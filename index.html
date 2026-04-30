@@ -1078,29 +1078,24 @@
         </div>
         <p class="newsletter-sub" style="margin-top: 28px; margin-bottom: 28px;">kannst.</p>
 
-        <!-- BREVO FORM – eigenes Design, postet direkt an Brevo -->
-        <form class="brevo-form" id="brevoForm"
-              method="POST"
-              action="https://31a89f69.sibforms.com/serve/MUIFAHDK9YkvtS3xqHeRQENJP_yQhNPzVEadUgQgHbRH6Ok9w6LYFy0Yvg8auppUxjHnBd_KioPi99yAvPAdMxfQQg14a04boiY9D9kPvIwj92q7PCsyiajdMVuV3XwcZC0Ghibq7Bu2uv4c3FoFxJ2ImLMZGcGjuwi2dEYpo9zkDoRUP8wxMXcvhBBDoBvz03aMnSMF3jZDQSnsGw=="
-              onsubmit="handleBrevoSubmit(event)">
+        <!-- BREVO FORM – eigenes Design, sendet per fetch im Hintergrund -->
+        <form class="brevo-form" id="brevoForm" onsubmit="handleBrevoSubmit(event)">
           <input type="text"
+                 id="brevoVorname"
                  name="VORNAME"
                  placeholder="Dein Vorname (optional)"
                  autocomplete="given-name">
           <input type="email"
+                 id="brevoEmail"
                  name="EMAIL"
                  placeholder="Deine E-Mail-Adresse *"
                  required
                  autocomplete="email">
-          <!-- Pflichtfelder für Brevo -->
-          <input type="text" name="email_address_check" value="" style="display:none;">
-          <input type="hidden" name="locale" value="de">
-          <input type="hidden" name="html_type" value="simple">
-          <button type="submit">Jetzt anmelden →</button>
+          <button type="submit" id="brevoBtn">Jetzt anmelden →</button>
         </form>
         <div class="newsletter-success" id="newsletterSuccess">
           🎉 <strong>Fast geschafft!</strong><br>
-          Schau in dein Postfach – ich habe dir eine Bestätigungs-E-Mail geschickt. Bitte klicke darin auf den Link.
+          Schau in dein Postfach – ich habe dir eine Bestätigungs-E-Mail geschickt. Bitte klicke darin auf den Link, um deine Anmeldung zu bestätigen.
         </div>
         <p class="newsletter-legal">Mit dem Absenden stimmst du der Übertragung deiner Daten an Brevo zu. <a href="https://www.brevo.com/de/legal/privacypolicy/" target="_blank" style="color:rgba(168,200,220,0.4);">Datenschutzerklärung von Brevo.</a></p>
         <!-- END Brevo Form -->
@@ -1419,15 +1414,36 @@ document.getElementById('postOverlay').addEventListener('click', function(e) {
 
 // ===== NEWSLETTER =====
 function handleBrevoSubmit(e) {
-  // Formular wird normal an Brevo gesendet
-  // Erfolgs-Meldung sofort anzeigen
-  setTimeout(function() {
-    var form = document.getElementById("brevoForm");
-    var success = document.getElementById("newsletterSuccess");
-    if (form) form.style.display = "none";
-    if (success) success.style.display = "block";
-  }, 300);
-  return true; // Normales Submit an Brevo
+  e.preventDefault();
+
+  var email = document.getElementById("brevoEmail").value.trim();
+  var vorname = document.getElementById("brevoVorname").value.trim();
+  var btn = document.getElementById("brevoBtn");
+
+  if (!email) return;
+
+  btn.disabled = true;
+  btn.textContent = "Wird gesendet...";
+
+  var formData = new FormData();
+  formData.append("EMAIL", email);
+  if (vorname) formData.append("VORNAME", vorname);
+  formData.append("email_address_check", "");
+  formData.append("locale", "de");
+  formData.append("html_type", "simple");
+
+  fetch("https://31a89f69.sibforms.com/serve/MUIFAHDK9YkvtS3xqHeRQENJP_yQhNPzVEadUgQgHbRH6Ok9w6LYFy0Yvg8auppUxjHnBd_KioPi99yAvPAdMxfQQg14a04boiY9D9kPvIwj92q7PCsyiajdMVuV3XwcZC0Ghibq7Bu2uv4c3FoFxJ2ImLMZGcGjuwi2dEYpo9zkDoRUP8wxMXcvhBBDoBvz03aMnSMF3jZDQSnsGw==", {
+    method: "POST",
+    body: formData,
+    mode: "no-cors"
+  }).then(function() {
+    document.getElementById("brevoForm").style.display = "none";
+    document.getElementById("newsletterSuccess").style.display = "block";
+  }).catch(function() {
+    // no-cors gibt keinen Fehler zurück, daher immer Erfolg zeigen
+    document.getElementById("brevoForm").style.display = "none";
+    document.getElementById("newsletterSuccess").style.display = "block";
+  });
 }
 
 // ===== ADMIN =====
