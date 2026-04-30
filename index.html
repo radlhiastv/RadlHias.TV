@@ -1074,9 +1074,10 @@
     <!-- EDITOR (nach Login) -->
     <div id="adminEditor" style="display:none;">
 
-      <!-- NEUER ARTIKEL -->
-      <div class="admin-card">
-        <div class="admin-card-title">✏️ Neuen Artikel schreiben</div>
+      <!-- NEUER / BEARBEITEN ARTIKEL -->
+      <div class="admin-card" id="formCard">
+        <div class="admin-card-title" id="formCardTitle">✏️ Neuen Artikel schreiben</div>
+        <input type="hidden" id="editPostId" value="">
 
         <div class="admin-form-group">
           <label>Titel *</label>
@@ -1124,8 +1125,8 @@
         </div>
 
         <div class="admin-btn-row">
-          <button class="btn-save" onclick="savePost()">Artikel speichern</button>
-          <button class="btn-ghost" onclick="clearForm()">Formular leeren</button>
+          <button class="btn-save" id="saveBtn" onclick="savePost()">Artikel speichern</button>
+          <button class="btn-ghost" onclick="clearForm()">Abbrechen / Neu</button>
         </div>
       </div>
 
@@ -1352,26 +1353,56 @@ function savePost() {
   const date = document.getElementById('postDate').value;
   const image = document.getElementById('postImage').value.trim();
   const seoDesc = document.getElementById('postSeoDesc').value.trim();
+  const editId = document.getElementById('editPostId').value;
 
   if (!title) { alert('Bitte einen Titel eingeben.'); return; }
   if (!content) { alert('Bitte einen Text schreiben.'); return; }
 
-  const newPost = {
-    id: 'post_' + Date.now(),
-    title,
-    excerpt,
-    content,
-    tag,
-    date: date || new Date().toISOString().split('T')[0],
-    image,
-    seoDesc
-  };
+  if (editId) {
+    // BEARBEITEN: bestehenden Artikel aktualisieren
+    const idx = posts.findIndex(p => p.id === editId);
+    if (idx !== -1) {
+      posts[idx] = { id: editId, title, excerpt, content, tag,
+        date: date || posts[idx].date, image, seoDesc };
+    }
+    alert('✅ Artikel aktualisiert! Vergiss nicht, die posts.json herunterzuladen und auf GitHub hochzuladen.');
+  } else {
+    // NEU: neuen Artikel anlegen
+    const newPost = {
+      id: 'post_' + Date.now(),
+      title, excerpt, content, tag,
+      date: date || new Date().toISOString().split('T')[0],
+      image, seoDesc
+    };
+    posts.unshift(newPost);
+    alert('✅ Artikel gespeichert! Vergiss nicht, die posts.json herunterzuladen und auf GitHub hochzuladen.');
+  }
 
-  posts.unshift(newPost);
   renderPosts();
   renderAdminPostList();
   clearForm();
-  alert('✅ Artikel gespeichert! Vergiss nicht, die posts.json herunterzuladen und auf GitHub hochzuladen.');
+}
+
+function editPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+
+  // Formular mit Artikeldaten befüllen
+  document.getElementById('postTitle').value = p.title || '';
+  document.getElementById('postExcerpt').value = p.excerpt || '';
+  document.getElementById('postContent').value = p.content || '';
+  document.getElementById('postTag').value = p.tag || 'Erfahrung';
+  document.getElementById('postDate').value = p.date || '';
+  document.getElementById('postImage').value = p.image || '';
+  document.getElementById('postSeoDesc').value = p.seoDesc || '';
+  document.getElementById('editPostId').value = id;
+
+  // Titel und Button anpassen
+  document.getElementById('formCardTitle').textContent = '✏️ Artikel bearbeiten';
+  document.getElementById('saveBtn').textContent = 'Änderungen speichern';
+
+  // Zum Formular scrollen
+  document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
 }
 
 function clearForm() {
@@ -1379,6 +1410,9 @@ function clearForm() {
     document.getElementById(id).value = '';
   });
   document.getElementById('postTag').value = 'Erfahrung';
+  document.getElementById('editPostId').value = '';
+  document.getElementById('formCardTitle').textContent = '✏️ Neuen Artikel schreiben';
+  document.getElementById('saveBtn').textContent = 'Artikel speichern';
   setTodayDate();
 }
 
@@ -1392,6 +1426,7 @@ function renderAdminPostList() {
     <div class="admin-post-item">
       <div class="admin-post-item-title">${escHtml(p.title)}</div>
       <div class="admin-post-item-date">${formatDate(p.date)}</div>
+      <button class="admin-post-item-edit" onclick="editPost('${p.id}')" style="background:rgba(42,100,160,0.25); border:1px solid rgba(42,100,160,0.4); color:#a8c8dc; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer; transition:background 0.2s; margin-right:6px;">Bearbeiten</button>
       <button class="admin-post-item-del" onclick="deletePost('${p.id}')">Löschen</button>
     </div>
   `).join('');
@@ -1400,6 +1435,7 @@ function renderAdminPostList() {
 function deletePost(id) {
   if (!confirm('Diesen Artikel wirklich löschen?')) return;
   posts = posts.filter(p => p.id !== id);
+  if (document.getElementById('editPostId').value === id) clearForm();
   renderPosts();
   renderAdminPostList();
 }
