@@ -6,6 +6,7 @@
 <title>RadlHias.TV – Fahrrad-Erfahrungen aus 25 Jahren</title>
 <meta name="description" content="Ehrliche Fahrrad-Geschichten, Erfahrungen und Tipps aus 25 Jahren. Kein Sponsoring, keine Provision – nur meine persönliche Meinung.">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Barlow:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
 
 <style>
   :root {
@@ -971,20 +972,133 @@
           <div class="promise-item">Abmeldung jederzeit mit einem Klick</div>
         </div>
 
-        <!-- BREVO FORM – ersetze FORM_ID mit deiner echten Brevo-Form-ID -->
-        <div id="newsletterFormWrapper">
-          <form class="brevo-form" id="brevoForm" onsubmit="submitNewsletter(event)">
-            <input type="text" id="nlName" placeholder="Dein Vorname (optional)" autocomplete="given-name">
-            <input type="email" id="nlEmail" placeholder="Deine E-Mail-Adresse *" required autocomplete="email">
-            <button type="submit">Jetzt anmelden →</button>
-          </form>
-        </div>
-        <div class="newsletter-success" id="newsletterSuccess">
-          🎉 <strong>Fast geschafft!</strong><br>
-          Ich habe dir eine Bestätigungs-E-Mail geschickt. Bitte klicke darin auf den Link, um deine Anmeldung abzuschließen.
-        </div>
+        <!-- BREVO FORM (echtes Formular) -->
+        <style>
+          /* RadlHias-Overrides für das Brevo-Formular */
+          #sib-container {
+            background-color: transparent !important;
+            border: none !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+          }
+          .sib-form { background-color: transparent !important; text-align: left !important; }
+          .sib-form-block p { display: none !important; } /* Brevo-Titel + Text ausblenden – wir haben unsere eigenen */
+          .sib-form-block:has(input), .sib-form-block:has(button) { display: block !important; }
+          #sib-form-container { text-align: left !important; }
+          .sib-container--large { text-align: left !important; }
+          .entry__label {
+            font-family: 'Barlow Condensed', sans-serif !important;
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-transform: uppercase !important;
+            color: var(--text-dim) !important;
+            margin-bottom: 6px !important;
+          }
+          .entry__field input.input {
+            width: 100% !important;
+            padding: 14px 18px !important;
+            background: rgba(255,255,255,0.08) !important;
+            border: 1.5px solid rgba(255,255,255,0.15) !important;
+            border-radius: 10px !important;
+            color: var(--cream) !important;
+            font-family: 'Barlow', sans-serif !important;
+            font-size: 15px !important;
+            outline: none !important;
+            transition: border-color 0.2s !important;
+          }
+          .entry__field input.input:focus { border-color: rgba(200,90,20,0.6) !important; }
+          .entry__field input.input::placeholder { color: rgba(245,241,235,0.35) !important; }
+          .entry__specification { display: none !important; }
+          .sib-form-block__button {
+            width: 100% !important;
+            padding: 16px !important;
+            background: var(--orange) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            font-family: 'Barlow Condensed', sans-serif !important;
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-transform: uppercase !important;
+            cursor: pointer !important;
+            transition: background 0.2s !important;
+            margin-top: 4px !important;
+          }
+          .sib-form-block__button:hover { background: var(--orange-light) !important; }
+          .sib-form__declaration {
+            margin-top: 12px !important;
+            background: transparent !important;
+          }
+          .sib-form__declaration p,
+          .sib-form__declaration div[style] {
+            font-size: 11px !important;
+            color: rgba(245,241,235,0.3) !important;
+            background: transparent !important;
+            font-family: 'Barlow', sans-serif !important;
+          }
+          .sib-form__declaration a { color: rgba(168,200,220,0.6) !important; }
+          .declaration-block-icon { display: none !important; }
+          .entry__error { font-size: 13px !important; margin-top: 6px !important; }
+        </style>
 
-        <p class="newsletter-legal">Mit der Anmeldung stimmst du der Verarbeitung deiner E-Mail-Adresse für den Versand des Newsletters zu. Du kannst dich jederzeit abmelden. Datenschutzerklärung beachten.</p>
+        <div class="sib-form" style="text-align:left; background-color:transparent;">
+          <div id="sib-form-container" class="sib-form-container">
+            <div id="sib-container" class="sib-container--large sib-container--vertical" style="text-align:left; background-color:transparent; max-width:100%; border-radius:0; border:none;">
+              <form id="sib-form" method="POST" action="https://31a89f69.sibforms.com/serve/MUIFAHDK9YkvtS3xqHeRQENJP_yQhNPzVEadUgQgHbRH6Ok9w6LYFy0Yvg8auppUxjHnBd_KioPi99yAvPAdMxfQQg14a04boiY9D9kPvIwj92q7PCsyiajdMVuV3XwcZC0Ghibq7Bu2uv4c3FoFxJ2ImLMZGcGjuwi2dEYpo9zkDoRUP8wxMXcvhBBDoBvz03aMnSMF3jZDQSnsGw==">
+                <div style="padding: 6px 0;">
+                  <div class="sib-input sib-form-block">
+                    <div class="form__entry entry_block">
+                      <div class="form__label-row">
+                        <label class="entry__label" style="font-weight:700; text-align:left; font-size:11px; font-family:'Barlow Condensed',sans-serif; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px;" for="VORNAME">Dein Vorname (optional)</label>
+                        <div class="entry__field">
+                          <input class="input" maxlength="200" type="text" id="VORNAME" name="VORNAME" autocomplete="given-name" placeholder="Vorname" />
+                        </div>
+                      </div>
+                      <label class="entry__error entry__error--primary" style="font-size:13px; text-align:left; font-family:'Barlow',sans-serif; color:#ff8888; background-color:rgba(255,80,80,0.1); border-radius:6px; border-color:rgba(255,80,80,0.3);"></label>
+                    </div>
+                  </div>
+                </div>
+                <div style="padding: 6px 0;">
+                  <div class="sib-input sib-form-block">
+                    <div class="form__entry entry_block">
+                      <div class="form__label-row">
+                        <label class="entry__label" style="font-weight:700; text-align:left; font-size:11px; font-family:'Barlow Condensed',sans-serif; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px;" for="EMAIL" data-required="*">Deine E-Mail-Adresse *</label>
+                        <div class="entry__field">
+                          <input class="input" type="text" id="EMAIL" name="EMAIL" autocomplete="email" placeholder="deine@email.com" data-required="true" required />
+                        </div>
+                      </div>
+                      <label class="entry__error entry__error--primary" style="font-size:13px; text-align:left; font-family:'Barlow',sans-serif; color:#ff8888; background-color:rgba(255,80,80,0.1); border-radius:6px; border-color:rgba(255,80,80,0.3);"></label>
+                    </div>
+                  </div>
+                </div>
+                <div style="padding: 6px 0;">
+                  <div class="sib-form-block" style="text-align:left;">
+                    <button class="sib-form-block__button sib-form-block__button-with-loader" form="sib-form" type="submit">
+                      <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512" style="width:16px;height:16px;margin-right:8px;vertical-align:middle;">
+                        <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z" />
+                      </svg>
+                      Jetzt anmelden →
+                    </button>
+                  </div>
+                </div>
+                <div style="padding: 6px 0;">
+                  <div class="sib-form__declaration">
+                    <div style="font-size:11px; text-align:left; font-family:'Barlow',sans-serif; color:rgba(245,241,235,0.3); background-color:transparent;">
+                      Mit dem Absenden stimmst du der Übertragung deiner Daten an Brevo zu. <a href="https://www.brevo.com/de/legal/privacypolicy/" target="_blank" style="color:rgba(168,200,220,0.5);">Datenschutzerklärung von Brevo.</a>
+                    </div>
+                  </div>
+                </div>
+                <input type="text" name="email_address_check" value="" class="input--hidden" style="display:none;">
+                <input type="hidden" name="locale" value="de">
+                <input type="hidden" name="html_type" value="simple">
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- END Brevo Form -->
+
       </div>
     </div>
   </section>
