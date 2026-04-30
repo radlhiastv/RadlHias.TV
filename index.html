@@ -242,6 +242,11 @@
     margin: 0 auto;
   }
 
+  .section-inner-wide {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   .section-label {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 10px;
@@ -309,6 +314,9 @@
     gap: 8px;
     margin-bottom: 28px;
     text-align: left;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .promise-item {
@@ -403,8 +411,8 @@
 
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
   }
 
   .post-card {
@@ -1055,15 +1063,18 @@
   <section id="newsletter">
     <div class="section-inner">
       <div class="newsletter-card">
-        <span class="newsletter-icon">✉️</span>
-        <h2 class="newsletter-title">Bleib dabei</h2>
-        <p class="newsletter-sub">Neue Artikel, ehrliche Meinungen und Fahrrad-Erfahrungen – direkt in dein Postfach. Kein Spam. Ich schreibe nur, wenn ich wirklich etwas zu sagen habe.</p>
+        <span class="newsletter-icon">🎁</span>
+        <h2 class="newsletter-title">Bleib informiert</h2>
+        <p class="newsletter-sub">Hier kannst Du dich zum <a href="http://RadlHias.TV" target="_blank" style="color:var(--orange); text-decoration:none;">RadlHias.TV</a> Newsletter anmelden. Über diesen versorge ich Dich mit hochwertigen Inhalten rund um die Welt der Fahrräder. Und als kleines Dankeschön für dein Interesse erhältst Du deinen persönlichen Link zum RadlHias Fahrrad Konfigurator. Einem Universal Tool, mit dem Du</p>
 
         <div class="newsletter-promise">
-          <div class="promise-item">Kein Spam, kein Verkauf, kein Sponsoring</div>
-          <div class="promise-item">Neue Blog-Artikel als Erste erhalten</div>
-          <div class="promise-item">Abmeldung jederzeit mit einem Klick</div>
+          <div class="promise-item">Dein neues Fahrrad konfigurieren</div>
+          <div class="promise-item">Den Zustand eines gebrauchten Fahrrades bestimmen und einschätzen</div>
+          <div class="promise-item">Die Sitzposition optimal einstellen</div>
+          <div class="promise-item">Den Luftdruck für deine Reifen berechnen</div>
+          <div class="promise-item">Viele Fragen rund ums Thema Fahrrad beantworten</div>
         </div>
+        <p class="newsletter-sub" style="margin-top: 28px; margin-bottom: 28px;">kannst.</p>
 
         <!-- BREVO FORM – eigenes Design, postet direkt an Brevo -->
         <form class="brevo-form" id="brevoForm"
@@ -1100,7 +1111,7 @@
 
   <!-- BLOG -->
   <section id="blog">
-    <div class="section-inner">
+    <div class="section-inner-wide">
       <div class="blog-header">
         <div>
           <div class="section-label">Geschichten & Erfahrungen</div>
@@ -1153,7 +1164,7 @@
   </div>
 </div>
 
-
+<footer>
   <div class="footer-logo">RadlHias.TV</div>
   <p class="footer-sub">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision</p>
   <div class="footer-links">
