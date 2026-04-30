@@ -61,7 +61,7 @@
     width: 200px;
     height: auto;
     margin-bottom: 28px;
-    filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+    filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0,0,0,0.5));
     animation: logoIn 0.8s ease both;
   }
 
@@ -1177,13 +1177,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== LOGO: Lade das echte Logo wenn vorhanden =====
 function loadHeroLogo() {
-  // Das Logo aus der Vorlage (Base64) wird hier als Data-URL gesetzt
-  // Du kannst stattdessen einen echten Pfad verwenden: img.src = 'images/logo.png';
   const img = document.getElementById('heroLogo');
-  // Platzhalter – ersetze durch: img.src = 'images/RadlHias_Logo.png';
-  img.src = 'images/RadlHias_Logo.png';
+  img.src = 'Logo_500x500.webp';
   img.onerror = function() {
-    // Fallback: Text-Logo anzeigen
     this.style.display = 'none';
   };
 }
