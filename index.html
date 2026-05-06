@@ -1042,6 +1042,26 @@
     pointer-events: all;
   }
 
+  /* Responsive Banner-Höhe */
+  #bannerIframe {
+    min-height: 200px;
+  }
+  @media (min-width: 500px) {
+    #bannerIframe { min-height: 230px; }
+  }
+  @media (min-width: 700px) {
+    #bannerIframe { min-height: 270px; }
+  }
+  @media (min-width: 900px) {
+    #bannerIframe { min-height: 310px; }
+  }
+  @media (min-width: 1100px) {
+    #bannerIframe { min-height: 360px; }
+  }
+  @media (min-width: 1400px) {
+    #bannerIframe { min-height: 420px; }
+  }
+
 </style>
 </head>
 <body>
@@ -1097,7 +1117,7 @@
           id="bannerIframe"
           src="Bike_Berater_Banner.html"
           width="100%"
-          height="292"
+          height="200"
           frameborder="0"
           scrolling="no"
           title="Radl Hias Bike Berater"
@@ -1651,14 +1671,27 @@ function formatDate(dateStr) {
 function resizeBannerIframe(iframe) {
   function setHeight() {
     try {
-      var h = iframe.contentWindow.document.body.scrollHeight;
-      if (h && h > 0) iframe.style.height = h + 'px';
+      var doc = iframe.contentWindow.document;
+      // scrollHeight auf position:absolute Elemente oft 0 – daher offsetHeight als Fallback
+      var h = Math.max(
+        doc.body.scrollHeight,
+        doc.body.offsetHeight,
+        doc.documentElement.offsetHeight
+      );
+      if (h && h > 50) {
+        iframe.style.height = h + 'px';
+        iframe.style.minHeight = h + 'px';
+      }
     } catch(e) {}
   }
   setHeight();
-  setTimeout(setHeight, 300);
-  setTimeout(setHeight, 800);
-  window.addEventListener('resize', setHeight);
+  setTimeout(setHeight, 200);
+  setTimeout(setHeight, 600);
+  setTimeout(setHeight, 1200);
+  window.addEventListener('resize', function() {
+    // Kleine Verzögerung damit der Banner intern erst neu rendert
+    setTimeout(setHeight, 100);
+  });
 }
 </script>
 </body>
