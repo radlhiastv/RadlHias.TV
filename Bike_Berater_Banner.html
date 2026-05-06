@@ -16,7 +16,7 @@
   .banner {
     position: relative;
     width: 100%;
-    height: 320px;
+    height: 292px;
     border-radius: 16px;
     overflow: hidden;
     display: block;
@@ -201,31 +201,13 @@
     transform: translateX(4px);
   }
 
-  /* Bottom Bar */
-  .bottom-bar {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 28px;
-    background: rgba(0,0,0,0.72);
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    z-index: 16;
-  }
-  .bottom-bar span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(168,200,220,0.45);
-  }
+
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 600px) {
-    .banner { height: 280px; }
+    .banner { height: 260px; }
     .banner-content { max-width: 80%; padding: 0 0 0 20px; }
     .features { display: none; }
-    .bottom-bar { display: none; }
   }
 </style>
 </head>
@@ -263,9 +245,6 @@
 
   </div>
 
-  <div class="bottom-bar">
-    <span>RadlHias.TV · Persönliche Fahrrad-Beratung aus 25 Jahren Erfahrung</span>
-  </div>
 
 </a>
 
