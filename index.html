@@ -1018,6 +1018,30 @@
     margin-top: 6px;
     line-height: 1.5;
   }
+
+  /* ===== BANNER IFRAME WRAP ===== */
+  .banner-iframe-wrap {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    display: block;
+    pointer-events: none;
+  }
+
+  .banner-iframe-wrap:hover {
+    transform: translateY(-4px);
+    border-color: rgba(200,90,20,0.4);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  }
+
+  .banner-iframe-wrap iframe {
+    display: block;
+    pointer-events: all;
+  }
+
 </style>
 </head>
 <body>
@@ -1068,15 +1092,16 @@
   <!-- BANNER: Bike Berater -->
   <section id="bike-berater-banner" style="padding: 32px 20px;">
     <div class="section-inner-wide">
-      <iframe
-        src="Bike_Berater_Banner.html"
-        width="100%"
-        height="340"
-        frameborder="0"
-        scrolling="no"
-        style="border-radius:14px; display:block;"
-        title="Radl Hias Bike Berater"
-      ></iframe>
+      <div class="banner-iframe-wrap">
+        <iframe
+          src="Bike_Berater_Banner.html"
+          width="100%"
+          height="340"
+          frameborder="0"
+          scrolling="no"
+          title="Radl Hias Bike Berater"
+        ></iframe>
+      </div>
     </div>
   </section>
 
