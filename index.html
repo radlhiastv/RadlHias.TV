@@ -1041,10 +1041,15 @@
     display: block;
     pointer-events: all;
     width: 100%;
-    /* aspect-ratio hält Proportionen bei jeder Fensterbreite */
+    /* Desktop: Banner ist ca. 3.5:1 designed */
     aspect-ratio: 3.5 / 1;
-    min-height: 180px;
     border: none;
+  }
+  /* Handy: Banner-Inhalt ist höher wegen größerer vw-Schriften */
+  @media (max-width: 600px) {
+    .banner-iframe-wrap iframe {
+      aspect-ratio: 2.2 / 1;
+    }
   }
 
 </style>

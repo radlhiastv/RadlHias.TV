@@ -204,14 +204,59 @@
 
 
 
-  /* ===== RESPONSIVE ===== */
+
+  /* ===== RESPONSIVE – MOBIL ===== */
   @media (max-width: 600px) {
-    .banner { min-height: 200px; height: auto; }
-    .banner-content { max-width: 80%; padding: 0 0 0 20px; }
-    .features { display: none; }
+    .banner {
+      min-height: 0;
+      height: auto;
+    }
+    /* Hintergrundbild: auf Handy nach links schieben, damit Rad weniger dominiert */
+    .banner-bg {
+      background-position: center right -60px;
+    }
+    /* Dunkler Gradient auf Handy stärker → Text besser lesbar */
+    .overlay-dark {
+      background: linear-gradient(
+        100deg,
+        rgba(5,10,15,0.97) 0%,
+        rgba(5,10,15,0.88) 55%,
+        rgba(5,10,15,0.45) 80%,
+        transparent 100%
+      );
+    }
+    .banner-content {
+      max-width: 75%;
+      padding: 22px 0 22px 18px;
+    }
+    /* Headline: auf Handy mit vw skalieren, damit sie zur Breite passt */
+    .headline .line1 {
+      font-size: clamp(32px, 10vw, 52px);
+    }
+    .headline .line2 {
+      font-size: clamp(24px, 7.5vw, 38px);
+    }
+    .arrow-accent {
+      font-size: 14px;
+      margin: 6px 0 8px;
+    }
+    .cta-line {
+      font-size: clamp(12px, 3.8vw, 16px);
+      margin-bottom: 14px;
+    }
+    .features {
+      display: none;
+    }
+    .btn-cta {
+      font-size: 12px;
+      padding: 9px 18px;
+      letter-spacing: 1px;
+    }
+    /* Pfeil nach unten auf Handy kleiner */
+    .scroll-hint span { font-size: 9px; }
+    .scroll-hint svg  { width: 18px; height: 18px; }
   }
-  html, body { margin: 0; padding: 0; height: 100%; }
-  .banner { height: 100%; min-height: 180px; }
+  html, body { margin: 0; padding: 0; height: auto; }
 </style>
 </head>
 <body>
