@@ -421,6 +421,9 @@
   }
 
   .post-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 16px;
@@ -1576,18 +1579,36 @@
 
       <!-- EXPORT -->
       <div class="admin-card">
-        <div class="admin-card-title">💾 posts.json herunterladen</div>
+        <div class="admin-card-title">💾 Dateien herunterladen & hochladen</div>
         <p style="font-size:14px; color:rgba(245,241,235,0.6); margin-bottom:16px; line-height:1.6;">
-          Nach dem Speichern lädst du die aktuelle posts.json herunter und ersetzt sie in deinem GitHub-Repository. Das dauert ca. 30 Sekunden.
+          Nach dem Speichern eines Artikels erscheint unten automatisch der Download-Link für die HTML-Datei
+          und der passende Sitemap-Eintrag. Lade beide manuell in GitHub hoch.
         </p>
         <div class="admin-btn-row">
           <button class="btn-download" onclick="downloadPostsJson()">📥 posts.json herunterladen</button>
         </div>
         <p class="admin-notice" style="margin-top:10px;">
-          <strong>Schritt 1:</strong> Auf "Herunterladen" klicken → posts.json wird gespeichert<br>
-          <strong>Schritt 2:</strong> GitHub öffnen → Repo → posts.json → Upload / Drag & Drop<br>
-          <strong>Schritt 3:</strong> Fertig. Die Seite zeigt die neuen Artikel in ca. 1–2 Minuten.
+          <strong>Schritt 1:</strong> Artikel speichern → Artikel-HTML + Sitemap-Block erscheinen unten<br>
+          <strong>Schritt 2:</strong> Artikel-HTML herunterladen → in GitHub unter <em>/blog/</em> hochladen<br>
+          <strong>Schritt 3:</strong> posts.json herunterladen → im Repo-Root ersetzen<br>
+          <strong>Schritt 4:</strong> Sitemap-Block in <em>sitemap.xml</em> einfügen
         </p>
+      </div>
+
+      <!-- ARTIKEL-EXPORT ERGEBNIS (wird nach Speichern eingeblendet) -->
+      <div class="admin-card" id="articleExportCard" style="display:none;">
+        <div class="admin-card-title">✅ Artikel bereit zum Hochladen</div>
+        <div style="margin-bottom:16px;">
+          <p style="font-size:13px; color:rgba(245,241,235,0.6); margin-bottom:10px;">1. Artikel-HTML herunterladen und in GitHub unter <strong>/blog/</strong> hochladen:</p>
+          <div class="admin-btn-row">
+            <button class="btn-download" id="downloadArticleBtn" onclick="downloadArticleHTML()">📄 Artikel-HTML herunterladen</button>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:13px; color:rgba(245,241,235,0.6); margin-bottom:8px;">2. Diesen Block in deine <strong>sitemap.xml</strong> kopieren:</p>
+          <pre id="sitemapBlock" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:14px; font-size:12px; color:#a8d8a8; overflow-x:auto; white-space:pre; line-height:1.6;"></pre>
+          <button onclick="copySitemap()" style="margin-top:8px; background:rgba(42,100,60,0.3); border:1px solid rgba(42,180,80,0.3); color:#a8d8a8; padding:6px 16px; border-radius:6px; font-size:12px; cursor:pointer;">📋 Kopieren</button>
+        </div>
       </div>
 
     </div><!-- /adminEditor -->
@@ -1663,11 +1684,14 @@ function renderPosts() {
   }
 
   const sorted = [...posts].sort((a,b) => new Date(b.date) - new Date(a.date));
-  grid.innerHTML = sorted.map(p => `
-    <div class="post-card" onclick="openPost('${p.id}')">
+  grid.innerHTML = sorted.map(p => {
+    const slug = slugify(p.title);
+    const href = `blog/${slug}.html`;
+    return `
+    <a class="post-card" href="${href}">
       <div class="post-img">
         ${p.image
-          ? `<img src="${p.image}" alt="${escHtml(p.title)}" loading="lazy" onerror="this.parentElement.innerHTML='🚲'">`
+          ? `<img src="../${p.image}" alt="${escHtml(p.title)}" loading="lazy" onerror="this.parentElement.innerHTML='🚲'">`
           : '🚲'}
       </div>
       <div class="post-body">
@@ -1678,8 +1702,8 @@ function renderPosts() {
         <div class="post-title">${escHtml(p.title)}</div>
         <div class="post-excerpt">${escHtml(p.excerpt || '')}</div>
       </div>
-    </div>
-  `).join('');
+    </a>`;
+  }).join('');
 }
 
 // ===== POST ÖFFNEN =====
@@ -1825,7 +1849,7 @@ function savePost() {
       image, seoDesc
     };
     posts.unshift(newPost);
-    alert('✅ Artikel gespeichert! Vergiss nicht, die posts.json herunterzuladen und auf GitHub hochzuladen.');
+    generateArticleHTML(newPost);
   }
 
   renderPosts();
@@ -1900,6 +1924,181 @@ function downloadPostsJson() {
   a.download = 'posts.json';
   a.click();
   URL.revokeObjectURL(url);
+}
+
+// ── Slug aus Titel erzeugen ──
+function slugify(title) {
+  return title
+    .toLowerCase()
+    .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+
+// ── Artikel-HTML generieren & im Admin anzeigen ──
+let _lastArticlePost = null;
+
+function generateArticleHTML(post) {
+  _lastArticlePost = post;
+  const slug = slugify(post.title);
+  const today = new Date().toISOString().split('T')[0];
+  const dateFormatted = formatDate(post.date || today);
+  const seoDesc = post.seoDesc || post.excerpt || '';
+  const imgTag = post.image
+    ? `<img src="../${post.image}" alt="${escHtml(post.title)}" class="article-hero-img">`
+    : '';
+
+  // Content: Leerzeilen → Absätze
+  let contentHTML = post.content || '';
+  if (!contentHTML.includes('<')) {
+    contentHTML = contentHTML
+      .split(/\n\n+/)
+      .map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`)
+      .join('\n');
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escHtml(post.title)} – RadlHias.TV</title>
+<meta name="description" content="${escHtml(seoDesc)}">
+<link rel="canonical" href="https://radlhias.tv/blog/${slug}.html">
+<meta property="og:title" content="${escHtml(post.title)} – RadlHias.TV">
+<meta property="og:description" content="${escHtml(seoDesc)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://radlhias.tv/blog/${slug}.html">
+${post.image ? `<meta property="og:image" content="https://radlhias.tv/${post.image}">` : ''}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "${escHtml(post.title)}",
+  "description": "${escHtml(seoDesc)}",
+  "datePublished": "${post.date || today}",
+  "author": {
+    "@type": "Person",
+    "name": "Mathias",
+    "url": "https://radlhias.tv"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "RadlHias.TV",
+    "url": "https://radlhias.tv"
+  }${post.image ? `,
+  "image": "https://radlhias.tv/${post.image}"` : ''}
+}
+<\/script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0d1b2a; --navy2:#162232; --orange:#c85a14; --orange2:#e06820;
+    --text:#c8d8e8; --muted:rgba(168,200,220,0.55); --border:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--navy);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;
+    justify-content:space-between;padding:18px 40px;background:rgba(13,27,42,0.92);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Dancing Script',cursive;font-size:28px;color:#fff;text-decoration:none;}
+  .nav-back{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+  .nav-back:hover{color:var(--orange2);}
+  .article{max-width:740px;margin:0 auto;padding:130px 40px 80px;}
+  .article-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
+    letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:14px;display:block;}
+  .article-tag{background:rgba(200,90,20,0.15);border:1px solid rgba(200,90,20,0.3);
+    color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-right:10px;}
+  .article-date{font-size:13px;color:var(--muted);}
+  h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:900;
+    text-transform:uppercase;color:#fff;line-height:0.95;margin:16px 0 28px;}
+  .article-hero-img{width:100%;border-radius:16px;margin-bottom:36px;display:block;
+    max-height:420px;object-fit:cover;}
+  .article-body{font-size:16px;line-height:1.8;color:var(--text);}
+  .article-body p{margin-bottom:20px;}
+  .article-body h2{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;
+    text-transform:uppercase;color:#fff;margin:36px 0 14px;}
+  .article-body h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;
+    color:var(--orange2);margin:28px 0 10px;}
+  .article-body ul,ol{padding-left:22px;margin-bottom:20px;}
+  .article-body li{margin-bottom:8px;}
+  .article-body strong{color:#fff;}
+  .article-body a{color:var(--orange2);text-decoration:none;}
+  .article-body a:hover{text-decoration:underline;}
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;
+    font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+    text-decoration:none;margin-top:48px;transition:color 0.2s;border-top:1px solid var(--border);
+    padding-top:32px;width:100%;}
+  .back-link:hover{color:var(--orange2);}
+  footer{text-align:center;padding:32px;border-top:1px solid var(--border);
+    font-size:13px;color:var(--muted);}
+  footer a{color:var(--muted);text-decoration:none;}
+  footer a:hover{color:var(--orange2);}
+  @media(max-width:600px){nav{padding:14px 20px;}.article{padding:100px 20px 60px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">RadlHias.TV</a>
+  <a href="../index.html#blog" class="nav-back">← Zurück zum Blog</a>
+</nav>
+<div class="article">
+  <div>
+    <span class="article-tag">${escHtml(post.tag || 'Blog')}</span>
+    <span class="article-date">${dateFormatted}</span>
+  </div>
+  <h1>${escHtml(post.title)}</h1>
+  ${imgTag}
+  <div class="article-body">
+    ${contentHTML}
+  </div>
+  <a href="../index.html#blog" class="back-link">← Zurück zum Blog</a>
+</div>
+<footer>
+  <a href="../index.html">RadlHias.TV</a> &nbsp;·&nbsp;
+  <a href="../impressum.html">Impressum</a> &nbsp;·&nbsp;
+  <a href="../datenschutz.html">Datenschutz</a>
+</footer>
+</body>
+</html>`;
+
+  // Sitemap-Block erzeugen
+  const sitemapBlock = `  <url>
+    <loc>https://radlhias.tv/blog/${slug}.html</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+
+  // HTML und Sitemap cachen, dann im Admin anzeigen
+  _lastArticlePost._slug = slug;
+  _lastArticlePost._html = html;
+  const card = document.getElementById('articleExportCard');
+  document.getElementById('sitemapBlock').textContent = sitemapBlock;
+  card.style.display = 'block';
+  card.scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadArticleHTML() {
+  if (!_lastArticlePost || !_lastArticlePost._html) return;
+  const b = new Blob([_lastArticlePost._html], {type:'text/html'});
+  const url = URL.createObjectURL(b);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = _lastArticlePost._slug + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copySitemap() {
+  const text = document.getElementById('sitemapBlock').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Kopiert!';
+    setTimeout(() => btn.textContent = '📋 Kopieren', 2000);
+  });
 }
 
 // ===== UTILS =====
