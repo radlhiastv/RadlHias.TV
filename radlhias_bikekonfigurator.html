@@ -27,36 +27,44 @@
   }
 
   /* ── NAV ── */
-  nav {
+  nav.main-nav {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 40px;
-    background: rgba(13,27,42,0.92);
+    padding: 0 20px;
+    height: 56px;
+    background: rgba(10,18,25,0.88);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    gap: 16px;
   }
   .nav-logo {
     font-family: 'Dancing Script', cursive;
-    font-size: 28px;
-    color: #fff;
+    font-size: 22px;
+    color: #f5f0e8;
     text-decoration: none;
   }
-  .nav-back {
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .nav-links a {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(168,200,220,0.55);
     text-decoration: none;
     transition: color 0.2s;
   }
-  .nav-back:hover { color: var(--orange2); }
+  .nav-links a:hover { color: #f5f0e8; }
+  @media (max-width: 500px) { .nav-links { display: none; } }
 
   /* ── HERO ── */
   .hero {
-    padding: 140px 40px 80px;
+    padding: 100px 40px 80px;
     max-width: 860px;
     margin: 0 auto;
   }
@@ -236,9 +244,12 @@
 </head>
 <body>
 
-<nav>
+<nav class="main-nav">
   <a href="index.html" class="nav-logo">RadlHias.TV</a>
-  <a href="index.html" class="nav-back">← Zurück zur Startseite</a>
+  <div class="nav-links">
+    <a href="index.html#blog">Blog</a>
+    <a href="index.html#newsletter">Newsletter</a>
+  </div>
 </nav>
 
 <div class="hero">
