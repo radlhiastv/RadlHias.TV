@@ -1210,9 +1210,17 @@
     z-index: 15;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 28px 0 28px 36px;
-    max-width: 58%;
+    justify-content: space-between;
+    padding: 22px 28px 22px 36px;
+    max-width: 62%;
+  }
+
+  /* Button rechts unten – eigene Zeile außerhalb des content-div */
+  .rh-btn-wrap {
+    position: absolute;
+    bottom: 22px;
+    right: 28px;
+    z-index: 16;
   }
 
   .rh-headline {
@@ -1249,12 +1257,13 @@
 
   .rh-cta-line {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     color: #e06820;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
+    line-height: 1.2;
   }
 
   .rh-features {
@@ -1311,7 +1320,7 @@
         </style>
         <div class="rh-banner-outer" id="rhBannerOuter">
         <div class="rh-banner-wrap" id="rhBannerWrap">
-          <a class="rh-banner" href="berater-info.html" target="_blank" rel="noopener">
+          <a class="rh-banner" href="radlhias_bikekonfigurator.html">
 
   <div class="rh-banner-bg"></div>
   <div class="rh-overlay-dark"></div>
@@ -1327,9 +1336,7 @@
       <span class="rh-line2">BIKE BERATER</span>
     </div>
 
-    <span class="rh-arrow-accent">&raquo;&raquo;</span>
-
-    <div class="rh-cta-line">Hol ihn Dir jetzt – kostenlos!</div>
+    <div class="rh-cta-line">Jetzt Newsletter abonnieren &amp; persönlichen Zugang erhalten!</div>
 
     <div class="rh-features">
       <span class="rh-feature">Kaufberatung</span>
@@ -1339,8 +1346,10 @@
       <span class="rh-feature">FAQ</span>
     </div>
 
-    <div class="rh-btn-cta">Mehr erfahren →</div>
+  </div>
 
+  <div class="rh-btn-wrap">
+    <a class="rh-btn-cta" href="radlhias_bikekonfigurator.html">Mehr Informationen →</a>
   </div>
 
 

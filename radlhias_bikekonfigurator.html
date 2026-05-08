@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radl Hias – Bike Konfigurator & Berater</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0d1b2a;
+    --navy2:  #162232;
+    --orange: #c85a14;
+    --orange2:#e06820;
+    --cream:  #f5f0e8;
+    --text:   #c8d8e8;
+    --muted:  rgba(168,200,220,0.55);
+    --border: rgba(255,255,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(13,27,42,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Dancing Script', cursive;
+    font-size: 28px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-back {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--orange2); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 40px 80px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+    display: block;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(52px, 7vw, 88px);
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 580px;
+    margin-bottom: 40px;
+  }
+
+  /* ── TOOLS GRID ── */
+  .tools {
+    padding: 0 40px 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .tool-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(200,90,20,0.4);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  }
+  .tool-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .tool-card h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .tool-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(200,90,20,0.12);
+    border: 1px solid rgba(200,90,20,0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--orange);
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    border: none;
+    cursor: pointer;
+  }
+  .card-cta:hover {
+    background: var(--orange2);
+    transform: translateX(3px);
+  }
+  .card-cta.ghost {
+    background: transparent;
+    border: 1.5px solid rgba(168,200,220,0.3);
+    color: var(--muted);
+  }
+  .card-cta.ghost:hover {
+    border-color: rgba(200,90,20,0.5);
+    color: var(--orange2);
+    transform: translateX(3px);
+  }
+
+  /* ── NEWSLETTER TEASER ── */
+  .nl-teaser {
+    margin: 0 40px 80px;
+    max-width: 1020px;
+    margin-left: auto;
+    margin-right: auto;
+    background: linear-gradient(110deg, rgba(200,90,20,0.15) 0%, rgba(13,27,42,0) 60%);
+    border: 1px solid rgba(200,90,20,0.25);
+    border-radius: 20px;
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .nl-teaser-text h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .nl-teaser-text p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--orange2); }
+
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    .hero { padding: 110px 20px 60px; }
+    .tools { padding: 0 20px 60px; grid-template-columns: 1fr; }
+    .nl-teaser { margin: 0 20px 60px; padding: 28px 24px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <a href="index.html" class="nav-back">← Zurück zur Startseite</a>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">Dein persönliches Tool-Paket</span>
+  <h1>Radl Hias<br><span>Bike Berater</span></h1>
+  <p class="hero-sub">
+    25 Jahre Fahrradbranche, 5 Jahre eigener Laden – alles was ich gelernt habe, steckt in diesen Tools.
+    Kein Marketing, keine Affiliate-Links. Nur ehrliche Hilfe, wie ich sie meinen Freunden gebe.
+  </p>
+</div>
+
+<div class="tools">
+
+  <div class="tool-card">
+    <span class="tool-icon">🚲</span>
+    <h2>Kaufberatung</h2>
+    <p>Welches Fahrrad passt wirklich zu dir? Anwendungsgebiet, Budget, Körpergröße – ich führe dich Schritt für Schritt zur richtigen Entscheidung.</p>
+    <div class="tag-list">
+      <span class="tag">Neukauf</span>
+      <span class="tag">E-Bike</span>
+      <span class="tag">Gravel</span>
+      <span class="tag">MTB</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
+  </div>
+
+  <div class="tool-card">
+    <span class="tool-icon">🔧</span>
+    <h2>Gebrauchtkauf-Check</h2>
+    <p>Gebrauchtes Fahrrad kaufen ohne böse Überraschungen. Meine Checkliste zeigt dir, worauf du wirklich achten musst – bevor du Geld ausgibst.</p>
+    <div class="tag-list">
+      <span class="tag">Gebraucht</span>
+      <span class="tag">Inspektion</span>
+      <span class="tag">Preisbewertung</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
+  </div>
+
+  <div class="tool-card">
+    <span class="tool-icon">🎯</span>
+    <h2>Bike Fitting</h2>
+    <p>Sattelhöhe, Sattelposition, Lenkerhöhe – die richtige Einstellung verhindert Schmerzen und macht das Fahren deutlich effizienter.</p>
+    <div class="tag-list">
+      <span class="tag">Sitzposition</span>
+      <span class="tag">Ergonomie</span>
+      <span class="tag">Schmerzfrei</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
+  </div>
+
+  <div class="tool-card">
+    <span class="tool-icon">💨</span>
+    <h2>Reifendruck-Rechner</h2>
+    <p>Der richtige Druck hängt von Körpergewicht, Reifenbreite und Untergrund ab. Mein Rechner gibt dir den optimalen Wert – sofort und kostenlos.</p>
+    <div class="tag-list">
+      <span class="tag">Reifen</span>
+      <span class="tag">Druck</span>
+      <span class="tag">Performance</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
+  </div>
+
+  <div class="tool-card">
+    <span class="tool-icon">❓</span>
+    <h2>FAQ – Ehrliche Antworten</h2>
+    <p>Was kostet eine Inspektion wirklich? Lohnt sich ein E-Bike? Welche Marken sind ihr Geld wert? Ich beantworte die Fragen, die Händler lieber nicht hören.</p>
+    <div class="tag-list">
+      <span class="tag">Kosten</span>
+      <span class="tag">Marken</span>
+      <span class="tag">Wartung</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta ghost">Demnächst verfügbar</a>
+  </div>
+
+  <div class="tool-card">
+    <span class="tool-icon">📊</span>
+    <h2>Zustandsbewertung</h2>
+    <p>Wie gut ist dein aktuelles Fahrrad noch? Lohnt sich eine Reparatur oder ist ein Neukauf sinnvoller? Ich zeige dir, wie du das selbst einschätzen kannst.</p>
+    <div class="tag-list">
+      <span class="tag">Verschleiß</span>
+      <span class="tag">Reparatur</span>
+      <span class="tag">Neukauf</span>
+    </div>
+    <a href="index.html#newsletter" class="card-cta ghost">Demnächst verfügbar</a>
+  </div>
+
+</div>
+
+<div class="nl-teaser">
+  <div class="nl-teaser-text">
+    <h3>Alle Tools – kostenlos per Newsletter</h3>
+    <p>Trag dich ein und ich schicke dir deinen persönlichen Zugangslink. Kein Spam, kein Abo-Modell. Einmal eintragen, dauerhaft nutzen.</p>
+  </div>
+  <a href="index.html#newsletter" class="card-cta" style="white-space:nowrap; flex-shrink:0;">
+    Jetzt Newsletter abonnieren →
+  </a>
+</div>
+
+<footer>
+  <a href="index.html">RadlHias.TV</a> &nbsp;·&nbsp;
+  <a href="#">Impressum</a> &nbsp;·&nbsp;
+  <a href="#">Datenschutz</a>
+</footer>
+
+</body>
+</html>
