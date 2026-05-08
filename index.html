@@ -1117,9 +1117,16 @@
   */
   .rh-banner-outer {
     width: 100%;
-    overflow: hidden;
+    overflow: visible; /* sichtbar damit translateY-Effekt nicht abgeschnitten wird */
     border-radius: 16px;
-    line-height: 0; /* verhindert Leerzeichen-Gap */
+    line-height: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .rh-banner-outer:hover {
+    transform: translateY(-4px);
+    border-color: rgba(200,90,20,0.4);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
   }
 
   /* Innerer Wrapper: feste Größe 900×260, wird via JS skaliert */
