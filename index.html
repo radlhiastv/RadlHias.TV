@@ -1686,7 +1686,7 @@ function renderPosts() {
   const sorted = [...posts].sort((a,b) => new Date(b.date) - new Date(a.date));
   grid.innerHTML = sorted.map(p => {
     const slug = slugify(p.title);
-    const href = `blog/${slug}.html`;
+    const href = `Blog/${slug}.html`;
     return `
     <a class="post-card" href="${href}">
       <div class="post-img">
@@ -1964,7 +1964,7 @@ function generateArticleHTML(post) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${escHtml(post.title)} – RadlHias.TV</title>
 <meta name="description" content="${escHtml(seoDesc)}">
-<link rel="canonical" href="https://radlhias.tv/blog/${slug}.html">
+<link rel="canonical" href="https://radlhias.tv/Blog/${slug}.html">
 <meta property="og:title" content="${escHtml(post.title)} – RadlHias.TV">
 <meta property="og:description" content="${escHtml(seoDesc)}">
 <meta property="og:type" content="article">
@@ -2066,7 +2066,7 @@ ${post.image ? `<meta property="og:image" content="https://radlhias.tv/${post.im
 
   // Sitemap-Block erzeugen
   const sitemapBlock = `  <url>
-    <loc>https://radlhias.tv/blog/${slug}.html</loc>
+    <loc>https://radlhias.tv/Blog/${slug}.html</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
