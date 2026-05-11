@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Startseite -->
   <url>
     <loc>https://radlhias.tv/</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
+  <!-- Bike Konfigurator -->
   <url>
     <loc>https://radlhias.tv/radlhias_bikekonfigurator.html</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
+  <!-- Impressum -->
   <url>
     <loc>https://radlhias.tv/impressum.html</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
+  <!-- Datenschutz -->
   <url>
     <loc>https://radlhias.tv/datenschutz.html</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
+  <!-- Blog: Ich fahre kein eBike -->
   <url>
     <loc>https://radlhias.tv/blog/ich-fahre-kein-ebike-aber-ich-verstehe-jeden-der-es-tut.html</loc>
     <lastmod>2026-05-07</lastmod>
@@ -36,6 +41,15 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Blog: Sollte jeder ein eBike fahren dürfen -->
+  <url>
+    <loc>https://radlhias.tv/blog/sollte-jeder-ein-ebike-fahren-duerfen.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog: Fahrradgeschäft eröffnen -->
   <url>
     <loc>https://radlhias.tv/blog/fahrradgeschaeft-eroeffnen-was-ich-wirklich-gelernt-habe.html</loc>
     <lastmod>2026-05-06</lastmod>
@@ -43,6 +57,7 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Blog: Fahrrad-Technik mehr Gänge mehr Kosten -->
   <url>
     <loc>https://radlhias.tv/blog/fahrrad-technik-mehr-gaenge-mehr-kosten-wer-profitiert.html</loc>
     <lastmod>2026-05-06</lastmod>
@@ -50,6 +65,7 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Blog: Die schmutzige Meisterprüfung -->
   <url>
     <loc>https://radlhias.tv/blog/die-schmutzige-meisterpruefung-die-mich-stolz-machte.html</loc>
     <lastmod>2026-05-06</lastmod>
@@ -57,6 +73,7 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Blog: KTM / Canyon / Stevens -->
   <url>
     <loc>https://radlhias.tv/blog/ist-ktm-ein-gutes-fahrrad-ist-canyon-gut-ist-stevens-was-wert.html</loc>
     <lastmod>2026-04-30</lastmod>
