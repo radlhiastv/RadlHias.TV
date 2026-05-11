@@ -98,7 +98,7 @@
 
   /* ── TOOLS GRID ── */
   .tools {
-    padding: 0 40px 100px;
+    padding: 0 40px 40px;
     max-width: 1100px;
     margin: 0 auto;
     display: grid;
@@ -137,7 +137,7 @@
     font-size: 14px;
     line-height: 1.6;
     color: var(--muted);
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 
   .tag-list {
@@ -192,34 +192,29 @@
     transform: translateX(3px);
   }
 
-  /* ── NEWSLETTER TEASER ── */
+  /* ── NEWSLETTER TEASER (im Grid) ── */
   .nl-teaser {
-    margin: 0 40px 80px;
-    max-width: 1020px;
-    margin-left: auto;
-    margin-right: auto;
-    background: linear-gradient(110deg, rgba(200,90,20,0.15) 0%, rgba(13,27,42,0) 60%);
-    border: 1px solid rgba(200,90,20,0.25);
-    border-radius: 20px;
-    padding: 40px 48px;
+    background: linear-gradient(135deg, rgba(200,90,20,0.18) 0%, rgba(13,27,42,0) 70%);
+    border: 1px solid rgba(200,90,20,0.3);
+    border-radius: 16px;
+    padding: 32px 28px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
   }
   .nl-teaser-text h3 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 900;
     text-transform: uppercase;
     color: #fff;
     margin-bottom: 8px;
+    letter-spacing: 0.5px;
   }
   .nl-teaser-text p {
     font-size: 14px;
     color: var(--muted);
-    max-width: 480px;
     line-height: 1.6;
   }
 
@@ -393,85 +388,42 @@
     <span class="tool-icon">🚲</span>
     <h2>Kaufberater</h2>
     <p>Welches Fahrrad passt wirklich zu dir? Anwendungsgebiet, Budget, Körpergröße – ich führe dich Schritt für Schritt zur richtigen Entscheidung.</p>
-    <div class="tag-list">
-      <span class="tag">Neukauf</span>
-      <span class="tag">E-Bike</span>
-      <span class="tag">Gravel</span>
-      <span class="tag">MTB</span>
-    </div>
-    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
   </div>
 
   <div class="tool-card">
     <span class="tool-icon">🔧</span>
     <h2>Gebraucht-Check</h2>
     <p>Gebrauchtes Fahrrad kaufen ohne böse Überraschungen. Meine Checkliste zeigt dir, worauf du wirklich achten musst – bevor du Geld ausgibst.</p>
-    <div class="tag-list">
-      <span class="tag">Gebraucht</span>
-      <span class="tag">Inspektion</span>
-      <span class="tag">Preisbewertung</span>
-    </div>
-    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
   </div>
 
   <div class="tool-card">
     <span class="tool-icon">🎯</span>
     <h2>Bike-Fitting</h2>
     <p>Sattelhöhe, Sattelposition, Lenkerhöhe – die richtige Einstellung verhindert Schmerzen und macht das Fahren deutlich effizienter.</p>
-    <div class="tag-list">
-      <span class="tag">Sitzposition</span>
-      <span class="tag">Ergonomie</span>
-      <span class="tag">Schmerzfrei</span>
-    </div>
-    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
   </div>
 
   <div class="tool-card">
     <span class="tool-icon">💨</span>
     <h2>Luftdruck Rechner</h2>
     <p>Der richtige Druck hängt von Körpergewicht, Reifenbreite und Untergrund ab. Mein Rechner gibt dir den optimalen Wert – sofort und kostenlos.</p>
-    <div class="tag-list">
-      <span class="tag">Reifen</span>
-      <span class="tag">Druck</span>
-      <span class="tag">Performance</span>
-    </div>
-    <a href="index.html#newsletter" class="card-cta">Zugang holen →</a>
   </div>
 
   <div class="tool-card">
     <span class="tool-icon">❓</span>
     <h2>FAQ – Ehrliche Antworten</h2>
     <p>Was kostet eine Inspektion wirklich? Lohnt sich ein E-Bike? Welche Marken sind ihr Geld wert? Ich beantworte die Fragen, die Händler lieber nicht hören.</p>
-    <div class="tag-list">
-      <span class="tag">Kosten</span>
-      <span class="tag">Marken</span>
-      <span class="tag">Wartung</span>
+  </div>
+
+  <div class="nl-teaser">
+    <div class="nl-teaser-text">
+      <h3>Alle Tools – kostenlos per Newsletter</h3>
+      <p>Trag dich ein und ich schicke dir deinen persönlichen Zugangslink. Kein Spam, kein Abo-Modell. Einmal eintragen, dauerhaft nutzen.</p>
     </div>
-    <a href="index.html#newsletter" class="card-cta ghost">Demnächst verfügbar</a>
+    <a href="index.html#newsletter" class="card-cta" style="white-space:nowrap; align-self:flex-start;">
+      Jetzt Newsletter abonnieren →
+    </a>
   </div>
 
-  <div class="tool-card">
-    <span class="tool-icon">📊</span>
-    <h2>Zustandsbewertung</h2>
-    <p>Wie gut ist dein aktuelles Fahrrad noch? Lohnt sich eine Reparatur oder ist ein Neukauf sinnvoller? Ich zeige dir, wie du das selbst einschätzen kannst.</p>
-    <div class="tag-list">
-      <span class="tag">Verschleiß</span>
-      <span class="tag">Reparatur</span>
-      <span class="tag">Neukauf</span>
-    </div>
-    <a href="index.html#newsletter" class="card-cta ghost">Demnächst verfügbar</a>
-  </div>
-
-</div>
-
-<div class="nl-teaser">
-  <div class="nl-teaser-text">
-    <h3>Alle Tools – kostenlos per Newsletter</h3>
-    <p>Trag dich ein und ich schicke dir deinen persönlichen Zugangslink. Kein Spam, kein Abo-Modell. Einmal eintragen, dauerhaft nutzen.</p>
-  </div>
-  <a href="index.html#newsletter" class="card-cta" style="white-space:nowrap; flex-shrink:0;">
-    Jetzt Newsletter abonnieren →
-  </a>
 </div>
 
 <!-- DISCLAIMER -->
