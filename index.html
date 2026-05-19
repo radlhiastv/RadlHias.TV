@@ -1164,7 +1164,7 @@
   /* Innerer Wrapper: feste Größe 900×260, wird via JS skaliert */
   .rh-banner-wrap {
     width: 900px;
-    height: 260px;
+    height: 360px;
     transform-origin: top left;
     position: relative;
     font-family: 'Barlow', sans-serif;
@@ -1175,7 +1175,7 @@
     position: absolute;
     inset: 0;
     width: 900px;
-    height: 260px;
+    height: 360px;
     border-radius: 16px;
     overflow: hidden;
     display: block;
@@ -1231,7 +1231,7 @@
     top: 0; left: 0;
     width: 0; height: 0;
     border-style: solid;
-    border-width: 72px 90px 0 0;
+    border-width: 96px 120px 0 0;
     border-color: #c85a14 transparent transparent transparent;
     z-index: 10;
   }
@@ -1255,36 +1255,37 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 22px 28px 22px 36px;
+    padding: 40px 28px 40px 40px;
     max-width: 72%;
   }
 
   /* Button rechts unten – eigene Zeile außerhalb des content-div */
   .rh-btn-wrap {
     position: absolute;
-    bottom: 22px;
-    right: 28px;
+    bottom: 38px;
+    right: 36px;
     z-index: 16;
   }
 
   .rh-headline {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    line-height: 0.88;
+    line-height: 0.92;
     color: #ffffff;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     letter-spacing: -1px;
   }
 
   .rh-headline .rh-line1 {
-    font-size: 52px;
+    font-size: 62px;
     display: block;
     margin-left: -2px;
+    margin-bottom: 6px;
   }
 
   .rh-headline .rh-line2 {
-    font-size: 78px;
+    font-size: 96px;
     display: block;
     color: rgba(255,255,255,0.85);
     line-height: 0.92;
@@ -1302,13 +1303,13 @@
 
   .rh-cta-line {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     color: #e06820;
-    margin-top: 10px;
-    margin-bottom: 14px;
+    margin-top: 20px;
+    margin-bottom: 0px;
     line-height: 1.2;
     white-space: nowrap;
   }
@@ -1353,7 +1354,7 @@
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 11px 26px;
+    padding: 14px 32px;
     border-radius: 4px;
     width: fit-content;
     transition: background 0.2s, transform 0.15s;
@@ -1402,7 +1403,7 @@
 
   <script>
     (function() {
-      var BANNER_W = 900, BANNER_H = 260;
+      var BANNER_W = 900, BANNER_H = 360;
       function scaleBanner() {
         var outer = document.getElementById('rhBannerOuter');
         var wrap  = document.getElementById('rhBannerWrap');
