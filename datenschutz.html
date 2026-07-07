@@ -174,6 +174,61 @@
     .nav-links { gap: 12px; }
     .nav-links a { font-size: 11px; }
   }
+
+/* Burger-Menü (nur mobil) */
+.main-nav .nav-toggle-checkbox { display: none; }
+.main-nav .nav-toggle-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 28px;
+  height: 24px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.main-nav .nav-toggle-burger span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background: #f5f1eb;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+@media (max-width: 640px) {
+  .main-nav .nav-toggle-burger { display: flex; }
+  .main-nav .nav-links {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #0a1219;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .main-nav .nav-links a {
+    padding: 14px 0;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .main-nav .nav-links a:first-child { border-top: none; }
+  .main-nav .nav-links .nav-cta {
+    display: inline-block;
+    margin: 12px 0 16px;
+    text-align: center;
+  }
+  .main-nav .nav-toggle-checkbox:checked ~ .nav-links { max-height: 320px; }
+  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(2) { opacity: 0; }
+  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+}
+
 </style>
 </head>
 <body>
@@ -188,6 +243,7 @@
     <a href="index.html#blog">Blog</a>
     <a href="konfigurator.html">Konfigurator</a>
     <a href="videos.html">Videos</a>
+    <a href="bikeservice.html">Bike Service</a>
     <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
   </div>
 </nav>
