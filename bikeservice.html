@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bike Service – RadlHias.TV</title>
-<meta name="description" content="Fahrrad-Service von RadlHias.TV: Kinder-/Neurad-Service, normaler Service und Premium-Service inkl. Komplett-Reinigung.">
+<meta name="description" content="Fahrrad-Service von RadlHias.TV: ehrlich, transparent und ohne Verkaufsdruck.">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
@@ -171,165 +171,47 @@
     line-height: 1.6;
   }
 
-  /* ===== SERVICE PAKETE ===== */
-  .service-wrap {
-    max-width: 1200px;
+  /* ===== SERVICE-EINSTELLUNG ===== */
+  .philosophy-wrap {
+    max-width: 760px;
     margin: 0 auto;
-    padding: 0 20px 40px;
+    padding: 0 20px 70px;
   }
 
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 28px;
-    align-items: stretch;
-  }
-
-  .service-card {
+  .philosophy-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     box-shadow: var(--shadow);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 40px 36px;
   }
 
-  .service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(28,52,72,0.18);
-  }
-
-  .service-card.featured {
-    border: 2px solid var(--orange);
-    position: relative;
-  }
-
-  .service-badge {
-    position: absolute;
-    top: 0;
-    right: 24px;
-    background: var(--orange);
-    color: white;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 0 0 6px 6px;
-  }
-
-  .service-head {
-    background: var(--navy);
-    color: var(--cream);
-    padding: 28px 24px 22px;
-    text-align: center;
-  }
-
-  .service-icon { font-size: 34px; margin-bottom: 10px; display: block; }
-
-  .service-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
-
-  .service-sub {
-    font-size: 13px;
-    color: var(--blue-muted);
-  }
-
-  .service-price {
-    padding: 20px 24px 4px;
-    text-align: center;
-  }
-
-  .service-price .amount {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 34px;
-    font-weight: 900;
-    color: var(--navy);
-  }
-
-  .service-price .amount span {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .service-price .hint {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-
-  .service-body {
-    padding: 12px 24px 28px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .service-list {
-    list-style: none;
-    margin: 8px 0 24px;
-    flex: 1;
-  }
-
-  .service-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 14.5px;
-    line-height: 1.5;
+  .philosophy-card p {
+    font-size: 16px;
+    line-height: 1.8;
     color: var(--text);
-    margin-bottom: 11px;
+    margin-bottom: 18px;
   }
 
-  .service-list li::before {
-    content: "✓";
-    color: var(--orange);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
+  .philosophy-card p:last-of-type { margin-bottom: 0; }
 
-  .service-cta {
-    display: block;
-    text-align: center;
+  .philosophy-cta {
+    display: inline-block;
+    margin-top: 28px;
     background: var(--orange);
     color: white;
     text-decoration: none;
     font-weight: 700;
     font-size: 14px;
     letter-spacing: 0.5px;
-    padding: 12px 20px;
+    padding: 12px 24px;
     border-radius: 8px;
     transition: background 0.2s, transform 0.15s;
   }
 
-  .service-cta:hover {
+  .philosophy-cta:hover {
     background: var(--orange-light);
     transform: translateY(-2px);
-  }
-
-  /* ===== INFO-HINWEIS ===== */
-  .service-note {
-    max-width: 760px;
-    margin: 8px auto 60px;
-    padding: 20px 24px;
-    background: var(--cream2);
-    border-left: 4px solid var(--orange);
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.7;
   }
 
   /* ===== FOOTER ===== */
@@ -387,91 +269,18 @@
 <!-- ===== PAGE HEADER ===== -->
 <div class="page-header">
   <h1>Bike<span>Service</span></h1>
-  <p>Wartung, Reparatur und Pflege für dein Fahrrad – ehrlich kalkuliert, ohne versteckte Positionen. Drei Pakete, je nach Bedarf.</p>
+  <p>Wartung, Reparatur und Pflege für dein Fahrrad – ehrlich, transparent und ohne Verkaufsdruck.</p>
 </div>
 
-<!-- ===== SERVICE PAKETE ===== -->
-<div class="service-wrap">
-  <div class="service-grid">
-
-    <!-- Paket 1: Kinder-/Neurad-Service -->
-    <div class="service-card">
-      <div class="service-head">
-        <span class="service-icon">🚲</span>
-        <div class="service-name">Kinder- &amp; Neurad-Service</div>
-        <div class="service-sub">Nach dem Neukauf</div>
-      </div>
-      <div class="service-price">
-        <div class="amount">ab XX <span>€</span></div>
-        <div class="hint">Richtpreis, abhängig vom Radtyp</div>
-      </div>
-      <div class="service-body">
-        <ul class="service-list">
-          <li>Erstinspektion nach den ersten 200–300 km bzw. wenigen Wochen im Einsatz</li>
-          <li>Nachjustierung von Schaltung und Bremsen – neue Züge setzen sich in der Einfahrzeit</li>
-          <li>Speichenspannung und Laufradzentrierung prüfen und nachziehen</li>
-          <li>Alle Schraubverbindungen (Pedale, Vorbau, Sattelstütze) kontrollieren und nachziehen</li>
-          <li>Reifendruck und Zustand prüfen</li>
-          <li>Kurze Einweisung für Eltern bzw. junge Fahrer:innen</li>
-        </ul>
-        <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Kinder-%2F%20Neurad-Service" class="service-cta">Service anfragen</a>
-      </div>
-    </div>
-
-    <!-- Paket 2: Normaler Service -->
-    <div class="service-card featured">
-      <span class="service-badge">Beliebt</span>
-      <div class="service-head">
-        <span class="service-icon">🔧</span>
-        <div class="service-name">Normaler Service</div>
-        <div class="service-sub">Die Standardwartung</div>
-      </div>
-      <div class="service-price">
-        <div class="amount">ab XX <span>€</span></div>
-        <div class="hint">Richtpreis, abhängig vom Radtyp</div>
-      </div>
-      <div class="service-body">
-        <ul class="service-list">
-          <li>Antrieb reinigen (Kette, Kassette, Kettenblätter)</li>
-          <li>Schaltung einstellen und Funktion prüfen</li>
-          <li>Bremsen prüfen und einstellen (Beläge, Scheiben bzw. Felgen)</li>
-          <li>Verschleißteile-Check: Kette, Reifen, Bremsbeläge</li>
-          <li>Schraubverbindungen und Lagerspiel kontrollieren</li>
-          <li>Reifendruck, Sichtkontrolle und kurze Funktionsprobefahrt</li>
-        </ul>
-        <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Normaler%20Service" class="service-cta">Service anfragen</a>
-      </div>
-    </div>
-
-    <!-- Paket 3: Premium Service -->
-    <div class="service-card">
-      <div class="service-head">
-        <span class="service-icon">✨</span>
-        <div class="service-name">Premium Service</div>
-        <div class="service-sub">Inkl. Komplett-Reinigung</div>
-      </div>
-      <div class="service-price">
-        <div class="amount">ab XX <span>€</span></div>
-        <div class="hint">Richtpreis, abhängig vom Radtyp</div>
-      </div>
-      <div class="service-body">
-        <ul class="service-list">
-          <li>Alle Leistungen des normalen Service</li>
-          <li>Komplett-Reinigung: Rahmen, Laufräder, Antrieb und Schaltwerk</li>
-          <li>Antrieb entfetten und neu fetten</li>
-          <li>Lagerspiel an Steuersatz, Tretlager und Naben prüfen</li>
-          <li>Bremsanlage im Detail geprüft, auf Wunsch Entlüftung (hydraulisch)</li>
-          <li>Rahmenpflege/Politur und ausführlicher Check-Bericht</li>
-        </ul>
-        <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Premium%20Service" class="service-cta">Service anfragen</a>
-      </div>
-    </div>
-
+<!-- ===== SERVICE-EINSTELLUNG (Platzhaltertext – bitte von Mathias final abstimmen) ===== -->
+<div class="philosophy-wrap">
+  <div class="philosophy-card">
+    <p>Ich könnte dir hier fixe Service-Pakete mit Preisen auflisten. Mache ich bewusst nicht.</p>
+    <p>Jedes Fahrrad kommt in einem anderen Zustand zu mir – ein Kinderrad nach dem ersten Sommer braucht etwas anderes als ein E-Bike nach drei Jahren im Alltag. Ein Pauschalpreis, der das ignoriert, wäre für mich nicht ehrlich.</p>
+    <p>Was du von mir bekommst: Ich schaue mir dein Rad in Ruhe an und sage dir, was wirklich notwendig ist – und was nicht. Du bekommst vorher ein klares, verbindliches Angebot. Erst wenn du zustimmst, wird geschraubt. Keine Überraschungen auf der Rechnung, keine Leistungen, die du nicht brauchst.</p>
+    <p>Egal ob kurzer Check nach dem Neukauf, normale Wartung oder eine Komplett-Aufbereitung deines Rads: Schreib mir kurz, was ansteht – ich melde mich mit einer ehrlichen Einschätzung.</p>
+    <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta">Rad anfragen</a>
   </div>
-
-  <p class="service-note">
-    <strong>Hinweis:</strong> Die genannten Preise sind Richtwerte und können je nach Radtyp, Zustand und Ersatzteilbedarf abweichen. Nach kurzer Sichtung des Rads bekommst du von mir ein verbindliches Angebot, bevor etwas gemacht wird.
-  </p>
 </div>
 
 <!-- ===== FOOTER ===== -->
@@ -491,4 +300,10 @@
     </div>
     <div class="footer-bottom">
       <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
-      <p style="margin-top:8px;">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision · Kein kommerzielles A
+      <p style="margin-top:8px;">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision · Kein kommerzielles Angebot</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
