@@ -902,7 +902,7 @@ function showLoadingOverlay(callback) {
           </svg>
         </div>
       </div>
-      <div style="font-family:'Dancing Script',cursive; font-size:28px; color:#1c3448; margin-bottom:14px; line-height:1.2;">Radl Hias</div>
+      <div style="font-family:'Abuget',cursive; font-size:38px; color:#1c3448; margin-bottom:14px; line-height:1.2;">Radl Hias</div>
       <p style="font-family:'Barlow',sans-serif; font-size:14px; color:#4a6a84; line-height:1.8; font-style:italic; margin:0;">
         Der Radl Hias schaut sich nochmal deine Daten an und überlegt, welches Fahrrad zu Dir passt&nbsp;…
       </p>
