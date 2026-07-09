@@ -10,7 +10,26 @@
   <meta property="og:description" content="Ehrliche Geschichten, Erfahrungen und Meinungen rund ums Fahrrad. Kein Sponsoring. Keine Provision.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://radlhias.tv/">
+  <meta property="og:image" content="https://radlhias.tv/Fotos/RadlHias_Portrait_2026.jpg">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RadlHias.TV",
+    "url": "https://radlhias.tv/",
+    "description": "Ehrliche Geschichten, Erfahrungen und Meinungen rund ums Fahrrad. Kein Sponsoring. Keine Provision.",
+    "author": {
+      "@type": "Person",
+      "name": "Mathias Blumreich",
+      "url": "https://radlhias.tv/",
+      "jobTitle": "Fahrradmechaniker",
+      "sameAs": [
+        "https://www.instagram.com/radlhias.tv/"
+      ]
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -90,7 +109,7 @@
     }
 
     .hero-center { text-align: center; color: var(--cream); padding: 0 6px; }
-    .hero-logo-badge { width: 117px; margin: 0 auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
+    .hero-logo-badge { width: 117px; height: auto; margin: 0 auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
     .hero-bio {
       font-size: 14.5px;
       line-height: 1.75;
@@ -480,54 +499,6 @@
     }
     .kontakt-note { font-size: 12px; color: var(--blue-lt); margin-top: 16px; line-height: 1.6; }
 
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--navy);
-      color: var(--cream);
-      padding: 44px 20px 32px;
-      text-align: center;
-      border-top: 3px solid var(--orange);
-    }
-    .footer-content { max-width: 1100px; margin: 0 auto; }
-    .footer-wordmark {
-      font-family: 'Abuget', cursive;
-      font-size: 30px;
-      color: var(--cream);
-      margin-bottom: 18px;
-    }
-    .footer-nav {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
-    }
-    .footer-nav a {
-      color: var(--cream);
-      text-decoration: none;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 13px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .footer-nav a:hover { color: var(--blue-lt); }
-    .footer-social { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
-    .footer-social a, .footer-social span {
-      color: var(--cream);
-      font-size: 19px;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-social a:hover { color: var(--orange); }
-    .footer-social span { opacity: 0.35; cursor: default; }
-    .footer-bottom {
-      border-top: 1px solid rgba(168,200,220,0.2);
-      padding-top: 18px;
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.7;
-    }
 
     /* ===== ADMIN (versteckt, Ctrl+Shift+A) ===== */
     #admin-toggle {
@@ -568,17 +539,17 @@
   <div class="hero-grid">
     <div class="hero-photos left">
       <div class="hero-tile">
-        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.jpg" alt="Mathias in seiner Werkstatt"></div>
+        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.jpg" alt="Mathias in seiner Werkstatt" width="469" height="700"></div>
         <span class="polaroid-year">2012</span>
       </div>
       <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.jpg" alt="Mathias beim Schrauben am Mountainbike"></div>
+        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.jpg" alt="Mathias beim Schrauben am Mountainbike" width="466" height="700"></div>
         <span class="polaroid-year">2019</span>
       </div>
     </div>
     <div class="hero-center">
       <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">RadlHias.TV – Ehrliche Fahrrad-Beratung von Mathias</h1>
-      <img src="RadlHias_Logo_freigestellt_cream.png" alt="RadlHias.TV Logo" class="hero-logo-badge">
+      <img src="RadlHias_Logo_freigestellt_cream.png" alt="RadlHias.TV Logo" class="hero-logo-badge" width="500" height="500">
       <p class="hero-bio">
         Ich bin Mathias (45) und Fahrräder begleiten mich mein gesamtes Leben. Seit inzwischen mehr
         als 25 Jahren auch beruflich. Ob als Mechaniker, als Verkäufer, als Kundendienstmitarbeiter
@@ -594,11 +565,11 @@
     </div>
     <div class="hero-photos right">
       <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.jpg" alt="Mathias bei der Fahrradmontage"></div>
+        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.jpg" alt="Mathias bei der Fahrradmontage" width="1000" height="670"></div>
         <span class="polaroid-year">2012</span>
       </div>
       <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;"></div>
+        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;" width="604" height="900"></div>
         <span class="polaroid-year">2026</span>
       </div>
     </div>
@@ -634,7 +605,7 @@
 <!-- ===== KONFIGURATOR-WERBEBANNER ===== -->
 <section class="kfg-banner">
   <div class="kfg-banner-media">
-    <img src="konfigurator-banner-foto.jpg" alt="Hände halten ein Smartphone mit dem RadlHias Luftdruck-Rechner, im Hintergrund eine Fahrrad-Werkstatt">
+    <img src="konfigurator-banner-foto.jpg" alt="Hände halten ein Smartphone mit dem RadlHias Luftdruck-Rechner, im Hintergrund eine Fahrrad-Werkstatt" width="2200" height="1228">
     <div class="kfg-banner-scrim"></div>
     <div class="kfg-banner-inner">
       <div class="kfg-col kfg-col-left">
@@ -895,4 +866,3 @@ loadBlogTeasers();
 
 </body>
 </html>
-                                                                                                                                                                                                                          

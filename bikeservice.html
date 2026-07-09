@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bike Service – RadlHias.TV</title>
 <meta name="description" content="Fahrrad-Service von RadlHias.TV: ehrlich, transparent und ohne Verkaufsdruck.">
+<link rel="canonical" href="https://radlhias.tv/bikeservice.html">
+<meta property="og:title" content="Bike Service – RadlHias.TV">
+<meta property="og:description" content="Fahrrad-Service von RadlHias.TV: ehrlich, transparent und ohne Verkaufsdruck.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radlhias.tv/bikeservice.html">
+<meta property="og:image" content="https://radlhias.tv/Fotos/foto-werkstatt-shop.jpg">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-  @font-face {
-    font-family: 'Abuget';
-    src: url('Abuget.ttf') format('truetype');
-    font-display: swap;
-  }
   :root {
-    --navy: #1a2e3d;
+    --navy: #1c3448;
     --navy-dark: #111e28;
     --orange: #c85a14;
     --orange-light: #e06820;
@@ -39,110 +41,6 @@
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
-  }
-
-  /* ===== EINHEITLICHE NAVIGATION ===== */
-  .main-nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100000;
-    background: #0a1219;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    padding: 0 20px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    font-family: 'Barlow', sans-serif;
-  }
-  .nav-logo {
-    font-family: 'Abuget', cursive;
-    font-size: 24px;
-    color: #f5f1eb;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .nav-links {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-  }
-  .nav-links a {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #a8c8dc;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover,
-  .nav-links a.active { color: #f5f1eb; }
-  .nav-links a.nav-cta {
-    background: var(--orange);
-    padding: 7px 14px;
-    border-radius: 6px;
-    color: white;
-  }
-  .nav-links a.nav-cta:hover { background: #a04a10; color: white; }
-  @media (max-width: 540px) {
-    .nav-links { gap: 12px; }
-    .nav-links a { font-size: 11px; }
-  }
-
-  /* Burger-Menü (nur mobil) */
-  .main-nav .nav-toggle-checkbox { display: none; }
-  .main-nav .nav-toggle-burger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 28px;
-    height: 24px;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .main-nav .nav-toggle-burger span {
-    display: block;
-    width: 100%;
-    height: 2.5px;
-    background: #f5f1eb;
-    border-radius: 2px;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  @media (max-width: 640px) {
-    .main-nav .nav-toggle-burger { display: flex; }
-    .main-nav .nav-links {
-      position: fixed;
-      top: 56px;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      background: #0a1219;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 0 20px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.25s ease;
-    }
-    .main-nav .nav-links a {
-      padding: 14px 0;
-      font-size: 13px;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .main-nav .nav-links a:first-child { border-top: none; }
-    .main-nav .nav-links .nav-cta {
-      display: inline-block;
-      margin: 12px 0 16px;
-      text-align: center;
-    }
-    .main-nav .nav-toggle-checkbox:checked ~ .nav-links { max-height: 320px; }
-    .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-    .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(2) { opacity: 0; }
-    .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
   }
 
   /* ===== PAGE HEADER ===== */
@@ -195,9 +93,16 @@
 
   .philosophy-card p:last-of-type { margin-bottom: 0; }
 
-  .philosophy-cta {
-    display: inline-block;
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 28px;
+  }
+
+  .philosophy-cta {
+    display: inline-flex;
+    align-items: center;
     background: var(--orange);
     color: white;
     text-decoration: none;
@@ -214,38 +119,29 @@
     transform: translateY(-2px);
   }
 
-  /* ===== FOOTER ===== */
-  footer {
-    background: #1c3448;
-    color: #f5f1eb;
-    padding: 44px 20px 32px;
-    text-align: center;
-    border-top: 3px solid #c85a14;
-    margin-top: 40px;
-  }
-  .footer-content { max-width: 1100px; margin: 0 auto; }
-  .footer-wordmark {
-    font-family: 'Abuget', cursive;
-    font-size: 30px;
-    color: #f5f1eb;
-    margin-bottom: 18px;
-  }
-  .footer-nav { display: flex; justify-content: center; gap: 24px; margin-bottom: 22px; flex-wrap: wrap; }
-  .footer-nav a {
-    color: #f5f1eb;
+  .whatsapp-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: white;
     text-decoration: none;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.15s;
   }
-  .footer-nav a:hover { color: #a8c8dc; }
-  .footer-social { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
-  .footer-social a, .footer-social span { color: #f5f1eb; font-size: 19px; text-decoration: none; transition: color 0.2s; }
-  .footer-social a:hover { color: #c85a14; }
-  .footer-social span { opacity: 0.35; cursor: default; }
-  .footer-bottom { border-top: 1px solid rgba(168,200,220,0.2); padding-top: 18px; font-size: 12px; color: #a8c8dc; line-height: 1.7; }
+
+  .whatsapp-cta svg { width: 30px; height: 30px; flex-shrink: 0; margin: -7px 0; }
+
+  .whatsapp-cta:hover {
+    background: #1ebe57;
+    transform: translateY(-2px);
+  }
+
+  footer { margin-top: 40px; }
 </style>
 </head>
 <body>
@@ -279,7 +175,13 @@
     <p>Jedes Fahrrad kommt in einem anderen Zustand zu mir – ein Kinderrad nach dem ersten Sommer braucht etwas anderes als ein E-Bike nach drei Jahren im Alltag. Ein Pauschalpreis, der das ignoriert, wäre für mich nicht ehrlich.</p>
     <p>Was du von mir bekommst: Ich schaue mir dein Rad in Ruhe an und sage dir, was wirklich notwendig ist – und was nicht. Du bekommst vorher ein klares, verbindliches Angebot. Erst wenn du zustimmst, wird geschraubt. Keine Überraschungen auf der Rechnung, keine Leistungen, die du nicht brauchst.</p>
     <p>Egal ob kurzer Check nach dem Neukauf, normale Wartung oder eine Komplett-Aufbereitung deines Rads: Schreib mir kurz, was ansteht – ich melde mich mit einer ehrlichen Einschätzung.</p>
-    <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta">Rad anfragen</a>
+    <div class="cta-row">
+      <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta">Service anfragen</a>
+      <a href="https://wa.me/4367762985544?text=Hallo%20Mathias%2C%20ich%20habe%20eine%20Anfrage%20zum%20Bike%20Service" target="_blank" rel="noopener noreferrer" class="whatsapp-cta">
+        <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.19.588 4.24 1.617 6.007L4 29l8.2-1.578A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.818a9.77 9.77 0 0 1-4.98-1.362l-.357-.212-4.868.937.955-4.75-.233-.367A9.76 9.76 0 0 1 6.182 15c0-5.412 4.41-9.818 9.822-9.818S25.818 9.588 25.818 15 21.416 24.818 16.004 24.818zm5.373-7.34c-.294-.148-1.74-.858-2.01-.956-.27-.099-.467-.148-.663.148-.196.295-.762.956-.934 1.152-.172.196-.344.221-.638.074-.294-.148-1.24-.457-2.362-1.457-.873-.779-1.463-1.741-1.635-2.036-.172-.295-.018-.454.13-.601.134-.133.294-.344.442-.516.147-.172.196-.295.294-.492.098-.196.049-.369-.025-.517-.074-.148-.663-1.598-.908-2.19-.239-.575-.482-.497-.663-.506l-.565-.01c-.196 0-.516.074-.786.369-.27.295-1.03 1.006-1.03 2.455 0 1.449 1.055 2.85 1.202 3.046.147.196 2.077 3.17 5.033 4.445.703.304 1.252.485 1.68.62.706.224 1.348.192 1.856.117.566-.085 1.74-.712 1.985-1.4.246-.688.246-1.277.172-1.4-.074-.123-.27-.196-.564-.344z"/></svg>
+        WhatsApp
+      </a>
+    </div>
   </div>
 </div>
 

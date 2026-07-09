@@ -8,6 +8,7 @@
   --blue-mid: #4a8aaa;
   --blue-lt:  #a8c8dc;
   --orange:   #c85a14;
+  --orange2:  #e06820;
   --text:     #2a3a48;
   --text-dim: #7a8a98;
   --border:   #ccc8c0;
@@ -31,6 +32,11 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Sicherheitsnetz: verhindert verzerrte Bilder, wenn width/height-Attribute
+   gesetzt sind, CSS aber nur eine Dimension überschreibt. Spezifischere
+   Regeln (z.B. object-fit-Container mit width+height:100%) haben Vorrang. */
+img { height: auto; }
 
 body {
   background: var(--cream);
@@ -141,7 +147,11 @@ header.compact .logo-tagline {
   border-radius: 6px;
   color: white !important;
 }
-.main-nav .nav-cta:hover { background: #a04a10; }
+.main-nav .nav-cta:hover { background: var(--orange2); }
+@media (max-width: 540px) {
+  .main-nav .nav-links { gap: 12px; }
+  .main-nav .nav-links a { font-size: 11px; }
+}
 
 /* Burger-Menü (nur mobil) */
 .main-nav .nav-toggle-checkbox { display: none; }
@@ -195,6 +205,55 @@ header.compact .logo-tagline {
   .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
   .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(2) { opacity: 0; }
   .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+}
+
+/* ===== EINHEITLICHER FOOTER (alle Seiten) ===== */
+footer {
+  background: var(--navy);
+  color: var(--cream);
+  padding: 44px 20px 32px;
+  text-align: center;
+  border-top: 3px solid var(--orange);
+}
+.footer-content { max-width: 1100px; margin: 0 auto; }
+.footer-wordmark {
+  font-family: 'Abuget', cursive;
+  font-size: 30px;
+  color: var(--cream);
+  margin-bottom: 18px;
+}
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.footer-nav a {
+  color: var(--cream);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer-nav a:hover { color: var(--blue-lt); }
+.footer-social { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
+.footer-social a, .footer-social span {
+  color: var(--cream);
+  font-size: 19px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-social a:hover { color: var(--orange); }
+.footer-social span { opacity: 0.35; cursor: default; }
+.footer-bottom {
+  border-top: 1px solid rgba(168,200,220,0.2);
+  padding-top: 18px;
+  font-size: 12px;
+  color: var(--blue-lt);
+  line-height: 1.7;
 }
 
 /* NAV DROPDOWN */

@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🚲 Sollte jeder ein eBike fahren dürfen? – RadlHias.TV</title>
 <meta name="description" content="Sollte jeder ein eBike fahren dürfen? Radl Hias fragt, was Händler und Hersteller beim Thema Sicherheit und Verantwortung gerne verschweigen.">
 <link rel="canonical" href="https://radlhias.tv/blog/sollte-jeder-ein-ebike-fahren-duerfen.html">
@@ -31,82 +31,15 @@
   "image": "https://radlhias.tv/blogimages/Oma_faehrt_ebike_2048.webp"
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
 <style>
-  @font-face {
-    font-family: 'Abuget';
-    src: url('../Abuget.ttf') format('truetype');
-    font-display: swap;
-  }
   :root {
-    --navy:#0d1b2a; --navy2:#162232; --orange:#c85a14; --orange2:#e06820;
+    --navy:#1c3448; --navy2:#254560; --orange:#c85a14; --orange2:#e06820;
     --text:#c8d8e8; --muted:rgba(168,200,220,0.55); --border:rgba(255,255,255,0.08);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--navy);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;}
-  .main-nav{position:fixed;top:0;left:0;right:0;z-index:100000;display:flex;align-items:center;
-    justify-content:space-between;padding:0 20px;height:56px;background:#0a1219;border-bottom:1px solid rgba(255,255,255,0.07);}
-  .main-nav .nav-logo{font-family:'Abuget',cursive;font-size:24px;color:#f5f1eb;text-decoration:none;white-space:nowrap;}
-  .main-nav .nav-links{display:flex;gap:24px;align-items:center;}
-  .main-nav .nav-links a{font-size:13px;font-weight:600;letter-spacing:0.5px;color:#a8c8dc;text-decoration:none;text-transform:uppercase;transition:color 0.2s;}
-  .main-nav .nav-links a:hover{color:#f5f1eb;}
-  .main-nav .nav-cta{background:var(--orange);padding:7px 14px;border-radius:6px;color:white;}
-  .main-nav .nav-cta:hover{background:var(--orange2);color:white;}
-  @media (max-width:540px){.main-nav .nav-links{gap:12px;}.main-nav .nav-links a{font-size:11px;}}
-
-/* Burger-Menü (nur mobil) */
-.main-nav .nav-toggle-checkbox { display: none; }
-.main-nav .nav-toggle-burger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 28px;
-  height: 24px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.main-nav .nav-toggle-burger span {
-  display: block;
-  width: 100%;
-  height: 2.5px;
-  background: #f5f1eb;
-  border-radius: 2px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-@media (max-width: 640px) {
-  .main-nav .nav-toggle-burger { display: flex; }
-  .main-nav .nav-links {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    background: #0a1219;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    padding: 0 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.25s ease;
-  }
-  .main-nav .nav-links a {
-    padding: 14px 0;
-    font-size: 13px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-  .main-nav .nav-links a:first-child { border-top: none; }
-  .main-nav .nav-links .nav-cta {
-    display: inline-block;
-    margin: 12px 0 16px;
-    text-align: center;
-  }
-  .main-nav .nav-toggle-checkbox:checked ~ .nav-links { max-height: 320px; }
-  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(2) { opacity: 0; }
-  .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-}
 
   .article{max-width:740px;margin:0 auto;padding:100px 40px 80px;}
   .article-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
@@ -117,7 +50,7 @@
   .article-date{font-size:13px;color:var(--muted);}
   h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:900;
     text-transform:uppercase;color:#fff;line-height:0.95;margin:16px 0 28px;}
-  .article-hero-img{width:100%;border-radius:16px;margin-bottom:36px;display:block;
+  .article-hero-img{width:100%;height:auto;border-radius:16px;margin-bottom:36px;display:block;
     max-height:420px;object-fit:cover;}
   .article-body{font-size:16px;line-height:1.8;color:var(--text);}
   .article-body p{margin-bottom:20px;}
@@ -135,17 +68,6 @@
     text-decoration:none;margin-top:48px;transition:color 0.2s;border-top:1px solid var(--border);
     padding-top:32px;width:100%;}
   .back-link:hover{color:var(--orange2);}
-    footer{background:#1c3448;color:#f5f1eb;padding:44px 20px 32px;text-align:center;border-top:3px solid #c85a14;}
-  .footer-content{max-width:1100px;margin:0 auto;}
-  .footer-wordmark{font-family:'Abuget',cursive;font-size:30px;color:#f5f1eb;margin-bottom:18px;}
-  .footer-nav{display:flex;justify-content:center;gap:24px;margin-bottom:22px;flex-wrap:wrap;}
-  .footer-nav a{color:#f5f1eb;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;}
-  .footer-nav a:hover{color:#a8c8dc;}
-  .footer-social{display:flex;justify-content:center;gap:16px;margin-bottom:20px;}
-  .footer-social a,.footer-social span{color:#f5f1eb;font-size:19px;text-decoration:none;transition:color 0.2s;}
-  .footer-social a:hover{color:#c85a14;}
-  .footer-social span{opacity:0.35;cursor:default;}
-  .footer-bottom{border-top:1px solid rgba(168,200,220,0.2);padding-top:18px;font-size:12px;color:#a8c8dc;line-height:1.7;}
   @media(max-width:600px){.article{padding:90px 20px 60px;}}
 </style>
 </head>
@@ -170,7 +92,7 @@
     <span class="article-date">11. Mai 2026</span>
   </div>
   <h1>🚲 Sollte jeder ein eBike fahren dürfen?</h1>
-  <img src="../blogimages/Oma_faehrt_ebike_2048.webp" alt="🚲 Sollte jeder ein eBike fahren dürfen?" class="article-hero-img">
+  <img src="../blogimages/Oma_faehrt_ebike_2048.webp" alt="🚲 Sollte jeder ein eBike fahren dürfen?" class="article-hero-img" width="1200" height="675">
   <div class="article-body">
     <p>Ich würde nicht die Instanz sein wollen, die das entscheidet. Aber wie ist es mit der Sicherheit?</p>
 <p>⛑️ Sicherheit für die Fahrer, ebenso wie die Sicherheit anderer. Ist es wirklich gut, wenn jeder motorisiert unterwegs ist? Ganz unabhängig von seiner geistigen und körperlichen Fitness. Ganz unabhängig auch von seiner Reaktionsfähigkeit und vielleicht sogar von den körperlichen Einschränkungen, die er hat.</p>
