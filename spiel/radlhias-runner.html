@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>Radl Hias Runner</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
 <style>
   @font-face {
     font-family: 'Abuget';
@@ -27,7 +29,7 @@
       radial-gradient(ellipse at 100% 110%, rgba(45,110,158,0.10), transparent 50%),
       var(--navy-deep);
     color:var(--cream); font-family:'Barlow', sans-serif;
-    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:72px 16px 16px;
   }
   .stage{
     width:100%; max-width:420px; background:var(--navy);
@@ -156,6 +158,21 @@
 </style>
 </head>
 <body>
+<nav class="main-nav">
+  <a href="../index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="../index.html#blog">Blog</a>
+    <a href="../konfigurator.html">Konfigurator</a>
+    <a href="../videos.html">Videos</a>
+    <a href="../bikeservice.html">Bike Service</a>
+    <a href="radlhias-runner.html" class="active">Spiel</a>
+    <a href="../index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
 <div class="stage">
   <div class="topbar">
     <div class="brand"><img src="../RadlHias_Logo_freigestellt_cream.png" alt="Radl Hias"><span class="brandtext">Radl Hias</span></div>
