@@ -169,7 +169,7 @@
     <a href="../konfigurator.html">Konfigurator</a>
     <a href="../videos.html">Videos</a>
     <a href="../bikeservice.html">Bike Service</a>
-    <a href="radlhias-runner.html" class="active">Spiel</a>
+    <a href="radlhias-runner.html" class="active">Tour de Hias</a>
     <a href="../index.html#kontakt" class="nav-cta">Kontakt</a>
   </div>
 </nav>
@@ -224,10 +224,10 @@ const ICON_COLORS = {
   kind: '#E4568C',
   tannenbaum: '#3F7A52',
   baum: '#3F7A52',
-  schlagloch: '#F5F1EB',
+  schlagloch: '#000000',
   auto: '#F5F1EB',
   flugzeug: '#F5F1EB',
-  stern: '#F5F1EB',
+  stern: '#FFD447',
   haus: '#F5F1EB',
   blume: '#F5F1EB',
   schaf: '#F5F1EB',
@@ -717,8 +717,16 @@ function draw(){
   });
 
   // Sammelobjekte
+  const sternPulse = (Math.sin(performance.now()/180) + 1) / 2;
   collectibles.forEach(c=>{
+    if(c.kind === 'stern'){
+      ctx.shadowColor = 'rgba(255,212,71,' + (0.45 + sternPulse*0.45).toFixed(2) + ')';
+      ctx.shadowBlur = 6 + sternPulse*14;
+    }
     drawIcon(ctx, c.kind, c.x+c.w/2, c.y+c.h/2, Math.max(c.w, c.h)*1.5);
+    if(c.kind === 'stern'){
+      ctx.shadowBlur = 0;
+    }
   });
 
   drawParticles(ctx);
