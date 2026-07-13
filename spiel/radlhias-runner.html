@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<title>Radl Hias Runner</title>
+<title>Tour de Hias</title>
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
@@ -36,11 +36,11 @@
     border:1px solid var(--line); border-radius:14px; overflow:hidden;
     box-shadow:0 20px 60px rgba(0,0,0,0.5); position:relative;
   }
-  .topbar{ display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--navy-deep); position:relative; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding:8px 16px; border-bottom:1px solid var(--line); background:var(--navy-deep); position:relative; }
   .topbar::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:linear-gradient(90deg, var(--navy-panel), var(--blue), var(--orange), var(--navy-panel)); }
   .brand{ display:flex; align-items:center; gap:8px; }
   .brand img{ height:22px; width:22px; object-fit:contain; }
-  .brandtext{ font-family:'Abuget', cursive; font-weight:400; color:var(--cream); font-size:24px; }
+  .brandtext{ font-family:'Abuget', cursive; font-weight:400; color:var(--cream); font-size:36px; line-height:1; }
   .topright{ display:flex; align-items:center; gap:10px; }
   .icon-btn{ background:transparent; border:1px solid var(--line); color:var(--blue-lt); border-radius:6px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; line-height:1; padding:0; }
   .icon-btn:active{ background:var(--orange); color:#fff; border-color:var(--orange); }
@@ -128,7 +128,7 @@
   .legend-col-title.good{ color:var(--blue-lt); }
   .legend-col-title.bad{ color:var(--orange-bright); }
   .legend-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:#C9D2DE; margin-bottom:5px; }
-  .legend-item .lem{ font-size:18px; line-height:1; width:22px; text-align:center; }
+  .legend-item .lem{ width:22px; height:22px; object-fit:contain; filter:invert(1); flex-shrink:0; }
 
   .tabs{ display:flex; gap:6px; margin-bottom:8px; }
   .tab{
@@ -175,7 +175,7 @@
 </nav>
 <div class="stage">
   <div class="topbar">
-    <div class="brand"><img src="../RadlHias_Logo_freigestellt_cream.png" alt="Radl Hias"><span class="brandtext">Radl Hias</span></div>
+    <div class="brand"><span class="brandtext">Tour de Hias</span></div>
     <div class="topright">
       <button class="icon-btn" id="muteBtn" title="Ton an/aus">🔊</button>
       <div class="scoretop" id="scoreTop">0 m</div>
@@ -200,20 +200,75 @@ const CONFIG = {
   GRAVITY: 900,
   JUMP_SPEED: 330,
   COLLECT_BONUS: 20,
-  PUMP_BOOST_BONUS: 10,
-  PUMP_BOOST_DURATION: 2.5,
-  PUMP_BOOST_FACTOR: 1.35,
-  WUFFI_BONUS: 60,
   SCENES: [
-    { at:0,    name:"Dorf",  sky:['#0A1219','#16273D'], far:'🏠', near:'🪴' },
-    { at:450,  name:"Wald",  sky:['#0B1B18','#15342B'], far:'🌲', near:'🍃' },
-    { at:1000, name:"Alm",   sky:['#0A1219','#1E3A56'], far:'⛰️', near:'🌲' }
+    { at:0,    name:"Dorf",  sky:['#0A1219','#16273D'], far:'haus' },
+    { at:450,  name:"Wald",  sky:['#0B1B18','#15342B'], far:'tannenbaum' },
+    { at:1000, name:"Alm",   sky:['#0A1219','#1E3A56'], far:'schaf' }
   ]
 };
 
-const EMOJI_FONT = "'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const ICON_FILES = {
+  fahrrad:'fahrrad.png', schlagloch:'schlagloch.png', kind:'kind_filled.png', auto:'auto.png', flugzeug:'flugzeug.png', stern:'stern.png',
+  haus:'haus.png', blume:'blume.png', tannenbaum:'tannenbaum.png', blatt:'blatt.png', baum:'baum.png', schaf:'schaf.png', regenwolke:'regenwolke.png'
+};
+const ICONS = {};
+Object.keys(ICON_FILES).forEach(key=>{
+  const img = new Image();
+  img.src = 'icons/' + ICON_FILES[key];
+  ICONS[key] = { img, loaded:false };
+  img.onload = ()=>{ ICONS[key].loaded = true; };
+});
+const HEADER_BG = '#0A1219';
+const ICON_COLORS = {
+  fahrrad: '#C85A14',
+  kind: '#E4568C',
+  tannenbaum: '#3F7A52',
+  baum: '#3F7A52',
+  schlagloch: '#F5F1EB',
+  auto: '#F5F1EB',
+  flugzeug: '#F5F1EB',
+  stern: '#F5F1EB',
+  haus: '#F5F1EB',
+  blume: '#F5F1EB',
+  schaf: '#F5F1EB',
+  regenwolke: '#F5F1EB',
+  blatt: '#F5F1EB'
+};
+const TINTED_CACHE = {};
+function getTintedIcon(key, color){
+  const entry = ICONS[key];
+  if(!entry || !entry.loaded) return null;
+  const cacheKey = key + '|' + color;
+  if(TINTED_CACHE[cacheKey]) return TINTED_CACHE[cacheKey];
+  const img = entry.img;
+  const w = img.naturalWidth, h = img.naturalHeight;
+  if(!w || !h) return null;
+  const off = document.createElement('canvas');
+  off.width = w; off.height = h;
+  const octx = off.getContext('2d');
+  octx.drawImage(img, 0, 0);
+  octx.globalCompositeOperation = 'source-in';
+  octx.fillStyle = color;
+  octx.fillRect(0, 0, w, h);
+  TINTED_CACHE[cacheKey] = off;
+  return off;
+}
+function drawIcon(ctx, key, cx, cy, size){
+  const tinted = getTintedIcon(key, ICON_COLORS[key] || HEADER_BG);
+  if(!tinted) return;
+  const ratio = tinted.width / tinted.height;
+  let dw = size, dh = size / ratio;
+  if(dh > size){ dh = size; dw = size * ratio; }
+  ctx.drawImage(tinted, cx - dw/2, cy - dh/2, dw, dh);
+}
 const MILESTONE_LINES = ["Passt scho!", "Sauber unterwegs!", "Ordentlich am Rad!", "Volle Kette!", "Bergauf wie im Schlaf!"];
-const GAMEOVER_LINES = ["Platten!", "Aus die Maus!", "Nagel im Reifen…", "Ab in die Werkstatt!"];
+const GAMEOVER_LINES = {
+  schlagloch: ["Das war ein Schlagloch!", "Mitten ins Schlagloch!", "Schlagloch erwischt!"],
+  kind: ["Kind nicht gesehen!", "Autsch, das tut weh!", "Vorsicht auf dem Radweg!"],
+  auto: ["Auto im Weg!", "Blechschaden!", "Ausgebremst!"],
+  flugzeug: ["Tiefflieger erwischt!", "Kopf einziehen war zu spät!", "Von oben kam's!"],
+  default: ["Ab in die Werkstatt!"]
+};
 
 const content = document.getElementById('content');
 const scoreTop = document.getElementById('scoreTop');
@@ -262,8 +317,6 @@ function playTone(freq, duration, type, gainVal, glideTo){
   osc.start(now); osc.stop(now + duration);
 }
 function sfxBell(){ playTone(1500,0.1,'triangle',0.16); setTimeout(()=>playTone(1900,0.09,'triangle',0.12),55); }
-function sfxBoost(){ playTone(260,0.3,'sawtooth',0.10,760); }
-function sfxAchievement(){ playTone(880,0.12,'sine',0.14); setTimeout(()=>playTone(1320,0.2,'sine',0.14),110); }
 function sfxCrash(){
   const ctx = ensureAudio();
   if(!ctx) return;
@@ -283,23 +336,22 @@ function renderStart(){
   content.innerHTML = `
     <div class="herostrip"><div class="herostrip-inner">
       <img src="../RadlHias_Logo_freigestellt_cream.png" alt="Radl Hias" class="startlogo">
-      <div class="eyebrow center">Radl Hias Runner</div>
+      <div class="eyebrow center">Tour de Hias</div>
       <h1 class="center">Rauf aufs Rad!</h1>
-      <p>Weich Schlaglöchern und Nägeln aus, duck dich unter Ästen weg, schnapp dir Kettenöl und Luftpumpen für Bonusmeter. Ein Treffer und die Tour ist vorbei.</p>
+      <p>Weich Kindern, Autos und Schlaglöchern aus, duck dich unter tieffliegenden Flugzeugen weg und schnapp dir Sterne für Bonuspunkte. Ein Treffer und die Tour ist vorbei.</p>
     </div></div>
     ${CONFIG.GEWINNSPIEL_AKTIV ? `<div class="banner">🏆 ${CONFIG.GEWINNSPIEL_TEXT}</div>` : ''}
     <div class="legend">
       <div>
         <div class="legend-col-title good">Einsammeln</div>
-        <div class="legend-item"><span class="lem">🔧</span> Kettenöl – Bonusmeter</div>
-        <div class="legend-item"><span class="lem">⚡</span> Luftpumpe – Speed-Boost</div>
-        <div class="legend-item"><span class="lem">🐕</span> Wuffi – großer Bonus</div>
+        <div class="legend-item"><img class="lem" src="icons/stern.png" alt=""> Stern – Bonuspunkte</div>
       </div>
       <div>
         <div class="legend-col-title bad">Ausweichen</div>
-        <div class="legend-item"><span class="lem">🕳️</span> Schlagloch – springen</div>
-        <div class="legend-item"><span class="lem">🔩</span> Nagel – springen</div>
-        <div class="legend-item"><span class="lem">🪵</span> Ast – ducken</div>
+        <div class="legend-item"><img class="lem" src="icons/schlagloch.png" alt=""> Schlagloch – springen</div>
+        <div class="legend-item"><img class="lem" src="icons/kind.png" alt=""> Kind – springen</div>
+        <div class="legend-item"><img class="lem" src="icons/auto.png" alt=""> Auto – springen</div>
+        <div class="legend-item"><img class="lem" src="icons/flugzeug.png" alt=""> Flugzeug – ducken</div>
       </div>
     </div>
     <button class="btn" id="startBtn">Los geht's</button>
@@ -333,7 +385,7 @@ function setupBoardTabs(tabsId, boardId, limit){
 /* ---------- GAME STATE ---------- */
 let player, obstacles, collectibles, particles, speed, distance, running, paused, lastTs;
 let spawnTimer, nextSpawnGap, keyDownHandler, keyUpHandler;
-let boostTimer, dustTimer, currentScene, wuffiFound;
+let dustTimer, currentScene, lastHitKind;
 
 function initGame(){
   content.innerHTML = `
@@ -361,9 +413,7 @@ function initGame(){
   paused = false;
   spawnTimer = 0;
   nextSpawnGap = 1.1;
-  boostTimer = 0;
   dustTimer = 0;
-  wuffiFound = false;
   currentScene = CONFIG.SCENES[0];
 
   const jumpBtn = document.getElementById('jumpBtn');
@@ -438,18 +488,16 @@ function getScene(d){
 
 function spawnEntity(){
   const roll = Math.random();
-  if(roll < 0.26){
-    obstacles.push({ kind:'pothole', x: CONFIG.CW+10, w:34, h:14, y: CONFIG.GROUND_Y-14 });
-  } else if(roll < 0.42){
-    obstacles.push({ kind:'nail', x: CONFIG.CW+10, w:16, h:16, y: CONFIG.GROUND_Y-16 });
-  } else if(roll < 0.68){
-    obstacles.push({ kind:'branch', x: CONFIG.CW+10, w:44, h:30, y: CONFIG.GROUND_Y-50 });
-  } else if(roll < 0.84){
-    collectibles.push({ kind:'oil', x: CONFIG.CW+10, w:16, h:16, y: CONFIG.GROUND_Y-58 });
-  } else if(roll < 0.94){
-    collectibles.push({ kind:'pump', x: CONFIG.CW+10, w:14, h:24, y: CONFIG.GROUND_Y-64 });
+  if(roll < 0.18){
+    obstacles.push({ kind:'schlagloch', x: CONFIG.CW+10, w:34, h:14, y: CONFIG.GROUND_Y-14 });
+  } else if(roll < 0.38){
+    obstacles.push({ kind:'kind', x: CONFIG.CW+10, w:20, h:26, y: CONFIG.GROUND_Y-26 });
+  } else if(roll < 0.58){
+    obstacles.push({ kind:'auto', x: CONFIG.CW+10, w:40, h:22, y: CONFIG.GROUND_Y-22 });
+  } else if(roll < 0.72){
+    obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:28, y: CONFIG.GROUND_Y-52 });
   } else {
-    collectibles.push({ kind:'wuffi', x: CONFIG.CW+10, w:20, h:16, y: CONFIG.GROUND_Y-40 });
+    collectibles.push({ kind:'stern', x: CONFIG.CW+10, w:20, h:20, y: CONFIG.GROUND_Y-58 });
   }
 }
 
@@ -515,21 +563,12 @@ function loop(ts){
   }
 
   // Tempo & Distanz
-  const baseSpeed = Math.min(CONFIG.MAX_SPEED, CONFIG.BASE_SPEED + distance*0.06);
-  if(boostTimer > 0){
-    boostTimer -= dt;
-    speed = Math.min(CONFIG.MAX_SPEED * CONFIG.PUMP_BOOST_FACTOR, baseSpeed * CONFIG.PUMP_BOOST_FACTOR);
-  } else {
-    speed = baseSpeed;
-  }
+  speed = Math.min(CONFIG.MAX_SPEED, CONFIG.BASE_SPEED + distance*0.06);
   distance += speed*dt*0.05;
   scoreTop.textContent = Math.floor(distance) + " m";
   const kmh = Math.round(speed*0.05*3.6);
   const sr = document.getElementById('speedReadout');
-  if(sr){
-    sr.textContent = kmh + " km/h" + (boostTimer > 0 ? " 🚀" : "");
-    sr.classList.toggle('boost', boostTimer > 0);
-  }
+  if(sr){ sr.textContent = kmh + " km/h"; }
 
   // Szenenwechsel erkennen
   const scene = getScene(distance);
@@ -563,7 +602,7 @@ function loop(ts){
     o.x -= speed*dt;
     if(o.x < -60){ obstacles.splice(i,1); continue; }
     if(rectsOverlap(pRect, o)){
-      gameOver();
+      gameOver(o.kind);
       return;
     }
   }
@@ -573,23 +612,10 @@ function loop(ts){
     if(c.x < -30){ collectibles.splice(i,1); continue; }
     if(rectsOverlap(pRect, c)){
       collectibles.splice(i,1);
-      const burstColor = c.kind === 'pump' ? '45,110,158' : '200,90,20';
-      spawnParticles(c.x, c.y, 8, { vy0:-40, spreadX:60, spreadY:60, life:0.5, color:burstColor, gravity:150 });
-      if(c.kind === 'oil'){
-        distance += CONFIG.COLLECT_BONUS;
-        showPopup(c.x, c.y, "+" + CONFIG.COLLECT_BONUS + "m");
-        sfxBell();
-      } else if(c.kind === 'pump'){
-        distance += CONFIG.PUMP_BOOST_BONUS;
-        boostTimer = CONFIG.PUMP_BOOST_DURATION;
-        showPopup(c.x, c.y, "Luftdruck perfekt!");
-        sfxBoost();
-      } else if(c.kind === 'wuffi'){
-        distance += CONFIG.WUFFI_BONUS;
-        wuffiFound = true;
-        showPopup(c.x, c.y, "Wuffi! +" + CONFIG.WUFFI_BONUS + "m");
-        sfxAchievement();
-      }
+      spawnParticles(c.x, c.y, 8, { vy0:-40, spreadX:60, spreadY:60, life:0.5, color:'200,90,20', gravity:150 });
+      distance += CONFIG.COLLECT_BONUS;
+      showPopup(c.x, c.y, "+" + CONFIG.COLLECT_BONUS + "m");
+      sfxBell();
     }
   }
 
@@ -623,35 +649,52 @@ function draw(){
   sky.addColorStop(0, scene.sky[0]); sky.addColorStop(1, scene.sky[1]);
   ctx.fillStyle = sky; ctx.fillRect(0,0,CW,GY);
 
-  // Wolken (sehr langsam, oberer Himmel)
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.font = '30px ' + EMOJI_FONT;
-  ctx.globalAlpha = 0.35;
-  const cOff = (distance*0.15) % 160;
-  for(let i=-1;i<4;i++){
-    const clx = i*160 - cOff + 80;
-    ctx.fillText('☁️', clx, GY*0.28);
-  }
+  // Wolken (Parallax, 3 Größen für mehr Tiefe)
+  const cloudLayers = [
+    { size:76, alpha:0.26, y:GY*0.15, speed:0.08, spacing:230, phase:0 },
+    { size:50, alpha:0.32, y:GY*0.30, speed:0.15, spacing:170, phase:70 },
+    { size:30, alpha:0.40, y:GY*0.44, speed:0.24, spacing:120, phase:35 }
+  ];
+  cloudLayers.forEach(layer=>{
+    ctx.globalAlpha = layer.alpha;
+    const off = (distance*layer.speed + layer.phase) % layer.spacing;
+    for(let i=-1;i<Math.ceil(CW/layer.spacing)+2;i++){
+      const clx = i*layer.spacing - off + layer.spacing/2;
+      drawIcon(ctx, 'regenwolke', clx, layer.y, layer.size);
+    }
+  });
   ctx.globalAlpha = 1;
 
-  // Kulisse (Parallax, fern) – Emoji
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#F5F1EB';
-  ctx.font = '34px ' + EMOJI_FONT;
+  // Kulisse (Parallax, fern)
   ctx.globalAlpha = 0.55;
-  const mOff = (distance*0.6) % 120;
+  const mSpacing = 150;
+  const mOff = (distance*0.6) % mSpacing;
   for(let i=-1;i<4;i++){
-    const bx = i*120 - mOff + 60;
-    ctx.fillText(scene.far, bx, GY-36);
+    const bx = i*mSpacing - mOff + mSpacing/2;
+    drawIcon(ctx, scene.far, bx, GY-42, 68);
   }
 
-  // Nahe Parallax-Reihe, schneller – Emoji
-  ctx.font = '26px ' + EMOJI_FONT;
+  // Straßenrand: Bäume in 3 Größen (wie bei den Wolken)
   ctx.globalAlpha = 0.85;
-  const nOff = (distance*1.6) % 60;
-  for(let i=-1;i<8;i++){
-    const nx = i*60 - nOff + 30;
-    ctx.fillText(scene.near, nx, GY-13);
+  const roadTreeLayers = [
+    { size:60, spacing:210, speed:1.7, phase:15 },
+    { size:42, spacing:145, speed:1.6, phase:60 },
+    { size:28, spacing:100, speed:1.5, phase:35 }
+  ];
+  roadTreeLayers.forEach(layer=>{
+    const off = (distance*layer.speed + layer.phase) % layer.spacing;
+    for(let i=-1;i<Math.ceil(CW/layer.spacing)+2;i++){
+      const tx = i*layer.spacing - off + layer.spacing/2;
+      drawIcon(ctx, 'baum', tx, GY - layer.size/2 - 2, layer.size);
+    }
+  });
+
+  // Straßenrand: kleine Blumen, dicht am Weg
+  const nSpacing = 55;
+  const nOff = (distance*1.6) % nSpacing;
+  for(let i=-1;i<Math.ceil(CW/nSpacing)+2;i++){
+    const nx = i*nSpacing - nOff + nSpacing/2;
+    drawIcon(ctx, 'blume', nx, GY-15, 24);
   }
   ctx.globalAlpha = 1;
 
@@ -668,20 +711,14 @@ function draw(){
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Hindernisse – Emoji
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#F5F1EB';
-  const OBSTACLE_EMOJI = { pothole:'🕳️', nail:'🔩', branch:'🪵' };
+  // Hindernisse
   obstacles.forEach(o=>{
-    ctx.font = Math.round(Math.max(o.w, o.h)*1.3) + 'px ' + EMOJI_FONT;
-    ctx.fillText(OBSTACLE_EMOJI[o.kind], o.x+o.w/2, o.y+o.h/2);
+    drawIcon(ctx, o.kind, o.x+o.w/2, o.y+o.h/2, Math.max(o.w, o.h)*1.3);
   });
 
-  // Sammelobjekte – Emoji
-  const COLLECTIBLE_EMOJI = { oil:'🔧', pump:'⚡', wuffi:'🐕' };
+  // Sammelobjekte
   collectibles.forEach(c=>{
-    ctx.font = Math.round(Math.max(c.w, c.h)*1.4) + 'px ' + EMOJI_FONT;
-    ctx.fillText(COLLECTIBLE_EMOJI[c.kind], c.x+c.w/2, c.y+c.h/2);
+    drawIcon(ctx, c.kind, c.x+c.w/2, c.y+c.h/2, Math.max(c.w, c.h)*1.5);
   });
 
   drawParticles(ctx);
@@ -696,17 +733,15 @@ function drawPlayer(ctx){
   ctx.save();
   ctx.translate(cx, cy);
   if(player.ducking) ctx.scale(1, 0.62);
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#F5F1EB';
-  ctx.font = '40px ' + EMOJI_FONT;
-  ctx.shadowColor = 'rgba(245,241,235,0.9)';
-  ctx.shadowBlur = 10;
-  ctx.fillText('🚲', 0, 2);
+  ctx.shadowColor = 'rgba(224,104,32,0.55)';
+  ctx.shadowBlur = 8;
+  drawIcon(ctx, 'fahrrad', 0, 2, 46);
   ctx.shadowBlur = 0;
   ctx.restore();
 }
 
-function gameOver(){
+function gameOver(hitKind){
+  lastHitKind = hitKind;
   running = false;
   document.removeEventListener('keydown', keyDownHandler);
   document.removeEventListener('keyup', keyUpHandler);
@@ -725,9 +760,9 @@ function renderResult(finalScore){
 
   const badges = [];
   if(isNewBest) badges.push('🏆 Neue Bestleistung!');
-  if(wuffiFound) badges.push('🐕 Wuffi getroffen!');
 
-  const gameOverLine = GAMEOVER_LINES[Math.floor(Math.random()*GAMEOVER_LINES.length)];
+  const gameOverOptions = GAMEOVER_LINES[lastHitKind] || GAMEOVER_LINES.default;
+  const gameOverLine = gameOverOptions[Math.floor(Math.random()*gameOverOptions.length)];
 
   content.innerHTML = `
     <div class="eyebrow center">${gameOverLine}</div>
@@ -791,7 +826,7 @@ function saveShareImage(finalScore){
   ctx.textAlign = 'center';
   ctx.fillStyle = '#A8C8DC';
   ctx.font = "700 30px 'Barlow Condensed', sans-serif";
-  ctx.fillText('RADL HIAS RUNNER', W/2, 130);
+  ctx.fillText('TOUR DE HIAS', W/2, 130);
 
   ctx.fillStyle = '#E06820';
   ctx.font = "900 120px 'Barlow Condensed', sans-serif";
