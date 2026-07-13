@@ -1083,3 +1083,98 @@ details.truth-box > summary:hover {
   color: var(--text);
   line-height: 1.6;
 }
+
+/* ===== FLOATING SOCIAL BAR ===== */
+.social-bar {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.social-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.social-btn:hover { transform: scale(1.12); }
+
+.social-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: white;
+}
+
+.social-btn-instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  box-shadow: 0 4px 16px rgba(214,36,159,0.4);
+}
+
+.social-btn-youtube {
+  background: rgba(28,52,72,0.1);
+  border: 1.5px solid rgba(28,52,72,0.15);
+  cursor: default;
+  box-shadow: none;
+}
+
+.social-btn-youtube svg { fill: rgba(28,52,72,0.3); }
+
+.social-btn-youtube:hover { transform: none; }
+
+.social-tooltip {
+  position: absolute;
+  right: 54px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10,18,25,0.92);
+  color: rgba(245,241,235,0.9);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.social-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-left-color: rgba(10,18,25,0.92);
+}
+
+.social-btn:hover .social-tooltip { opacity: 1; }
+
+.social-btn-youtube .social-tooltip {
+  color: var(--orange);
+}
+
+@media (max-width: 600px) {
+  .social-bar {
+    right: 10px;
+    top: auto;
+    bottom: 24px;
+    transform: none;
+    flex-direction: row;
+  }
+  .social-tooltip { display: none; }
+}
