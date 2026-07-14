@@ -331,6 +331,8 @@ function renderStart(){
   document.getElementById('gameStage').style.display = 'none';
   const startWrap = document.getElementById('startWrap');
   startWrap.style.display = 'flex';
+  const footerEl = document.getElementById('siteFooter');
+  if(footerEl) footerEl.style.display = '';
   startWrap.innerHTML = `
     <div class="icon-collage">
       <svg viewBox="0 0 40 56" class="ic-kind">
@@ -463,6 +465,8 @@ let worldPx, crankAngle, duckAnim, prevScene, sceneFadeT, shakeMag = 0, dpr = 1;
 function initGame(){
   document.getElementById('startWrap').style.display = 'none';
   document.getElementById('gameStage').style.display = 'block';
+  const footerEl = document.getElementById('siteFooter');
+  if(footerEl) footerEl.style.display = 'none';
   content.innerHTML = `
     <div class="canvaswrap">
       <canvas id="gameCanvas" width="${CONFIG.CW}" height="${CONFIG.CH}"></canvas>
@@ -1422,7 +1426,7 @@ function escapeHtml(str){
 renderStart();
 </script>
 
-<footer>
+<footer id="siteFooter">
   <div class="footer-content">
     <div class="footer-wordmark">RadlHias.TV</div>
     <nav class="footer-nav">
