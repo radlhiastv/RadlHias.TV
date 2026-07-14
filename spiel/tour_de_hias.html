@@ -4,7 +4,37 @@
 <meta charset="UTF-8">
 <script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<title>Tour de Hias</title>
+<title>Tour de Hias – das Radl-Spiel von RadlHias.TV</title>
+<meta name="description" content="Tour de Hias: das kostenlose Radl-Browsergame von RadlHias.TV. Weiche Schlaglöchern, Autos und Kindern aus, schnapp dir Sterne und knack die Bestenliste.">
+<link rel="canonical" href="https://radlhias.tv/spiel/tour_de_hias.html">
+<meta property="og:title" content="Tour de Hias – das Radl-Spiel von RadlHias.TV">
+<meta property="og:description" content="Kostenloses Radl-Browsergame: ausweichen, springen, Sterne sammeln und die Bestenliste knacken. Direkt im Browser spielbar.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radlhias.tv/spiel/tour_de_hias.html">
+<meta property="og:image" content="https://radlhias.tv/RadlHias_Logo_500x500.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Game",
+  "name": "Tour de Hias",
+  "url": "https://radlhias.tv/spiel/tour_de_hias.html",
+  "description": "Kostenloses Radl-Browsergame von RadlHias.TV: Schlaglöchern, Autos und Kindern ausweichen, Sterne sammeln und die Bestenliste knacken.",
+  "genre": "Arcade",
+  "gamePlatform": "Web Browser",
+  "applicationCategory": "Game",
+  "isAccessibleForFree": true,
+  "author": {
+    "@type": "Person",
+    "name": "Mathias Blumreich",
+    "url": "https://radlhias.tv/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "RadlHias.TV",
+    "url": "https://radlhias.tv/"
+  }
+}
+</script>
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
@@ -328,6 +358,7 @@ function sfxCrash(){
 
 /* ---------- START ---------- */
 function renderStart(){
+  window.scrollTo(0,0);
   document.getElementById('gameStage').style.display = 'none';
   const startWrap = document.getElementById('startWrap');
   startWrap.style.display = 'flex';
@@ -463,6 +494,7 @@ let dustTimer, currentScene, lastHitKind;
 let worldPx, crankAngle, duckAnim, prevScene, sceneFadeT, shakeMag = 0, dpr = 1;
 
 function initGame(){
+  window.scrollTo(0,0);
   document.getElementById('startWrap').style.display = 'none';
   document.getElementById('gameStage').style.display = 'block';
   const footerEl = document.getElementById('siteFooter');
