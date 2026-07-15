@@ -39,6 +39,13 @@
   </url>
 
   <url>
+    <loc>https://radlhias.tv/spiel/</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://radlhias.tv/spiel/tour_de_hias.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>

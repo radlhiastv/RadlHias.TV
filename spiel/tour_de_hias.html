@@ -4,37 +4,14 @@
 <meta charset="UTF-8">
 <script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<title>Tour de Hias – das Radl-Spiel von RadlHias.TV</title>
-<meta name="description" content="Tour de Hias: das kostenlose Radl-Browsergame von RadlHias.TV. Weiche Schlaglöchern, Autos und Kindern aus, schnapp dir Sterne und knack die Bestenliste.">
+<title>Tour de Hias spielen – das Radl-Spiel von RadlHias.TV</title>
+<meta name="description" content="Jetzt Tour de Hias spielen: das kostenlose Radl-Browsergame von RadlHias.TV. Weiche Schlaglöchern, Autos und Kindern aus, schnapp dir Sterne und knack die Bestenliste.">
 <link rel="canonical" href="https://radlhias.tv/spiel/tour_de_hias.html">
-<meta property="og:title" content="Tour de Hias – das Radl-Spiel von RadlHias.TV">
+<meta property="og:title" content="Tour de Hias spielen – RadlHias.TV">
 <meta property="og:description" content="Kostenloses Radl-Browsergame: ausweichen, springen, Sterne sammeln und die Bestenliste knacken. Direkt im Browser spielbar.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://radlhias.tv/spiel/tour_de_hias.html">
 <meta property="og:image" content="https://radlhias.tv/RadlHias_Logo_500x500.jpg">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Game",
-  "name": "Tour de Hias",
-  "url": "https://radlhias.tv/spiel/tour_de_hias.html",
-  "description": "Kostenloses Radl-Browsergame von RadlHias.TV: Schlaglöchern, Autos und Kindern ausweichen, Sterne sammeln und die Bestenliste knacken.",
-  "genre": "Arcade",
-  "gamePlatform": "Web Browser",
-  "applicationCategory": "Game",
-  "isAccessibleForFree": true,
-  "author": {
-    "@type": "Person",
-    "name": "Mathias Blumreich",
-    "url": "https://radlhias.tv/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "RadlHias.TV",
-    "url": "https://radlhias.tv/"
-  }
-}
-</script>
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
@@ -172,11 +149,17 @@
   .pump-btn{ margin-top:4px; }
   .pump-bubble{
     position:relative; background:var(--cream); color:var(--navy-deep); border-radius:14px;
-    padding:16px 22px; max-width:230px; text-align:center; cursor:pointer;
+    padding:16px 22px; max-width:230px; text-align:center;
     box-shadow:0 12px 30px rgba(0,0,0,0.4); animation:bubblein .25s cubic-bezier(.25,.8,.3,1.4);
   }
   .pump-bubble p{ font-family:'Barlow Condensed'; font-weight:700; font-size:16px; line-height:1.3; color:var(--navy-deep); margin:0 0 5px; }
-  .pump-bubble p:last-child{ margin-bottom:0; }
+  .pump-ok{
+    margin-top:12px; padding:10px 26px; font-size:15px;
+    background:var(--orange-bright); color:#fff; border:none; border-radius:9px;
+    font-family:'Barlow Condensed'; font-weight:900; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; box-shadow:0 6px 16px rgba(200,90,20,0.35);
+  }
+  .pump-ok:hover{ filter:brightness(1.08); }
   .pump-bubble-tail{
     position:absolute; left:50%; bottom:-13px; transform:translateX(-50%);
     width:0; height:0; border-left:11px solid transparent; border-right:11px solid transparent;
@@ -240,7 +223,7 @@
     <a href="../konfigurator.html">Konfigurator</a>
     <a href="../videos.html">Videos</a>
     <a href="../bikeservice.html">Bike Service</a>
-    <a href="tour_de_hias.html" class="active">Tour de Hias</a>
+    <a href="index.html">Tour de Hias</a>
     <a href="../index.html#kontakt" class="nav-cta">Kontakt</a>
   </div>
 </nav>
@@ -637,17 +620,16 @@ function startPumpMinigame(){
       <p>Drücke die Leertaste oder den Pumpen-Knopf.</p>
       <p>Immer genau dann, wenn der Zeiger in der Zone ist.</p>
       <p>Je voller der Reifen, desto weniger Strafmeter.</p>
+      <button class="pump-ok" id="pumpOkBtn">✓ Alles klar</button>
       <div class="pump-bubble-tail"></div>
     </div>
   `;
   wrap.appendChild(overlay);
 
-  const introTimer = setTimeout(showChallenge, 4000);
-  overlay.addEventListener('click', showChallenge, { once:true });
+  // Kein Zeitlimit: die Erklärung bleibt stehen, bis sie per Häkchen bestätigt wird
+  document.getElementById('pumpOkBtn').addEventListener('click', showChallenge, { once:true });
 
   function showChallenge(){
-    clearTimeout(introTimer);
-    overlay.removeEventListener('click', showChallenge);
     overlay.innerHTML = `
       <h3>Platter Reifen!</h3>
       <p class="pump-hint">Pumpe, wenn der Zeiger in der Zone ist – jeder Stoß zählt!</p>
@@ -863,8 +845,8 @@ function loop(ts){
   const sr = document.getElementById('speedReadout');
   if(sr){ sr.textContent = kmh + " km/h"; }
 
-  // Szenenwechsel erkennen
-  const scene = getScene(distance);
+  // Szenenwechsel erkennen (nach gefahrener Strecke, ohne Bonusmeter – synchron zur Kulisse)
+  const scene = getScene(worldPx*0.05);
   if(scene !== currentScene){
     prevScene = currentScene;
     sceneFadeT = 0;
@@ -951,6 +933,10 @@ function draw(){
     ctx.translate((Math.random()*2-1)*shakeMag*7, (Math.random()*2-1)*shakeMag*7);
   }
 
+  // Render-Distanz: tatsächlich gefahrene Strecke ohne Bonus-/Strafmeter,
+  // damit die Kulisse beim Sterne-Einsammeln und bei Platten-Strafen nicht springt
+  const rd = worldPx*0.05;
+
   // Himmel (blendet beim Szenenwechsel weich über)
   const sky = ctx.createLinearGradient(0,0,0,GY);
   sky.addColorStop(0, skyTop); sky.addColorStop(1, skyBot);
@@ -981,7 +967,7 @@ function draw(){
     { sp:1.5,  y:GY*0.44, gap:150, s:0.55, a:0.17 }
   ];
   cloudLayers.forEach((L,li)=>{
-    const off = distance*L.sp;
+    const off = rd*L.sp;
     const i0 = Math.floor(off/L.gap)-1, i1 = Math.ceil((off+CW)/L.gap)+1;
     for(let i=i0;i<=i1;i++){
       const h = hash1(i*13.3 + li*57);
@@ -990,13 +976,13 @@ function draw(){
   });
 
   // Ferne Bergkette und Hügelzug: durchgängige Silhouetten
-  drawRidge(ctx, distance*1.1, GY-158, 34, 0.010, mixColor(prv.ridge, cur.ridge, f), GY);
-  drawRidge(ctx, distance*2.4, GY-102, 22, 0.016, mixColor(prv.hill, cur.hill, f), GY);
+  drawRidge(ctx, rd*1.1, GY-158, 34, 0.010, mixColor(prv.ridge, cur.ridge, f), GY);
+  drawRidge(ctx, rd*2.4, GY-102, 22, 0.016, mixColor(prv.hill, cur.hill, f), GY);
 
   // Mittlere Kulisse: Dorf / Wald / Alm — in Welt-Koordinaten, neue Szene rollt von rechts herein
   const bSp = 5.5, bGap = 120;
   {
-    const off = distance*bSp;
+    const off = rd*bSp;
     const i0 = Math.floor(off/bGap)-1, i1 = Math.ceil((off+CW)/bGap)+1;
     for(let i=i0;i<=i1;i++){
       const sc = getScene(Math.max(0,(i*bGap)/bSp));
@@ -1007,7 +993,7 @@ function draw(){
   // Straßenrand: fährt im Fahrtempo mit
   const rSp = 20, rGap = 95;
   {
-    const off = distance*rSp;
+    const off = rd*rSp;
     const i0 = Math.floor(off/rGap)-1, i1 = Math.ceil((off+CW)/rGap)+1;
     for(let i=i0;i<=i1;i++){
       const sc = getScene(Math.max(0,(i*rGap)/rSp));
@@ -1163,7 +1149,7 @@ function drawRoad(ctx, CW, CH, GY){
   ctx.fillStyle = PAL.asphalt;
   ctx.fillRect(-10, GY, CW+20, CH-GY+10);
   // Belag-Sprenkel, scrollen im Fahrtempo
-  const off = distance*20;
+  const off = worldPx;
   ctx.fillStyle = 'rgba(245,241,235,0.05)';
   for(let i=0;i<46;i++){
     const wx = i*61.7 + hash1(i*5.3)*50;
@@ -1178,7 +1164,7 @@ function drawRoad(ctx, CW, CH, GY){
   ctx.strokeStyle = 'rgba(224,104,32,0.5)'; ctx.lineWidth = 3;
   ctx.setLineDash([18,16]);
   ctx.beginPath();
-  ctx.moveTo(-((distance*20)%34), GY+42);
+  ctx.moveTo(-(worldPx%34), GY+42);
   ctx.lineTo(CW+10, GY+42);
   ctx.stroke();
   ctx.setLineDash([]);
@@ -1494,7 +1480,7 @@ function renderResult(finalScore){
     document.getElementById('submitMsg').style.display = 'block';
     document.getElementById('submitMsg').textContent = "Deine Distanz wurde in der Bestenliste gespeichert.";
   };
-  document.getElementById('againBtn').onclick = renderStart;
+  document.getElementById('againBtn').onclick = initGame;
   document.getElementById('shareBtn').onclick = ()=>{
     const nameInput = document.getElementById('nameInput');
     const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim().slice(0,24) : 'Anonym';
