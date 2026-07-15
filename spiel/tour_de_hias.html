@@ -160,6 +160,30 @@
   }
   .pauseoverlay h3{ font-family:'Barlow Condensed'; font-weight:900; text-transform:uppercase; letter-spacing:2px; font-size:22px; color:var(--cream); margin:0; }
 
+  .pump-hint{ font-size:13px; color:var(--blue-lt); text-align:center; margin:0 0 4px; max-width:240px; }
+  .pump-track{ position:relative; width:240px; height:14px; background:rgba(255,255,255,0.1); border-radius:7px; overflow:hidden; }
+  .pump-zone{ position:absolute; top:0; bottom:0; background:rgba(74,138,170,0.55); border-radius:4px; }
+  .pump-needle{ position:absolute; top:-3px; bottom:-3px; width:3px; background:var(--orange-bright); box-shadow:0 0 6px rgba(224,104,32,0.8); transform:translateX(-50%); }
+  .pump-svg{ width:170px; height:170px; display:block; }
+  .tube-base{ fill:none; stroke:rgba(255,255,255,0.13); stroke-width:9; transition:stroke-width .15s ease; }
+  .tube-fill{ fill:none; stroke:var(--orange-bright); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset .15s ease, stroke-width .15s ease; }
+  .pump-handle{ transition:transform .09s ease; }
+  .pump-svg.stroking .pump-handle{ transform:translateY(16px); }
+  .pump-btn{ margin-top:4px; }
+  .pump-bubble{
+    position:relative; background:var(--cream); color:var(--navy-deep); border-radius:14px;
+    padding:16px 22px; max-width:230px; text-align:center; cursor:pointer;
+    box-shadow:0 12px 30px rgba(0,0,0,0.4); animation:bubblein .25s cubic-bezier(.25,.8,.3,1.4);
+  }
+  .pump-bubble p{ font-family:'Barlow Condensed'; font-weight:700; font-size:16px; line-height:1.3; color:var(--navy-deep); margin:0 0 5px; }
+  .pump-bubble p:last-child{ margin-bottom:0; }
+  .pump-bubble-tail{
+    position:absolute; left:50%; bottom:-13px; transform:translateX(-50%);
+    width:0; height:0; border-left:11px solid transparent; border-right:11px solid transparent;
+    border-top:13px solid var(--cream);
+  }
+  @keyframes bubblein{ 0%{ opacity:0; transform:scale(0.85); } 100%{ opacity:1; transform:scale(1); } }
+
   .controls{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .ctrlbtn{
     background:var(--navy-panel); border:1px solid var(--line); color:var(--blue-lt);
@@ -247,7 +271,11 @@ const CONFIG = {
   MAX_SPEED: 300,
   GRAVITY: 900,
   JUMP_SPEED: 330,
+  JUMP_CUT_GRAVITY: 2.0,
   COLLECT_BONUS: 20,
+  PUMP_DURATION: 5,
+  PUMP_MIN_PENALTY: 8,
+  PUMP_MAX_PENALTY: 42,
   SCENES: [
     { at:0,    name:"Dorf", sky:['#0A1219','#1C3450'], ridge:'#111F30', hill:'#182D44', back:'#1F3A55', side:'dorf' },
     { at:450,  name:"Wald", sky:['#081411','#173029'], ridge:'#0C1D17', hill:'#12281F', back:'#1A3629', side:'wald' },
@@ -489,6 +517,7 @@ function setupBoardTabs(tabsId, boardId, limit){
 
 /* ---------- GAME STATE ---------- */
 let player, obstacles, collectibles, particles, speed, distance, running, paused, lastTs;
+let minigameActive = false;
 let spawnTimer, nextSpawnGap, keyDownHandler, keyUpHandler;
 let dustTimer, currentScene, lastHitKind;
 let worldPx, crankAngle, duckAnim, prevScene, sceneFadeT, shakeMag = 0, dpr = 1;
@@ -512,9 +541,9 @@ function initGame(){
       <div class="ctrlbtn" id="jumpBtn">Springen</div>
       <div class="ctrlbtn" id="duckBtn">Ducken</div>
     </div>
-    <div class="hint">Leertaste / Pfeil hoch = springen · Pfeil runter halten = ducken · Esc = Pause</div>
+    <div class="hint">Springen: kurz tippen = kleiner Hupfer, halten = hoher Sprung · Pfeil runter halten = ducken · Esc = Pause</div>
   `;
-  player = { jumpOffset:0, vy:0, ducking:false, prevJumpOffset:0 };
+  player = { jumpOffset:0, vy:0, ducking:false, prevJumpOffset:0, jumpHeld:false };
   obstacles = [];
   collectibles = [];
   particles = [];
@@ -541,22 +570,27 @@ function initGame(){
 
   const jumpBtn = document.getElementById('jumpBtn');
   const duckBtn = document.getElementById('duckBtn');
-  jumpBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); doJump(); }, {passive:false});
-  jumpBtn.addEventListener('mousedown', doJump);
-  duckBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); player.ducking = true; }, {passive:false});
+  jumpBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); doJump(); player.jumpHeld = true; }, {passive:false});
+  jumpBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); player.jumpHeld = false; }, {passive:false});
+  jumpBtn.addEventListener('mousedown', ()=>{ doJump(); player.jumpHeld = true; });
+  jumpBtn.addEventListener('mouseup', ()=>{ player.jumpHeld = false; });
+  jumpBtn.addEventListener('mouseleave', ()=>{ player.jumpHeld = false; });
+  duckBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); if(!minigameActive) player.ducking = true; }, {passive:false});
   duckBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); player.ducking = false; }, {passive:false});
-  duckBtn.addEventListener('mousedown', ()=>{ player.ducking = true; });
+  duckBtn.addEventListener('mousedown', ()=>{ if(!minigameActive) player.ducking = true; });
   duckBtn.addEventListener('mouseup', ()=>{ player.ducking = false; });
   duckBtn.addEventListener('mouseleave', ()=>{ player.ducking = false; });
   document.getElementById('pauseBtn').addEventListener('click', togglePause);
 
   keyDownHandler = (e)=>{
-    if(e.key === ' ' || e.key === 'ArrowUp'){ doJump(); e.preventDefault(); }
+    if(minigameActive) return;
+    if(e.key === ' ' || e.key === 'ArrowUp'){ doJump(); player.jumpHeld = true; e.preventDefault(); }
     else if(e.key === 'ArrowDown'){ player.ducking = true; }
     else if(e.key === 'Escape'){ togglePause(); }
   };
   keyUpHandler = (e)=>{
     if(e.key === 'ArrowDown'){ player.ducking = false; }
+    else if(e.key === ' ' || e.key === 'ArrowUp'){ player.jumpHeld = false; }
   };
   document.addEventListener('keydown', keyDownHandler);
   document.addEventListener('keyup', keyUpHandler);
@@ -587,7 +621,136 @@ function togglePause(){
   }
 }
 
+/* ---------- Platten-Zwischenspiel (Reifen aufpumpen) ---------- */
+function startPumpMinigame(){
+  paused = true;
+  minigameActive = true;
+  sfxCrash();
+  const wrap = document.querySelector('.canvaswrap');
+  if(!wrap) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'pauseoverlay pumpoverlay';
+  overlay.id = 'pumpOverlay';
+  overlay.innerHTML = `
+    <div class="pump-bubble" id="pumpBubble">
+      <p>Platt! Reifen aufpumpen! 💨</p>
+      <p>Drücke die Leertaste oder den Pumpen-Knopf.</p>
+      <p>Immer genau dann, wenn der Zeiger in der Zone ist.</p>
+      <p>Je voller der Reifen, desto weniger Strafmeter.</p>
+      <div class="pump-bubble-tail"></div>
+    </div>
+  `;
+  wrap.appendChild(overlay);
+
+  const introTimer = setTimeout(showChallenge, 4000);
+  overlay.addEventListener('click', showChallenge, { once:true });
+
+  function showChallenge(){
+    clearTimeout(introTimer);
+    overlay.removeEventListener('click', showChallenge);
+    overlay.innerHTML = `
+      <h3>Platter Reifen!</h3>
+      <p class="pump-hint">Pumpe, wenn der Zeiger in der Zone ist – jeder Stoß zählt!</p>
+      <svg viewBox="0 0 170 170" class="pump-svg" id="pumpSvg">
+        <circle cx="85" cy="85" r="64" class="tube-base" id="tubeBase"/>
+        <circle cx="85" cy="85" r="64" class="tube-fill" id="tubeFill" transform="rotate(-90 85 85)"/>
+        <rect x="82" y="14" width="6" height="10" rx="2" fill="#8393A6"/>
+        <path d="M97 122 Q 120 116 114 62 Q 112 40 88 26" fill="none" stroke="#8393A6" stroke-width="3" stroke-linecap="round"/>
+        <g class="pump-handle" id="pumpHandle">
+          <rect x="63" y="50" width="44" height="7" rx="3.5" fill="${PAL.jersey}"/>
+          <rect x="82" y="55" width="6" height="34" rx="2" fill="#8393A6"/>
+        </g>
+        <rect x="77" y="86" width="16" height="42" rx="4" fill="#2D6E9E"/>
+        <rect x="64" y="126" width="42" height="7" rx="3.5" fill="#1C3448" stroke="#8393A6" stroke-width="1"/>
+      </svg>
+      <div class="pump-track"><div class="pump-zone" id="pumpZone"></div><div class="pump-needle" id="pumpNeedle"></div></div>
+      <button class="btn pump-btn" id="pumpBtn">💨 Pumpen!</button>
+    `;
+    runChallenge();
+  }
+
+  function runChallenge(){
+  const zoneEl = document.getElementById('pumpZone');
+  const needleEl = document.getElementById('pumpNeedle');
+  const svgEl = document.getElementById('pumpSvg');
+  const tubeBase = document.getElementById('tubeBase');
+  const tubeFill = document.getElementById('tubeFill');
+  const btn = document.getElementById('pumpBtn');
+  const TUBE_CIRC = 2*Math.PI*64;
+  tubeFill.style.strokeDasharray = TUBE_CIRC;
+  tubeFill.style.strokeDashoffset = TUBE_CIRC;
+
+  let pressure = 0, t = 0, zonePos = 0, zoneW = 18, ended = false, raf, strokes = 0, hits = 0;
+
+  function renderTube(){
+    tubeFill.style.strokeDashoffset = TUBE_CIRC * (1 - pressure/100);
+    const w = 9 + pressure*0.05;
+    tubeBase.style.strokeWidth = w;
+    tubeFill.style.strokeWidth = w;
+  }
+
+  function placeZone(){
+    zonePos = 8 + Math.random()*74;
+    zoneEl.style.left = zonePos + '%';
+    zoneEl.style.width = zoneW + '%';
+  }
+  function needlePos(){ return 50 + Math.sin(t*4.2)*48; }
+
+  function tick(ts){
+    if(ended) return;
+    const dt = Math.min((ts - (tick.last || ts))/1000, 0.05);
+    tick.last = ts;
+    t += dt;
+    needleEl.style.left = needlePos() + '%';
+    if(t >= CONFIG.PUMP_DURATION){ finish(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function pump(){
+    if(ended) return;
+    const hit = needlePos() >= zonePos && needlePos() <= zonePos + zoneW;
+    strokes++;
+    if(hit) hits++;
+    pressure = Math.min(100, pressure + (hit ? 20 : 4));
+    renderTube();
+    svgEl.classList.add('stroking');
+    setTimeout(()=> svgEl.classList.remove('stroking'), 110);
+    sfxBell();
+    if(hit) placeZone();
+    if(pressure >= 100) finish();
+  }
+
+  function pumpKeyHandler(e){
+    if(e.key === ' '){ e.preventDefault(); pump(); }
+  }
+
+  function finish(){
+    if(ended) return;
+    ended = true;
+    cancelAnimationFrame(raf);
+    btn.removeEventListener('click', pump);
+    document.removeEventListener('keydown', pumpKeyHandler);
+    const accuracy = strokes > 0 ? hits/strokes : 0;
+    const score = (pressure/100)*0.75 + accuracy*0.25;
+    const penalty = Math.round(CONFIG.PUMP_MAX_PENALTY - (CONFIG.PUMP_MAX_PENALTY - CONFIG.PUMP_MIN_PENALTY)*score);
+    distance = Math.max(0, distance - penalty);
+    showPopup(CONFIG.CW/2, CONFIG.GROUND_Y-80, "-" + penalty + "m Platten!");
+    overlay.remove();
+    minigameActive = false;
+    paused = false;
+    lastTs = performance.now();
+    requestAnimationFrame(loop);
+  }
+
+  placeZone();
+  btn.addEventListener('click', pump);
+  document.addEventListener('keydown', pumpKeyHandler);
+  raf = requestAnimationFrame(tick);
+  }
+}
+
 function doJump(){
+  if(minigameActive) return;
   if(player.jumpOffset === 0 && !player.ducking){
     player.vy = CONFIG.JUMP_SPEED;
     sfxBell();
@@ -621,7 +784,7 @@ function spawnEntity(){
   } else if(roll < 0.72){
     obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:28, y: CONFIG.GROUND_Y-52, seed });
   } else {
-    collectibles.push({ kind:'stern', x: CONFIG.CW+10, w:20, h:20, y: CONFIG.GROUND_Y-58, seed });
+    collectibles.push({ kind:'stern', x: CONFIG.CW+10, w:20, h:20, y: CONFIG.GROUND_Y-70, seed });
   }
 }
 
@@ -678,7 +841,9 @@ function loop(ts){
   player.prevJumpOffset = player.jumpOffset;
   if(player.jumpOffset > 0 || player.vy !== 0){
     player.jumpOffset += player.vy*dt;
-    player.vy -= CONFIG.GRAVITY*dt;
+    // Anschlagdynamik: Taste losgelassen im Aufstieg = Sprung wird früh gekappt
+    const gMul = (player.vy > 0 && !player.jumpHeld) ? CONFIG.JUMP_CUT_GRAVITY : 1;
+    player.vy -= CONFIG.GRAVITY*gMul*dt;
     if(player.jumpOffset <= 0){ player.jumpOffset = 0; player.vy = 0; }
   }
   if(player.prevJumpOffset > 0 && player.jumpOffset === 0){
@@ -732,6 +897,11 @@ function loop(ts){
     o.x -= speed*dt;
     if(o.x < -60){ obstacles.splice(i,1); continue; }
     if(rectsOverlap(pRect, o)){
+      if(o.kind === 'schlagloch'){
+        obstacles.splice(i,1);
+        startPumpMinigame();
+        return;
+      }
       gameOver(o.kind);
       return;
     }
@@ -1325,67 +1495,133 @@ function renderResult(finalScore){
     document.getElementById('submitMsg').textContent = "Deine Distanz wurde in der Bestenliste gespeichert.";
   };
   document.getElementById('againBtn').onclick = renderStart;
-  document.getElementById('shareBtn').onclick = ()=> saveShareImage(finalScore);
+  document.getElementById('shareBtn').onclick = ()=>{
+    const nameInput = document.getElementById('nameInput');
+    const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim().slice(0,24) : 'Anonym';
+    saveShareImage(finalScore, name);
+  };
 }
 
 /* ---------- Share-Bild ---------- */
-function saveShareImage(finalScore){
-  const W = 600, H = 800;
-  const canvas = document.createElement('canvas');
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
+function saveShareImage(finalScore, playerName){
+  const shareBtn = document.getElementById('shareBtn');
+  playerName = playerName || 'Anonym';
 
-  const bg = ctx.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,'#0A1219'); bg.addColorStop(1,'#16273D');
-  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+  function drawTrophy(ctx, cx, cy, s){
+    const gold = '#FFD447', goldDark = '#D9A916';
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(s, s);
+    // Henkel
+    ctx.strokeStyle = goldDark; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.arc(-42, 14, 20, Math.PI*0.5, Math.PI*1.5, false); ctx.stroke();
+    ctx.beginPath(); ctx.arc(42, 14, 20, -Math.PI*0.5, Math.PI*0.5, false); ctx.stroke();
+    // Kelch
+    ctx.fillStyle = gold;
+    ctx.beginPath();
+    ctx.moveTo(-38, 0);
+    ctx.bezierCurveTo(-38, 42, -16, 58, 0, 58);
+    ctx.bezierCurveTo(16, 58, 38, 42, 38, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillRect(-42, -8, 84, 10);
+    // Glanzlicht
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.beginPath(); ctx.ellipse(-16, 20, 7, 16, -0.15, 0, Math.PI*2); ctx.fill();
+    // Stiel & Fuß
+    ctx.fillStyle = goldDark;
+    ctx.fillRect(-7, 58, 14, 16);
+    ctx.beginPath();
+    ctx.moveTo(-26, 88); ctx.lineTo(26, 88); ctx.lineTo(18, 74); ctx.lineTo(-18, 74);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
 
-  const borderGrad = ctx.createLinearGradient(0,0,W,0);
-  borderGrad.addColorStop(0,'rgba(45,110,158,0.6)'); borderGrad.addColorStop(1,'rgba(200,90,20,0.6)');
-  ctx.strokeStyle = borderGrad; ctx.lineWidth = 3;
-  ctx.strokeRect(16,16,W-32,H-32);
+  function drawCard(logo){
+    const W = 600, H = 800;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
 
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#A8C8DC';
-  ctx.font = "700 30px 'Barlow Condensed', sans-serif";
-  ctx.fillText('TOUR DE HIAS', W/2, 130);
+    const bg = ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0A1219'); bg.addColorStop(1,'#16273D');
+    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
 
-  ctx.fillStyle = '#E06820';
-  ctx.font = "900 120px 'Barlow Condensed', sans-serif";
-  ctx.fillText(finalScore + ' m', W/2, 300);
+    // Urkunden-Doppelrahmen
+    const borderGrad = ctx.createLinearGradient(0,0,W,0);
+    borderGrad.addColorStop(0,'rgba(45,110,158,0.6)'); borderGrad.addColorStop(1,'rgba(200,90,20,0.6)');
+    ctx.strokeStyle = borderGrad; ctx.lineWidth = 3;
+    ctx.strokeRect(16,16,W-32,H-32);
+    ctx.strokeStyle = 'rgba(245,241,235,0.22)'; ctx.lineWidth = 1;
+    ctx.strokeRect(28,28,W-56,H-56);
 
-  ctx.fillStyle = '#DBE6EE';
-  ctx.font = "500 22px 'Barlow', sans-serif";
-  ctx.fillText('zurückgelegte Distanz', W/2, 340);
+    ctx.textAlign = 'center';
 
-  ctx.fillStyle = '#E06820';
-  ctx.font = "700 20px 'Barlow Condensed', sans-serif";
-  ctx.fillText('Mitspielen & gewinnen: @radlhias.tv', W/2, H-90);
+    if(logo) ctx.drawImage(logo, W/2-45, 48, 90, 90);
 
-  ctx.fillStyle = '#F5F1EB';
-  ctx.font = "400 40px 'Abuget', cursive";
-  ctx.fillText('Radl Hias', W/2, H-38);
+    ctx.fillStyle = '#A8C8DC';
+    ctx.font = "700 32px 'Barlow Condensed', sans-serif";
+    ctx.fillText('TOUR DE HIAS', W/2, 176);
 
-  function finishDownload(){
-    canvas.toBlob(blob=>{
-      if(!blob) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `tour-de-hias-${finalScore}m.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(()=> URL.revokeObjectURL(url), 2000);
-    }, 'image/png');
+    ctx.fillStyle = '#E06820';
+    ctx.font = "700 18px 'Barlow Condensed', sans-serif";
+    ctx.fillText('O F F I Z I E L L E   U R K U N D E', W/2, 206);
+
+    drawTrophy(ctx, W/2, 262, 1.15);
+
+    ctx.fillStyle = '#DBE6EE';
+    ctx.font = "500 20px 'Barlow', sans-serif";
+    ctx.fillText('verliehen an', W/2, 430);
+
+    // Spielername (schrumpft, falls er zu breit wird)
+    ctx.fillStyle = '#F5F1EB';
+    let nameSize = 62;
+    ctx.font = "400 " + nameSize + "px 'Abuget', cursive";
+    while(ctx.measureText(playerName).width > 500 && nameSize > 30){
+      nameSize -= 4;
+      ctx.font = "400 " + nameSize + "px 'Abuget', cursive";
+    }
+    ctx.fillText(playerName, W/2, 492);
+
+    ctx.fillStyle = '#E06820';
+    ctx.font = "900 96px 'Barlow Condensed', sans-serif";
+    ctx.fillText(finalScore + ' m', W/2, 600);
+
+    ctx.fillStyle = '#DBE6EE';
+    ctx.font = "500 20px 'Barlow', sans-serif";
+    ctx.fillText('zurückgelegte Distanz', W/2, 636);
+
+    ctx.fillStyle = '#E06820';
+    ctx.font = "700 20px 'Barlow Condensed', sans-serif";
+    ctx.fillText(CONFIG.GEWINNSPIEL_AKTIV ? 'Mitspielen & gewinnen: @radlhias.tv' : 'Jetzt selbst fahren auf radlhias.tv', W/2, H-52);
+
+    return canvas;
+  }
+
+  function finishDownload(canvas, retryOhneLogo){
+    try{
+      canvas.toBlob(blob=>{
+        if(!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tour-de-hias-${finalScore}m.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(()=> URL.revokeObjectURL(url), 2000);
+        if(shareBtn) shareBtn.textContent = '📸 Gespeichert ✓';
+      }, 'image/png');
+    } catch(e){
+      // Canvas durch Logo "tainted" (z. B. bei file://): ohne Logo neu rendern
+      if(retryOhneLogo) finishDownload(drawCard(null), false);
+      else if(shareBtn) shareBtn.textContent = 'Speichern nicht möglich';
+    }
   }
 
   function drawLogoAndFinish(){
     const logo = new Image();
-    logo.onload = ()=>{
-      ctx.drawImage(logo, W/2-60, 150, 120, 120);
-      finishDownload();
-    };
-    logo.onerror = finishDownload;
+    logo.onload = ()=> finishDownload(drawCard(logo), true);
+    logo.onerror = ()=> finishDownload(drawCard(null), false);
     logo.src = '../RadlHias_Logo_freigestellt_cream.png';
   }
 
