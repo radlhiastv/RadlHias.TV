@@ -32,7 +32,7 @@
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -42,7 +42,9 @@
     .hero {
       margin-top: 56px;
       position: relative;
-      background: var(--navy);
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--navy);
       padding: 60px 20px 50px;
       overflow: hidden;
     }
@@ -52,7 +54,9 @@
       top: 0; right: 0;
       width: 46%;
       height: 100%;
-      background: var(--orange);
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--orange);
       clip-path: polygon(100% 0, 100% 100%, 40% 100%);
       opacity: 0.9;
     }
@@ -574,7 +578,11 @@
     .btn-view-all:hover { background: var(--navy2); }
 
     /* ===== KONTAKT ===== */
-    .kontakt-section { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); }
+    .kontakt-section {
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+    }
     .kontakt-wrap {
       max-width: 480px;
       margin: 0 auto;

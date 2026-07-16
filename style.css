@@ -209,7 +209,9 @@ header.compact .logo-tagline {
 
 /* ===== EINHEITLICHER FOOTER (alle Seiten) ===== */
 footer {
-  background: var(--navy);
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+    var(--navy);
   color: var(--cream);
   padding: 44px 20px 32px;
   text-align: center;
