@@ -190,7 +190,7 @@
     <div class="step-hint">Fahrfertig – also du + typische Kleidung + was du dabei hast. Kein Gepäck.</div>
     <div class="input-group" style="margin-top:8px;">
       <div class="input-row">
-        <input type="range" id="gewicht" min="20" max="160" value="80" oninput="updateSlider('gewicht','gewicht-val')" onchange="updateSlider('gewicht','gewicht-val')">
+        <input type="range" id="gewicht" min="20" max="200" value="80" oninput="updateSlider('gewicht','gewicht-val')" onchange="updateSlider('gewicht','gewicht-val')">
         <div class="input-val"><span id="gewicht-val">80</span><span class="input-unit">kg</span></div>
       </div>
     </div>
@@ -1277,7 +1277,7 @@
       <div style="margin-bottom:20px;">
         <div class="input-label">Fahrergewicht (inkl. Ausrüstung)</div>
         <div style="display:flex; align-items:center; gap:12px;">
-          <input type="range" id="druck-gewicht" min="20" max="160" value="80" step="1"
+          <input type="range" id="druck-gewicht" min="20" max="200" value="80" step="1"
             style="flex:1; accent-color:var(--navy);"
             oninput="document.getElementById('druck-gewicht-val').textContent=this.value; berechneDruck();">
           <span style="font-size:22px; font-weight:700; color:var(--navy); min-width:60px;" id="druck-gewicht-val">80</span>
