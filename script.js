@@ -794,9 +794,9 @@ function calcResult() {
 
   // ---- XXL-HINWEIS ----
   const xxlBox = document.getElementById('xxl-hinweis');
-  if (gewicht > 120 || groesse > 195) {
+  if (gewicht > 100 || groesse > 195) {
     let xxlGrund = [];
-    if (gewicht > 120) xxlGrund.push('deinem Gewicht von ' + gewicht + ' kg');
+    if (gewicht > 100) xxlGrund.push('deinem Gewicht von ' + gewicht + ' kg');
     if (groesse > 195) xxlGrund.push('deiner Körpergröße von ' + groesse + ' cm');
     const xxlGrundText = xxlGrund.join(' und ');
 

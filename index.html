@@ -79,6 +79,14 @@
       border-radius: 2px;
       box-shadow: 0 14px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.6) inset;
       width: 78%;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+    .hero-tile:hover {
+      transform: rotate(var(--rot, 0deg)) translateY(-6px) scale(1.04);
+      box-shadow: 0 22px 42px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset;
+      z-index: 2;
     }
     .hero-tile::before {
       content: '';
@@ -92,10 +100,10 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.15);
       transform: translateX(-50%) rotate(-4deg);
     }
-    .hero-photos.left .hero-tile:first-child { width: 92%; transform: rotate(-7deg); }
-    .hero-photos.left .hero-tile:last-child { width: 68%; align-self: flex-end; transform: rotate(5deg); margin-top: -10px; }
-    .hero-photos.right .hero-tile:first-child { width: 92%; transform: rotate(7deg); }
-    .hero-photos.right .hero-tile:last-child { width: 68%; align-self: flex-start; transform: rotate(-5deg); margin-top: -10px; }
+    .hero-photos.left .hero-tile:first-child { width: 92%; --rot: -7deg; }
+    .hero-photos.left .hero-tile:last-child { width: 68%; align-self: flex-end; --rot: 5deg; margin-top: -10px; }
+    .hero-photos.right .hero-tile:first-child { width: 92%; --rot: 7deg; }
+    .hero-photos.right .hero-tile:last-child { width: 68%; align-self: flex-start; --rot: -5deg; margin-top: -10px; }
     .hero-photos.left .hero-tile:first-child::before { transform: translateX(-50%) rotate(3deg); }
     .hero-photos.left .hero-tile:last-child::before { transform: translateX(-50%) rotate(-5deg); }
     .hero-photos.right .hero-tile:first-child::before { transform: translateX(-50%) rotate(-3deg); }
@@ -132,10 +140,10 @@
       .hero-photos.right .hero-tile:first-child { width: 46%; margin-top: 0; }
       .hero-photos.left .hero-tile:last-child,
       .hero-photos.right .hero-tile:last-child { width: 46%; align-self: center; margin-top: 0; }
-      .hero-photos.left .hero-tile:first-child { transform: rotate(-5deg); }
-      .hero-photos.left .hero-tile:last-child { transform: rotate(3deg); }
-      .hero-photos.right .hero-tile:first-child { transform: rotate(5deg); }
-      .hero-photos.right .hero-tile:last-child { transform: rotate(-3deg); }
+      .hero-photos.left .hero-tile:first-child { --rot: -5deg; }
+      .hero-photos.left .hero-tile:last-child { --rot: 3deg; }
+      .hero-photos.right .hero-tile:first-child { --rot: 5deg; }
+      .hero-photos.right .hero-tile:last-child { --rot: -3deg; }
       .hero-center { order: 1; }
       .hero::before { width: 100%; clip-path: polygon(100% 0, 100% 30%, 0 0); opacity: 0.85; }
     }
@@ -167,7 +175,13 @@
       transition: background 0.2s;
     }
     .feature-item:hover { background: rgba(28,52,72,0.06); }
-    .feature-item .fi-icon { font-size: 38px; margin-bottom: 12px; display: block; }
+    .feature-item .fi-icon {
+      font-size: 38px;
+      margin-bottom: 12px;
+      display: block;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .feature-item:hover .fi-icon { transform: scale(1.15) rotate(-6deg); }
     .feature-item .fi-title {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900;
@@ -478,6 +492,7 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
     .kfg-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .kfg-cta:active { transform: translateY(0) scale(0.97); }
     .kfg-stats {
       position: relative;
       z-index: 1;
@@ -534,7 +549,8 @@
       color: inherit;
     }
     .blog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(28,52,72,0.15); }
-    .blog-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .blog-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.45s ease; }
+    .blog-card:hover img { transform: scale(1.06); }
     .blog-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
     .blog-card-cat {
       display: inline-block;
@@ -664,6 +680,26 @@
       .hero { min-height: 460px; }
       .hero-inner { padding: 40px 20px 36px; }
     }
+
+    /* ===== SCROLL REVEAL (Micro-Interaktion) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.22,0.61,0.36,1), transform 0.65s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+    .feature-item.reveal:nth-child(1) { transition-delay: 0ms; }
+    .feature-item.reveal:nth-child(2) { transition-delay: 70ms; }
+    .feature-item.reveal:nth-child(3) { transition-delay: 140ms; }
+    .feature-item.reveal:nth-child(4) { transition-delay: 210ms; }
+    .feature-item.reveal:nth-child(5) { transition-delay: 280ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal.in-view, .hero-tile, .fi-icon, .blog-card img, .kfg-cta {
+        transition: none !important;
+      }
+      .reveal { opacity: 1 !important; transform: none !important; }
+    }
   </style>
 </head>
 
@@ -713,27 +749,27 @@
 <!-- ===== FEATURE BAR ===== -->
 <div class="feature-bar">
   <div class="feature-bar-inner">
-    <a href="bikeservice.html" class="feature-item">
+    <a href="bikeservice.html" class="feature-item reveal">
       <span class="fi-icon">🛠️</span>
       <div class="fi-title">Bike Service</div>
       <div class="fi-desc">Wartung, Reparatur, Beratung</div>
     </a>
-    <a href="konfigurator.html" class="feature-item">
+    <a href="konfigurator.html" class="feature-item reveal">
       <span class="fi-icon">🔧</span>
       <div class="fi-title">Fahrrad Konfigurator</div>
       <div class="fi-desc">Dein perfektes Fahrrad in 10 Schritten</div>
     </a>
-    <a href="videos.html" class="feature-item">
+    <a href="videos.html" class="feature-item reveal">
       <span class="fi-icon">🎥</span>
       <div class="fi-title">Tutorials</div>
       <div class="fi-desc">YouTube-Archiv mit Suchfunktion</div>
     </a>
-    <a href="#blog" class="feature-item">
+    <a href="#blog" class="feature-item reveal">
       <span class="fi-icon">📚</span>
       <div class="fi-title">Blog</div>
       <div class="fi-desc">Tipps, Tests, ehrliche Erfahrungen</div>
     </a>
-    <a href="spiel/index.html" class="feature-item">
+    <a href="spiel/index.html" class="feature-item reveal">
       <span class="fi-icon">🚲</span>
       <div class="fi-title">Tour de Hias</div>
       <div class="fi-desc">Spiel: Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne</div>
@@ -783,7 +819,7 @@
 </section>
 
 <!-- ===== FÜR WEN ===== -->
-<section class="fuer-wen">
+<section class="fuer-wen reveal">
   <h2>Für wen ist RadlHias.TV?</h2>
 
   <p>Nicht jeder Radfahrer oder Fahrradkäufer hat die gleichen Bedürfnisse oder die gleichen Ziele. RadlHias.TV ist mein Kanal, mit dem ich Dir mehr als nur ein Verkaufsgespräch anbiete. Ich möchte Dich unabhängig, kostenlos und ganzheitlich beraten, ohne Dir etwas verkaufen zu müssen. Ich möchte einfach nur, dass Du mit deinem Fahrrad eine gute Zeit hast.</p>
@@ -804,7 +840,7 @@
   <div class="kfg-banner-media">
     <img src="konfigurator-banner-foto.jpg" alt="Hände halten ein Smartphone mit dem RadlHias Luftdruck-Rechner, im Hintergrund eine Fahrrad-Werkstatt" width="2200" height="1228">
     <div class="kfg-banner-scrim"></div>
-    <div class="kfg-banner-inner">
+    <div class="kfg-banner-inner reveal">
       <div class="kfg-col kfg-col-left">
         <div class="kfg-eyebrow">100% Kostenlos · Keine Werbung · Wertvoll für jeden Radfahrer</div>
         <h2 class="kfg-title">25 Jahre Bike Erfahrung<br>in deiner Hand</h2>
@@ -824,7 +860,7 @@
 </section>
 
 <!-- ===== FÜR WEN: TOOLS IM DETAIL ===== -->
-<section class="fuer-wen">
+<section class="fuer-wen reveal">
   <h3>Fahrrad kaufen, aber unsicher welches?</h3>
 
   <p>Der Fachhandel zeigt dir oft, was gerade auf Lager ist oder die beste Marge bringt. Ich zeige dir, worauf es bei deinem Einsatzzweck tatsächlich ankommt – egal ob Alltagsrad für die Stadt, Mountainbike fürs Gelände oder Rennrad für die Straße. Mit dem Fahrrad-Konfigurator findest du in wenigen Schritten heraus, welcher Bike-Typ wirklich zu deinem Fahrstil und Budget passt.</p>
@@ -1020,9 +1056,10 @@ function renderBlogTeasers() {
   grid.innerHTML = '';
   const featured = postsData.slice(0, 3);
 
-  featured.forEach(post => {
+  featured.forEach((post, idx) => {
     const card = document.createElement('a');
-    card.className = 'blog-card';
+    card.className = 'blog-card reveal';
+    card.style.transitionDelay = (idx * 90) + 'ms';
     card.href = `blog/${post.slug}.html`;
     card.innerHTML = `
       <img src="${post.image || ''}" alt="${escapeHtml(post.title)}" loading="lazy">
@@ -1035,6 +1072,7 @@ function renderBlogTeasers() {
     `;
     grid.appendChild(card);
   });
+  observeReveals();
 }
 
 function renderAdminPostsList() {
@@ -1100,6 +1138,24 @@ function escapeHtml(text) {
 }
 
 loadBlogTeasers();
+
+// Scroll-Reveal (Micro-Interaktion)
+const revealReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => {
+    if (revealReduceMotion) { el.classList.add('in-view'); }
+    else { revealObserver.observe(el); }
+  });
+}
+observeReveals();
 
 // Count-up der Kennzahlen im Value-Hero
 (function () {
