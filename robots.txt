@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /Papierkorb/
+Allow: /
+
+Sitemap: https://radlhias.tv/sitemap.xml

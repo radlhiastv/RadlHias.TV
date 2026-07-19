@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impressum – RadlHias.TV</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  :root {
+    --navy:   #1c3448;
+    --navy2:  #254560;
+    --orange: #c85a14;
+    --orange2:#e06820;
+    --text:   #c8d8e8;
+    --muted:  rgba(168,200,220,0.55);
+    --border: rgba(255,255,255,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+  }
+  /* nav via .main-nav */
+  
+  
+  
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 40px 80px;
+  }
+  .page-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+    display: block;
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 48px;
+    line-height: 0.95;
+  }
+  .block {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 20px;
+  }
+  .block h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 14px;
+  }
+  .block p, .block address {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    font-style: normal;
+  }
+  .block a {
+    color: var(--orange2);
+    text-decoration: none;
+  }
+  .block a:hover { text-decoration: underline; }
+  .block .notice {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+
+  @media (max-width: 600px) {
+    .page { padding: 80px 20px 60px; }
+    h1 { font-size: 38px; }
+    .block { padding: 24px 20px; }
+  }
+
+  /* ===== FLOATING SOCIAL BAR ===== */
+  .social-bar {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .social-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .social-btn:hover { transform: scale(1.12); }
+
+  .social-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+
+  .social-btn-instagram {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    box-shadow: 0 4px 16px rgba(214,36,159,0.4);
+  }
+
+  .social-btn-youtube {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .social-btn-youtube svg { fill: rgba(255,255,255,0.3); }
+
+  .social-btn-youtube:hover { transform: none; }
+
+  .social-tooltip {
+    position: absolute;
+    right: 54px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(10,18,25,0.92);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(245,241,235,0.7);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .social-tooltip::after {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: rgba(10,18,25,0.92);
+  }
+
+  .social-btn:hover .social-tooltip { opacity: 1; }
+
+  .social-btn-youtube .social-tooltip {
+    color: var(--orange);
+  }
+
+  @media (max-width: 600px) {
+    .social-bar {
+      right: 10px;
+      top: auto;
+      bottom: 24px;
+      transform: none;
+      flex-direction: row;
+    }
+    .social-tooltip { display: none; }
+  }
+</style>
+<style>
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="index.html#blog">Blog</a>
+    <a href="konfigurator.html">Konfigurator</a>
+    <a href="videos.html">Videos</a>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+    <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<div class="page">
+  <span class="page-label">Rechtliches</span>
+  <h1>Impressum</h1>
+
+  <div class="block">
+    <h2>Angaben gemäß § 5 ECG und § 14 UGB (Österreich)</h2>
+    <address>
+      Mathias Blumreich<br>
+      Wildshuter Str. 11b<br>
+      5120 St. Pantaleon<br>
+      Österreich
+    </address>
+    <p style="margin-top: 12px;">
+      E-Mail: <a href="mailto:radlhias.tv@gmail.com">radlhias.tv@gmail.com</a>
+    </p>
+    <p class="notice">
+      <strong style="color: var(--text);">Unternehmensangaben</strong><br>
+      Unternehmensgegenstand: Fahrradservice und -handel (freies Gewerbe)<br>
+      Gewerbebehörde: Bezirkshauptmannschaft Braunau am Inn<br>
+      GISA-Zahl: wird nach Zustellung des Gewerbescheins ergänzt<br>
+      Kleinunternehmer gemäß § 6 Abs. 1 Z 27 UStG – keine Umsatzsteuer ausgewiesen, daher keine UID-Nummer.
+    </p>
+    <p class="notice">
+      <strong style="color: var(--text);">Hinweis zur Geschäftsadresse:</strong><br>
+      An der angeführten Adresse findet kein Kundenverkehr statt und es besteht keine
+      öffentlich zugängliche Werkstatt oder Verkaufsstelle. Reparaturen und Termine werden
+      ausschließlich nach vorheriger Anmeldung per E-Mail entgegengenommen.
+    </p>
+  </div>
+
+  <div class="block">
+    <h2>Urheberrecht</h2>
+    <p>
+      Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten
+      unterliegen dem österreichischen Urheberrecht. Die Vervielfältigung, Bearbeitung,
+      Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts
+      bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+    </p>
+  </div>
+
+  <div class="block">
+    <h2>Haftungsausschluss</h2>
+    <p>
+      Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt.
+      Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine
+      Gewähr übernommen werden.
+    </p>
+  </div>
+
+  <div class="block">
+    <h2>Externe Links</h2>
+    <p>
+      Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte
+      ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets der
+      jeweilige Anbieter oder Betreiber verantwortlich.
+    </p>
+  </div>
+
+</div>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="blog/index.html">Blog</a>
+      <a href="konfigurator.html">Konfigurator</a>
+      <a href="videos.html">Videos</a>
+      <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram">📷</a>
+      <span title="YouTube – kommt bald">🎥</span>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+      <p style="margin-top:8px;">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

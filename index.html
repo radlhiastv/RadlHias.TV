@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RadlHias.TV – Fahrrad-Service & unabhängige Bike-Beratung</title>
+  <meta name="description" content="Ehrlicher Fahrrad-Service und unabhängige Bike-Beratung – mit über 25 Jahren Erfahrung im Bike Business. Kein Verkaufsdruck, keine Markenwerbung.">
+  <link rel="canonical" href="https://radlhias.tv/">
+  <meta property="og:title" content="RadlHias.TV – Fahrrad-Service & unabhängige Bike-Beratung">
+  <meta property="og:description" content="Fahrrad-Service & unabhängige Bike-Beratung mit über 25 Jahren Erfahrung. Kein Sponsoring. Keine Provision.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://radlhias.tv/">
+  <meta property="og:image" content="https://radlhias.tv/Fotos/RadlHias_Portrait_2026.jpg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "RadlHias.TV",
+    "url": "https://radlhias.tv/",
+    "description": "Fahrrad-Service & unabhängige Bike-Beratung mit über 25 Jahren Erfahrung. Kein Sponsoring. Keine Provision.",
+    "author": {
+      "@type": "Person",
+      "name": "Mathias Blumreich",
+      "url": "https://radlhias.tv/",
+      "jobTitle": "Fahrradmechaniker & unabhängiger Bike-Berater",
+      "sameAs": [
+        "https://www.instagram.com/radlhias.tv/"
+      ]
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body { background: var(--cream); }
+
+    /* ===== HERO (Foto-Collage) ===== */
+    .hero {
+      margin-top: 56px;
+      position: relative;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--navy);
+      padding: 60px 20px 50px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 46%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--orange);
+      clip-path: polygon(100% 0, 100% 100%, 40% 100%);
+      opacity: 0.9;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      max-width: 1150px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.7fr 1.6fr 0.7fr;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-photos { display: flex; flex-direction: column; gap: 18px; }
+    .hero-photos.right { align-items: flex-end; }
+    .hero-tile {
+      position: relative;
+      background: #fbfaf7;
+      padding: 10px 10px 0;
+      border-radius: 2px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.6) inset;
+      width: 78%;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+    .hero-tile:hover {
+      transform: rotate(var(--rot, 0deg)) translateY(-6px) scale(1.04);
+      box-shadow: 0 22px 42px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset;
+      z-index: 2;
+    }
+    .hero-tile::before {
+      content: '';
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      width: 54px;
+      height: 20px;
+      background: rgba(230,224,210,0.55);
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      transform: translateX(-50%) rotate(-4deg);
+    }
+    .hero-photos.left .hero-tile:first-child { width: 92%; --rot: -7deg; }
+    .hero-photos.left .hero-tile:last-child { width: 68%; align-self: flex-end; --rot: 5deg; margin-top: -10px; }
+    .hero-photos.right .hero-tile:first-child { width: 92%; --rot: 7deg; }
+    .hero-photos.right .hero-tile:last-child { width: 68%; align-self: flex-start; --rot: -5deg; margin-top: -10px; }
+    .hero-photos.left .hero-tile:first-child::before { transform: translateX(-50%) rotate(3deg); }
+    .hero-photos.left .hero-tile:last-child::before { transform: translateX(-50%) rotate(-5deg); }
+    .hero-photos.right .hero-tile:first-child::before { transform: translateX(-50%) rotate(-3deg); }
+    .hero-photos.right .hero-tile:last-child::before { transform: translateX(-50%) rotate(5deg); }
+    .polaroid-photo { overflow: hidden; background: #111; }
+    .polaroid-photo img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1/1; object-position: center; }
+    .polaroid-photo img.photo-top { object-position: center 8%; }
+    .polaroid-year {
+      display: block;
+      text-align: center;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--navy);
+      padding: 9px 0 12px;
+    }
+
+    .hero-center { text-align: center; color: var(--cream); padding: 0 6px; }
+    .hero-logo-badge { width: 117px; height: auto; margin: 0 auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
+    .hero-bio {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #dbe6ee;
+      margin: 0 auto 16px;
+      max-width: 460px;
+    }
+    .hero-bio strong { color: var(--cream); }
+    .hero-bio:last-of-type { margin-bottom: 0; }
+
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-photos { flex-direction: row; justify-content: center; order: 2; margin-top: 30px; }
+      .hero-photos.left .hero-tile:first-child,
+      .hero-photos.right .hero-tile:first-child { width: 46%; margin-top: 0; }
+      .hero-photos.left .hero-tile:last-child,
+      .hero-photos.right .hero-tile:last-child { width: 46%; align-self: center; margin-top: 0; }
+      .hero-photos.left .hero-tile:first-child { --rot: -5deg; }
+      .hero-photos.left .hero-tile:last-child { --rot: 3deg; }
+      .hero-photos.right .hero-tile:first-child { --rot: 5deg; }
+      .hero-photos.right .hero-tile:last-child { --rot: -3deg; }
+      .hero-center { order: 1; }
+      .hero::before { width: 100%; clip-path: polygon(100% 0, 100% 30%, 0 0); opacity: 0.85; }
+    }
+
+    /* ===== FEATURE BAR ===== */
+    .feature-bar {
+      background: var(--cream);
+      position: relative;
+      z-index: 1;
+      padding: 0;
+    }
+    .feature-bar-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 32px 20px;
+    }
+    .feature-item {
+      text-align: center;
+      color: var(--navy);
+      max-width: 220px;
+      flex: 1 1 190px;
+      text-decoration: none;
+      padding: 14px 14px;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .feature-item:hover { background: rgba(28,52,72,0.06); }
+    .feature-item .fi-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 12px;
+      display: block;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .feature-item:hover .fi-icon { transform: scale(1.15) rotate(-6deg); }
+    .feature-item .fi-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      min-height: 2.3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+    }
+    .feature-item .fi-desc { font-size: 15px; color: var(--text-dim); }
+
+    /* ===== VALUE HERO (Nutzenversprechen) ===== */
+    .value-hero {
+      position: relative;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--navy);
+      padding: 66px 20px 56px;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .value-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+    .value-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--orange);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .value-hero-eyebrow::before,
+    .value-hero-eyebrow::after {
+      content: '';
+      width: 26px;
+      height: 2px;
+      background: var(--orange);
+      opacity: 0.55;
+    }
+    .value-hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--cream);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .value-hero p { color: var(--cream); font-size: 18px; line-height: 1.6; opacity: 0.92; }
+
+    /* Kennzahlen mit Count-up */
+    .value-stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 0;
+      max-width: 640px;
+      margin: 34px auto 0;
+    }
+    .vstat {
+      position: relative;
+      flex: 1 1 0;
+      min-width: 150px;
+      padding: 6px 20px;
+    }
+    .vstat + .vstat::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 48px;
+      background: rgba(245,241,235,0.18);
+    }
+    .vstat-num {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(38px, 6vw, 52px);
+      line-height: 1;
+      color: var(--cream);
+    }
+    .vstat-label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 12.5px;
+      color: var(--blue-lt);
+      margin-top: 9px;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 640px) {
+      .value-stats { max-width: 340px; }
+      .vstat { flex: 1 1 40%; }
+      .vstat:nth-child(3) { flex: 1 1 60%; margin-top: 4px; }
+      .vstat:nth-child(3)::before { display: none; }
+    }
+
+    /* ===== SECTION SHARED ===== */
+    .section { max-width: 1100px; margin: 0 auto; padding: 64px 20px; }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-bottom: 40px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== FÜR WEN (SEO-Textblock) ===== */
+    .fuer-wen {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 20px;
+    }
+    .fuer-wen h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--navy);
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .fuer-wen h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      font-size: 19px;
+      line-height: 1.25;
+      margin: 28px 0 12px;
+    }
+    .fuer-wen p {
+      line-height: 1.6;
+      margin-bottom: 16px;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+    }
+    .fuer-wen p:last-child { margin-bottom: 0; }
+
+    /* ===== KONFIGURATOR-WERBEBANNER ===== */
+    .kfg-banner { position: relative; background: var(--navy); }
+    .kfg-banner-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .kfg-banner-media > img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .kfg-banner-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(16,28,38,0.9) 0%,
+        rgba(16,28,38,0.55) 24%,
+        rgba(16,28,38,0) 42%,
+        rgba(16,28,38,0) 58%,
+        rgba(16,28,38,0.55) 76%,
+        rgba(16,28,38,0.9) 100%);
+    }
+    .kfg-banner-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .kfg-col { max-width: 300px; }
+    .kfg-col-left { max-width: 480px; }
+    .kfg-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffb787;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .kfg-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--cream);
+      font-size: clamp(44px, 6vw, 64px);
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      margin: 0 0 36px;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+    }
+    .kfg-checks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .kfg-checks li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--cream);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.55);
+    }
+    .kfg-checks li::before {
+      content: '✓';
+      color: var(--orange);
+      background: rgba(245,241,235,0.18);
+      width: 18px; height: 18px;
+      min-width: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10.5px;
+      margin-top: 1px;
+    }
+    .kfg-features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .kfg-features li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--cream);
+      font-size: 19px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .kfg-features .kf-check {
+      color: var(--orange);
+      background: rgba(245,241,235,0.18);
+      width: 28px; height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .kfg-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 22px 48px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    .kfg-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .kfg-cta:active { transform: translateY(0) scale(0.97); }
+    .kfg-stats {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 18px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue-lt);
+    }
+    .kfg-stats strong { color: var(--cream); }
+    .kfg-stats .dot { opacity: 0.4; }
+    @media (max-width: 760px) {
+      .kfg-banner-media { aspect-ratio: unset; min-height: 340px; }
+      .kfg-banner-media > img { position: absolute; }
+      .kfg-banner-scrim {
+        background: linear-gradient(180deg,
+          rgba(16,28,38,0.88) 0%,
+          rgba(16,28,38,0.55) 22%,
+          rgba(16,28,38,0.55) 78%,
+          rgba(16,28,38,0.92) 100%);
+      }
+      .kfg-banner-inner { height: auto; flex-direction: column; justify-content: flex-start; padding: 32px 20px; text-align: center; gap: 30px; }
+      .kfg-col { max-width: 100%; margin: 0 auto; }
+      .kfg-checks, .kfg-features { align-items: center; }
+      .kfg-checks li, .kfg-features li { text-align: left; }
+    }
+
+    /* ===== BLOG TEASER ===== */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .blog-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--cream2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(28,52,72,0.15); }
+    .blog-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.45s ease; }
+    .blog-card:hover img { transform: scale(1.06); }
+    .blog-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .blog-card-cat {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(200,90,20,0.12);
+      color: var(--orange);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .blog-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .blog-card-excerpt { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; flex: 1; }
+    .blog-card-date { font-size: 12px; color: var(--text-dim); }
+    .blog-view-all { text-align: center; }
+    .btn-view-all {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--cream);
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .btn-view-all:hover { background: var(--navy2); }
+
+    /* ===== KONTAKT ===== */
+    .kontakt-section {
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+    }
+    .kontakt-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 36px 30px;
+      text-align: center;
+    }
+    .kontakt-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--blue-lt);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .kontakt-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: #dbe6ee;
+      margin-bottom: 24px;
+    }
+    .btn-mail {
+      display: block;
+      background: var(--orange);
+      color: white;
+      text-align: center;
+      padding: 15px 24px;
+      border-radius: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: background 0.2s;
+    }
+    .btn-mail:hover { background: #a04a10; }
+    .kontakt-email-row {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .kontakt-email-row span { font-size: 14px; color: var(--cream); font-weight: 600; word-break: break-all; }
+    .kontakt-copy-btn {
+      flex-shrink: 0;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .kontakt-note { font-size: 12px; color: var(--blue-lt); margin-top: 16px; line-height: 1.6; }
+
+
+    /* ===== ADMIN (versteckt, Ctrl+Shift+A) ===== */
+    #admin-toggle {
+      position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+      background: rgba(28,52,72,0.85); border: none; border-radius: 50%;
+      color: var(--cream); font-size: 22px; cursor: pointer; z-index: 999;
+      display: none; align-items: center; justify-content: center;
+    }
+    #admin-toggle.visible { display: flex; }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 460px; }
+      .hero-inner { padding: 40px 20px 36px; }
+    }
+
+    /* ===== SCROLL REVEAL (Micro-Interaktion) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.22,0.61,0.36,1), transform 0.65s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+    .feature-item.reveal:nth-child(1) { transition-delay: 0ms; }
+    .feature-item.reveal:nth-child(2) { transition-delay: 70ms; }
+    .feature-item.reveal:nth-child(3) { transition-delay: 140ms; }
+    .feature-item.reveal:nth-child(4) { transition-delay: 210ms; }
+    .feature-item.reveal:nth-child(5) { transition-delay: 280ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal.in-view, .hero-tile, .fi-icon, .blog-card img, .kfg-cta {
+        transition: none !important;
+      }
+      .reveal { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="main-nav">
+  <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="#blog">Blog</a>
+    <a href="konfigurator.html">Konfigurator</a>
+    <a href="videos.html">Videos</a>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="spiel/index.html">Tour de Hias</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
+<section class="value-hero">
+  <div class="value-hero-inner">
+    <div class="value-hero-eyebrow">Bei RadlHias.TV profitierst Du von</div>
+    <h1>Wissen &amp; Erfahrung aus mehr als 25 Jahren. Ohne etwas kaufen zu müssen!</h1>
+    <p>Niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
+
+    <div class="value-stats">
+      <div class="vstat">
+        <span class="vstat-num" data-target="25" data-suffix="+">25+</span>
+        <span class="vstat-label">Jahre Bike Business</span>
+      </div>
+      <div class="vstat">
+        <span class="vstat-num" data-target="4">4</span>
+        <span class="vstat-label">Kostenlose Tools</span>
+      </div>
+      <div class="vstat">
+        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
+        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURE BAR ===== -->
+<div class="feature-bar">
+  <div class="feature-bar-inner">
+    <a href="bikeservice.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        <circle cx="7.5" cy="16.5" r="1" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Bike Service</div>
+      <div class="fi-desc">Wartung, Reparatur, Beratung</div>
+    </a>
+    <a href="konfigurator.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="4" y1="21" x2="4" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="3"/>
+        <line x1="20" y1="21" x2="20" y2="3"/>
+        <circle cx="4" cy="8" r="2.6" fill="#c85a14" stroke="none"/>
+        <circle cx="12" cy="15" r="2.6" fill="#c85a14" stroke="none"/>
+        <circle cx="20" cy="7" r="2.6" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Fahrrad Konfigurator</div>
+      <div class="fi-desc">Dein perfektes Fahrrad in 10 Schritten</div>
+    </a>
+    <a href="videos.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Tutorials</div>
+      <div class="fi-desc">YouTube-Archiv mit Suchfunktion</div>
+    </a>
+    <a href="#blog" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        <path d="M5 8h3.5M5 11.5h3.5M15.5 8H19M15.5 11.5H19" stroke="#c85a14" stroke-width="1.6"/>
+      </svg>
+      <div class="fi-title">Blog</div>
+      <div class="fi-desc">Tipps, Tests, ehrliche Erfahrungen</div>
+    </a>
+    <a href="spiel/index.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="5.5" cy="17" r="3.6"/>
+        <circle cx="18.5" cy="17" r="3.6"/>
+        <path d="M5.5 17 L9 9 L15.5 9 L18.5 17 M9 9 L11 17 L15.5 9 M5.5 17 H11" stroke="#c85a14"/>
+        <path d="M7.9 9 H10.3 M14.3 9 H16.7"/>
+      </svg>
+      <div class="fi-title">Tour de Hias</div>
+      <div class="fi-desc">Spiel: Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne</div>
+    </a>
+  </div>
+</div>
+
+<!-- ===== HERO (Foto-Collage mit echten Fotos) ===== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-photos left">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.jpg" alt="Mathias in seiner Werkstatt" width="469" height="700"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.jpg" alt="Mathias beim Schrauben am Mountainbike" width="466" height="700"></div>
+        <span class="polaroid-year">2019</span>
+      </div>
+    </div>
+    <div class="hero-center">
+      <img src="RadlHias_Logo_freigestellt_cream.png" alt="RadlHias.TV Logo" class="hero-logo-badge" width="500" height="500">
+      <p class="hero-bio">
+        Ich bin Mathias (45) und Fahrräder begleiten mich mein gesamtes Leben. Seit inzwischen mehr
+        als 25 Jahren auch beruflich. Ob als Mechaniker, als Verkäufer, als Kundendienstmitarbeiter
+        bei KTM Fahrrad, mit eigenem Bike Shop namens „<strong>FEINSCHLIFF BIKES</strong>" und
+        natürlich als begeisterter Radfahrer.
+      </p>
+      <p class="hero-bio">
+        Ich kenne die Methoden der Industrie. Das Marketing dahinter und was ein wirklich gutes,
+        ehrliches Verkaufsgespräch ausmacht. Diese Seite ist mein Ort, um dir genau das
+        weiterzugeben. Erfahrung und Wissen, mit dem ich Dir weiterhelfen möchte. Genau so, wie ich
+        meinen Freunden helfe. Ganz ohne Verkaufsdruck und ohne Markenwerbung.
+      </p>
+    </div>
+    <div class="hero-photos right">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.jpg" alt="Mathias bei der Fahrradmontage" width="1000" height="670"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;" width="604" height="900"></div>
+        <span class="polaroid-year">2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FÜR WEN ===== -->
+<section class="fuer-wen reveal">
+  <h2>Für wen ist RadlHias.TV?</h2>
+
+  <p>Nicht jeder Radfahrer oder Fahrradkäufer hat die gleichen Bedürfnisse oder die gleichen Ziele. RadlHias.TV ist mein Kanal, mit dem ich Dir mehr als nur ein Verkaufsgespräch anbiete. Ich möchte Dich unabhängig, kostenlos und ganzheitlich beraten, ohne Dir etwas verkaufen zu müssen. Ich möchte einfach nur, dass Du mit deinem Fahrrad eine gute Zeit hast.</p>
+
+  <h3>Das liest sich sehr nobel. Aber was habe ich davon?</h3>
+
+  <p>In mehr als 25 Jahren habe ich auf verschiedenen Ebenen gelernt, wie ein Business und speziell die Fahrradbranche funktioniert. Und wie jede andere Branche lebt auch diese vom Verkauf.</p>
+
+  <p>Das ist legitim. Jedoch sollte der reine Verkauf nicht das Ziel sein. Während meiner Ausbildung zum Einzelhandelskaufmann (Fachrichtung Radsport) habe ich zuerst gelernt, worum es in einem Verkaufsgespräch geht. Nämlich um den Bedarf des Kunden – und darum, das Produkt zu finden, das zu genau diesem Bedarf und den Zielen des Kunden passt.</p>
+
+  <p>In meiner Laufbahn habe ich immer wieder Situationen erlebt, die genau das nicht zum Ziel hatten.</p>
+
+  <p>Mein Ziel ist es, meine Erfahrung weiterzugeben. Menschen mit ihrem Fahrrad glücklich werden zu lassen. Und nicht den Konzernen die Taschen zu füllen, sondern meiner Community den Rücken zu stärken.</p>
+</section>
+
+<!-- ===== KONFIGURATOR-WERBEBANNER ===== -->
+<section class="kfg-banner">
+  <div class="kfg-banner-media">
+    <img src="konfigurator-banner-foto.jpg" alt="Hände halten ein Smartphone mit dem RadlHias Luftdruck-Rechner, im Hintergrund eine Fahrrad-Werkstatt" width="2200" height="1228">
+    <div class="kfg-banner-scrim"></div>
+    <div class="kfg-banner-inner reveal">
+      <div class="kfg-col kfg-col-left">
+        <div class="kfg-eyebrow">100% Kostenlos · Keine Werbung · Wertvoll für jeden Radfahrer</div>
+        <h2 class="kfg-title">25 Jahre Bike Erfahrung<br>in deiner Hand</h2>
+        <a href="konfigurator.html" class="kfg-cta">Jetzt die App starten!</a>
+      </div>
+      <div class="kfg-col">
+        <ul class="kfg-features">
+          <li><span class="kf-check">✓</span> Fahrrad Konfigurator</li>
+          <li><span class="kf-check">✓</span> Gebraucht Check</li>
+          <li><span class="kf-check">✓</span> Bike Fitting</li>
+          <li><span class="kf-check">✓</span> Luftdruck Rechner</li>
+          <li><span class="kf-check">✓</span> FAQ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FÜR WEN: TOOLS IM DETAIL ===== -->
+<section class="fuer-wen reveal">
+  <h3>Fahrrad kaufen, aber unsicher welches?</h3>
+
+  <p>Der Fachhandel zeigt dir oft, was gerade auf Lager ist oder die beste Marge bringt. Ich zeige dir, worauf es bei deinem Einsatzzweck tatsächlich ankommt – egal ob Alltagsrad für die Stadt, Mountainbike fürs Gelände oder Rennrad für die Straße. Mit dem Fahrrad-Konfigurator findest du in wenigen Schritten heraus, welcher Bike-Typ wirklich zu deinem Fahrstil und Budget passt.</p>
+
+  <h3>Ein gebrauchtes Fahrrad im Blick?</h3>
+
+  <p>Rahmenschaden, verschlissene Lager, falsche Rahmengröße – das sind die Fehler, die die meisten Käufer beim Gebrauchtkauf machen. Mit dem Gebraucht-Check gehst du strukturiert vor statt nach Bauchgefühl, und erkennst in wenigen Minuten, ob sich der Kauf wirklich lohnt.</p>
+
+  <h3>Schmerzen oder Unwohlsein beim Radfahren?</h3>
+
+  <p>Rückenschmerzen, taube Finger oder Knieprobleme sind fast immer eine Frage der richtigen Einstellung, nicht des falschen Rahmens. Mit den Bike-Fitting-Grundlagen findest du heraus, welche Anpassungen an Sattel, Lenker und Position dir sofort mehr Komfort bringen – oft ganz ohne neues Material.</p>
+
+  <h3>Dein Fahrrad selbst warten und verstehen?</h3>
+
+  <p>Kette reinigen, Reifendruck richtig einstellen, erkennen wann ein Bauteil wirklich hin ist und wann es nur ein Verkaufsgespräch ist – nach 25 Jahren im Bike-Business weiß ich, worauf es ankommt. Mit dem Luftdruck-Rechner und den weiteren Tools sparst du dir unnötige Werkstattbesuche und unnötige Ausgaben.</p>
+</section>
+
+<!-- ===== BLOG TEASER ===== -->
+<section class="section" id="blog">
+  <h2 class="section-title">Aktuelle Artikel</h2>
+  <p class="section-sub">Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.</p>
+
+  <div class="blog-grid" id="blog-teaser-grid">
+    <!-- wird per JavaScript aus posts.json geladen -->
+  </div>
+
+  <div class="blog-view-all">
+    <a href="blog/index.html" class="btn-view-all">Alle Artikel ansehen</a>
+  </div>
+</section>
+
+<!-- ===== KONTAKT ===== -->
+<section class="section kontakt-section" id="kontakt">
+  <div class="kontakt-wrap">
+    <div class="kontakt-title">Feedback & Beratung</div>
+    <p class="kontakt-text">
+      Du hast Fragen zu deinem Fahrrad, einen Verbesserungsvorschlag oder willst einfach Hallo sagen?
+      Ich freue mich über jede Nachricht.
+    </p>
+    <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20über%20RadlHias.TV" class="btn-mail">✉️ E-Mail schreiben</a>
+    <div class="kontakt-email-row">
+      <span id="kontakt-email">radlhias.tv@gmail.com</span>
+      <button class="kontakt-copy-btn" onclick="
+        navigator.clipboard.writeText('radlhias.tv@gmail.com');
+        this.textContent='✓ Kopiert';
+        setTimeout(() => this.textContent='Kopieren', 2000);
+      ">Kopieren</button>
+    </div>
+    <p class="kontakt-note">Kein Formular, kein Tracking – deine Nachricht geht direkt an mich.</p>
+  </div>
+</section>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="blog/index.html">Blog</a>
+      <a href="konfigurator.html">Konfigurator</a>
+      <a href="videos.html">Videos</a>
+      <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram">📷</a>
+      <span title="YouTube – kommt bald">🎥</span>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+      <p style="margin-top:8px;">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== ADMIN BUTTON (versteckt, Ctrl+Shift+A) ===== -->
+<button id="admin-toggle" onclick="toggleAdmin(event)">⚙️</button>
+
+<!-- ===== ADMIN PANEL (versteckt) ===== -->
+<div id="admin-panel" style="display:none; padding:24px 20px; background:var(--cream2); border-top:3px solid var(--orange); margin-top:0;">
+  <div style="max-width:700px; margin:0 auto;">
+    <h2 style="color:var(--navy); margin-bottom:20px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:1px;">📝 Admin Panel – Blog Verwaltung</h2>
+
+    <div style="background:white; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:var(--shadow);">
+      <h3 style="color:var(--navy); margin-bottom:15px;">Neuen Artikel erstellen</h3>
+
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Titel:</label>
+        <input type="text" id="admin-title" placeholder="Artikel-Titel" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Slug (URL):</label>
+        <input type="text" id="admin-slug" placeholder="artikel-slug" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Excerpt:</label>
+        <textarea id="admin-excerpt" placeholder="Kurze Beschreibung..." rows="3" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;"></textarea>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Datum (YYYY-MM-DD):</label>
+        <input type="text" id="admin-date" placeholder="2026-01-15" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Kategorie:</label>
+        <select id="admin-category" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+          <option>Erfahrung</option>
+          <option>Technik</option>
+          <option>Meinung</option>
+          <option>Kaufberatung</option>
+          <option>Wartung</option>
+        </select>
+      </div>
+      <button onclick="createPost()" style="background:var(--blue); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">✅ Artikel hinzufügen</button>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:10px; box-shadow:var(--shadow);">
+      <h3 style="color:var(--navy); margin-bottom:15px;">Bestehende Artikel</h3>
+      <div id="admin-posts-list" style="max-height:400px; overflow-y:auto;">(wird geladen...)</div>
+      <p style="margin-top:12px; font-size:13px; color:var(--text-dim);">
+        Artikel löschen entfernt sie nur in dieser Ansicht. Lade die posts.json danach neu herunter und lade sie auf GitHub hoch.
+        Neu angelegte Artikel brauchen zusätzlich noch eine eigene Seite im <code>blog/</code>-Ordner.
+      </p>
+      <div style="margin-top:16px;">
+        <button onclick="downloadPostsJson()" style="background:var(--green); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">📥 posts.json herunterladen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Admin-Toggle
+let adminVisible = false;
+function toggleAdmin(e) {
+  e.preventDefault();
+  adminVisible = !adminVisible;
+  document.getElementById('admin-panel').style.display = adminVisible ? 'block' : 'none';
+}
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+    document.getElementById('admin-toggle').classList.toggle('visible');
+  }
+});
+
+// Blogartikel laden
+let postsData = [];
+function loadBlogTeasers() {
+  fetch('posts.json')
+    .then(r => r.json())
+    .then(data => {
+      postsData = (data && data.posts) || [];
+      renderBlogTeasers();
+      renderAdminPostsList();
+    })
+    .catch(err => {
+      console.error('Fehler beim Laden von posts.json:', err);
+      document.getElementById('blog-teaser-grid').innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-dim);">Keine Artikel verfügbar.</p>';
+    });
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  const monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  return `${parseInt(d,10)}. ${monate[parseInt(m,10)-1]} ${y}`;
+}
+
+function renderBlogTeasers() {
+  const grid = document.getElementById('blog-teaser-grid');
+  grid.innerHTML = '';
+  const featured = postsData.slice(0, 3);
+
+  featured.forEach((post, idx) => {
+    const card = document.createElement('a');
+    card.className = 'blog-card reveal';
+    card.style.transitionDelay = (idx * 90) + 'ms';
+    card.href = `blog/${post.slug}.html`;
+    card.innerHTML = `
+      <img src="${post.image || ''}" alt="${escapeHtml(post.title)}" loading="lazy">
+      <div class="blog-card-body">
+        <span class="blog-card-cat">${escapeHtml(post.category || 'Blog')}</span>
+        <div class="blog-card-title">${escapeHtml(post.title)}</div>
+        <div class="blog-card-excerpt">${escapeHtml(post.excerpt || '')}</div>
+        <div class="blog-card-date">${formatDate(post.date)}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  observeReveals();
+}
+
+function renderAdminPostsList() {
+  const list = document.getElementById('admin-posts-list');
+  list.innerHTML = '';
+  postsData.forEach((post, idx) => {
+    const item = document.createElement('div');
+    item.style.padding = '10px';
+    item.style.borderBottom = '1px solid var(--cream2)';
+    item.innerHTML = `
+      <strong>${escapeHtml(post.title)}</strong>
+      <div style="font-size:13px; color:var(--text-dim); margin:4px 0;">${post.date} · ${post.category}</div>
+      <button onclick="deletePost(${idx})" style="background:var(--orange); color:white; padding:4px 12px; border:none; border-radius:4px; cursor:pointer; font-size:12px;">🗑 Löschen</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function createPost() {
+  const title = document.getElementById('admin-title').value;
+  const slug = document.getElementById('admin-slug').value;
+  const excerpt = document.getElementById('admin-excerpt').value;
+  const date = document.getElementById('admin-date').value;
+  const category = document.getElementById('admin-category').value;
+
+  if (!title || !slug) { alert('Bitte Titel und Slug eingeben!'); return; }
+
+  postsData.unshift({ title, slug, excerpt, date, category, tag: category });
+  document.getElementById('admin-title').value = '';
+  document.getElementById('admin-slug').value = '';
+  document.getElementById('admin-excerpt').value = '';
+  document.getElementById('admin-date').value = '';
+
+  renderBlogTeasers();
+  renderAdminPostsList();
+  alert('✅ Artikel in der Liste ergänzt! Vergiss nicht: posts.json herunterladen, hochladen – und eine eigene Artikelseite im blog/-Ordner anlegen.');
+}
+
+function deletePost(idx) {
+  if (confirm('Artikel wirklich löschen?')) {
+    postsData.splice(idx, 1);
+    renderBlogTeasers();
+    renderAdminPostsList();
+  }
+}
+
+function downloadPostsJson() {
+  const data = JSON.stringify({ posts: postsData }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'posts.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text == null ? '' : text;
+  return div.innerHTML;
+}
+
+loadBlogTeasers();
+
+// Scroll-Reveal (Micro-Interaktion)
+const revealReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => {
+    if (revealReduceMotion) { el.classList.add('in-view'); }
+    else { revealObserver.observe(el); }
+  });
+}
+observeReveals();
+
+// Count-up der Kennzahlen im Value-Hero
+(function () {
+  const nums = document.querySelectorAll('.value-hero .vstat-num');
+  if (!nums.length) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(el) {
+    const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+    const suffix = el.getAttribute('data-suffix') || '';
+    if (reduce) { el.textContent = target + suffix; return; }
+    const dur = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { run(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  nums.forEach(n => io.observe(n));
+})();
+</script>
+
+</body>
+</html>

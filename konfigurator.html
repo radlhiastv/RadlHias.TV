@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fahrrad Konfigurator – RadlHias.TV</title>
+<meta name="description" content="Kostenloser Fahrrad-Konfigurator von RadlHias.TV: Finde in 10 Schritten dein perfektes Fahrrad, inkl. Rahmengröße, Bike Fitting, Luftdruck-Rechner und Gebrauchtcheck – ganz ohne Verkaufsdruck.">
+<link rel="canonical" href="https://radlhias.tv/konfigurator.html">
+<meta property="og:title" content="Fahrrad Konfigurator – RadlHias.TV">
+<meta property="og:description" content="25 Jahre Bike-Erfahrung in deiner Hand: Konfigurator, Gebrauchtcheck, Bike Fitting und Luftdruck-Rechner – 100% kostenlos, keine Werbung.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radlhias.tv/konfigurator.html">
+<meta property="og:image" content="https://radlhias.tv/konfigurator-banner-foto.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="img/konfig-favicon.png">
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="index.html#blog">Blog</a>
+    <a href="konfigurator.html" class="active">Konfigurator</a>
+    <a href="videos.html">Videos</a>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+    <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+<!-- ===== DISCLAIMER / BEGRÜSSUNG ===== -->
+<div id="disclaimer-overlay" style="
+  margin-top:56px;
+  min-height:calc(100vh - 56px);
+  background:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px, var(--navy);
+  display:flex; flex-direction:column;
+  padding:0 0 40px 0;
+">
+  <div style="display:flex; flex-direction:column; align-items:center; padding:40px 24px 0;">
+
+    <!-- Logo -->
+    <img src="img/konfig-logo.png" alt="Radl Hias" width="320" height="320" style="height:150px; width:auto; border-radius:10px; margin-bottom:28px;">
+
+    <!-- Headline -->
+    <div id="welcome-headline" style="font-family:'Abuget',cursive; font-size:54px; color:#f5f1eb; text-align:center; margin-bottom:6px;">Hallo!</div>
+    <div style="font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#a8c8dc; text-align:center; margin-bottom:28px;">Bevor du startest – kurz zu dieser App</div>
+
+    <!-- Karte -->
+    <div style="background:rgba(255,255,255,0.07); border-radius:14px; padding:24px 20px; max-width:480px; width:100%; border:1px solid rgba(255,255,255,0.12);">
+
+      <p style="font-family:'Barlow',sans-serif; font-size:15px; color:#f5f1eb; line-height:1.7; margin:0 0 18px 0;">
+        Ich bin Mathias. Fahrräder sind seit mehr als 25 Jahren ein stabiler Bestandteil meines beruflichen und privaten Lebens. Ob als Mechaniker in verschiedenen Werkstätten, als Kundendienst- und Marketingmitarbeiter bei KTM Fahrrad oder in meinem eigenen Fahrradgeschäft namens „FEINSCHLIFF BIKES" (2010–2015).
+      </p>
+
+      <p style="font-family:'Barlow',sans-serif; font-size:15px; color:#f5f1eb; line-height:1.7; margin:0 0 18px 0;">
+        Mit dieser App möchte ich die Beratungslücken schließen, die viele Händler und vor allem Hersteller entstehen lassen. Diese App ist kein kommerzielles Produkt, keine gesponserte Empfehlungsmaschine und kein Ersatz für eine gute Probefahrt. Sie ist ein Werkzeug, mit dem ich deinen Fahrrad-Alltag erleichtern und Dir einen Teil meines Wissens und meiner Erfahrungen weitergeben möchte.
+      </p>
+
+      <div style="border-left:3px solid #c85a14; padding-left:16px; margin-bottom:18px;">
+        <p style="font-family:'Barlow',sans-serif; font-size:14px; color:#d4e8f5; line-height:1.7; margin:0;">
+          <strong style="color:#f5f1eb;">Wichtiger Hinweis:</strong> Alle Empfehlungen, Richtwerte und Tipps basieren tatsächlich nur auf meiner persönlichen Erfahrung. Ich nehme nicht in Anspruch, den Goldstandard zu definieren. Andere Fachleute können zu anderen Einschätzungen kommen – und das ist absolut legitim.
+        </p>
+      </div>
+
+      <p style="font-family:'Barlow',sans-serif; font-size:14px; color:#a8c8dc; line-height:1.7; margin:0;">
+        In meiner App findest Du <strong style="color:#f5f1eb;">KEINE</strong> versteckten Produktempfehlungen. Kein Sponsoring. Keine Provision. Nur meine ehrliche Einschätzung – so wie ich sie einem guten Freund geben würde.
+      </p>
+    </div>
+
+    <!-- Button -->
+    <button type="button" onclick="document.getElementById('disclaimer-overlay').style.display='none'; document.getElementById('konfig-app-content').style.display='block'; window.scrollTo(0,0);" style="
+      margin-top:32px;
+      background:#c85a14;
+      color:white;
+      border:none;
+      padding:18px 36px;
+      border-radius:10px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      cursor:pointer;
+      width:100%;
+      max-width:360px;
+    ">APP JETZT STARTEN</button>
+
+    <p style="font-family:'Barlow',sans-serif; font-size:11px; color:#5a7a8a; text-align:center; margin-top:20px; max-width:320px; line-height:1.6;">
+      Mit dem Klick bestätigst du, dass du den Hinweis zur Natur dieser Empfehlungen gelesen hast.
+    </p>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var name = params.get('name');
+    var el = document.getElementById('welcome-headline');
+    if (name) {
+      el.innerHTML = 'Hallo ' + name + '\!';
+    } else {
+      el.innerHTML = 'Hallo\!';
+    }
+  })();
+</script>
+
+
+<div id="konfig-app-content" style="display:none;">
+<nav id="main-nav" style="background:white; border-bottom:3px solid var(--orange); box-shadow:0 2px 8px rgba(28,52,72,0.06); position:relative; z-index:50; margin-top:56px;">
+  <button type="button" id="nav-toggle" onclick="toggleNavDropdown()" style="width:100%; padding:18px 24px; background:none; border:none; color:var(--navy); font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
+    <span id="nav-active-label">🚴 Bike Konfigurator</span>
+    <span id="nav-arrow" style="display:flex; flex-direction:column; gap:5px; transition:transform 0.2s ease;">
+      <span style="display:block; width:22px; height:2.5px; background:var(--orange); border-radius:2px;"></span>
+      <span style="display:block; width:22px; height:2.5px; background:var(--orange); border-radius:2px;"></span>
+      <span style="display:block; width:22px; height:2.5px; background:var(--orange); border-radius:2px;"></span>
+    </span>
+  </button>
+  <div id="nav-dropdown" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; box-shadow:0 6px 16px rgba(28,52,72,0.14); z-index:100;">
+    <button type="button" class="nav-dd-item" onclick="navSelect('berater','🚴 Bike Konfigurator')">🚴 Bike Konfigurator</button>
+    <button type="button" class="nav-dd-item" onclick="navSelect('gebraucht','🔍 Gebraucht-Check')">🔍 Gebraucht-Check</button>
+    <button type="button" class="nav-dd-item" onclick="navSelect('fitting','🔩 Bike-Fitting')">🔩 Bike-Fitting</button>
+    <button type="button" class="nav-dd-item" onclick="navSelect('druck','🔧 Luftdruck')">🔧 Luftdruck</button>
+    <button type="button" class="nav-dd-item" onclick="navSelect('kontakt','✉️ Kontakt')">✉️ Kontakt</button>
+  </div>
+
+</nav>
+
+<div id="berater-banner" style="max-width:640px; margin: 25px auto 0; padding: 0 16px 0;">
+  <div class="result-wrap" style="border-radius:12px 12px 0 0; border-bottom:none; box-shadow:0 2px 20px rgba(28,52,72,0.10); margin-bottom:0;">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Bike Konfigurator</div>
+      <div class="result-title">Dein persönlicher Fahrrad-Berater</div>
+    </div>
+    <div style="padding:14px 24px 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim);">Dein Profil</span>
+        <span id="nav-prog-label" style="font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim);">Schritt 1 von 10</span>
+      </div>
+      <div style="background:var(--cream2); height:5px; border-radius:3px; overflow:hidden;">
+        <div id="nav-prog-fill" style="height:100%; background:linear-gradient(90deg, var(--blue), var(--orange)); width:9%; border-radius:3px; transition:width 0.4s ease;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="wizard-wrap wizard-wrap-outer" style="padding-top:0; margin-top:0;">
+
+<!-- ===== STEP 1: ALTER ===== -->
+<div class="step active" id="step-1">
+  <div class="step-card">
+    <div class="step-pikt">🎂</div>
+    <div class="step-cat">Persönliches</div>
+    <div class="step-q">Wie alt bist du?</div>
+    <div class="step-hint">Das Alter beeinflusst die Geometrie-Empfehlung und wie sportlich oder komfortabel das Rad ausgelegt sein soll.</div>
+    <div style="text-align:center; padding: 10px 0 16px;">
+      <div class="input-label" style="text-align:center;">Dein Alter</div>
+      <div style="display:flex; justify-content:center;">
+        <div class="stepper">
+        <button type="button" class="stepper-btn" onclick="stepperChange('alter', -1)">−</button>
+        <div class="stepper-val"><span id="alter-val">35</span> <span style="font-size:14px; color:var(--text-dim);">J</span></div>
+        <button type="button" class="stepper-btn" onclick="stepperChange('alter', 1)">+</button>
+      </div>
+      </div>
+    </div>
+    <details class="truth-box">
+<summary>Warum das wichtig ist</summary>
+<div class="truth-box-body">Ein Fahrrad wird typischerweise für 7 bis 10 Jahre gekauft. In dieser Zeit verändert sich der Körper. Kinder werden größer. Ab dem 30. Lebensjahr baut der Körper langsam Muskulatur ab. Wer mit 45 noch voll im Saft steht, kann mit 50 erste altersbedingte Einschränkungen spüren. Dann freut man sich über etwas mehr Komfort, weniger Belastung für Rücken, Nacken und Handgelenke. Das Alter heute bestimmt also mit, wie gut das Rad in 5 Jahren noch passen soll.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-next" onclick="goNext(1)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 2: GEWICHT ===== -->
+<div class="step" id="step-2">
+  <div class="step-card">
+    <div class="step-pikt">⚖️</div>
+    <div class="step-cat">Körper</div>
+    <div class="step-q">Wie schwer bist du?</div>
+    <div class="step-hint">Fahrfertig – also du + typische Kleidung + was du dabei hast. Kein Gepäck.</div>
+    <div class="input-group" style="margin-top:8px;">
+      <div class="input-row">
+        <input type="range" id="gewicht" min="20" max="160" value="80" oninput="updateSlider('gewicht','gewicht-val')" onchange="updateSlider('gewicht','gewicht-val')">
+        <div class="input-val"><span id="gewicht-val">80</span><span class="input-unit">kg</span></div>
+      </div>
+    </div>
+    <details class="truth-box">
+<summary>Warum das wichtig ist</summary>
+<div class="truth-box-body">Das Körpergewicht spielt eine entscheidende Rolle bei der Auswahl von Rahmen, Gabel und Laufrädern. Nicht nur weil Hersteller oft Belastungsgrenzen definiert haben, die Einfluss auf Entscheidungen im Reklamationsfall haben, sondern auch weil Federelemente auf dein persönliches Körpergewicht angepasst werden müssen, um optimal zu funktionieren.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(2)">←</button>
+    <button class="btn-next" onclick="goNext(2)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 3: KÖRPERGRÖSSE ===== -->
+<div class="step" id="step-3">
+  <div class="step-card">
+    <div class="step-pikt">📏</div>
+    <div class="step-cat">Körper</div>
+    <div class="step-q">Wie groß bist du?</div>
+    <div class="step-hint">Wichtig für die Rahmengröße. Aber Größe allein reicht nicht – deshalb kommen danach noch Schrittlänge und Armlänge.</div>
+    <div class="input-group" style="margin-top:8px;">
+      <div class="input-row">
+        <input type="range" id="groesse" min="125" max="210" value="175" oninput="updateSlider('groesse','groesse-val')" onchange="updateSlider('groesse','groesse-val')">
+        <div class="input-val"><span id="groesse-val">175</span><span class="input-unit">cm</span></div>
+      </div>
+    </div>
+    <details class="truth-box">
+<summary>Was der Händler nicht sagt</summary>
+<div class="truth-box-body">Die Rahmengröße nur anhand der Körpergröße aus einer Tabelle zu wählen ist eine grobe Annäherung. Viel präziser geht es mit der Kombination aus Schrittlänge, Armlänge und Rumpflänge, die dieses Tool in den nächsten Schritten abfragt. Gerade im sportlichen Bereich ist genau das entscheidend, um am Ende wirklich perfekt auf dem Fahrrad zu sitzen.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(3)">←</button>
+    <button class="btn-next" onclick="goNext(3)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 4: SCHRITTLÄNGE ===== -->
+<div class="step" id="step-4">
+  <div class="step-card">
+    <div class="step-pikt">🦵</div>
+    <div class="step-cat">Körper</div>
+    <div class="step-q">Wie lang ist deine Schrittlänge?</div>
+    <div class="step-hint">Barfuß, ohne Schuhe: vom Boden bis zur Leistengegend (Schritt). Am besten mit einem Buch zwischen den Beinen messen – Buch an die Wand, Abstand Boden zum Buch messen.</div>
+    <div class="input-group" style="margin-top:8px;">
+      <div class="input-row">
+        <input type="range" id="schrittl" min="40" max="125" value="80" oninput="updateSlider('schrittl','schrittl-val'); checkSchrittlPlausibel()" onchange="updateSlider('schrittl','schrittl-val'); checkSchrittlPlausibel()">
+        <div class="input-val"><span id="schrittl-val">80</span><span class="input-unit">cm</span></div>
+      </div>
+    </div>
+    <div id="schrittl-warn" style="display:none; margin-top:10px; padding:10px 14px; background:#fff8e1; border-left:4px solid #f59e0b; border-radius:6px; font-size:14px; color:#7c5a00;">
+      &#9888;&#65039; <strong>Eingabe prüfen:</strong> <span id="schrittl-warn-text"></span>
+    </div>
+    <details class="truth-box">
+<summary>Warum das entscheidend ist</summary>
+<div class="truth-box-body">Die Schrittlänge ist in den meisten Fällen der wichtigste Einzelwert für die Ermittlung der korrekten Rahmengröße. Noch wichtiger und genauer als die Körpergröße. Zwei augenscheinlich gleich große Menschen können dennoch völlig unterschiedliche Beinlängen haben. Und diese Beinlänge entscheidet dann, ob jemand bei einer bestimmten Rahmengröße mit seinen Füßen bis zum Boden reicht, oder ob er vorher mit dem Schritt auf dem Oberrohr aufsetzt. Das ist der Extremfall. In jedem Fall hat die Beinlänge aber Einfluss darauf, ob eine ergonomische Sitzposition gebaut werden kann oder nicht.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(4)">←</button>
+    <button class="btn-next" onclick="goNext(4)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 5: ARMLÄNGE ===== -->
+<div class="step" id="step-5">
+  <div class="step-card">
+    <div class="step-pikt">💪</div>
+    <div class="step-cat">Körper</div>
+    <div class="step-q">Wie lang ist dein Arm – von der Achsel bis zum Handballen?</div>
+    <div class="step-hint">Arm gerade ausstrecken, von der Achselhöhle bis zum Handballen messen. Diese Länge bestimmt mit, wie weit du dich auf dem Rad nach vorne strecken musst – und ob du dabei entspannt oder verspannt sitzt.</div>
+    <div class="input-group" style="margin-top:8px;">
+      <div class="input-row">
+        <input type="range" id="armlaenge" min="25" max="100" value="55" oninput="updateSlider('armlaenge','armlaenge-val'); checkArmlaengePlausibel()" onchange="updateSlider('armlaenge','armlaenge-val'); checkArmlaengePlausibel()">
+        <div class="input-val"><span id="armlaenge-val">55</span><span class="input-unit">cm</span></div>
+      </div>
+    </div>
+    <div id="armlaenge-warn" style="display:none; margin-top:10px; padding:10px 14px; background:#fff8e1; border-left:4px solid #f59e0b; border-radius:6px; font-size:14px; color:#7c5a00;">
+      &#9888;&#65039; <strong>Eingabe prüfen:</strong> <span id="armlaenge-warn-text"></span>
+    </div>
+    <details class="truth-box">
+<summary>Warum das wichtig ist</summary>
+<div class="truth-box-body">Kurze Arme brauchen einen kürzeren Vorbau oder ein kürzeres Oberrohr – sonst sitzt du zu gestreckt und bekommst auf langen Fahrten Nacken- und Schulterprobleme. Lange Arme bei kurzem Rumpf bedeuten umgekehrt, dass du dich auf dem Rad zusammenfalten würdest. Beides zusammen – Arm- und Rumpflänge – ergibt das Bild.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(5)">←</button>
+    <button class="btn-next" onclick="goNext(5)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 6: EINSATZ ===== -->
+<div class="step" id="step-6">
+  <div class="step-card">
+    <div class="step-pikt">🎯</div>
+    <div class="step-cat">Nutzung</div>
+    <div class="step-q">Was willst du mit dem Rad hauptsächlich machen?</div>
+    <div class="step-hint">Wähle den Einsatzbereich der am besten zu dir passt – so wie du wirklich fährst, nicht wie du gerne fahren würdest.</div>
+    <div class="options-grid">
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'city', 'Stadt & Pendeln')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="8" height="18" fill="#1c3448"/>
+            <rect x="14" y="8" width="10" height="24" fill="#1c3448"/>
+            <rect x="26" y="17" width="6" height="15" fill="#1c3448"/>
+            <rect x="6" y="17" width="2" height="3" fill="white"/>
+            <rect x="10" y="17" width="2" height="3" fill="white"/>
+            <rect x="16" y="12" width="2" height="3" fill="white"/>
+            <rect x="20" y="12" width="2" height="3" fill="white"/>
+            <rect x="16" y="18" width="2" height="3" fill="white"/>
+            <rect x="20" y="18" width="2" height="3" fill="white"/>
+            <rect x="28" y="20" width="2" height="3" fill="white"/>
+            <rect x="2" y="32" width="32" height="2" fill="#1c3448"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">Stadt & Pendeln</div>
+        <div class="opt-grid-desc">Arbeit, Einkaufen, kurze Wege</div>
+      </button>
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'trekking', 'Trekking & Touren')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4L32 28H4L18 4Z" fill="#1c3448"/>
+            <path d="M18 10L28 26H8L18 10Z" fill="white"/>
+            <path d="M18 16L24 26H12L18 16Z" fill="#1c3448"/>
+            <rect x="16" y="28" width="4" height="4" fill="#1c3448"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">Trekking & Touren</div>
+        <div class="opt-grid-desc">Längere Ausfahrten, Radreisen</div>
+      </button>
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'rennrad', 'Rennrad & Sport')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="24" r="7" stroke="#1c3448" stroke-width="3" fill="none"/>
+            <circle cx="27" cy="24" r="7" stroke="#1c3448" stroke-width="3" fill="none"/>
+            <circle cx="9" cy="24" r="2" fill="#1c3448"/>
+            <circle cx="27" cy="24" r="2" fill="#1c3448"/>
+            <path d="M9 24L17 12L27 24" stroke="#1c3448" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+            <path d="M17 12L19 8" stroke="#1c3448" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M16 8H22" stroke="#1c3448" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M17 12L13 15" stroke="#1c3448" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">Rennrad & Sport</div>
+        <div class="opt-grid-desc">Schnell, sportlich, Asphalt</div>
+      </button>
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'gravel', 'Gravel & Abenteuer')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 28L12 14L18 22L24 10L32 28H4Z" fill="#1c3448"/>
+            <circle cx="28" cy="10" r="4" fill="#1c3448"/>
+            <path d="M26 8L30 8M28 6L28 10" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">Gravel & Abenteuer</div>
+        <div class="opt-grid-desc">Asphalt + Schotter, vielseitig</div>
+      </button>
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'mtb_xc', 'MTB Cross-Country')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 28L10 16L18 22L26 8L34 28H2Z" fill="#1c3448"/>
+            <path d="M2 28L10 16L18 22L26 8L34 28" stroke="white" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">MTB Cross-Country</div>
+        <div class="opt-grid-desc">Ausdauer im Gelände, wenig Technik</div>
+      </button>
+      <button class="opt-grid" onclick="pickGrid(this, 6, 'mtb_trail', 'MTB Trail & Enduro')">
+        <div class="opt-grid-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 32L14 10L22 20L28 6L34 32H2Z" fill="#1c3448"/>
+            <path d="M14 10L14 32" stroke="white" stroke-width="1.5"/>
+            <path d="M22 20L22 32" stroke="white" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="opt-grid-title">MTB Trail & Enduro</div>
+        <div class="opt-grid-desc">Technische Trails, bergab Spaß</div>
+      </button>
+    </div>
+    <div id="next-6-wrap" style="display:none; height:0; overflow:hidden;"></div>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(6)">←</button>
+    <button class="btn-next" id="next-6-btn" onclick="goNext(6)" disabled>Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 7: UNTERGRUND ===== -->
+<div class="step" id="step-7">
+  <div class="step-card">
+    <div class="step-pikt">🛣</div>
+    <div class="step-cat">Untergrund</div>
+    <div class="step-q">Wo fährst du – und wie viel davon?</div>
+    <div class="step-hint">Verteile 100% auf die Untergründe. <strong id="terrain-remaining" style="color:var(--green);">✓ 100% verteilt – perfekt!</strong></div>
+    <div class="terrain-wrap" style="margin-top:12px;">
+
+      <div class="terrain-row">
+        <div class="terrain-header">
+          <div class="terrain-name">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="7" width="16" height="4" rx="1" fill="#1c3448"/><rect x="3" y="3" width="4" height="7" rx="1" fill="#1c3448"/><rect x="11" y="5" width="3" height="5" rx="1" fill="#1c3448"/></svg>
+            Asphalt / Stadt
+          </div>
+          <div class="terrain-pct"><span id="t1-pct">40</span>%</div>
+        </div>
+        <input type="range" id="t1" min="0" max="100" value="40" style="accent-color:#2d6e9e;" oninput="updateTerrain('t1')">
+      </div>
+
+      <div class="terrain-row">
+        <div class="terrain-header">
+          <div class="terrain-name">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L14 10H4L9 2Z" fill="#1c3448"/><rect x="8" y="10" width="2" height="6" fill="#1c3448"/><path d="M3 16h12" stroke="#1c3448" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Waldweg / Schotter
+          </div>
+          <div class="terrain-pct"><span id="t2-pct">30</span>%</div>
+        </div>
+        <input type="range" id="t2" min="0" max="100" value="30" style="accent-color:#3a7a4a;" oninput="updateTerrain('t2')">
+      </div>
+
+      <div class="terrain-row">
+        <div class="terrain-header">
+          <div class="terrain-name">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 14L7 6L11 10L14 4L16 14H2Z" fill="#1c3448"/></svg>
+            Singletrail / MTB
+          </div>
+          <div class="terrain-pct"><span id="t3-pct">20</span>%</div>
+        </div>
+        <input type="range" id="t3" min="0" max="100" value="20" style="accent-color:#c85a14;" oninput="updateTerrain('t3')">
+      </div>
+
+      <div class="terrain-row">
+        <div class="terrain-header">
+          <div class="terrain-name">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1 12 Q4 8 9 10 Q14 12 17 8" stroke="#1c3448" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M1 15 Q4 11 9 13 Q14 15 17 11" stroke="#1c3448" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            Feldweg / Sand / Wiese
+          </div>
+          <div class="terrain-pct"><span id="t4-pct">10</span>%</div>
+        </div>
+        <input type="range" id="t4" min="0" max="100" value="10" style="accent-color:#a07828;" oninput="updateTerrain('t4')">
+      </div>
+
+      <div class="terrain-total ok" id="terrain-total">✓ Gesamt: 100%</div>
+    </div>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(7)">←</button>
+    <button class="btn-next" id="next-7" onclick="goNext(7)">Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 8: KILOMETER ===== -->
+<div class="step" id="step-8">
+  <div class="step-card">
+    <div class="step-pikt">🚴</div>
+    <div class="step-cat">Nutzungsintensität</div>
+    <div class="step-q">Wie viele Kilometer pro Woche stellst du dir vor?</div>
+    <div class="step-hint">Schätze realistisch – nicht was du dir vornimmst, sondern was du wirklich machen wirst.</div>
+    <div class="options" style="margin-top:8px;">
+      <button class="opt" onclick="pick(this, 8, 'km_low', 'bis 30 km/Woche')">
+        <span class="opt-icon">🐢</span>
+        <div><div class="opt-title">Bis 30 km pro Woche</div><div class="opt-desc">Gelegentlich, kurze Strecken, kein Sport</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 8, 'km_mid', '30–100 km/Woche')">
+        <span class="opt-icon">🚲</span>
+        <div><div class="opt-title">30–100 km pro Woche</div><div class="opt-desc">Regelmäßig, Wochenend-Touren, gelegentlich pendeln</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 8, 'km_high', '100–200 km/Woche')">
+        <span class="opt-icon">💨</span>
+        <div><div class="opt-title">100–200 km pro Woche</div><div class="opt-desc">Ich fahre viel – sportlich oder als Hauptverkehrsmittel</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 8, 'km_vhigh', 'über 200 km/Woche')">
+        <span class="opt-icon">🏆</span>
+        <div><div class="opt-title">Über 200 km pro Woche</div><div class="opt-desc">Ernsthafter Sport, Training, Radreisen</div></div>
+      </button>
+    </div>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(8)">←</button>
+    <button class="btn-next" id="next-8" onclick="goNext(8)" disabled>Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 9: HÖHENMETER ===== -->
+<div class="step" id="step-9">
+  <div class="step-card">
+    <div class="step-pikt">⛰</div>
+    <div class="step-cat">Gelände</div>
+    <div class="step-q">Spielen Höhenmeter und Anstiege eine große Rolle?</div>
+    <div class="step-hint">Das beeinflusst die Übersetzung der Schaltung – ob du ein großes Übersetzungsband brauchst oder nicht.</div>
+    <div class="options" style="margin-top:8px;">
+      <button class="opt" onclick="pick(this, 9, 'hm_flach', 'Hauptsächlich flach')">
+        <span class="opt-icon">➖</span>
+        <div><div class="opt-title">Hauptsächlich flach</div><div class="opt-desc">Wenig Steigungen, kein nennenswertes Bergfahren</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 9, 'hm_huegel', 'Hügelig')">
+        <span class="opt-icon">〰️</span>
+        <div><div class="opt-title">Hügelig – moderate Anstiege</div><div class="opt-desc">Regelmäßige Steigungen, aber keine langen Bergpassagen</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 9, 'hm_berg', 'Bergig – viele Höhenmeter')">
+        <span class="opt-icon">🏔</span>
+        <div><div class="opt-title">Bergig – viele Höhenmeter</div><div class="opt-desc">Lange Anstiege, alpine Touren, Pässe – Übersetzung ist entscheidend</div></div>
+      </button>
+    </div>
+    <details class="truth-box" style="margin-top:14px;">
+<summary>Was der Händler nicht sagt</summary>
+<div class="truth-box-body">Höhenmeter beeinflussen nicht nur die Übersetzung – sie erhöhen auch den Verschleiß deutlich. Wer viel bergauf fährt, belastet Kette und Zahnkränze wesentlich stärker als jemand der flach fährt. Bergab-Fahrten verschleißen Bremsbeläge und Reifen schneller. Das bedeutet: wer regelmäßig Anstiege fährt, muss kürzere Wartungsintervalle einplanen und kauft in seiner Fahrrad-Karriere deutlich mehr Verschleißteile. Das gehört in die Gesamtrechnung.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(9)">←</button>
+    <button class="btn-next" id="next-9" onclick="goNext(9)" disabled>Weiter →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 10: E-BIKE ===== -->
+<div class="step" id="step-10">
+  <div class="step-card">
+    <div class="step-pikt">⚡</div>
+    <div class="step-cat">Antrieb</div>
+    <div class="step-q">Mit oder ohne Motor?</div>
+    <div class="step-hint">Keine Wertung. Ein E-Bike macht für viele absolut Sinn. Ich sage dir nur die Wahrheit dazu.</div>
+    <div class="options" style="margin-top:8px;">
+      <button class="opt" onclick="pick(this, 10, 'ebike_nein', 'Ohne Motor')">
+        <span class="opt-icon">🚴</span>
+        <div><div class="opt-title">Ohne Motor – klassisch</div><div class="opt-desc">Ich will Eigenleistung, weniger Gewicht, einfachere Technik</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 10, 'ebike_ja', 'Mit Motor – E-Bike')">
+        <span class="opt-icon">⚡</span>
+        <div><div class="opt-title">Ja – ich will elektrische Unterstützung</div><div class="opt-desc">Für Berge, Pendeln, Gesundheit oder mehr Reichweite</div></div>
+      </button>
+      <button class="opt" onclick="pick(this, 10, 'ebike_offen', 'Noch offen')">
+        <span class="opt-icon">🤔</span>
+        <div><div class="opt-title">Ich bin noch unentschlossen</div><div class="opt-desc">Ich höre mir gern eine ehrliche Einschätzung an</div></div>
+      </button>
+    </div>
+    <details class="truth-box" style="margin-top:14px;">
+<summary>Was der Händler nicht sagt</summary>
+<div class="truth-box-body">Ein E-Bike macht das Treten leichter – aber wer schneller fährt, muss auch öfter und stärker bremsen. Das erhöht den Bremsbelagsverschleiß deutlich. Auch die Reifen verschleißen schneller. Kraftvolles Anfahren und häufiges Abbremsen aus höheren Geschwindigkeiten bedeuten mehr Abrieb. Beides gehört in die Folgekostenrechnung.<br><br>
+      Mindestens genauso wichtig: Der Motor muss zum Fahrer passen. Ein zu starker Motor liefert mehr Leistung als erwartet. Und wer mental nicht mehr ganz so fit ist wie früher, kann in Stresssituationen falsch reagieren. Die Leistung wird unterschätzt, die Reaktion kommt zu spät. Ein gut abgestimmter Antrieb ist deshalb keine Frage des Komforts, sondern der Sicherheit.</div>
+</details>
+  </div>
+  <div class="step-nav">
+    <button class="btn-back" onclick="goBack(10)">←</button>
+    <button class="btn-next" id="next-10" onclick="calcResult()" disabled>Der Radl Hias empfiehlt Dir →</button>
+  </div>
+</div>
+
+
+<!-- ===== RESULT ===== -->
+<div class="step" id="step-result">
+  <div class="result-wrap">
+    <!-- Eingaben-Zusammenfassung -->
+    <div class="summary-box" id="summary-box">
+      <div class="summary-box-title">📋 Dein Profil auf einen Blick</div>
+      <div class="summary-grid" id="summary-grid"></div>
+    </div>
+
+    <!-- Spezifikation -->
+    <div class="spec-section" style="padding-top:16px;">
+      <div class="spec-section-title">Empfohlene Spezifikation</div>
+      <div id="spec-grid"></div>
+    </div>
+
+    <!-- XXL-Hinweis (wird bei Bedarf per JS eingeblendet) -->
+    <div id="xxl-hinweis" style="display:none; margin:20px 20px 4px; padding:16px 18px; background:#fff8f5; border:2px solid var(--orange); border-radius:12px;"></div>
+
+    <div class="result-footer">
+      <p>Diese Empfehlung basiert auf deinen Angaben. Zeig sie dem Händler oder nutze sie als Checkliste beim Kauf.</p>
+      <button class="btn-pdf" onclick="exportPDF()">📄 Empfehlung als PDF speichern</button>
+      <button class="btn-restart" onclick="restartWizard()">Nochmal von vorne</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wizard-wrap -->
+
+
+<!-- ===== BIKE-FITTING ===== -->
+<div id="fitting-bereich" style="display:none; max-width:640px; margin: 0 auto 80px; padding: 0 16px 20px;">
+
+  <div class="result-wrap" style="margin-top:25px;">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Bike-Fitting</div>
+      <div class="result-title">In 5 Schritten zur perfekten Sitzposition</div>
+    </div>
+
+    <div style="padding:16px 20px 8px;">
+      <p style="font-size:13px; color:var(--text-dim); font-style:italic; line-height:1.6; padding-bottom:14px; border-bottom:1px solid var(--cream2);">
+        Ein professionelles Bikefitting kostet mehrere Hundert Euro – aber mit den richtigen Handgriffen kannst du die wichtigsten Einstellungen selbst vornehmen. Nimm dir Zeit, probiere aus und vertraue deinem Körpergefühl.
+      </p>
+    </div>
+
+    <!-- SCHRITT 1: SATTELHÖHE -->
+    <div class="fitting-step" id="fit-step-1">
+      <div class="fitting-step-header" onclick="toggleFitStep(1)">
+        <div class="fitting-step-num">01</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Sattelhöhe</div>
+          <div class="fitting-step-sub">Die wichtigste Einstellung am ganzen Rad</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-1">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-1">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid">
+            <div class="fitting-polaroid-photo"><img src="img/fit-sattelhoehe-foto.jpg" alt="Sattelhöhe einstellen – Fersen-Methode" width="900" height="900"></div>
+            <span class="fitting-polaroid-caption">Sattelhöhe</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Ziehe dir die Schuhe an, die du vorhast, auch beim Radfahren zu tragen!</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Suche dir eine Wand oder etwas zum Anlehnen. Setz dich auf dein Rad und stütze dich an der Wand ab. So kannst du sicher pedalieren ohne umzufallen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Setze beide Fersen auf die Pedale und tritt gleichmäßig rückwärts.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Achte dabei auf Folgendes: Die Fersen müssen auf den Pedalen bleiben können und die Hüfte muss beim Pedalieren horizontal bleiben. Sie darf nicht nach links oder rechts kippen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">5</div>
+            <div>Probiere so lange aus, bis die <strong>optimale Höhe</strong> gefunden ist. Das braucht manchmal ein paar Versuche – das ist normal.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↕</span>
+            <div><strong>Hüfte kippt seitlich</strong> → Sattel zu hoch. Etwas nach unten verstellen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↕</span>
+            <div><strong>Beine nicht vollständig gestreckt</strong> → Sattel noch zu niedrig. Etwas nach oben verstellen.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Hüfte bleibt gerade, Beine voll gestreckt</strong> → Sattelhöhe passt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Die Sattelstütze wird mit einer Klemme oder Schraube am Rahmen fixiert. Lösen, Höhe anpassen, wieder festziehen – und nochmal testen.</div>
+      </div>
+    </div>
+
+
+    <!-- SCHRITT 2: SATTEL VOR/RÜCK -->
+    <div class="fitting-step" id="fit-step-2">
+      <div class="fitting-step-header" onclick="toggleFitStep(2)">
+        <div class="fitting-step-num">02</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Sattel-Position</div>
+          <div class="fitting-step-sub">Vor/Rück – das Knie über der Pedalachse</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-2">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-2" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-sattelposition-foto.jpg" alt="Sattelposition – Knie über Pedalachse" width="900" height="900"></div>
+            <span class="fitting-polaroid-caption">Sattel Einstellung</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Bleibe an der Wand angelehnt. Setze beide Füße mit den <strong>Ballen auf die Pedale</strong>. Also mit den Bereichen, mit denen du dann tatsächlich treten wirst.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Drehe die Kurbeln, bis sie <strong>exakt horizontal</strong> stehen. Eine Kurbel zeigt nach vorne, eine nach hinten.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Neige die Füße um etwa <strong>10° mit der Ferse nach oben</strong> – so wie beim echten Fahren.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Schaue <strong>senkrecht von oben</strong> auf dein vorderes Knie: Die <strong>Kniescheibe sollte nun genau über der Pedalachse</strong> stehen.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">←</span>
+            <div><strong>Knie vor der Pedalachse</strong> → Sattel zu weit vorne. Sattel nach hinten schieben.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">→</span>
+            <div><strong>Knie hinter der Pedalachse</strong> → Sattel zu weit hinten. Sattel nach vorne schieben.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Knie genau über der Pedalachse</strong> → Position passt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Unter dem Sattel befinden sich eine oder zwei Schrauben. Löse diese, schiebe den Sattel in Position, ziehe wieder an – und teste nochmal.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 3: LENKERHÖHE -->
+    <div class="fitting-step" id="fit-step-3">
+      <div class="fitting-step-header" onclick="toggleFitStep(3)">
+        <div class="fitting-step-num">03</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Lenkerhöhe</div>
+          <div class="fitting-step-sub">Komfort vs. Sportlichkeit – deine Wahl</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-3">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-3" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(-2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-lenkerhoehe-foto.jpg" alt="Lenkerhöhe einstellen – Griffe über Satteloberkante" width="900" height="900"></div>
+            <span class="fitting-polaroid-caption">Lenkerhöhe</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Als Faustregel gilt: Die Lenkergriffe sollten etwa <strong>10 cm über der Satteloberkante</strong> liegen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Je fitter und sportlicher du fährst, desto tiefer darf der Lenker. Im Leistungssport liegt der Lenker oft sogar <strong>unter dem Sattel</strong>.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Bei Trekkingrädern und Citybikes: Verstellbarer Vorbau – einfach drehen und fixieren. Bei Sporträdern: Spacer unter dem Vorbau entfernen oder hinzufügen.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Orientierung nach Fahrertyp</div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🏙</span>
+            <div><strong>Alltag & Komfort:</strong> Lenker deutlich über dem Sattel – aufrechte, entspannte Haltung.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🗺</span>
+            <div><strong>Trekking & Touren:</strong> Lenker auf Sattelhöhe oder bis 10 cm drüber – gute Balance aus Komfort und Effizienz.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🏎</span>
+            <div><strong>Sport & Rennrad:</strong> Lenker auf oder unter Sattelhöhe – aerodynamisch, aber braucht gewöhnungsbedürftige Körperspannung.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">💡 Rückenschmerzen nach längeren Fahrten? Lenker etwas höher stellen. Nackenschmerzen durch zu aufrechte Haltung? Lenker leicht tiefer.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 4: REACH -->
+    <div class="fitting-step" id="fit-step-4">
+      <div class="fitting-step-header" onclick="toggleFitStep(4)">
+        <div class="fitting-step-num">04</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Reach – Abstand zum Lenker</div>
+          <div class="fitting-step-sub">Zu weit oder zu nah? So findest du es heraus.</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-4">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-4" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-reach-foto.jpg" alt="Reach – Abstand zum Lenker prüfen" width="900" height="900"></div>
+            <span class="fitting-polaroid-caption">Lenker Entfernung</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Setz dich in deine normale Fahrposition. Hände an den Griffen, Blick geradeaus. <strong>Schultern locker</strong> – nicht hochziehen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Kontrolliere den Armwinkel: Die Arme sollten <strong>leicht angewinkelt</strong> sein – etwa 10–15°. Nicht gestreckt, nicht stark gebeugt.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Schau auf die Vorderradnabe: Wenn du entspannt sitzt, sollte die Nabe <strong>knapp hinter dem Lenker verschwinden</strong> – also vom Lenker verdeckt sein.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↔</span>
+            <div><strong>Arme komplett gestreckt</strong> → Lenker zu weit weg. Kürzerer Vorbau oder verstellbaren Vorbau nach hinten drehen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↔</span>
+            <div><strong>Ellbogen stark angewinkelt, zusammengefaltet</strong> → Lenker zu nah. Längerer Vorbau oder nach vorne drehen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">→</span>
+            <div><strong>Vorderradnabe weit vor dem Lenker sichtbar</strong> → Sitzposition zu aufrecht, Lenker zu nah.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Arme leicht angewinkelt, Nabe hinter dem Lenker</strong> → Reach passt perfekt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box" style="margin-top:12px; background:#fff8f5; border-color:var(--orange);">
+          <div class="fitting-check-title" style="color:var(--orange);">⚠ Typische Beschwerden als Hinweis</div>
+          <div class="fitting-check-row" style="border-color:transparent;">
+            <span class="fitting-check-icon" style="color:var(--orange);">↔</span>
+            <div><strong>Nackenschmerzen, Schultern hochgezogen, Kribbeln in Händen</strong> → Reach zu groß (zu weit gestreckt)</div>
+          </div>
+          <div class="fitting-check-row" style="border-color:transparent;">
+            <span class="fitting-check-icon" style="color:var(--orange);">↔</span>
+            <div><strong>Knieschmerzen durch Behinderung des Kniehubs, Rückenschmerzen</strong> → Reach zu klein (zu aufrecht)</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Der Reach wird über die <strong>Vorbaul­änge</strong> angepasst. Kürzerer Vorbau = Lenker näher. Längerer Vorbau = Lenker weiter weg. Bei City- und Trekkingrädern oft direkt über den verstellbaren Vorbau einstellbar.</div>
+
+      </div>
+    </div>
+
+    <div class="fitting-step" id="fit-step-5">
+      <div class="fitting-step-header" onclick="toggleFitStep(5)">
+        <div class="fitting-step-num">05</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Bremshebel und Griffe ausrichten</div>
+          <div class="fitting-step-sub">Ergonomische Position für Hände und Handgelenke</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-5">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-5" style="display:none;">
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(-2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-bremshebel-foto.jpg" alt="Bremshebel und Griffe ausrichten" width="900" height="900"></div>
+            <span class="fitting-polaroid-caption">Griffe einstellen</span>
+          </div>
+        </div>
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Setze Dich aufs Rad. Lege die Finger auf die <strong>Bremshebel</strong> – so als würdest Du bremsen wollen. In dieser Position sollten Finger, Handrücken und Unterarm eine gerade Linie bilden. Drehe die Bremsgriffe in die erforderliche Position.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div><strong>„Ergo"-Griffe</strong> sollen deine Hände unterstützen, in der richtigen Position zu bleiben. Diese müssen genau so montiert bzw. gedreht werden, dass der Knick zwischen Hand und Unterarm vermieden wird. Drehe die erweiterte Grifffläche so weit nach oben, bis sich die gerade Linie ergibt!</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="margin-bottom:16px;">💡 Ein Knick im Handgelenk kann dafür sorgen, dass Nerven eingeklemmt werden und die Hände einschlafen.</div>
+        <div class="fitting-check-box" style="margin-bottom:0">
+          <div class="fitting-check-title">Was du spürst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Handgelenk knickt ab</strong> → Bremshebel und Griffe neu ausrichten</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Griffe verdrehen oder sitzen lose</strong> → Befestigung prüfen und festziehen</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Hände und Unterarme bilden eine Gerade und der Hebel ist gut erreichbar</strong> → Position passt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abschluss -->
+    <div style="margin:20px 0 8px; padding:18px 20px; background:var(--navy); border-radius:12px; color:var(--cream);">
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--blue-lt); margin-bottom:10px;">🏁 Letzter Check</div>
+      <p style="font-size:13px; line-height:1.7; margin:0;">Mach nach dem Einstellen eine kurze Probefahrt – mindestens 10–15 Minuten. Der Körper braucht etwas Zeit um sich zu melden. Kleinere Korrekturen danach sind völlig normal. Wenn nach mehreren Ausfahrten noch Beschwerden da sind: ein professionelles Bikefitting beim Fachhandel lohnt sich – besonders bei Rädern über 1.500 €.</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== GEBRAUCHT-CHECK ===== -->
+<div id="gebraucht-bereich" style="display:none; max-width:640px; margin: 0 auto 80px; padding: 0 16px 20px;">
+
+  <div class="result-wrap" style="margin-top:25px;">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Gebraucht-Check</div>
+      <div class="result-title">8-Punkte-Plan für den Gebrauchtkauf</div>
+    </div>
+
+    <div style="padding:16px 20px 8px;">
+      <p style="font-size:13px; color:var(--text-dim); font-style:italic; line-height:1.6; padding-bottom:14px; border-bottom:1px solid var(--cream2);">
+        Du möchtest Dir ein gebrauchtes Fahrrad kaufen und bist Dir unsicher ob sich der Kauf lohnt oder als Geldverschwendung herausstellen wird? Dann hat der Radl Hias genau das richtige für dich. Einen 8-Punkte-Plan, mit dem Du Schritt für Schritt den Zustand jedes Fahrrades prüfen kannst.
+      </p>
+    </div>
+
+    <!-- SCHRITT 1 -->
+    <div class="fitting-step" id="gb-step-1">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(1)">
+        <div class="fitting-step-num">01</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Optischer Gesamteindruck</div>
+          <div class="fitting-step-sub">Was der erste Blick verrät</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-1">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-1">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Schau Dir den <strong>Lack</strong> genau an. Kratzer und Macken sind normal – Dellen oder Knicke im Rahmen sind ein Ausschlusskriterium.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Prüfe den <strong>Sattel</strong>. Eingerissen oder stark verformt?</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Kontrolliere die <strong>Pedale</strong>. Verbogen oder offensichtlich beschädigt?</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Dellen oder Knicke im Rahmen</strong> → Ausschlusskriterium, Finger weg</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Eingerissener Sattel, verbogene Pedale</strong> → deutliche Vernachlässigung</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Kratzer und Macken</strong> → normal, kein Problem</div>
+          </div>
+        </div>
+        <div class="fitting-hint">💡 Ein verwahrlostes Äußeres deutet fast immer auf mangelnde Pflege im Inneren hin. Gut gepflegte Räder sehen meist auch so aus.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 2 -->
+    <div class="fitting-step" id="gb-step-2">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(2)">
+        <div class="fitting-step-num">02</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Reifenzustand</div>
+          <div class="fitting-step-sub">Profil, Risse und Luftdruckgeschichte</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-2">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-2" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Schau Dir das <strong>Profil</strong> an. Ist es noch deutlich erkennbar – oder schon fast glattgefahren oder abgebremst? Rennradreifen sind „Ballon"-artig rund. Wenn diese deutlich eckiger und flach sind, dann sind diese zu erneuern!</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Prüfe ob der Gummi <strong>porös</strong> ist!</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Reifen mit <strong>farbigen Seitenwänden</strong> bekommen oft Risse am Übergang (vom farbigen Teil zur Lauffläche). Lass ggf. etwas Luft ab und drücke den Reifen zusammen, um den Riss deutlicher zu sehen!</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Hat ein Reifen viele <strong>schräge Risse an der gesamten Seitenwand</strong>, deutet das darauf hin, dass lange mit zu wenig Luftdruck gefahren und das Rad nur wenig gewartet wurde.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Risse in der Reifenflanke</strong> → Grundpflege vernachlässigt, Reifen fällig</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Profil fast glattgefahren</strong> → Reifen muss erneuert werden</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Profil deutlich sichtbar, keine Risse, nicht porös</strong> → alles gut</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Materialkosten neue Reifen: ca. 50–80 €</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 3 -->
+    <div class="fitting-step" id="gb-step-3">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(3)">
+        <div class="fitting-step-num">03</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Radlager</div>
+          <div class="fitting-step-sub">Spiel erkennen – und was es bedeutet</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-3">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-3" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Halte den <strong>Hinterbau</strong> mit einer Hand fest und versuche das Hinterrad mit der anderen Hand in Achsrichtung zu bewegen (seitlich). Versuche ein Klappern bewusst zu provozieren! Klappert das Radlager, so muss es nachgestellt werden. Bei Industrielagern sind die Lager zu ersetzen, da diese nicht einstellbar sind.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Beim <strong>Vorderrad</strong> hältst du die Gabel fest und prüfst auf die gleiche Weise.</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="margin-bottom:8px;">💡 Achte bei Konus-Lagern (z. B. SHIMANO) darauf, ob die Lager knacken oder reiben. Das würde auf einen Defekt hinweisen.</div>
+        <div class="fitting-check-box" style="margin-bottom:0">
+          <div class="fitting-check-title">Was du spürst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Spiel spürbar</strong> → Lockeres oder defektes Lager. Neu einstellen oder ersetzen!</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Kein Spiel</strong> → Lager in Ordnung</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Lager einstellen: ca. 30 € oder Eigenleistung. Lager erneuern: deutlich mehr.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 4 -->
+    <div class="fitting-step" id="gb-step-4">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(4)">
+        <div class="fitting-step-num">04</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Bremsbeläge</div>
+          <div class="fitting-step-sub">Felgenbremse und Scheibenbremse prüfen</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-4">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-4" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div><strong>Felgenbremse:</strong> Gummi-Bremsklötze haben senkrechte Kerben. Sind diese noch deutlich sichtbar? Dann ist alles ok. Sind diese unter 1 mm tief, wird es Zeit für einen Wechsel.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div><strong>Scheibenbremse:</strong> Schau von unten in die Bremssättel. Neue Beläge sind ca. 2 mm dick. Wenn Du siehst, dass die Beläge nur noch 0,5 mm Restdicke haben, dann sollten diese dringend ausgetauscht werden.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Prüfe auch die <strong>Bremsscheiben</strong>: nach innen gewölbt oder tiefe Kratzer in der Bremsfläche? Dann müssen auch diese erneuert werden.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Felgenbremse</div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div>Kerben noch deutlich sichtbar → alles ok</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div>Kerben unter 1 mm tief → Wechsel fällig</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Scheibenbremse</div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div>Belag noch ~2 mm dick, Scheibe plan und kratzerlos → gut</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div>Belag nur noch 0,5 mm oder Scheibe gewölbt / tief verkratzt → dringend tauschen</div>
+          </div>
+        </div>
+        <div class="fitting-hint">💡 Scheibenbremsbeläge bestehen aus dem Belag selbst und einer Metall-Trägerplatte. Felgenbremsbeläge bestehen aus dem Bremsgummi und einem Metall-Kern. Sind die Beläge komplett abgebremst, bremst man mit der Trägerplatte bzw. dem Metall-Kern – und beschädigt dabei Bremsscheibe oder Felge. Dann wird es richtig teuer.</div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Felgenbremse: ca. 20–30 € &middot; Scheibenbremse: ca. 40–50 €</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 5 -->
+    <div class="fitting-step" id="gb-step-5">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(5)">
+        <div class="fitting-step-num">05</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Tretlager</div>
+          <div class="fitting-step-sub">Knacken und Spiel erkennen</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-5">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-5" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Versuche die <strong>Kurbel mit der Hand in Achsrichtung</strong> hin und her zu bewegen. Ist das möglich? Stellst Du Spiel oder ein Klappern fest, dann muss das alte Tretlager raus.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Mache eine <strong>Probefahrt</strong>. Ziehe die Bremsen so weit, dass Du gerade noch dagegen antreten und fahren kannst. Gehe zusätzlich in den <strong>Wiegetritt</strong> und höre genau hin, ob das Tretlager knackt. Knackt es – klappert aber nicht? Dann ist das Lager grundsätzlich ok, sollte aber aus dem Rahmen geschraubt, gefettet und neu mit dem korrekten Drehmoment eingeschraubt werden.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box" style="margin-bottom:0">
+          <div class="fitting-check-title">Was du spürst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Spiel oder Klappern an der Kurbel</strong> → Tretlager erneuern</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Knacken beim Fahren</strong> → aus Rahmen schrauben, fetten und mit korrektem Drehmoment neu einschrauben lassen</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Kein Spiel, kein Klappern</strong> → Tretlager in Ordnung</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Neues Tretlager inkl. Montage: ca. 80 €</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 6 -->
+    <div class="fitting-step" id="gb-step-6">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(6)">
+        <div class="fitting-step-num">06</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Steuerlager</div>
+          <div class="fitting-step-sub">So testest du die Gabelführung</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-6">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-6" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Eine Hand an den <strong>Griff mit der Vorderradbremse</strong>. Die andere Hand rund um das <strong>obere Steuerlager</strong> legen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div><strong>Vorderradbremse durchziehen</strong> und das Fahrrad langsam nach vorne und hinten schaukeln. Wenn Du hier ein Klappern oder Wackeln im Steuerlager feststellst, muss dieses nachgestellt werden.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Drehe den <strong>Lenker</strong>. Lässt er sich leicht und gleichmäßig drehen? Sehr gut! Dreht er sich schwer aber gleichmäßig und ohne Reiben oder Knacken? Dann muss das Lager nur neu eingestellt werden. Knackt und klappert das Lager, muss es ersetzt werden.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du spürst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Klappern oder Wackeln beim Schaukeln</strong> → Steuerlager nachstellen. Eventuell Defekt.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Der Lenker lässt sich schwer drehen, dreht aber gleichmäßig</strong> → Lager zu fest eingestellt.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Kein Klappern, Lenker dreht leicht und gleichmäßig</strong> → Steuerlager ok.</div>
+          </div>
+        </div>
+        <div class="fitting-hint">💡 Viele Besitzer schrauben vorsorglich alle erreichbaren Schrauben fest, ohne zu wissen wie ein Steuerlager korrekt eingestellt wird. Lass Dich also nicht abschrecken, wenn sich der Lenker nur schwer dreht! Entscheidend ist, dass das Lager nicht klappert, reibt oder knackt.</div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Einstellen: günstig &middot; Neues Steuerlager + Montage: ca. 50–80 €</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 7: KETTENVERSCHLEISS -->
+    <div class="fitting-step" id="gb-step-7">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(7)">
+        <div class="fitting-step-num">07</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Kettenverschleiß</div>
+          <div class="fitting-step-sub">Kette, Kassette und was das kostet</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-7">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-7" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Besorge Dir eine <strong>Kettenverschleißlehre</strong> (ab 8 €). Zeigt sie 0,75 % Dehnung → neue Kette fällig. Zeigt sie 1,0 % → Kette und Kassette gleichzeitig tauschen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Zähle die <strong>Gänge der Kassette</strong> (hinten) und recherchiere aktuelle Preise für Kette + passende Kassette des jeweiligen Systems.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Kettenverschleißlehre – Ergebnis</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div>Lehre zeigt <strong>0,75 %</strong> → neue Kette fällig</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div>Lehre zeigt <strong>1,0 %</strong> → Kette und Kassette gleichzeitig tauschen</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div>Lehre zeigt <strong>&lt; 0,75 %</strong> → Antrieb noch in Ordnung</div>
+          </div>
+        </div>
+        <div class="fitting-hint">💡 Um dauerhaft Geld zu sparen, solltest Du Ketten regelmäßig tauschen und die Gänge gleichmäßig nutzen.<br><br>
+          &bull; 6/7/8-fach Kette: immer nach 3.500 km<br>
+          &bull; 9-fach Kette: nach 2.500–3.000 km<br>
+          &bull; 10-fach Kette: nach 2.000 km<br>
+          &bull; 11/12-fach Ketten: immer nach 1.500–2.000 km<br><br>
+          Auf diese Weise kannst Du die Kassette und Kettenblätter über viele Ketten hinweg fahren und sparst viel Geld.</div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Kette + Kassette je nach System: ca. 55–180 €</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 8: SCHALTUNG -->
+    <div class="fitting-step" id="gb-step-8">
+      <div class="fitting-step-header" onclick="toggleGebrauchtStep(8)">
+        <div class="fitting-step-num">08</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Schaltung</div>
+          <div class="fitting-step-sub">Seile, Schalthebel und Schaltwerk prüfen</div>
+        </div>
+        <div class="fitting-chevron" id="gb-chev-8">›</div>
+      </div>
+      <div class="fitting-step-body" id="gb-body-8" style="display:none;">
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Drücke mal die <strong>Schalthebel</strong>. Greifen diese den nächsten Gang mit einem deutlichen Klicken? Oder rutschen sie durch?</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="margin-bottom:8px;">💡 Rutscht der Schalthebel durch, muss das kein Defekt sein. Oft ist nur das Fett im Hebel zu alt und verharzt. In einem solchen Fall sollte der Schalthebel zerlegt, entfettet und neu geschmiert werden. Danach funktioniert er in 90 % der Fälle wieder wie neu. Tausche doch bei dieser Gelegenheit auch gleich die Schaltseile.</div>
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Schau Dir die <strong>Schaltseile</strong> genauer an! Sind sie verrostet oder geknickt? Oder gleiten sie frei durch die Bowden?</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Fasse die <strong>untere Rolle am Schaltwerk</strong> (Schaltung hinten) an und bewege sie in Achsrichtung (innen/außen) hin und her. Spürst Du hier kein oder nur sehr wenig Spiel, ist es in Ordnung. Wackelt es deutlich, dann ist es verschlissen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Gehe mal <strong>hinter das Fahrrad</strong> und schaue Dir die Schaltung von hinten an! Steht das Schaltwerk perfekt senkrecht? Oder sieht es nach innen gebogen aus? Orientiere dich an der oberen Rolle und dem Gang, der eingelegt ist. Diese zwei müssen genau untereinander stehen.</div>
+          </div>
+        </div>
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Schaltseile verrostet oder geknickt</strong> → Seile und Hüllen erneuern.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Schalthebel rutscht durch</strong> → Selten ein wirklicher Defekt – Innere Reinigung und neue Schaltseile!</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Deutliches Spiel im Schaltwerk</strong> → Schaltwerk wechseln.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Schaltwerk ist in Richtung der Speichen gebogen</strong> → Schaltauge ausrichten lassen. Bis dahin nicht auf das größte Ritzel schalten!</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Seile glatt und sauber, Hebel greifen und klicken, Schaltwerk senkrecht und ohne Spiel</strong> → alles in Ordnung</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="background:#fff7f0; border-left:3px solid var(--orange); border-radius:0 8px 8px 0; margin-top:12px;">💰 Seilzug + Bowden: ca. 15–25 € Material. Schalthebel-Service in der Werkstatt: ca. 30–60 €. Neues Schaltwerk je nach Gruppe: 40–300 €. Schaltauge richten: 15–30 €.</div>
+      </div>
+    </div>
+
+    <!-- PROFI-TIPP -->
+    <div style="margin:20px 0 8px; padding:18px 20px; background:var(--navy); border-radius:12px; color:var(--cream);">
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:8px;">Profi-Tipp</div>
+      <p style="font-size:13px; line-height:1.7; margin:0;">Ein ausgeschlagenes Lager muss irgendwann erneuert werden – aber es macht den Rest des Rades nicht schlechter. Wer das Geld gerade knapp hat, kann damit noch eine Saison weiterfahren und später nachbessern. Bei der Kette sollte man dagegen nicht zu lange warten: eine verschlissene Kette frisst Kassette und Kettenblatt mit, und das wird teurer. Bremsbeläge müssen immer sofort ersetzt werden, sobald sie am Limit sind. Bremsen ist keine Frage des Budgets.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== LUFTDRUCK-RECHNER ===== -->
+<div id="druck-bereich" style="display:none; max-width:640px; margin: 25px auto 80px; padding: 0 16px;">
+  <div class="result-wrap">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Luftdruck-Rechner</div>
+      <div class="result-title">Der richtige Druck für deine Reifen</div>
+    </div>
+
+    <div style="padding: 25px 20px 25px;">
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Fahrergewicht (inkl. Ausrüstung)</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="range" id="druck-gewicht" min="20" max="160" value="80" step="1"
+            style="flex:1; accent-color:var(--navy);"
+            oninput="document.getElementById('druck-gewicht-val').textContent=this.value; berechneDruck();">
+          <span style="font-size:22px; font-weight:700; color:var(--navy); min-width:60px;" id="druck-gewicht-val">80</span>
+          <span style="color:var(--text-dim); font-size:14px;">kg</span>
+        </div>
+      </div>
+
+      <!-- Radgröße -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Laufradgröße</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-rad-opts">
+          <button type="button" class="druck-opt" data-val="26" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">26" | 559 mm<br><small>MTB klassisch</small></button>
+          <button type="button" class="druck-opt" data-val="27.5" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">27,5" | 584 mm<br><small>MTB / Trekking</small></button>
+          <button type="button" class="druck-opt selected" data-val="28" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">28" | 622 mm<br><small>Trekking / City</small></button>
+          <button type="button" class="druck-opt" data-val="29" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">29" | 622 mm<br><small>MTB / Gravel</small></button>
+          <button type="button" class="druck-opt" data-val="rennrad" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">700c | 622 mm<br><small>Rennrad, schmale Reifen</small></button>
+        </div>
+      </div>
+
+      <!-- Reifenmass Grafik -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:#7a8a98;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">So findest du deine Reifenmaße</div>
+        <img src="img/reifenmass.jpg"
+             alt="Reifenbezeichnungen: ETRTO, Zoll und Französisch erklärt"
+             width="900" height="375"
+             style="width:100%;max-width:900px;height:auto;border-radius:8px;display:block;">
+        <div style="font-size:11px;color:#7a8a98;margin-top:6px;line-height:1.5;">Die Zahlen auf deiner Reifenflanke: <strong>ETRTO</strong> (z.B. 40-622) gibt Breite und Innendurchmesser in mm an – das sind die präzisesten Werte für den Rechner.</div>
+      </div>
+
+      <!-- Reifenbreite -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Reifenbreite</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="range" id="druck-breite-slider" min="23" max="70" value="23" step="1"
+            style="flex:1; accent-color:var(--navy);"
+            oninput="updateBreiteSlider(this.value); berechneDruck();">
+          <span style="font-size:22px; font-weight:700; color:var(--navy); min-width:60px;" id="druck-breite-val">23</span>
+          <span style="color:var(--text-dim); font-size:14px;">mm</span>
+        </div>
+        <div id="druck-breite-label" style="font-size:13px; color:var(--text-dim); margin-top:4px;">Rennrad schmal</div>
+      </div>
+
+      <!-- Profil -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Profil / Einsatz</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-profil-opts">
+          <button type="button" class="druck-opt selected" data-val="slick" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">Slick / Halbslick<br><small>Asphalt</small></button>
+          <button type="button" class="druck-opt" data-val="gravel" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">Gravel-Profil<br><small>Schotter/Mix</small></button>
+          <button type="button" class="druck-opt" data-val="mtb" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">MTB-Profil<br><small>Trail/Offroad</small></button>
+        </div>
+      </div>
+
+      <!-- Reifentyp -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Reifentyp</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-typ-opts">
+          <button type="button" class="druck-opt selected" data-val="schlauch" onclick="druckOpt('druck-typ-opts',this); berechneDruck();">Mit Schlauch<br><small>Draht- oder Faltreifen</small></button>
+          <button type="button" class="druck-opt" data-val="tubeless" onclick="druckOpt('druck-typ-opts',this); berechneDruck();">Tubeless<br><small>Kein Schlauch</small></button>
+        </div>
+      </div>
+
+      <!-- Untergrund -->
+      <div style="margin-bottom:24px;">
+        <div class="input-label">Hauptuntergrund</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-grund-opts">
+          <button type="button" class="druck-opt selected" data-val="asphalt" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Asphalt<br><small>Straße</small></button>
+          <button type="button" class="druck-opt" data-val="schotter" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Waldwege<br><small>Forst, Kies</small></button>
+          <button type="button" class="druck-opt" data-val="trail" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Singletrail<br><small>Wurzeln, Steine</small></button>
+        </div>
+      </div>
+
+      <!-- Ergebnis -->
+      <div id="druck-ergebnis" style="background:var(--navy); border-radius:12px; padding:20px; color:var(--cream); margin-bottom:20px;">
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--blue-lt); margin-bottom:16px;">Empfohlener Luftdruck</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div style="background:rgba(255,255,255,0.08); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; color:var(--blue-lt); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">Vorderrad</div>
+            <div id="druck-vorne" style="font-size:28px; font-weight:700; color:white;">–</div>
+            <div style="font-size:12px; color:var(--blue-lt);">bar</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.08); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; color:var(--blue-lt); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">Hinterrad</div>
+            <div id="druck-hinten" style="font-size:28px; font-weight:700; color:white;">–</div>
+            <div style="font-size:12px; color:var(--blue-lt);">bar</div>
+          </div>
+        </div>
+        <div id="druck-erklaerung" style="font-size:13px; color:var(--blue-lt); line-height:1.6; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px;"></div>
+      </div>
+      <div id="druck-warnung" style="display:none; background:#fff3cd; border:1px solid #f0ad4e; border-radius:8px; padding:12px 16px; font-size:13px; color:#856404; line-height:1.5; margin-top:12px;"></div>
+
+      <!-- Hinweis -->
+      <div style="background:var(--cream2); border-radius:8px; padding:14px 16px; font-size:13px; color:var(--text-dim); line-height:1.6;">
+        💡 <strong style="color:var(--text);">Wichtiger Hinweis:</strong> Das sind Richtwerte aus der Praxis. Das optimale Gefühl findest du durch Ausprobieren in 0,1-bar-Schritten. Zu wenig Druck = Schlaglochrisk (Felgenschlag), zu viel = weniger Grip und harte Fahrt. Bei Tubeless generell 0,2–0,3 bar weniger möglich als mit Schlauch.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== KONTAKT ===== -->
+<div id="kontakt-bereich" style="display:none; max-width:640px; margin: 25px auto 60px; padding: 0 16px;">
+  <div class="result-wrap">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Kontakt</div>
+      <div class="result-title">Feedback & Verbesserungsvorschläge</div>
+    </div>
+    <div style="padding: 24px 20px;">
+      <p style="font-size:15px; color:var(--text); line-height:1.7; margin-bottom:20px;">
+        Du hast einen Verbesserungsvorschlag, einen Fehler entdeckt oder willst einfach Hallo sagen? Ich freue mich über jede Nachricht.
+      </p>
+
+      <!-- mailto Button -->
+      <a href="mailto:radlhias.tv@gmail.com?subject=Feedback%20Radl%20Hias%20App"
+         style="display:block; background:var(--navy); color:white; text-align:center; padding:16px 24px;
+                border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:13px;
+                font-weight:700; letter-spacing:2px; text-transform:uppercase; text-decoration:none;
+                margin-bottom:20px;">
+        ✉️ &nbsp;E-Mail schreiben
+      </a>
+
+      <!-- Adresse + Kopieren -->
+      <div style="background:var(--cream2); border-radius:10px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <span id="kontakt-email" style="font-size:14px; color:var(--navy); font-weight:600; word-break:break-all;">radlhias.tv@gmail.com</span>
+        <button onclick="
+          navigator.clipboard.writeText('radlhias.tv@gmail.com');
+          this.textContent='✓ Kopiert';
+          setTimeout(() => this.textContent='Kopieren', 2000);
+        " style="flex-shrink:0; background:var(--navy); color:white; border:none; border-radius:6px;
+                 padding:8px 14px; font-size:12px; font-weight:700; letter-spacing:1px;
+                 text-transform:uppercase; cursor:pointer; font-family:'Barlow Condensed',sans-serif;">
+          Kopieren
+        </button>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-dim); margin-top:16px; line-height:1.6;">
+        Kein Formular, kein Tracking – deine Nachricht geht direkt an mich.
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="script.js"></script>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="blog/index.html">Blog</a>
+      <a href="konfigurator.html">Konfigurator</a>
+      <a href="videos.html">Videos</a>
+      <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram">📷</a>
+      <span title="YouTube – kommt bald">🎥</span>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+      <p style="margin-top:8px;">Fahrrad-Erfahrungen aus 25 Jahren · Kein Sponsoring · Keine Provision</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
