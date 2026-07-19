@@ -1009,6 +1009,51 @@ details.truth-box > summary:hover {
   border: 1px solid var(--cream2);
 }
 
+.fitting-polaroid-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 22px 0 26px;
+}
+.fitting-polaroid {
+  position: relative;
+  background: #fbfaf7;
+  padding: 10px 10px 0;
+  border-radius: 2px;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.6) inset;
+  width: 220px;
+  transform: rotate(-2deg);
+}
+.fitting-polaroid::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 54px;
+  height: 20px;
+  background: rgba(230,224,210,0.55);
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transform: translateX(-50%) rotate(-4deg);
+}
+.fitting-polaroid-photo { overflow: hidden; background: #111; }
+.fitting-polaroid-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  object-position: center;
+}
+.fitting-polaroid-caption {
+  display: block;
+  text-align: center;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--navy);
+  padding: 9px 0 12px;
+}
+
 .fitting-instruction {
   display: flex;
   flex-direction: column;
