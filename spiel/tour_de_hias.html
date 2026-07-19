@@ -209,6 +209,19 @@
   .signoff{ font-family:'Permanent Marker', cursive; font-weight:400; color:var(--cream); font-size:18px; text-align:center; margin-top:18px; line-height:1.4; }
   .sharerow{ display:flex; gap:10px; margin-top:14px; }
   .sharerow .btn{ flex:1; }
+
+  /* Fahrrad-Farbauswahl auf dem Startscreen */
+  .colorpick{ margin-top:6px; }
+  .colorpick-title{ font-family:'Barlow Condensed'; font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:11.5px; color:var(--blue-lt); margin-bottom:9px; text-align:center; }
+  .swatches{ display:flex; gap:14px; justify-content:center; }
+  .swatch{ width:40px; height:40px; border-radius:50%; border:3px solid rgba(255,255,255,0.18); cursor:pointer; padding:0; position:relative; transition:transform .1s ease, border-color .15s ease; }
+  .swatch:active{ transform:scale(1.05); }
+  .swatch.active{ border-color:var(--cream); transform:scale(1.12); }
+  .swatch.active::after{ content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:17px; text-shadow:0 1px 3px rgba(0,0,0,0.55); }
+
+  /* Meterzähler blinkt während des Wheelies */
+  .scoretop.wheelie{ color:#FFD447; animation:meterblink .42s steps(1,end) infinite; }
+  @keyframes meterblink{ 0%,100%{opacity:1;} 50%{opacity:0.2;} }
 </style>
 </head>
 <body>
@@ -248,6 +261,8 @@ const CONFIG = {
   GEWINNSPIEL_TEXT: "Gewinnspiel läuft: Höchste Distanz im Monat gewinnt ein Radl Hias Überraschungspaket. Schreib deine Meter + Screenshot per DM an @radlhias.tv, um teilzunehmen.",
   LEADERBOARD_KEY: "radlhias-runner-leaderboard",
   LEADERBOARD_MAX: 20,
+  LEADERBOARD_URL: "https://script.google.com/macros/s/AKfycby1NkFgk6QFF2JB0w3PpCOcYFXhyx9EPDpn89mePZNAqgayS24BG1m2DbmZv04Cdci-vA/exec", // Google-Apps-Script Web-App – global
+  LEADERBOARD_MAX_SCORE: 100000, // Plausibilitätsgrenze (Client-Vorprüfung gegen Schummeln)
   CW: 380, CH: 520,
   GROUND_Y: 416,
   BASE_SPEED: 175,
@@ -256,6 +271,7 @@ const CONFIG = {
   JUMP_SPEED: 330,
   JUMP_CUT_GRAVITY: 2.0,
   COLLECT_BONUS: 20,
+  WHEELIE_METER_MULT: 2.4,
   PUMP_DURATION: 5,
   PUMP_MIN_PENALTY: 8,
   PUMP_MAX_PENALTY: 42,
@@ -274,6 +290,26 @@ const PAL = {
   green:'#3F7A52', greenDark:'#2C5A3E', wood:'#4A3526',
   asphalt:'#1A2530', glass:'#16273D'
 };
+
+/* ---------- Fahrrad-Farbwelt: vor Spielstart wählbar, bleibt für die Session ---------- */
+const BIKE_COLORS = {
+  orange:  { label:'Orange',  base:'#C85A14', bright:'#E06820' },
+  blau:    { label:'Blau',    base:'#2D6E9E', bright:'#4A8AAA' },
+  tuerkis: { label:'Türkis',  base:'#1C8C86', bright:'#33BDB0' },
+  pink:    { label:'Pink',    base:'#C43C6E', bright:'#E4568C' }
+};
+let selectedBikeKey = 'orange';
+let bikeCol = BIKE_COLORS[selectedBikeKey];
+
+/* ---------- Wheelie-Steuerung (Double-Tap-Halten auf der Ducken-Taste) ---------- */
+const WHEELIE_WINDOW = 320;   // ms: Fenster zwischen Loslassen und zweitem Drücken
+const WHEELIE_TAP_MAX = 260;  // ms: erster Antipper muss kürzer als das sein
+let wheelie = false, duckHeld = false, wheelieAnim = 0;
+let lastDuckUpTime = -9999, lastDuckDownTime = 0, lastTapShort = false;
+
+/* ---------- Crash-Teile (wegfliegende Räder / Helm / Ballon) ---------- */
+let crashPieces = [], playerWheelsOff = false, playerHelmetOff = false;
+
 function hash1(n){ const s = Math.sin(n*127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
 function lerp(a,b,t){ return a + (b-a)*t; }
 function hexToRgb(h){ return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
@@ -469,6 +505,10 @@ function renderStart(){
           </svg> Flugzeug – ducken</div>
         </div>
       </div>
+      <div class="colorpick">
+        <div class="colorpick-title">Wähl dein Radl</div>
+        <div class="swatches" id="swatches"></div>
+      </div>
     </div>
     <button class="btn welcome-btn" id="startBtn">Los geht's</button>
     <div class="welcome-board-wrap">
@@ -483,7 +523,27 @@ function renderStart(){
   scoreTop.textContent = getBest() ? getBest() + " m Bestleistung" : "0 m";
 
   document.getElementById('startBtn').onclick = initGame;
+  setupSwatches();
   setupBoardTabs('startTabs', 'startBoard', 5);
+}
+
+function setupSwatches(){
+  const wrap = document.getElementById('swatches');
+  if(!wrap) return;
+  wrap.innerHTML = Object.keys(BIKE_COLORS).map(key=>{
+    const c = BIKE_COLORS[key];
+    const active = key === selectedBikeKey ? ' active' : '';
+    return `<button class="swatch${active}" data-key="${key}" title="${c.label}" aria-label="${c.label}" style="background:linear-gradient(135deg, ${c.bright}, ${c.base});"></button>`;
+  }).join('');
+  wrap.querySelectorAll('.swatch').forEach(sw=>{
+    sw.onclick = ()=>{
+      selectedBikeKey = sw.dataset.key;
+      bikeCol = BIKE_COLORS[selectedBikeKey];
+      wrap.querySelectorAll('.swatch').forEach(s=> s.classList.remove('active'));
+      sw.classList.add('active');
+      sfxBell();
+    };
+  });
 }
 
 function setupBoardTabs(tabsId, boardId, limit){
@@ -524,9 +584,9 @@ function initGame(){
       <div class="ctrlbtn" id="jumpBtn">Springen</div>
       <div class="ctrlbtn" id="duckBtn">Ducken</div>
     </div>
-    <div class="hint">Springen: kurz tippen = kleiner Hupfer, halten = hoher Sprung · Pfeil runter halten = ducken · Esc = Pause</div>
+    <div class="hint">Springen: kurz tippen = kleiner Hupfer, halten = hoher Sprung · Ducken halten · Wheelie: Ducken antippen, gleich wieder drücken &amp; halten · Esc = Pause</div>
   `;
-  player = { jumpOffset:0, vy:0, ducking:false, prevJumpOffset:0, jumpHeld:false };
+  player = { jumpOffset:0, vy:0, ducking:false, prevJumpOffset:0, jumpHeld:false, onCar:null };
   obstacles = [];
   collectibles = [];
   particles = [];
@@ -544,6 +604,9 @@ function initGame(){
   crankAngle = 0;
   duckAnim = 0;
   shakeMag = 0;
+  wheelie = false; duckHeld = false; wheelieAnim = 0;
+  lastDuckUpTime = -9999; lastTapShort = false;
+  crashPieces = []; playerWheelsOff = false; playerHelmetOff = false;
 
   /* Scharfes Rendering auf hochauflösenden Displays */
   const canvasEl = document.getElementById('gameCanvas');
@@ -558,21 +621,21 @@ function initGame(){
   jumpBtn.addEventListener('mousedown', ()=>{ doJump(); player.jumpHeld = true; });
   jumpBtn.addEventListener('mouseup', ()=>{ player.jumpHeld = false; });
   jumpBtn.addEventListener('mouseleave', ()=>{ player.jumpHeld = false; });
-  duckBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); if(!minigameActive) player.ducking = true; }, {passive:false});
-  duckBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); player.ducking = false; }, {passive:false});
-  duckBtn.addEventListener('mousedown', ()=>{ if(!minigameActive) player.ducking = true; });
-  duckBtn.addEventListener('mouseup', ()=>{ player.ducking = false; });
-  duckBtn.addEventListener('mouseleave', ()=>{ player.ducking = false; });
+  duckBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); onDuckPress(); }, {passive:false});
+  duckBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); onDuckRelease(); }, {passive:false});
+  duckBtn.addEventListener('mousedown', ()=>{ onDuckPress(); });
+  duckBtn.addEventListener('mouseup', ()=>{ onDuckRelease(); });
+  duckBtn.addEventListener('mouseleave', ()=>{ onDuckRelease(); });
   document.getElementById('pauseBtn').addEventListener('click', togglePause);
 
   keyDownHandler = (e)=>{
     if(minigameActive) return;
     if(e.key === ' ' || e.key === 'ArrowUp'){ doJump(); player.jumpHeld = true; e.preventDefault(); }
-    else if(e.key === 'ArrowDown'){ player.ducking = true; }
+    else if(e.key === 'ArrowDown'){ onDuckPress(); e.preventDefault(); }
     else if(e.key === 'Escape'){ togglePause(); }
   };
   keyUpHandler = (e)=>{
-    if(e.key === 'ArrowDown'){ player.ducking = false; }
+    if(e.key === 'ArrowDown'){ onDuckRelease(); }
     else if(e.key === ' ' || e.key === 'ArrowUp'){ player.jumpHeld = false; }
   };
   document.addEventListener('keydown', keyDownHandler);
@@ -731,9 +794,38 @@ function startPumpMinigame(){
   }
 }
 
+function onDuckPress(){
+  if(minigameActive) return;
+  if(duckHeld) return;                 // Tastenwiederholung / doppeltes Event ignorieren
+  duckHeld = true;
+  const now = performance.now();
+  const grounded = player.jumpOffset === 0 && !player.onCar;
+  if(grounded && lastTapShort && (now - lastDuckUpTime) <= WHEELIE_WINDOW){
+    // Zweiter Antipper rechtzeitig & gehalten → Wheelie (kein Ducken möglich, solange gehalten)
+    wheelie = true;
+    playTone(320, 0.12, 'sawtooth', 0.05, 210);
+  } else {
+    player.ducking = true;
+    lastDuckDownTime = now;
+  }
+}
+function onDuckRelease(){
+  if(!duckHeld) return;
+  duckHeld = false;
+  const now = performance.now();
+  if(wheelie){
+    wheelie = false;
+  } else {
+    player.ducking = false;
+    lastTapShort = (now - lastDuckDownTime) <= WHEELIE_TAP_MAX;
+    lastDuckUpTime = now;
+  }
+}
 function doJump(){
   if(minigameActive) return;
-  if(player.jumpOffset === 0 && !player.ducking){
+  if((player.jumpOffset === 0 || player.onCar) && !player.ducking){
+    if(player.onCar) player.onCar = null;
+    if(wheelie){ wheelie = false; duckHeld = false; }
     player.vy = CONFIG.JUMP_SPEED;
     sfxBell();
   }
@@ -754,6 +846,47 @@ function getScene(d){
   return scene;
 }
 
+/* ---------- Auto: Frontzone (tödlich) vs. Dachfläche (sichere Landung) ---------- */
+function handleAutoInteraction(o){
+  const roofTop = o.y;                       // Oberkante = Dach (Sprungfläche)
+  const carL = o.x, carR = o.x + o.w;
+  const pr = getPlayerRect();
+  const pL = pr.x, pR = pr.x + pr.w;
+  const horiz = pR > carL && pL < carR;
+
+  // Bereits auf dem Dach: mitfahren, bis das Auto darunter wegrollt
+  if(player.onCar === o){
+    if(horiz){
+      player.jumpOffset = CONFIG.GROUND_Y - roofTop;
+      player.vy = 0;
+    } else {
+      player.onCar = null;                   // abgefallen → Schwerkraft übernimmt (kein Front-Tod von oben)
+    }
+    return;
+  }
+  if(!horiz) return;
+
+  const pBot = CONFIG.GROUND_Y - player.jumpOffset;
+  const prevBot = CONFIG.GROUND_Y - player.prevJumpOffset;
+  const LAND_TOL = 9;
+
+  // Von oben absinkend auf das Dach → sichere Landung (kein Game Over)
+  if(player.vy <= 0 && prevBot <= roofTop + LAND_TOL && pBot >= roofTop - 1){
+    player.jumpOffset = CONFIG.GROUND_Y - roofTop;
+    player.vy = 0;
+    player.onCar = o;
+    sfxBell();
+    spawnParticles(pr.x + pr.w/2, roofTop, 5, { vy0:-12, spreadX:44, spreadY:16, life:0.3, color:'154,167,184', gravity:120 });
+    return;
+  }
+
+  // Noch klar über dem Dach (drüberfliegend) → keine Berührung
+  if(pBot <= roofTop) return;
+
+  // Füße auf Karosseriehöhe & horizontal im Auto → Frontaufprall (tödlich)
+  gameOver('auto', o);
+}
+
 function spawnEntity(){
   const roll = Math.random();
   const seed = Math.random()*100;
@@ -764,7 +897,7 @@ function spawnEntity(){
   } else if(roll < 0.58){
     obstacles.push({ kind:'auto', x: CONFIG.CW+10, w:40, h:22, y: CONFIG.GROUND_Y-22, seed });
   } else if(roll < 0.72){
-    obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:28, y: CONFIG.GROUND_Y-52, seed });
+    obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:28, y: CONFIG.GROUND_Y-58, seed });
   } else {
     collectibles.push({ kind:'stern', x: CONFIG.CW+10, w:20, h:20, y: CONFIG.GROUND_Y-70, seed });
   }
@@ -821,7 +954,7 @@ function loop(ts){
 
   // Physik
   player.prevJumpOffset = player.jumpOffset;
-  if(player.jumpOffset > 0 || player.vy !== 0){
+  if(!player.onCar && (player.jumpOffset > 0 || player.vy !== 0)){
     player.jumpOffset += player.vy*dt;
     // Anschlagdynamik: Taste losgelassen im Aufstieg = Sprung wird früh gekappt
     const gMul = (player.vy > 0 && !player.jumpHeld) ? CONFIG.JUMP_CUT_GRAVITY : 1;
@@ -834,13 +967,20 @@ function loop(ts){
   }
 
   // Tempo & Distanz
-  speed = Math.min(CONFIG.MAX_SPEED, CONFIG.BASE_SPEED + distance*0.06);
-  distance += speed*dt*0.05;
+  // Fahrtempo & Kulisse hängen an der TATSÄCHLICH gefahrenen Strecke (worldPx),
+  // nicht an den Bonus-/Wheelie-Metern – so bleibt die Spielwelt bei Boni normal schnell.
+  const traveled = worldPx * 0.05;
+  speed = Math.min(CONFIG.MAX_SPEED, CONFIG.BASE_SPEED + traveled*0.06);
+  let distGain = speed*dt*0.05;
+  if(wheelie) distGain *= CONFIG.WHEELIE_METER_MULT;   // Wheelie: Meter zählen schneller
+  distance += distGain;
   worldPx += speed*dt;
   if(player.jumpOffset === 0) crankAngle += (speed*dt)/18;
   duckAnim += ((player.ducking ? 1 : 0) - duckAnim) * Math.min(1, dt*14);
+  wheelieAnim += (((wheelie && player.jumpOffset === 0) ? 1 : 0) - wheelieAnim) * Math.min(1, dt*12);
   sceneFadeT = Math.min(1, sceneFadeT + dt/1.4);
   scoreTop.textContent = Math.floor(distance) + " m";
+  scoreTop.classList.toggle('wheelie', wheelie);
   const kmh = Math.round(speed*0.05*3.6);
   const sr = document.getElementById('speedReadout');
   if(sr){ sr.textContent = kmh + " km/h"; }
@@ -868,7 +1008,7 @@ function loop(ts){
   spawnTimer += dt;
   if(spawnTimer >= nextSpawnGap){
     spawnTimer = 0;
-    nextSpawnGap = Math.max(0.7, 1.3 - distance*0.0015) + Math.random()*0.5;
+    nextSpawnGap = Math.max(0.7, 1.3 - (worldPx*0.05)*0.0015) + Math.random()*0.5;
     spawnEntity();
   }
 
@@ -877,14 +1017,19 @@ function loop(ts){
   for(let i=obstacles.length-1;i>=0;i--){
     const o = obstacles[i];
     o.x -= speed*dt;
-    if(o.x < -60){ obstacles.splice(i,1); continue; }
+    if(o.x < -60){ if(player.onCar === o) player.onCar = null; obstacles.splice(i,1); continue; }
+    if(o.kind === 'auto'){
+      handleAutoInteraction(o);
+      if(!running) return;
+      continue;
+    }
     if(rectsOverlap(pRect, o)){
       if(o.kind === 'schlagloch'){
         obstacles.splice(i,1);
         startPumpMinigame();
         return;
       }
-      gameOver(o.kind);
+      gameOver(o.kind, o);
       return;
     }
   }
@@ -1028,6 +1173,7 @@ function draw(){
 
   drawParticles(ctx);
   drawPlayer(ctx);
+  drawCrashPieces(ctx);
 }
 
 /* ---------- Landschaft ---------- */
@@ -1195,19 +1341,58 @@ function drawSchlagloch(ctx, o, GY){
 }
 
 /* ---------- Hindernisse & Sterne (Vektor-Illustrationen) ---------- */
+function drawKindDown(ctx, o){
+  // Liegend am Boden, nachdem der Ballon losgelassen wurde (Cartoon-„überfahren")
+  const cx = o.x + o.w/2, gy = o.y + o.h;
+  const midY = gy - 3;
+  // flacher, breiter Bodenschatten
+  ctx.fillStyle = 'rgba(0,0,0,0.26)';
+  ctx.beginPath(); ctx.ellipse(cx+3, gy+2, 16, 3, 0, 0, Math.PI*2); ctx.fill();
+  // Beine nach rechts, leicht gespreizt
+  ctx.strokeStyle = PAL.skin; ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(cx+8, midY-2); ctx.lineTo(cx+17, midY-4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx+8, midY+1); ctx.lineTo(cx+17, midY+2); ctx.stroke();
+  // Kleid (liegendes Dreieck, Spitze zur Hüfte)
+  ctx.fillStyle = PAL.pink;
+  ctx.beginPath();
+  ctx.moveTo(cx-1, midY-5);
+  ctx.lineTo(cx+9, midY-1.5);
+  ctx.lineTo(cx-1, midY+3);
+  ctx.closePath(); ctx.fill();
+  // Arm nach oben abgestreckt (Richtung entschwundener Ballon)
+  ctx.strokeStyle = PAL.skin; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(cx-1, midY-2); ctx.lineTo(cx-3.5, midY-9); ctx.stroke();
+  // Kopf links, liegend
+  ctx.fillStyle = PAL.skin; ctx.beginPath(); ctx.arc(cx-6, midY-1, 4.5, 0, Math.PI*2); ctx.fill();
+  // Haare (Hinterkopf)
+  ctx.fillStyle = '#7A4A22';
+  ctx.beginPath(); ctx.arc(cx-6, midY-1, 4.6, Math.PI*0.45, Math.PI*1.55); ctx.fill();
+  // benommene X-Augen
+  ctx.strokeStyle = '#3A2A1A'; ctx.lineWidth = 0.9; ctx.lineCap = 'round';
+  const s = 1.1, ey = midY-2;
+  [cx-7.4, cx-4.4].forEach(ex=>{
+    ctx.beginPath();
+    ctx.moveTo(ex-s, ey-s); ctx.lineTo(ex+s, ey+s);
+    ctx.moveTo(ex+s, ey-s); ctx.lineTo(ex-s, ey+s);
+    ctx.stroke();
+  });
+}
 function drawKind(ctx, o){
   const t = performance.now()/1000;
   const cx = o.x + o.w/2, by = o.y + o.h;
+  if(o.letGo){ drawKindDown(ctx, o); return; }
   groundShadow(ctx, cx, by, 11, 0.28);
-  // Luftballon an der Schnur, schwingt leicht
-  const sway = Math.sin(t*3 + o.seed)*2.5;
-  const bx = cx + 7 + sway, bcy = o.y - 14;
-  ctx.strokeStyle = 'rgba(245,241,235,0.55)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(cx+4, o.y+10); ctx.quadraticCurveTo(cx+7, o.y-2, bx, bcy+7.5); ctx.stroke();
-  ctx.fillStyle = PAL.pink;
-  ctx.beginPath(); ctx.ellipse(bx, bcy, 6, 7.5, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.35)';
-  ctx.beginPath(); ctx.ellipse(bx-2, bcy-2.5, 1.8, 2.4, 0, 0, Math.PI*2); ctx.fill();
+  // Luftballon an der Schnur, schwingt leicht (fehlt, wenn das Kind ihn losgelassen hat)
+  if(!o.letGo){
+    const sway = Math.sin(t*3 + o.seed)*2.5;
+    const bx = cx + 7 + sway, bcy = o.y - 14;
+    ctx.strokeStyle = 'rgba(245,241,235,0.55)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx+4, o.y+10); ctx.quadraticCurveTo(cx+7, o.y-2, bx, bcy+7.5); ctx.stroke();
+    ctx.fillStyle = PAL.pink;
+    ctx.beginPath(); ctx.ellipse(bx, bcy, 6, 7.5, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.beginPath(); ctx.ellipse(bx-2, bcy-2.5, 1.8, 2.4, 0, 0, Math.PI*2); ctx.fill();
+  }
   // Beine (Trippelschritt)
   const leg = Math.sin(t*10 + o.seed)*2.5;
   ctx.strokeStyle = PAL.skin; ctx.lineWidth = 2.6; ctx.lineCap = 'round';
@@ -1353,12 +1538,20 @@ function drawPlayer(ctx){
   ctx.rotate(pitch);
 
   const R = 9, ax = 13;
-  drawWheel(ctx, -ax, -R, R, worldPx/R);
-  drawWheel(ctx,  ax, -R, R, worldPx/R);
+  // Wheelie: gesamtes Rad ums Hinterrad kippen, Vorderrad hebt ab
+  if(wheelieAnim > 0.01){
+    ctx.translate(-ax, -R);
+    ctx.rotate(-wheelieAnim*0.55);
+    ctx.translate(ax, R);
+  }
+  if(!playerWheelsOff){
+    drawWheel(ctx, -ax, -R, R, worldPx/R);
+    drawWheel(ctx,  ax, -R, R, worldPx/R);
+  }
 
   // Rahmen
   const BB = {x:-2, y:-11}, ST = {x:-8, y:-27}, HT = {x:9, y:-26};
-  ctx.strokeStyle = PAL.orange; ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = bikeCol.base; ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath();
   ctx.moveTo(-ax,-R); ctx.lineTo(BB.x,BB.y);
   ctx.moveTo(-ax,-R); ctx.lineTo(ST.x,ST.y);
@@ -1390,43 +1583,110 @@ function drawPlayer(ctx){
   ctx.strokeStyle = '#2A3B4C'; ctx.lineWidth = 2.2;
   ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
   // Torso im Trikot
-  ctx.strokeStyle = PAL.jersey; ctx.lineWidth = 5; ctx.lineCap = 'round';
+  ctx.strokeStyle = bikeCol.bright; ctx.lineWidth = 5; ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(hip.x,hip.y); ctx.lineTo(sho.x,sho.y); ctx.stroke();
   // Arm zum Lenker
-  drawLimb(ctx, sho, HB, PAL.jersey, 3.4, -1);
+  drawLimb(ctx, sho, HB, bikeCol.bright, 3.4, -1);
   // vorderes Bein
   drawLeg(ctx, hip, p1, '#1F3346');
-  // Kopf mit Helm
+  // Kopf – mit Helm; nach Flugzeug-Crash ist der Helm weg (fliegt separat)
   ctx.fillStyle = PAL.skin;
   ctx.beginPath(); ctx.arc(head.x, head.y, 4.4, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = PAL.cream;
-  ctx.beginPath(); ctx.arc(head.x, head.y-0.8, 4.9, Math.PI*0.95, Math.PI*2.02); ctx.fill();
-  ctx.fillStyle = PAL.orangeBright;
-  ctx.fillRect(head.x-4.6, head.y-3.4, 3.2, 1.6);
+  if(!playerHelmetOff){
+    ctx.fillStyle = PAL.cream;
+    ctx.beginPath(); ctx.arc(head.x, head.y-0.8, 4.9, Math.PI*0.95, Math.PI*2.02); ctx.fill();
+    ctx.fillStyle = bikeCol.bright;
+    ctx.fillRect(head.x-4.6, head.y-3.4, 3.2, 1.6);
+  } else {
+    ctx.fillStyle = '#7A4A22';
+    ctx.beginPath(); ctx.arc(head.x, head.y-0.9, 4.7, Math.PI*0.95, Math.PI*2.02); ctx.fill();
+  }
 
   ctx.restore();
 }
 
-function gameOver(hitKind){
+function gameOver(hitKind, o){
   lastHitKind = hitKind;
   running = false;
+  wheelie = false; duckHeld = false;
+  scoreTop.classList.remove('wheelie');
   document.removeEventListener('keydown', keyDownHandler);
   document.removeEventListener('keyup', keyUpHandler);
   sfxCrash();
   const flash = document.getElementById('flash');
   if(flash){ flash.classList.add('show'); }
-  spawnParticles(getPlayerRect().x+15, getPlayerRect().y+15, 14, { vy0:-30, spreadX:90, spreadY:70, life:0.5, color:'138,32,32', gravity:220 });
-  // Kurzes Kamera-Rütteln beim Aufprall
+
+  const pr = getPlayerRect();
+  // Kollisions-spezifische Crash-Animation
+  if(hitKind === 'kind' && o){
+    o.letGo = true;                                  // Kind lässt den Ballon los
+    const bx = o.x + o.w/2 + 7, by = o.y - 14;
+    crashPieces.push({ type:'balloon', x:bx, y:by, vx:(Math.random()*2-1)*20, vy:-72, grav:-40, rot:0, vr:(Math.random()*2-1)*2.2 });
+  } else if(hitKind === 'auto'){
+    playerWheelsOff = true;                           // Fahrradräder lösen sich und fliegen weg
+    const wy = CONFIG.GROUND_Y - player.jumpOffset - 9;
+    crashPieces.push({ type:'wheel', x:pr.x+2,      y:wy, vx:-155, vy:-175, grav:520, rot:0, vr:-16, r:9, drag:0.99 });
+    crashPieces.push({ type:'wheel', x:pr.x+pr.w-2, y:wy, vx:130,  vy:-215, grav:520, rot:0, vr:15,  r:9, drag:0.99 });
+  } else if(hitKind === 'flugzeug'){
+    playerHelmetOff = true;                            // Helm fliegt vom Kopf und wirbelt umher
+    const hx = pr.x + pr.w/2 + 5, hy = CONFIG.GROUND_Y - player.jumpOffset - 46;
+    crashPieces.push({ type:'helmet', x:hx, y:hy, vx:95, vy:-155, grav:470, rot:0, vr:13 });
+  }
+
+  spawnParticles(pr.x+15, pr.y+15, 14, { vy0:-30, spreadX:90, spreadY:70, life:0.5, color:'138,32,32', gravity:220 });
+
+  // Kamera-Rütteln + Crash-Teile animieren, dann Ergebnis-Screen
+  const CRASH_MS = 780;
   const shakeStart = performance.now();
-  (function shakeLoop(){
-    const e = (performance.now() - shakeStart)/340;
+  let last = shakeStart;
+  (function crashLoop(ts){
+    ts = ts || performance.now();
+    const dt2 = Math.min((ts - last)/1000, 0.05); last = ts;
+    const e = (ts - shakeStart)/340;
     shakeMag = Math.max(0, 1-e);
-    const dt2 = 1/60;
     updateParticles(dt2);
+    updateCrashPieces(dt2);
     draw();
-    if(e < 1 && !running) requestAnimationFrame(shakeLoop);
+    if((ts - shakeStart) < CRASH_MS && !running) requestAnimationFrame(crashLoop);
   })();
-  setTimeout(()=> renderResult(Math.floor(distance)), 350);
+  setTimeout(()=> renderResult(Math.floor(distance)), CRASH_MS);
+}
+
+/* ---------- Crash-Teile: Update & Zeichnen ---------- */
+function updateCrashPieces(dt){
+  for(const p of crashPieces){
+    p.x += p.vx*dt;
+    p.y += p.vy*dt;
+    p.vy += (p.grav||0)*dt;
+    if(p.drag) p.vx *= p.drag;
+    p.rot += (p.vr||0)*dt;
+  }
+}
+function drawCrashPieces(ctx){
+  if(!crashPieces.length) return;
+  for(const p of crashPieces){
+    if(p.type === 'wheel'){
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      drawWheel(ctx, 0, 0, p.r || 9, 0);
+      ctx.restore();
+    } else if(p.type === 'helmet'){
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = PAL.cream;
+      ctx.beginPath(); ctx.arc(0, 0, 5, Math.PI*0.95, Math.PI*2.02); ctx.fill();
+      ctx.fillStyle = bikeCol.bright;
+      ctx.fillRect(-4.6, -2.6, 3.4, 1.7);
+      ctx.restore();
+    } else if(p.type === 'balloon'){
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.sin(p.rot)*0.25);
+      ctx.strokeStyle = 'rgba(245,241,235,0.5)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, 7); ctx.quadraticCurveTo(3, 15, 1, 22); ctx.stroke();
+      ctx.fillStyle = PAL.pink;
+      ctx.beginPath(); ctx.ellipse(0, 0, 6, 7.5, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.beginPath(); ctx.ellipse(-2, -2.5, 1.8, 2.4, 0, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+  }
 }
 
 /* ---------- RESULT ---------- */
@@ -1646,9 +1906,31 @@ async function storageSet(key, value){
   } catch(e){ console.error("Konnte Bestenliste nicht speichern", e); }
 }
 async function getLeaderboard(mode){
+  mode = mode || 'all';
+  // Globale Bestenliste (Google Sheet), sofern konfiguriert und erreichbar
+  if(CONFIG.LEADERBOARD_URL){
+    try{
+      const res = await fetch(CONFIG.LEADERBOARD_URL + '?mode=' + encodeURIComponent(mode), { method:'GET' });
+      if(res.ok){
+        const data = await res.json();
+        if(Array.isArray(data)) return data;
+      }
+    }catch(e){ /* offline → lokaler Fallback unten */ }
+  }
   return await storageGet(storageKeyFor(mode));
 }
 async function submitScore(name, score){
+  score = Math.max(0, Math.floor(score));
+  let sentGlobal = false;
+  // An die globale Bestenliste senden – bewusst ohne Content-Type-Header,
+  // damit es eine "einfache" Anfrage ohne CORS-Preflight bleibt (Apps Script mag keinen Preflight)
+  if(CONFIG.LEADERBOARD_URL && score <= CONFIG.LEADERBOARD_MAX_SCORE){
+    try{
+      const res = await fetch(CONFIG.LEADERBOARD_URL, { method:'POST', body: JSON.stringify({ name, score }) });
+      sentGlobal = res.ok;
+    }catch(e){ sentGlobal = false; }
+  }
+  // Immer auch lokal spiegeln (Offline-Sicherung; wird nur angezeigt, wenn global nicht erreichbar ist)
   const entry = { name, score, date: new Date().toISOString() };
   for(const mode of ['all','daily']){
     const key = storageKeyFor(mode);
@@ -1658,6 +1940,7 @@ async function submitScore(name, score){
     list = list.slice(0, CONFIG.LEADERBOARD_MAX);
     await storageSet(key, list);
   }
+  return sentGlobal;
 }
 async function loadBoardInto(elementId, limit, mode){
   const el = document.getElementById(elementId);
