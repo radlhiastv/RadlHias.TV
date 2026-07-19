@@ -1157,6 +1157,8 @@ function showTab(tab) {
     if (beraterBanner) beraterBanner.style.display = '';
     if (tabBerater) { tabBerater.style.borderBottomColor = 'var(--orange)'; tabBerater.style.color = 'var(--navy)'; }
   }
+
+  window.scrollTo(0, 0);
 }
 
 // ---- LUFTDRUCK LOGIK ----
