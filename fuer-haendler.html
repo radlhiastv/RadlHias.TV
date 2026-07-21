@@ -320,6 +320,115 @@
   .btn-b2b-whatsapp:hover { background: #1ebe57; }
   .b2b-kontakt-note { font-size: 12px; color: var(--blue-lt); margin-top: 20px; line-height: 1.6; }
 
+  /* ===== PROBLEM-ABSATZ ===== */
+  .problem-section { background: var(--cream2); }
+  .problem-card {
+    max-width: 780px; margin: 0 auto; text-align: center;
+    padding: 56px 20px;
+  }
+  .problem-card p {
+    font-size: 18px; line-height: 1.7; color: var(--navy);
+  }
+  .problem-card p strong { color: var(--orange); }
+
+  /* ===== USP-KARTE MIT FOTO ===== */
+  .usp-flex { display: flex; gap: 32px; align-items: flex-start; }
+  .usp-photo {
+    flex: 0 0 160px; width: 160px; border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow); border: 1px solid var(--cream3);
+  }
+  .usp-photo img { width: 100%; height: auto; display: block; }
+  .usp-flex-text { flex: 1; min-width: 0; }
+  @media (max-width: 640px) {
+    .usp-flex { flex-direction: column; align-items: center; }
+    .usp-photo { flex: 0 0 auto; width: 140px; }
+  }
+  .usp-card a.inline-link { color: var(--orange); font-weight: 600; text-decoration: underline; }
+  .usp-quote {
+    border-left: 3px solid var(--orange); padding-left: 18px; margin: 22px 0;
+    font-style: italic; color: var(--navy); font-size: 15.5px; line-height: 1.7;
+  }
+  .usp-stations { list-style: none; margin: 18px 0 0; padding: 0; }
+  .usp-stations li {
+    font-size: 14.5px; color: var(--text); line-height: 1.6; padding-left: 22px; position: relative;
+    margin-bottom: 10px;
+  }
+  .usp-stations li::before {
+    content: '✓'; position: absolute; left: 0; color: var(--orange); font-weight: 700;
+  }
+  .usp-stations strong { color: var(--navy); }
+  .usp-honesty {
+    margin-top: 24px; padding: 18px 20px; background: rgba(45,110,158,0.07);
+    border-radius: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6;
+  }
+  .usp-honesty strong { color: var(--navy); }
+
+  /* ===== ADD-ONS ===== */
+  .addon-box {
+    margin-top: 32px; margin-bottom: 24px; max-width: 720px; margin-left: auto; margin-right: auto;
+    background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 24px 28px;
+  }
+  .addon-box h4 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 12px;
+  }
+  .addon-box ul { list-style: none; margin: 0; padding: 0; }
+  .addon-box li {
+    font-size: 14px; color: var(--text-dim); line-height: 1.6; padding-left: 20px; position: relative;
+    margin-bottom: 8px;
+  }
+  .addon-box li:last-child { margin-bottom: 0; }
+  .addon-box li::before { content: '+'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+
+  /* ===== FAQ ===== */
+  .faq-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .faq-item {
+    background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 4px 24px; overflow: hidden;
+  }
+  .faq-item summary {
+    cursor: pointer; list-style: none; padding: 18px 0;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px;
+    color: var(--navy); display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+'; font-size: 22px; color: var(--orange); font-weight: 700; flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item p { font-size: 14.5px; color: var(--text-dim); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+  .faq-item p em { color: var(--navy); }
+
+  /* ===== KONTAKTFORMULAR ===== */
+  .b2b-form { text-align: left; margin-bottom: 26px; }
+  .b2b-form-row { margin-bottom: 14px; }
+  .b2b-form-row label {
+    display: block; font-size: 12.5px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--blue-lt); margin-bottom: 6px;
+  }
+  .b2b-form-row input, .b2b-form-row textarea {
+    width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08); color: var(--cream); font-family: 'Barlow', sans-serif; font-size: 14.5px;
+  }
+  .b2b-form-row input::placeholder, .b2b-form-row textarea::placeholder { color: rgba(219,230,238,0.45); }
+  .b2b-form-row textarea { resize: vertical; min-height: 90px; }
+  .btn-b2b-form {
+    display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center;
+    background: var(--orange); color: #fff; padding: 14px 26px; border-radius: 10px; border: none;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+  }
+  .btn-b2b-form:hover { background: #a04a10; }
+  .b2b-kontakt-divider {
+    display: flex; align-items: center; gap: 14px; margin: 26px 0;
+    font-size: 12px; color: var(--blue-lt); text-transform: uppercase; letter-spacing: 1px;
+  }
+  .b2b-kontakt-divider::before, .b2b-kontakt-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.15);
+  }
+
   footer { margin-top: 0; }
 </style>
 </head>
@@ -351,12 +460,35 @@
   <p>Homepage, Fahrradkonfigurator und laufende Betreuung für dein Fahrradgeschäft in Deutschland &amp; Österreich. radlhias.tv ist meine lebende Referenz – schau sie dir einfach an, bevor wir reden.</p>
 </div>
 
-<!-- ===== USP ===== -->
+<!-- ===== PROBLEM-ABSATZ ===== -->
+<section class="problem-section">
+  <div class="problem-card">
+    <p>Deine jetzige Website ist seit Jahren nicht mehr angefasst worden, auf dem Handy kaum bedienbar und bei Google praktisch unsichtbar? <strong>Damit bist du nicht allein.</strong> Genau dafür gibt es eine Lösung, die zu deinem Geschäft passt, statt zu einer x-beliebigen Agentur-Vorlage.</p>
+  </div>
+</section>
+
+<!-- ===== USP / BEWEIS ===== -->
 <section class="b2b-section">
   <div class="usp-card">
-    <p>Es gibt viele Webagenturen, die dir eine Website für dein Fahrradgeschäft verkaufen. Die wenigsten davon haben je an einem Fahrrad geschraubt, im Verkaufsgespräch gestanden oder eine Saison im Fachhandel überlebt.</p>
-    <p><strong>Ich schon.</strong> Über 27 Jahre im Bike-Business – als Mechaniker, Werkstattleiter, Verkäufer, mit eigenem Bikeshop und in der Industrie bei KTM Fahrrad. Ich weiß, wie ein Fahrradgeschäft tickt, welche Fragen deine Kunden wirklich haben und mit welchen Argumenten du sie überzeugst. Dazu kommt: Ich baue selbst Websites, Konfiguratoren und digitale Tools – so wie radlhias.tv, mit eigenem Fahrradkonfigurator und interaktivem Spiel.</p>
+    <div class="usp-flex">
+      <div class="usp-photo">
+        <img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias Blumreich, RadlHias.TV" width="604" height="900" loading="lazy">
+      </div>
+      <div class="usp-flex-text">
+        <p>Es gibt viele Webagenturen, die dir eine Website für dein Fahrradgeschäft verkaufen. Die wenigsten davon haben je an einem Fahrrad geschraubt, im Verkaufsgespräch gestanden oder eine Saison im Fachhandel überlebt.</p>
+        <p><strong>Ich schon.</strong> Über 27 Jahre im Bike-Business – als Mechaniker, Werkstattleiter, Verkäufer, mit eigenem Bikeshop und in der Industrie bei KTM Fahrrad. Mehr zu diesen Stationen findest du auf <a href="history.html" class="inline-link">meiner Laufbahn-Seite</a>.</p>
+      </div>
+    </div>
     <p>Das bedeutet für dich: Ich muss dir keine Grundlagen deiner eigenen Branche erklären lassen. Ich kenne die Fachbegriffe, das Saisongeschäft, die Servicelogik und die Erwartungen deiner Kundschaft – und übersetze das direkt in eine Website, die verkauft, statt nur gut auszusehen.</p>
+    <ul class="usp-stations">
+      <li><strong>KTM Fahrrad, Kundendienst &amp; Reklamation (2007):</strong> Einblick in die Industrie-Perspektive, nicht nur in die Ladentheke.</li>
+      <li><strong>Eigener Bikeshop „Feinschliff Bikes" (2010-2015):</strong> Unternehmerisches Risiko selbst getragen, nicht nur beraten.</li>
+      <li><strong>Aufbau eigener Onlineshops (2012):</strong> Direkte Relevanz für die Website- und Konfigurator-Kompetenz, die ich heute anbiete.</li>
+    </ul>
+    <p class="usp-quote">„Ich verstehe heute nicht nur, wie ein Rad funktioniert, sondern auch, wie eine Werkstatt, ein Shop oder ein Betrieb dahinter funktionieren muss."</p>
+    <div class="usp-honesty">
+      <strong>Ehrlich gesagt:</strong> Referenzprojekte für Fahrradhändler gibt es aktuell noch keine. radlhias.tv selbst ist der Beweis für die Technik und Qualität dahinter. Dein Projekt wäre mein erstes Händlerprojekt, und das gibt es zu Vorzugskonditionen.
+    </div>
     <div class="usp-pills">
       <span class="usp-pill">27 Jahre Bike-Business</span>
       <span class="usp-pill">Eigener Bikeshop geführt</span>
@@ -374,7 +506,7 @@
     <div class="ref-banner-inner">
       <div class="ref-eyebrow">Beweis statt Behauptung</div>
       <div class="ref-title">radlhias.tv ist keine Mock-up-Demo – sie ist live im Einsatz</div>
-      <p class="ref-text">Fahrradkonfigurator, interaktives Spiel, Blog, Bike-Service-Bereich: Alles, was du hier siehst, kann genauso für dein Geschäft aufgebaut werden – auf dich, deine Marken und deine Kunden zugeschnitten.</p>
+      <p class="ref-text">radlhias.tv zeigt dir das Content-Konzept: Fahrradkonfigurator, interaktives Spiel, Blog, Bike-Service-Bereich. Die Technik dahinter lässt sich 1:1 auf dein Händlerprojekt übertragen, zugeschnitten auf dich, deine Marken und deine Kunden.</p>
       <div class="ref-links">
         <a href="konfigurator.html" class="ref-link">Konfigurator ansehen</a>
         <a href="spiel/index.html" class="ref-link outline">Spiel ausprobieren</a>
@@ -424,36 +556,57 @@
     <div class="price-card">
       <div class="price-name">Starter</div>
       <div class="price-value">2.500–3.500 €</div>
-      <div class="price-hint">5–8 Seiten, Standard-Design</div>
+      <div class="price-hint">5-8 Seiten · Timeline: 2-3 Wochen</div>
       <ul class="price-features">
-        <li>Mobil optimierte Website</li>
-        <li>Google-Business-Anbindung</li>
-        <li>Basis-SEO</li>
+        <li>5-8 Seiten (Startseite, Über uns, Leistungen/Marken, Kontakt, Öffnungszeiten, ggf. Team)</li>
+        <li>Responsive Design auf Basis eines hochwertigen Templates</li>
+        <li>Google-Business-Profil Einrichtung/Optimierung</li>
+        <li>Basis-SEO: Meta-Titel/Beschreibungen, saubere URLs, lokale Keywords</li>
+        <li>Kontaktformular + Mailto + WhatsApp-Link</li>
+        <li>Google Maps Einbindung</li>
+        <li>Cookie-Banner / DSGVO-Grundausstattung</li>
+        <li>Öffnungszeiten-Widget</li>
+        <li>1 Korrekturschleife inklusive</li>
       </ul>
     </div>
     <div class="price-card featured">
       <div class="price-badge">Meist gewählt</div>
       <div class="price-name">Business</div>
       <div class="price-value">4.000–7.000 €</div>
-      <div class="price-hint">Individuelles Design, Basis-Konfigurator</div>
+      <div class="price-hint">Individuelles Design · Timeline: 3-5 Wochen</div>
       <ul class="price-features">
         <li>Alles aus Starter</li>
-        <li>Individuelles Design &amp; mehr Seiten</li>
-        <li>Basis-Fahrradkonfigurator</li>
+        <li>Individuelles Design statt Template</li>
+        <li>Mehr Seiten (Markenseiten, Service-Bereich, Team-Seite, News/Blog-Grundstruktur)</li>
+        <li>Basis-Fahrradkonfigurator: Berater-Funktion, ermittelt anhand Nutzung/Körpermaßen/Fahrstil/Budget eine Empfehlung (keine konkreten Modelle), endet mit Anfrageformular</li>
+        <li>Erweiterte SEO (Ladezeit-Optimierung, strukturierte Daten/Schema.org)</li>
+        <li>2 Korrekturschleifen inklusive</li>
       </ul>
     </div>
     <div class="price-card">
       <div class="price-name">Premium</div>
       <div class="price-value">8.000–15.000 €</div>
-      <div class="price-hint">Für größere Häuser &amp; Filialisten</div>
+      <div class="price-hint">Für größere Häuser &amp; Filialisten · Timeline: 6-8 Wochen</div>
       <ul class="price-features">
-        <li>Voller Fahrradkonfigurator</li>
-        <li>Spiel / Gamification-Feature</li>
-        <li>Fotografie inklusive</li>
+        <li>Alles aus Business</li>
+        <li>Voller Fahrradkonfigurator: Beratungs-Empfehlung <strong>plus</strong> Modelldatenbank deiner geführten Marken (fixe Anzahl inklusive, weitere gegen Aufpreis). Das Ergebnis sind konkrete, bei dir erhältliche Modelle statt nur einer Ausstattungsidee</li>
+        <li>Spiel/Gamification-Feature (wie „Tour de Hias", individualisiert)</li>
+        <li>Fotografie inklusive (Produktfotos, ggf. Standort-/Teamfotos)</li>
+        <li>Priorisierte Bearbeitung, mehr Abstimmungstermine</li>
+        <li>3 Korrekturschleifen inklusive</li>
       </ul>
     </div>
   </div>
   <p class="betreuung-note">Dazu kommt optional die <strong>monatliche Betreuung</strong> (ca. 120–350 €, gestaffelt nach Umfang) für laufende Pflege, SEO und Anpassungen – damit deine Website nach dem Livegang nicht stehen bleibt.</p>
+  <div class="addon-box">
+    <h4>Add-ons: unabhängig vom Paket buchbar</h4>
+    <ul>
+      <li>Fotografie &amp; Social-Media-Content (falls nicht bereits im Premium-Paket enthalten)</li>
+      <li>YouTube-Kurzformate/Reels</li>
+      <li>Erweiterte Betreuung (Content-Updates über das Standard-Paket hinaus)</li>
+      <li>Jährliche Pflege der Modelldatenbank (Premium-Konfigurator): Aktualisierung, wenn Hersteller neue Modelle bringen oder Modelle auslaufen. Ein fester, wiederkehrender Bestandteil der Betreuung</li>
+    </ul>
+  </div>
 </section>
 
 <!-- ===== ABLAUF ===== -->
@@ -475,12 +628,44 @@
     </div>
     <div class="ablauf-step">
       <h4>Kickoff</h4>
-      <p>Klarer Projektplan, meist 3–4 Wochen bis zum Livegang.</p>
+      <p>Klarer Projektplan: Starter 2-3 Wochen, Business 3-5 Wochen, Premium 6-8 Wochen bis zum Livegang.</p>
     </div>
     <div class="ablauf-step">
       <h4>Betreuung</h4>
       <p>Deine Seite bleibt aktuell – Anpassungen, SEO, Content laufend inklusive.</p>
     </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="b2b-section">
+  <h2 class="b2b-section-title">Häufige Fragen</h2>
+  <p class="b2b-section-sub">Was Fahrradhändler mich am häufigsten fragen, bevor wir loslegen.</p>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>Wem gehört die Website nach Projektende?</summary>
+      <p>Domain, Code und Design gehen nach Projektabschluss vollständig in deinen Besitz über. Wartung, Pflege und Upgrades können danach optional über separate Folgeverträge gebucht werden.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Was passiert, wenn ich das Betreuungspaket kündige?</summary>
+      <p>Die Website bleibt online, solange Webspace und Domain bezahlt sind. Im ersten Zyklus sind diese Kosten im Projektpreis inkludiert, ich kümmere mich in der Erstellungsphase darum. Nach Ablauf des ersten Zyklus liegt die Verlängerung bei dir, außer es gibt einen Folgevertrag (Betreuungspaket), dann übernehme ich das wieder.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Muss ich selbst Texte oder Fotos liefern?</summary>
+      <p>Bei allgemeinen bzw. kleineren Inhalten formuliere ich direkt. Bei spezifischen, individuellen Texten erstelle ich zwei Varianten, du wählst deinen Favoriten oder gibst Anmerkungen, die dann eingepflegt werden. Fotografie ist im Premium-Paket inklusive, sonst als Add-on buchbar.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Wie läuft die Zahlung ab?</summary>
+      <p>Anzahlung plus Restzahlung bei Projektabschluss. Monatliche Zahlungen gibt es ausschließlich bei Folgeverträgen (Betreuungspakete).</p>
+    </details>
+    <details class="faq-item">
+      <summary>Wo wird meine Website gehostet, ist das DSGVO-konform?</summary>
+      <p>Standard-Hosting erfolgt über Netlify (inklusive eingebauter Formularverarbeitung ohne zusätzliches Backend). Netlify ist ein US-Unternehmen; die DSGVO-Konformität wird über Standardvertragsklauseln (SCCs) sichergestellt. Das ist <em>keine EU-Server-Behauptung</em>, aber eine DSGVO-konforme Auftragsverarbeitung. Auf ausdrücklichen Wunsch (z. B. Behörden, größere Filialisten) ist Hosting über einen EU-Anbieter (IONOS oder Hetzner) möglich.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Gibt es eine Garantie oder Nachbesserung?</summary>
+      <p>Korrekturschleifen sind je nach Paket inklusive (Starter: 1, Business: 2, Premium: 3).</p>
+    </details>
   </div>
 </section>
 
@@ -493,6 +678,26 @@
         Schreib mir kurz, wie dein Geschäft aktuell online aufgestellt ist – ich melde mich mit einer
         ehrlichen Einschätzung und einem Terminvorschlag für eine kurze Live-Demo.
       </p>
+      <form id="bh-anfrage-form" class="b2b-form">
+        <div class="b2b-form-row">
+          <label for="bh-name">Name</label>
+          <input type="text" id="bh-name" name="name" placeholder="Dein Name" required>
+        </div>
+        <div class="b2b-form-row">
+          <label for="bh-firma">Firma</label>
+          <input type="text" id="bh-firma" name="firma" placeholder="Name deines Geschäfts" required>
+        </div>
+        <div class="b2b-form-row">
+          <label for="bh-website">Aktuelle Website-URL</label>
+          <input type="text" id="bh-website" name="website" placeholder="z. B. www.deingeschaeft.at">
+        </div>
+        <div class="b2b-form-row">
+          <label for="bh-nachricht">Kurze Nachricht</label>
+          <textarea id="bh-nachricht" name="nachricht" placeholder="Wie ist dein Geschäft aktuell online aufgestellt?" required></textarea>
+        </div>
+        <button type="submit" class="btn-b2b-form">Anfrage senden</button>
+      </form>
+      <div class="b2b-kontakt-divider">oder direkt</div>
       <div class="b2b-cta-row">
         <a href="mailto:radlhias.tv@gmail.com?subject=B2B-Anfrage%3A%20Website%20f%C3%BCr%20mein%20Fahrradgesch%C3%A4ft" class="btn-b2b-mail">✉️ E-Mail schreiben</a>
         <a href="https://wa.me/4367762985544?text=Hallo%20Mathias%2C%20ich%20habe%20eine%20B2B-Anfrage%20zu%20einer%20Website%20f%C3%BCr%20mein%20Fahrradgesch%C3%A4ft" target="_blank" rel="noopener noreferrer" class="btn-b2b-whatsapp">
@@ -553,5 +758,21 @@
 </footer>
 
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+<script>
+(function () {
+  var form = document.getElementById('bh-anfrage-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.name.value.trim();
+    var firma = form.firma.value.trim();
+    var website = form.website.value.trim();
+    var nachricht = form.nachricht.value.trim();
+    var subject = 'B2B-Anfrage: Website für ' + firma;
+    var body = 'Name: ' + name + '\nFirma: ' + firma + '\nAktuelle Website: ' + (website || '-') + '\n\n' + nachricht;
+    window.location.href = 'mailto:radlhias.tv@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
+})();
+</script>
 </body>
 </html>
