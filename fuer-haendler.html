@@ -442,16 +442,16 @@
     position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 16px;
     overflow: hidden; box-shadow: var(--shadow); cursor: ew-resize; user-select: none; background: #fff;
   }
-  .vgl-img-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .vgl-img-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
   .vgl-img-box iframe { width: 900px; height: 675px; border: none; transform-origin: top left; }
-  .vgl-new-box { clip-path: inset(0 50% 0 0); z-index: 2; }
+  .vgl-reveal-box { clip-path: inset(0 50% 0 0); z-index: 2; }
   .vgl-label {
     position: absolute; top: 12px; padding: 5px 14px; border-radius: 20px;
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px;
     letter-spacing: 0.04em; text-transform: uppercase; color: #fff; z-index: 5; pointer-events: none;
   }
-  .vgl-old-box .vgl-label { left: 12px; background: #8a1f1f; }
-  .vgl-new-box .vgl-label { right: 12px; background: var(--navy); }
+  .vgl-reveal-box .vgl-label { left: 12px; background: #8a1f1f; }
+  .vgl-bg-box .vgl-label { right: 12px; background: var(--navy); }
   .vgl-handle {
     position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background: #fff;
     transform: translateX(-50%); z-index: 6; pointer-events: none; box-shadow: 0 0 8px rgba(0,0,0,0.4);
@@ -559,18 +559,18 @@
   <p class="vgl-intro">Da es noch kein echtes Referenzprojekt für Fahrradhändler gibt, hier ein typisches Beispiel: ein fiktiver Fahrradladen mit den Schwächen, die viele echte Händlerseiten heute noch haben, daneben die überarbeitete Version. Zieh den Regler und vergleiche selbst.</p>
   <div class="vgl-wrap">
     <div class="vgl-container" id="vglContainer">
-      <div class="vgl-img-box vgl-old-box">
-        <iframe src="haendler-beispiel-vorher.html" scrolling="no" title="Vorher: veraltete Fahrradhändler-Website"></iframe>
-        <span class="vgl-label">Vorher</span>
-      </div>
-      <div class="vgl-img-box vgl-new-box" id="vglNewBox">
-        <iframe src="haendler-beispiel-nachher.html" scrolling="no" title="Nachher: moderne Fahrradhändler-Website"></iframe>
+      <div class="vgl-img-box vgl-bg-box">
+        <iframe id="vglBgFrame" src="haendler-beispiel-nachher.html" scrolling="no" title="Nachher: moderne Fahrradhändler-Website"></iframe>
         <span class="vgl-label">Nachher</span>
+      </div>
+      <div class="vgl-img-box vgl-reveal-box" id="vglRevealBox">
+        <iframe id="vglRevealFrame" src="haendler-beispiel-vorher.html" scrolling="no" title="Vorher: veraltete Fahrradhändler-Website"></iframe>
+        <span class="vgl-label">Vorher</span>
       </div>
       <div class="vgl-handle" id="vglHandle"></div>
       <div class="vgl-overlay" id="vglOverlay"></div>
     </div>
-    <p class="vgl-hint">← Ziehen zum Vergleichen →</p>
+    <p class="vgl-hint">← Ziehen zum Vergleichen · Scrollen für mehr Inhalt ↕</p>
     <p class="vgl-caption">Gleicher (fiktiver) Fahrradladen, gleiche Kerninhalte, zwei Welten: <strong>Ladezeit</strong> statt Klick-Wartezeit, <strong>mobile Bedienbarkeit</strong> statt Zoomen und Scrollen, <strong>zeitgemäße Optik</strong> statt Web-1998-Charme, klare <strong>Handlungsaufforderung</strong> statt Besucherzähler.</p>
     <p class="vgl-disclaimer">Beide Seiten sind frei erfunden und zeigen keinen echten Betrieb – jede Ähnlichkeit mit realen Fahrradgeschäften wäre Zufall.</p>
   </div>
@@ -832,16 +832,18 @@
 (function () {
   var container = document.getElementById('vglContainer');
   if (!container) return;
-  var newBox = document.getElementById('vglNewBox');
+  var revealBox = document.getElementById('vglRevealBox');
   var handle = document.getElementById('vglHandle');
   var overlay = document.getElementById('vglOverlay');
+  var bgFrame = document.getElementById('vglBgFrame');
+  var revealFrame = document.getElementById('vglRevealFrame');
   var dragging = false;
 
   function setPosition(clientX) {
     var rect = container.getBoundingClientRect();
     var percent = ((clientX - rect.left) / rect.width) * 100;
     percent = Math.max(0, Math.min(100, percent));
-    newBox.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0)';
+    revealBox.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0)';
     handle.style.left = percent + '%';
   }
   function startDrag(e) {
@@ -860,6 +862,14 @@
   overlay.addEventListener('touchstart', startDrag, {passive: true});
   window.addEventListener('touchmove', moveDrag, {passive: true});
   window.addEventListener('touchend', endDrag);
+
+  /* Scrollen über dem Vergleichsfenster scrollt beide eingebetteten Seiten synchron,
+     statt die eigentliche Seite zu bewegen. */
+  overlay.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    try { bgFrame.contentWindow.scrollBy(0, e.deltaY); } catch (err) {}
+    try { revealFrame.contentWindow.scrollBy(0, e.deltaY); } catch (err) {}
+  }, { passive: false });
 })();
 </script>
 <script>
