@@ -348,6 +348,10 @@
     border-left: 3px solid var(--orange); padding-left: 18px; margin: 22px 0;
     font-style: italic; color: var(--navy); font-size: 15.5px; line-height: 1.7;
   }
+  .usp-quote-attr {
+    display: inline-block; margin-top: 8px; font-style: normal; font-weight: 700;
+    font-size: 13.5px; color: var(--text-dim);
+  }
   .usp-stations { list-style: none; margin: 18px 0 0; padding: 0; }
   .usp-stations li {
     font-size: 14.5px; color: var(--text); line-height: 1.6; padding-left: 22px; position: relative;
@@ -430,6 +434,41 @@
   }
 
   footer { margin-top: 0; }
+
+  /* ===== VORHER/NACHHER-VERGLEICH ===== */
+  .vgl-intro { max-width: 640px; margin: 0 auto 30px; text-align: center; }
+  .vgl-wrap { max-width: 900px; margin: 0 auto; }
+  .vgl-container {
+    position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 16px;
+    overflow: hidden; box-shadow: var(--shadow); cursor: ew-resize; user-select: none; background: #fff;
+  }
+  .vgl-img-box { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .vgl-img-box iframe { width: 900px; height: 675px; border: none; transform-origin: top left; }
+  .vgl-new-box { clip-path: inset(0 50% 0 0); z-index: 2; }
+  .vgl-label {
+    position: absolute; top: 12px; padding: 5px 14px; border-radius: 20px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.04em; text-transform: uppercase; color: #fff; z-index: 5; pointer-events: none;
+  }
+  .vgl-old-box .vgl-label { left: 12px; background: #8a1f1f; }
+  .vgl-new-box .vgl-label { right: 12px; background: var(--navy); }
+  .vgl-handle {
+    position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background: #fff;
+    transform: translateX(-50%); z-index: 6; pointer-events: none; box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  }
+  .vgl-handle::after {
+    content: "⇔"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 42px; height: 42px; background: var(--orange); color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .vgl-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
+  .vgl-hint { text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--text-dim); }
+  .vgl-caption { max-width: 720px; margin: 28px auto 0; font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+  .vgl-caption strong { color: var(--navy); }
+  .vgl-disclaimer { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 10px; font-style: italic; }
+  @media (max-width: 600px) {
+    .vgl-img-box iframe { width: 600px; height: 450px; }
+  }
 </style>
 </head>
 <body>
@@ -485,7 +524,7 @@
       <li><strong>Eigener Bikeshop „Feinschliff Bikes" (2010-2015):</strong> Unternehmerisches Risiko selbst getragen, nicht nur beraten.</li>
       <li><strong>Aufbau eigener Onlineshops (2012):</strong> Direkte Relevanz für die Website- und Konfigurator-Kompetenz, die ich heute anbiete.</li>
     </ul>
-    <p class="usp-quote">„Ich verstehe heute nicht nur, wie ein Rad funktioniert, sondern auch, wie eine Werkstatt, ein Shop oder ein Betrieb dahinter funktionieren muss."</p>
+    <p class="usp-quote">„Ich verstehe heute nicht nur, wie ein Rad funktioniert, sondern auch, wie eine Werkstatt, ein Shop oder ein Betrieb dahinter funktionieren muss."<br><span class="usp-quote-attr">— Mathias Blumreich</span></p>
     <div class="usp-honesty">
       <strong>Ehrlich gesagt:</strong> Referenzprojekte für Fahrradhändler gibt es aktuell noch keine. radlhias.tv selbst ist der Beweis für die Technik und Qualität dahinter. Dein Projekt wäre mein erstes Händlerprojekt, und das gibt es zu Vorzugskonditionen.
     </div>
@@ -511,6 +550,29 @@
         <a href="spiel/index.html" class="ref-link outline">Spiel ausprobieren</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== VORHER/NACHHER ===== -->
+<section class="b2b-section wide">
+  <h2 class="b2b-section-title">So könnte deine Website aussehen</h2>
+  <p class="vgl-intro">Da es noch kein echtes Referenzprojekt für Fahrradhändler gibt, hier ein typisches Beispiel: ein fiktiver Fahrradladen mit den Schwächen, die viele echte Händlerseiten heute noch haben, daneben die überarbeitete Version. Zieh den Regler und vergleiche selbst.</p>
+  <div class="vgl-wrap">
+    <div class="vgl-container" id="vglContainer">
+      <div class="vgl-img-box vgl-old-box">
+        <iframe src="haendler-beispiel-vorher.html" scrolling="no" title="Vorher: veraltete Fahrradhändler-Website"></iframe>
+        <span class="vgl-label">Vorher</span>
+      </div>
+      <div class="vgl-img-box vgl-new-box" id="vglNewBox">
+        <iframe src="haendler-beispiel-nachher.html" scrolling="no" title="Nachher: moderne Fahrradhändler-Website"></iframe>
+        <span class="vgl-label">Nachher</span>
+      </div>
+      <div class="vgl-handle" id="vglHandle"></div>
+      <div class="vgl-overlay" id="vglOverlay"></div>
+    </div>
+    <p class="vgl-hint">← Ziehen zum Vergleichen →</p>
+    <p class="vgl-caption">Gleicher (fiktiver) Fahrradladen, gleiche Kerninhalte, zwei Welten: <strong>Ladezeit</strong> statt Klick-Wartezeit, <strong>mobile Bedienbarkeit</strong> statt Zoomen und Scrollen, <strong>zeitgemäße Optik</strong> statt Web-1998-Charme, klare <strong>Handlungsaufforderung</strong> statt Besucherzähler.</p>
+    <p class="vgl-disclaimer">Beide Seiten sind frei erfunden und zeigen keinen echten Betrieb – jede Ähnlichkeit mit realen Fahrradgeschäften wäre Zufall.</p>
   </div>
 </section>
 
@@ -542,7 +604,7 @@
     <div class="leist-card">
       <span class="leist-tag upgrade">Add-on</span>
       <h3>Fotografie &amp; Social Media</h3>
-      <p>Produktfotos und Social-Media-Content für dein Geschäft – auf Basis deiner Fotos, von mir professionell aufbereitet, nach Absprache.</p>
+      <p>Produktfotografie ab 350 € (Halbtag, vor Ort), Social-Media-Content-Pakete ab 400 € und YouTube-Kurzformate ab 80 € pro Stück – genaue Staffelung nach Umfang im Erstgespräch.</p>
     </div>
   </div>
 </section>
@@ -610,8 +672,8 @@
   <div class="addon-box">
     <h4>Add-ons: unabhängig vom Paket buchbar</h4>
     <ul>
-      <li>Fotografie &amp; Social-Media-Content (falls nicht bereits im Premium-Paket enthalten)</li>
-      <li>YouTube-Kurzformate/Reels</li>
+      <li>Fotografie &amp; Social-Media-Content ab 350 € (falls nicht bereits im Premium-Paket enthalten)</li>
+      <li>YouTube-Kurzformate/Reels ab 80 € pro Stück, Paket ab 500 € für 5 Stück</li>
       <li>Erweiterte Betreuung (Content-Updates über das Standard-Paket hinaus)</li>
       <li>Jährliche Pflege der Modelldatenbank (Premium-Konfigurator): Aktualisierung, wenn Hersteller neue Modelle bringen oder Modelle auslaufen. Ein fester, wiederkehrender Bestandteil der Betreuung</li>
     </ul>
@@ -687,6 +749,7 @@
         Schreib mir kurz, wie dein Geschäft aktuell online aufgestellt ist – ich melde mich mit einer
         ehrlichen Einschätzung und einem Terminvorschlag für eine kurze Live-Demo.
       </p>
+      <p class="b2b-kontakt-note" style="margin-top:-14px; margin-bottom:22px;">Ich baue RadlHias.TV nebenberuflich auf und nehme deshalb bewusst nur wenige Händlerprojekte gleichzeitig an, damit jedes die Aufmerksamkeit bekommt, die es braucht.</p>
       <form id="bh-anfrage-form" class="b2b-form">
         <div class="b2b-form-row">
           <label for="bh-name">Name</label>
@@ -765,6 +828,40 @@
 </footer>
 
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+<script>
+(function () {
+  var container = document.getElementById('vglContainer');
+  if (!container) return;
+  var newBox = document.getElementById('vglNewBox');
+  var handle = document.getElementById('vglHandle');
+  var overlay = document.getElementById('vglOverlay');
+  var dragging = false;
+
+  function setPosition(clientX) {
+    var rect = container.getBoundingClientRect();
+    var percent = ((clientX - rect.left) / rect.width) * 100;
+    percent = Math.max(0, Math.min(100, percent));
+    newBox.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0)';
+    handle.style.left = percent + '%';
+  }
+  function startDrag(e) {
+    dragging = true;
+    setPosition(e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function moveDrag(e) {
+    if (!dragging) return;
+    setPosition(e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function endDrag() { dragging = false; }
+
+  overlay.addEventListener('mousedown', startDrag);
+  window.addEventListener('mousemove', moveDrag);
+  window.addEventListener('mouseup', endDrag);
+  overlay.addEventListener('touchstart', startDrag, {passive: true});
+  window.addEventListener('touchmove', moveDrag, {passive: true});
+  window.addEventListener('touchend', endDrag);
+})();
+</script>
 <script>
 (function () {
   var form = document.getElementById('bh-anfrage-form');
