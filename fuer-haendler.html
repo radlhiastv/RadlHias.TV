@@ -47,7 +47,12 @@
 <link rel="stylesheet" href="style.css">
 <style>
   * { box-sizing: border-box; }
-  body { font-family: 'Barlow', sans-serif; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    -webkit-hyphens: auto; -ms-hyphens: auto; hyphens: auto;
+    -webkit-hyphenate-limit-before: 3; -webkit-hyphenate-limit-after: 3;
+    hyphenate-limit-chars: 6 3 3;
+  }
 
   /* ===== PAGE HEADER ===== */
   .page-header {
