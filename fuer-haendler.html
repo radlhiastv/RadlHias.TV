@@ -466,6 +466,17 @@
   }
   .vgl-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
   .vgl-hint { text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--text-dim); }
+  .vgl-fullpage-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  .vgl-full-link {
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 20px;
+    text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.03em; text-transform: uppercase; transition: transform 0.15s, background 0.2s, color 0.2s;
+    border: 1.5px solid; background: #fff;
+  }
+  .vgl-full-vorher { border-color: #8a1f1f; color: #8a1f1f; }
+  .vgl-full-vorher:hover { background: #8a1f1f; color: #fff; transform: translateY(-1px); }
+  .vgl-full-nachher { border-color: var(--orange); color: var(--orange); }
+  .vgl-full-nachher:hover { background: var(--orange); color: #fff; transform: translateY(-1px); }
   .vgl-caption { max-width: 720px; margin: 28px auto 0; font-size: 14px; color: var(--text-dim); line-height: 1.7; }
   .vgl-caption strong { color: var(--navy); }
   .vgl-disclaimer { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 10px; font-style: italic; }
@@ -574,6 +585,10 @@
       <div class="vgl-overlay" id="vglOverlay"></div>
     </div>
     <p class="vgl-hint">← Ziehen zum Vergleichen · Scrollen für mehr Inhalt ↕</p>
+    <div class="vgl-fullpage-links">
+      <a href="haendler-beispiel-vorher.html" target="_blank" rel="noopener" class="vgl-full-link vgl-full-vorher">Vorher als ganze Seite ansehen ↗</a>
+      <a href="haendler-beispiel-nachher.html" target="_blank" rel="noopener" class="vgl-full-link vgl-full-nachher">Nachher als ganze Seite ansehen ↗</a>
+    </div>
     <p class="vgl-caption">Gleicher (fiktiver) Fahrradladen, gleiche Kerninhalte, zwei Welten: <strong>Ladezeit</strong> statt Klick-Wartezeit, <strong>mobile Bedienbarkeit</strong> statt Zoomen und Scrollen, <strong>zeitgemäße Optik</strong> statt Web-1998-Charme, klare <strong>Handlungsaufforderung</strong> statt Besucherzähler.</p>
     <p class="vgl-disclaimer">Beide Seiten sind frei erfunden und zeigen keinen echten Betrieb – jede Ähnlichkeit mit realen Fahrradgeschäften wäre Zufall.</p>
   </div>
