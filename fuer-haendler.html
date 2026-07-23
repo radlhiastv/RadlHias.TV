@@ -372,7 +372,7 @@
 
   /* ===== ADD-ONS ===== */
   .addon-box {
-    margin-top: 32px; margin-bottom: 24px; max-width: 720px; margin-left: auto; margin-right: auto;
+    margin-top: 32px; margin-bottom: 24px; max-width: 780px; margin-left: auto; margin-right: auto;
     background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
     box-shadow: var(--shadow); padding: 24px 28px;
   }
@@ -380,6 +380,14 @@
     font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 12px;
   }
+  .addon-box-intro {
+    font-size: 14px; color: var(--text-dim); line-height: 1.6; margin: 0 0 20px;
+  }
+  .addon-box-cat {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange); margin: 20px 0 8px;
+  }
+  .addon-box-cat:first-of-type { margin-top: 0; }
   .addon-box ul { list-style: none; margin: 0; padding: 0; }
   .addon-box li {
     font-size: 14px; color: var(--text-dim); line-height: 1.6; padding-left: 20px; position: relative;
@@ -387,6 +395,9 @@
   }
   .addon-box li:last-child { margin-bottom: 0; }
   .addon-box li::before { content: '+'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  .addon-box-note {
+    font-size: 12px; color: var(--text-dim); opacity: 0.75; font-style: italic; margin: 20px 0 0;
+  }
 
   /* ===== FAQ ===== */
   .faq-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
@@ -689,12 +700,29 @@
   <p class="betreuung-note">Dazu kommt optional die <strong>monatliche Betreuung</strong> (ca. 120–350 €, gestaffelt nach Umfang) für laufende Pflege, SEO und Anpassungen – damit deine Website nach dem Livegang nicht stehen bleibt.</p>
   <div class="addon-box">
     <h4>Add-ons: unabhängig vom Paket buchbar</h4>
+    <p class="addon-box-intro">Alle Add-ons lassen sich auch <strong>nachträglich in eine bestehende Website integrieren</strong> – du musst also nicht deine ganze Seite neu bauen lassen, um z. B. nur den Konfigurator oder das Terminbuchungssystem zu bekommen. Ideal, wenn du mit deiner aktuellen Homepage zufrieden bist und nur gezielt ein Tool ergänzen willst.</p>
+    <p class="addon-box-cat">Prozess- &amp; Automatisierungs-Tools</p>
+    <ul>
+      <li>Fahrradkonfigurator als Nachrüst-Modul (Berater-Funktion ohne Modelldatenbank) ca. 1.800–3.000 €</li>
+      <li>Fahrradkonfigurator als Nachrüst-Modul mit Modelldatenbank deiner Marken ca. 3.500–6.000 €</li>
+      <li>Werkstatt-/Terminbuchungssystem für Service &amp; Reparatur ca. 900–1.800 €</li>
+      <li>Service-Erinnerungs-Automation (automatische Erinnerung an Kunden zur Inspektion, z. B. per E-Mail) ca. 700–1.400 €, optional laufende Pflege</li>
+      <li>Gebrauchtrad-Ankauf-Rechner: Kunde gibt Radtyp &amp; Zustand ein, erhält automatisch eine Richtpreis-Spanne plus Anfrageformular ca. 1.500–3.000 €</li>
+      <li>Leihrad-Verwaltung mit Verfügbarkeitskalender und Online-Reservierung ca. 900–2.000 €</li>
+      <li>Newsletter-System-Integration ca. 400–900 €</li>
+    </ul>
+    <p class="addon-box-cat">Gamification</p>
+    <ul>
+      <li>Individualisiertes Spiel (wie „Tour de Hias") mit deinem Branding, auch als eigenständiges Produkt für Aktionen, Messen oder Social-Media-Kampagnen buchbar ca. 1.800–4.000 €</li>
+    </ul>
+    <p class="addon-box-cat">Content &amp; Betreuung</p>
     <ul>
       <li>Fotografie &amp; Social-Media-Content ab 350 € (falls nicht bereits im Premium-Paket enthalten)</li>
       <li>YouTube-Kurzformate/Reels ab 80 € pro Stück, Paket ab 500 € für 5 Stück</li>
       <li>Erweiterte Betreuung (Content-Updates über das Standard-Paket hinaus)</li>
       <li>Jährliche Pflege der Modelldatenbank (Premium-Konfigurator): Aktualisierung, wenn Hersteller neue Modelle bringen oder Modelle auslaufen. Ein fester, wiederkehrender Bestandteil der Betreuung</li>
     </ul>
+    <p class="addon-box-note">Preisspannen für die neuen Prozess-Tools sind erste grobe Schätzungen und werden noch gemeinsam feinjustiert.</p>
   </div>
 </section>
 
