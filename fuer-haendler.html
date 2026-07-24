@@ -276,19 +276,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 18px;
-    counter-reset: ablauf;
   }
   .ablauf-step {
     background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
     padding: 22px 18px; text-align: center; box-shadow: var(--shadow);
-  }
-  .ablauf-step::before {
-    counter-increment: ablauf; content: counter(ablauf);
-    display: flex; align-items: center; justify-content: center;
-    width: 32px; height: 32px; margin: 0 auto 14px;
-    background: var(--navy); color: var(--cream);
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 15px;
-    border-radius: 50%;
   }
   .ablauf-step h4 {
     font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
@@ -375,33 +366,87 @@
   }
   .usp-honesty strong { color: var(--navy); }
 
+  /* ===== VERGLEICHSTABELLE BAUKASTEN/AGENTUR ===== */
+  .compare-table {
+    display: flex; flex-direction: column; gap: 2px;
+    border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .compare-cell {
+    background: #fff; padding: 15px 20px; font-size: 14.5px; line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .compare-cell-icon { flex-shrink: 0; font-weight: 700; line-height: 1.5; }
+  .compare-row.compare-header .compare-cell {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 0.5px; font-size: 15px; padding: 16px 20px; align-items: center;
+  }
+  .compare-header .compare-cell-bad { background: #8a1f1f; color: #fff; }
+  .compare-header .compare-cell-good { background: var(--navy); color: var(--cream); }
+  .compare-cell-bad { background: rgba(138,31,31,0.06); color: var(--text); }
+  .compare-cell-bad .compare-cell-icon { color: #8a1f1f; }
+  .compare-cell-good { background: rgba(200,90,20,0.07); color: var(--navy); font-weight: 600; }
+  .compare-cell-good .compare-cell-icon { color: var(--orange); }
+  @media (max-width: 640px) {
+    .compare-row { grid-template-columns: 1fr; }
+  }
+
   /* ===== ADD-ONS ===== */
   .addon-box {
-    margin-top: 32px; margin-bottom: 24px; max-width: 780px; margin-left: auto; margin-right: auto;
-    background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
-    box-shadow: var(--shadow); padding: 24px 28px;
+    margin-top: 32px; margin-bottom: 24px; max-width: 820px; margin-left: auto; margin-right: auto;
   }
   .addon-box h4 {
     font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 12px;
   }
   .addon-box-intro {
-    font-size: 14px; color: var(--text-dim); line-height: 1.6; margin: 0 0 20px;
+    font-size: 14px; color: var(--text-dim); line-height: 1.6; margin: 0 0 24px;
   }
   .addon-box-cat {
     font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange); margin: 20px 0 8px;
+    text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange); margin: 28px 0 12px;
   }
   .addon-box-cat:first-of-type { margin-top: 0; }
-  .addon-box ul { list-style: none; margin: 0; padding: 0; }
-  .addon-box li {
-    font-size: 14px; color: var(--text-dim); line-height: 1.6; padding-left: 20px; position: relative;
-    margin-bottom: 8px;
+  .addon-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 4px;
   }
-  .addon-box li:last-child { margin-bottom: 0; }
-  .addon-box li::before { content: '+'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  .addon-card {
+    background: #fff; border: 1px solid var(--cream3); border-radius: 12px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .addon-card summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+  }
+  .addon-card summary::-webkit-details-marker { display: none; }
+  .addon-icon {
+    flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(200,90,20,0.1); display: flex; align-items: center; justify-content: center;
+  }
+  .addon-icon svg { width: 19px; height: 19px; stroke: var(--orange); fill: none; }
+  .addon-card-head { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .addon-card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14.5px; color: var(--navy); line-height: 1.3; }
+  .addon-card-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--orange); letter-spacing: 0.2px; }
+  .addon-card-toggle { flex-shrink: 0; font-size: 20px; color: var(--orange); font-weight: 700; transition: transform 0.2s; }
+  .addon-card[open] .addon-card-toggle { transform: rotate(45deg); }
+  .addon-card-desc { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; padding: 0 18px 18px 68px; margin: 0; }
+  @media (max-width: 640px) { .addon-grid { grid-template-columns: 1fr; } }
   .addon-box-note {
-    font-size: 12px; color: var(--text-dim); opacity: 0.75; font-style: italic; margin: 20px 0 0;
+    font-size: 12px; color: var(--text-dim); opacity: 0.75; font-style: italic; margin: 24px 0 0;
+  }
+
+  /* ===== ABLAUF-ICONS ===== */
+  .ablauf-icon-wrap { position: relative; width: 52px; height: 52px; margin: 0 auto 14px; }
+  .ablauf-icon {
+    width: 100%; height: 100%; border-radius: 50%; background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ablauf-icon svg { width: 24px; height: 24px; stroke: var(--cream); fill: none; }
+  .ablauf-badge {
+    position: absolute; bottom: -4px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--orange); color: #fff; border: 2px solid #fff;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
   }
 
   /* ===== FAQ ===== */
@@ -544,8 +589,7 @@
         <img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias Blumreich, RadlHias.TV" width="604" height="900" loading="lazy">
       </div>
       <div class="usp-flex-text">
-        <p>Es gibt viele Webagenturen, die dir eine Website für dein Fahrradgeschäft verkaufen. Die wenigsten davon haben je an einem Fahrrad geschraubt, im Verkaufsgespräch gestanden oder eine Saison im Fachhandel überlebt.</p>
-        <p><strong>Ich schon.</strong> Über 27 Jahre im Bike-Business – als Mechaniker, Werkstattleiter, Verkäufer, mit eigenem Bikeshop und in der Industrie bei KTM Fahrrad. Mehr zu diesen Stationen findest du auf <a href="history.html" class="inline-link">meiner Laufbahn-Seite</a>.</p>
+        <p>Es gibt viele Webagenturen, die dir eine Website für dein Fahrradgeschäft verkaufen – die wenigsten davon haben je an einem Fahrrad geschraubt oder eine Saison im Fachhandel überlebt. <strong>Ich schon:</strong> über 27 Jahre im Bike-Business, als Mechaniker, Werkstattleiter, Verkäufer, mit eigenem Bikeshop und in der Industrie bei KTM Fahrrad. Mehr dazu auf <a href="history.html" class="inline-link">meiner Laufbahn-Seite</a>.</p>
       </div>
     </div>
     <p>Das bedeutet für dich: Ich muss dir keine Grundlagen deiner eigenen Branche erklären lassen. Ich kenne die Fachbegriffe, das Saisongeschäft, die Servicelogik und die Erwartungen deiner Kundschaft – und übersetze das direkt in eine Website, die verkauft, statt nur gut auszusehen.</p>
@@ -646,10 +690,36 @@
 <!-- ===== EINWAND-HANDLING ===== -->
 <section class="b2b-section problem-section">
   <h2 class="b2b-section-title">Warum nicht einfach ein Baukasten-System oder eine günstige Agentur?</h2>
-  <div class="usp-card">
-    <p>Ein Wix- oder Jimdo-Baukasten kostet wenig, aber du siehst aus wie jeder zweite Fahrradladen im Umkreis. Kein echter Konfigurator, keine Anbindung an dein Sortiment, kein Verständnis für dein Saisongeschäft. Am Ende bastelst du doch alles selbst zusammen und verlierst Zeit, die du im Laden brauchst.</p>
-    <p>Eine günstige Webagentur kennt HTML, aber nicht dein Geschäft. Du erklärst erstmal, was ein Trekkingrad von einem Gravelbike unterscheidet, warum Servicebindung wichtig ist und wieso dein Kunde eine Anprobe braucht statt nur einen „Kaufen"-Button. Diese Erklärarbeit zahlst du mit – ob im Preis oder in Nacharbeit.</p>
-    <p>Ich bringe beides mit: Ich baue selbst Websites und Konfiguratoren, <strong>und</strong> ich kenne dein Geschäft von innen. Kein Erklärbedarf, keine Verzögerung durch Rückfragen zur Branche.</p>
+  <p class="b2b-section-sub">Der Unterschied für dich als Fahrradhändler mit eigenem Fachgeschäft, ganz konkret:</p>
+  <div class="compare-table">
+    <div class="compare-row compare-header">
+      <div class="compare-cell compare-cell-bad">Baukasten / günstige Agentur</div>
+      <div class="compare-cell compare-cell-good">Ich</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Sieht aus wie jeder zweite Fahrradladen</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> Individuelles Design</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Kein echter Konfigurator</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> Konfigurator inklusive/buchbar</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Keine Anbindung an dein Sortiment</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> Zugeschnitten auf deine Marken</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Kein Verständnis fürs Saisongeschäft</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> 27 Jahre Bike-Business-Erfahrung</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Du erklärst erst, was ein Trekkingrad von einem Gravelbike unterscheidet</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> Kenne Fachbegriffe, Servicelogik, Kundenerwartungen</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell compare-cell-bad"><span class="compare-cell-icon">✗</span> Erklärarbeit zahlst du im Preis oder in Nacharbeit</div>
+      <div class="compare-cell compare-cell-good"><span class="compare-cell-icon">✓</span> Keine Verzögerung durch Rückfragen zur Branche</div>
+    </div>
   </div>
 </section>
 
@@ -706,27 +776,151 @@
   <div class="addon-box">
     <h4>Add-ons: unabhängig vom Paket buchbar</h4>
     <p class="addon-box-intro">Alle Add-ons lassen sich auch <strong>nachträglich in eine bestehende Website integrieren</strong> – du musst also nicht deine ganze Seite neu bauen lassen, um z. B. nur den Konfigurator oder das Terminbuchungssystem zu bekommen. Ideal, wenn du mit deiner aktuellen Homepage zufrieden bist und nur gezielt ein Tool ergänzen willst.</p>
+
     <p class="addon-box-cat">Prozess- &amp; Automatisierungs-Tools</p>
-    <ul>
-      <li>Fahrradkonfigurator als Nachrüst-Modul (Berater-Funktion ohne Modelldatenbank) ca. 1.800–3.000 €</li>
-      <li>Fahrradkonfigurator als Nachrüst-Modul mit Modelldatenbank deiner Marken ca. 3.500–6.000 €</li>
-      <li>Werkstatt-/Terminbuchungssystem für Service &amp; Reparatur ca. 900–1.800 €</li>
-      <li>Service-Erinnerungs-Automation (automatische Erinnerung an Kunden zur Inspektion, z. B. per E-Mail) ca. 700–1.400 €, optional laufende Pflege</li>
-      <li>Gebrauchtrad-Ankauf-Rechner: Kunde gibt Radtyp &amp; Zustand ein, erhält automatisch eine Richtpreis-Spanne plus Anfrageformular ca. 1.500–3.000 €</li>
-      <li>Leihrad-Verwaltung mit Verfügbarkeitskalender und Online-Reservierung ca. 900–2.000 €</li>
-      <li>Newsletter-System-Integration ca. 400–900 €</li>
-    </ul>
+    <div class="addon-grid">
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Fahrradkonfigurator, Nachrüst-Modul</span>
+            <span class="addon-card-price">ca. 1.800–3.000 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Berater-Funktion ohne Modelldatenbank – ermittelt anhand Nutzung, Körpermaßen, Fahrstil und Budget eine Empfehlung (keine konkreten Modelle), endet mit Anfrageformular.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Fahrradkonfigurator mit Modelldatenbank</span>
+            <span class="addon-card-price">ca. 3.500–6.000 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Nachrüst-Modul mit Modelldatenbank deiner Marken – Ergebnis sind konkrete, bei dir erhältliche Modelle statt nur einer Ausstattungsidee.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Werkstatt-/Terminbuchungssystem</span>
+            <span class="addon-card-price">ca. 900–1.800 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Online-Terminbuchung für Service &amp; Reparatur, direkt in deine Website integriert.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Service-Erinnerungs-Automation</span>
+            <span class="addon-card-price">ca. 700–1.400 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Automatische Erinnerung an Kunden zur Inspektion, z. B. per E-Mail. Optional als laufende Pflege buchbar.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="16" y1="14" x2="16" y2="14.01"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Gebrauchtrad-Ankauf-Rechner</span>
+            <span class="addon-card-price">ca. 1.500–3.000 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Kunde gibt Radtyp &amp; Zustand ein, erhält automatisch eine Richtpreis-Spanne plus Anfrageformular.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/><path d="M12 17.5V14l-3-3 4-3 2 3h3"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Leihrad-Verwaltung</span>
+            <span class="addon-card-price">ca. 900–2.000 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Verfügbarkeitskalender mit Online-Reservierung für dein Leihrad-Angebot.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Newsletter-System-Integration</span>
+            <span class="addon-card-price">ca. 400–900 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Anbindung eines Newsletter-Tools an deine Website, inklusive Anmeldeformular.</p>
+      </details>
+    </div>
+
     <p class="addon-box-cat">Gamification</p>
-    <ul>
-      <li>Individualisiertes Spiel (wie „Tour de Hias") mit deinem Branding, auch als eigenständiges Produkt für Aktionen, Messen oder Social-Media-Kampagnen buchbar ca. 1.800–4.000 €</li>
-    </ul>
+    <div class="addon-grid">
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Individualisiertes Spiel („Tour de Hias")</span>
+            <span class="addon-card-price">ca. 1.800–4.000 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Mit deinem Branding, auch als eigenständiges Produkt für Aktionen, Messen oder Social-Media-Kampagnen buchbar.</p>
+      </details>
+    </div>
+
     <p class="addon-box-cat">Content &amp; Betreuung</p>
-    <ul>
-      <li>Fotografie &amp; Social-Media-Content ab 350 € (falls nicht bereits im Premium-Paket enthalten)</li>
-      <li>YouTube-Kurzformate/Reels ab 80 € pro Stück, Paket ab 500 € für 5 Stück</li>
-      <li>Erweiterte Betreuung (Content-Updates über das Standard-Paket hinaus)</li>
-      <li>Jährliche Pflege der Modelldatenbank (Premium-Konfigurator): Aktualisierung, wenn Hersteller neue Modelle bringen oder Modelle auslaufen. Ein fester, wiederkehrender Bestandteil der Betreuung</li>
-    </ul>
+    <div class="addon-grid">
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Fotografie &amp; Social-Media-Content</span>
+            <span class="addon-card-price">ab 350 €</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Falls nicht bereits im Premium-Paket enthalten.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">YouTube-Kurzformate/Reels</span>
+            <span class="addon-card-price">ab 80 € pro Stück</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Paket ab 500 € für 5 Stück.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Erweiterte Betreuung</span>
+            <span class="addon-card-price">nach Umfang</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Content-Updates über das Standard-Paket hinaus.</p>
+      </details>
+      <details class="addon-card">
+        <summary>
+          <span class="addon-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+          <span class="addon-card-head">
+            <span class="addon-card-name">Jährliche Pflege der Modelldatenbank</span>
+            <span class="addon-card-price">fester Betreuungs-Bestandteil</span>
+          </span>
+          <span class="addon-card-toggle">+</span>
+        </summary>
+        <p class="addon-card-desc">Aktualisierung, wenn Hersteller neue Modelle bringen oder Modelle auslaufen (Premium-Konfigurator).</p>
+      </details>
+    </div>
+
     <p class="addon-box-note">Preisspannen für die neuen Prozess-Tools sind erste grobe Schätzungen und werden noch gemeinsam feinjustiert.</p>
   </div>
 </section>
@@ -737,22 +931,42 @@
   <p class="b2b-section-sub">Unkompliziert, ohne Fachchinesisch und ohne dass du dich erklären musst.</p>
   <div class="ablauf-grid">
     <div class="ablauf-step">
+      <div class="ablauf-icon-wrap">
+        <span class="ablauf-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+        <span class="ablauf-badge">1</span>
+      </div>
       <h4>Erstkontakt</h4>
       <p>Kurzer Austausch – persönlich, per Anruf oder E-Mail. 15 Minuten reichen.</p>
     </div>
     <div class="ablauf-step">
+      <div class="ablauf-icon-wrap">
+        <span class="ablauf-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+        <span class="ablauf-badge">2</span>
+      </div>
       <h4>Live-Demo</h4>
       <p>Ich zeige dir radlhias.tv und wie das bei dir konkret aussehen würde.</p>
     </div>
     <div class="ablauf-step">
+      <div class="ablauf-icon-wrap">
+        <span class="ablauf-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></span>
+        <span class="ablauf-badge">3</span>
+      </div>
       <h4>Angebot</h4>
       <p>Klar strukturiert innerhalb von 48 Stunden – Startpaket, Upgrades, Betreuung.</p>
     </div>
     <div class="ablauf-step">
+      <div class="ablauf-icon-wrap">
+        <span class="ablauf-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></span>
+        <span class="ablauf-badge">4</span>
+      </div>
       <h4>Kickoff</h4>
       <p>Klarer Projektplan: Starter 2-3 Wochen, Business 3-5 Wochen, Premium 6-8 Wochen bis zum Livegang.</p>
     </div>
     <div class="ablauf-step">
+      <div class="ablauf-icon-wrap">
+        <span class="ablauf-icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+        <span class="ablauf-badge">5</span>
+      </div>
       <h4>Betreuung</h4>
       <p>Deine Seite bleibt aktuell – Anpassungen, SEO, Content laufend inklusive.</p>
     </div>
