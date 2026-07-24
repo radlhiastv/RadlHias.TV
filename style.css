@@ -241,13 +241,14 @@ footer {
   transition: color 0.2s;
 }
 .footer-nav a:hover { color: var(--blue-lt); }
-.footer-social { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; }
+.footer-social { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; }
 .footer-social a, .footer-social span {
   color: var(--cream);
-  font-size: 19px;
+  display: flex;
   text-decoration: none;
   transition: color 0.2s;
 }
+.footer-social svg { width: 20px; height: 20px; fill: currentColor; }
 .footer-social a:hover { color: var(--orange); }
 .footer-social span { opacity: 0.35; cursor: default; }
 .footer-bottom {
