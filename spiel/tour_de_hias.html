@@ -259,8 +259,9 @@
    KONFIG
    ============================================================ */
 const CONFIG = {
-  GEWINNSPIEL_AKTIV: false,
-  GEWINNSPIEL_TEXT: "Gewinnspiel läuft: Höchste Distanz im Monat gewinnt ein Radl Hias Überraschungspaket. Schreib deine Meter + Screenshot per DM an @radlhias.tv, um teilzunehmen.",
+  GEWINNSPIEL_AKTIV: true,
+  GEWINNSPIEL_DEADLINE: "31.08.2026",
+  GEWINNSPIEL_TEXT: "Gewinnspiel läuft bis 31.08.2026: Höchste Distanz gewinnt einen Rad-Service (exkl. Material). Teilnahme: Folge @radlhias.tv auf Instagram und schick mir deine Urkunde (unten laden) per DM. Nur für Biker aus 5120 St. Pantaleon.",
   LEADERBOARD_KEY: "radlhias-runner-leaderboard",
   LEADERBOARD_MAX: 20,
   LEADERBOARD_URL: "https://script.google.com/macros/s/AKfycby1NkFgk6QFF2JB0w3PpCOcYFXhyx9EPDpn89mePZNAqgayS24BG1m2DbmZv04Cdci-vA/exec", // Google-Apps-Script Web-App – global
@@ -1713,8 +1714,9 @@ function renderResult(finalScore){
     <button class="btn" id="submitBtn">In Bestenliste eintragen</button>
     <div id="submitMsg" class="hint" style="display:none;"></div>
     <div class="sharerow">
-      <button class="btn ghost" id="shareBtn">📸 Ergebnis-Bild speichern</button>
+      <button class="btn ghost" id="shareBtn">🏆 Urkunde herunterladen</button>
     </div>
+    ${CONFIG.GEWINNSPIEL_AKTIV ? `<div class="hint" style="text-align:center; margin-top:8px;">1. Urkunde herunterladen &nbsp;·&nbsp; 2. <a href="https://www.instagram.com/radlhias.tv" target="_blank" rel="noopener noreferrer">@radlhias.tv</a> auf Instagram folgen &nbsp;·&nbsp; 3. Urkunde per DM schicken<br>Teilnahmeberechtigt sind nur Biker aus 5120 St. Pantaleon.</div>` : ''}
     <div style="margin-top:18px;">
       <h2>Bestenliste</h2>
       <div class="tabs" id="resultTabs">
@@ -1838,9 +1840,21 @@ function saveShareImage(finalScore, playerName){
     ctx.font = "500 20px 'Barlow', sans-serif";
     ctx.fillText('zurückgelegte Distanz', W/2, 636);
 
-    ctx.fillStyle = '#E06820';
-    ctx.font = "700 20px 'Barlow Condensed', sans-serif";
-    ctx.fillText(CONFIG.GEWINNSPIEL_AKTIV ? 'Mitspielen & gewinnen: @radlhias.tv' : 'Jetzt selbst fahren auf radlhias.tv', W/2, H-52);
+    if(CONFIG.GEWINNSPIEL_AKTIV){
+      ctx.fillStyle = '#E06820';
+      ctx.font = "700 19px 'Barlow Condensed', sans-serif";
+      ctx.fillText('Folge @radlhias.tv & schick mir diese Urkunde per DM', W/2, H-86);
+      ctx.fillStyle = '#A8C8DC';
+      ctx.font = "500 14px 'Barlow', sans-serif";
+      ctx.fillText('Gewinn: 1× Rad-Service (exkl. Material) · Einsendeschluss ' + (CONFIG.GEWINNSPIEL_DEADLINE || ''), W/2, H-62);
+      ctx.fillStyle = '#A8C8DC';
+      ctx.font = "700 14px 'Barlow', sans-serif";
+      ctx.fillText('Nur teilnahmeberechtigt: Biker aus 5120 St. Pantaleon', W/2, H-40);
+    } else {
+      ctx.fillStyle = '#E06820';
+      ctx.font = "700 20px 'Barlow Condensed', sans-serif";
+      ctx.fillText('Jetzt selbst fahren auf radlhias.tv', W/2, H-52);
+    }
 
     return canvas;
   }

@@ -705,10 +705,161 @@
       }
       .reveal { opacity: 1 !important; transform: none !important; }
     }
+
+    /* ===== TOUR DE HIAS AKTIONS-POPUP ===== */
+    .promo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(10,18,26,0.72);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .promo-overlay.is-visible { opacity: 1; pointer-events: auto; }
+    .promo-modal {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%);
+      border: 1px solid rgba(255,183,135,0.35);
+      border-radius: 18px;
+      padding: 40px 32px 32px;
+      text-align: center;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,183,135,0.08), 0 0 60px rgba(224,104,32,0.35);
+      transform: translateY(18px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .promo-overlay.is-visible .promo-modal { transform: translateY(0) scale(1); }
+    .promo-sticker {
+      position: absolute;
+      top: -16px;
+      left: -16px;
+      background: var(--orange);
+      color: white;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 8px;
+      transform: rotate(-9deg);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 0 3px var(--navy);
+      white-space: nowrap;
+    }
+    .promo-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(245,241,235,0.12);
+      color: var(--cream);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .promo-close:hover { background: rgba(245,241,235,0.22); }
+    .promo-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: #ffb787;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .promo-eyebrow::before, .promo-eyebrow::after {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: #ffb787;
+      opacity: 0.6;
+    }
+    .promo-modal h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+      font-size: clamp(26px, 6vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .promo-modal p { color: #dbe6ee; font-size: 15px; line-height: 1.65; margin-bottom: 12px; }
+    .promo-modal p:last-of-type { margin-bottom: 24px; }
+    .promo-prize {
+      display: inline-block;
+      background: rgba(200,90,20,0.18);
+      border: 1px solid rgba(255,183,135,0.35);
+      border-radius: 10px;
+      padding: 10px 18px;
+      margin-bottom: 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+    .promo-prize strong { color: #ffb787; }
+    .promo-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 16px 34px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    .promo-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .promo-fine { margin-top: 16px; font-size: 12px; color: var(--blue-lt); }
+    @media (max-width: 480px) {
+      .promo-modal { padding: 36px 22px 26px; }
+    }
   </style>
 </head>
 
 <body>
+
+<!-- ===== TOUR DE HIAS AKTIONS-POPUP ===== -->
+<div class="promo-overlay" id="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promo-title">
+  <div class="promo-modal">
+    <div class="promo-sticker">Nur bis 31.8.!</div>
+    <button class="promo-close" id="promo-close" aria-label="Popup schließen">&times;</button>
+    <div class="promo-eyebrow">Aktion läuft bis 31.08.2026</div>
+    <h2 id="promo-title">Servus Nachbarn!<br>Mach mit bei der Tour de Hias</h2>
+    <p>Spiel dich durch mein kleines Fahrrad-Game, weiche Kindern, Autos &amp; Schlaglöchern aus und lad dir am Ende deine persönliche Urkunde herunter.</p>
+    <p>Folge mir auf <strong>Instagram (@radlhias.tv)</strong> und schick mir deine Urkunde per DM. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht hat, gewinnt einen <strong>Rad-Service bei mir</strong> (exklusive Material)!</p>
+    <div class="promo-prize">🏆 Gewinn: <strong>1× Rad-Service</strong><br>(exkl. Material)<br><br>Teilnahme: Instagram folgen + Urkunde per DM<br><br>Nur für Biker aus <strong>5120 St. Pantaleon</strong></div>
+    <br>
+    <a href="spiel/index.html" class="promo-cta">Jetzt mitspielen</a>
+    <div class="promo-fine">Einsendeschluss 31.08.2026 · Gewinner wird über die Bestenliste ermittelt</div>
+  </div>
+</div>
 
 <!-- ===== NAVIGATION ===== -->
 <nav class="main-nav">
@@ -1226,5 +1377,29 @@ observeReveals();
 </script>
 
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+
+<!-- Tour de Hias Aktions-Popup: Anzeige & bewusstes Schließen -->
+<script>
+(function () {
+  var STORAGE_KEY = 'radlhias_tour_promo_dismissed_2026';
+  if (sessionStorage.getItem(STORAGE_KEY)) return;
+
+  var overlay = document.getElementById('promo-overlay');
+  var closeBtn = document.getElementById('promo-close');
+  if (!overlay || !closeBtn) return;
+
+  function dismiss() {
+    overlay.classList.remove('is-visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+  }
+
+  closeBtn.addEventListener('click', dismiss);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-visible')) dismiss();
+  });
+
+  setTimeout(function () { overlay.classList.add('is-visible'); }, 400);
+})();
+</script>
 </body>
 </html>
