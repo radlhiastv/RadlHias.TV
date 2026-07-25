@@ -1,635 +1,1083 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tour de Hias – kostenloses Radl-Browsergame von RadlHias.TV</title>
-<meta name="description" content="Tour de Hias ist das kostenlose Radl-Browsergame von RadlHias.TV: weiche Schlaglöchern, Autos und Kindern aus, sammle Sterne und knack die Bestenliste. Screenshots, Anleitung & direkt spielbar – ganz ohne Installation.">
-<link rel="canonical" href="https://radlhias.tv/spiel/">
-<meta property="og:title" content="Tour de Hias – kostenloses Radl-Browsergame von RadlHias.TV">
-<meta property="og:description" content="Weiche Schlaglöchern, Autos und Kindern aus, sammle Sterne und knack die Bestenliste. Kostenlos, direkt im Browser, ohne Anmeldung.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://radlhias.tv/spiel/">
-<meta property="og:site_name" content="RadlHias.TV">
-<meta property="og:locale" content="de_AT">
-<meta property="og:image" content="https://radlhias.tv/spiel/screenshots/tour-de-hias-screenshot-action.png">
-<meta property="og:image:width" content="760">
-<meta property="og:image:height" content="1040">
+  <meta charset="UTF-8">
+  <script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RadlHias.TV – Fahrrad-Service & Beratung | Salzburg, Innviertel</title>
+  <meta name="description" content="Unabhängiger Fahrrad-Service & Beratung im Raum Salzburg / Innviertel (St. Pantaleon) von Mathias Blumreich – 27 Jahre Bike-Erfahrung. Kostenloser Konfigurator, Gebrauchtcheck & Bike-Fitting. Kein Verkaufsdruck, keine Markenwerbung.">
+  <link rel="canonical" href="https://radlhias.tv/">
+  <meta property="og:title" content="RadlHias.TV – Fahrrad-Service & Beratung | Salzburg, Innviertel">
+  <meta property="og:description" content="Unabhängiger Fahrrad-Service & Beratung im Raum Salzburg / Innviertel mit über 27 Jahren Erfahrung. Kein Sponsoring. Keine Provision.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://radlhias.tv/">
+  <meta property="og:image" content="https://radlhias.tv/Fotos/RadlHias_Portrait_2026.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tour de Hias – kostenloses Radl-Browsergame von RadlHias.TV">
-<meta name="twitter:description" content="Weiche Schlaglöchern, Autos und Kindern aus, sammle Sterne und knack die Bestenliste. Kostenlos, direkt im Browser, ohne Anmeldung.">
-<meta name="twitter:image" content="https://radlhias.tv/spiel/screenshots/tour-de-hias-screenshot-action.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "VideoGame",
-  "name": "Tour de Hias",
-  "url": "https://radlhias.tv/spiel/",
-  "description": "Kostenloses Radl-Browsergame von RadlHias.TV: Schlaglöchern, Autos und Kindern ausweichen, unter Flugzeugen durchducken, Sterne sammeln und die Bestenliste knacken.",
-  "genre": "Arcade",
-  "gamePlatform": "Web Browser",
-  "applicationCategory": "Game",
-  "operatingSystem": "Beliebig (Browser)",
-  "playMode": "SinglePlayer",
-  "inLanguage": "de",
-  "isAccessibleForFree": true,
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "EUR"
-  },
-  "screenshot": [
-    "https://radlhias.tv/spiel/screenshots/tour-de-hias-screenshot-dorf.png",
-    "https://radlhias.tv/spiel/screenshots/tour-de-hias-screenshot-action.png"
-  ],
-  "author": {
-    "@type": "Person",
-    "name": "Mathias Blumreich",
-    "url": "https://radlhias.tv/"
-  },
-  "publisher": {
-    "@type": "Organization",
+<meta name="twitter:title" content="RadlHias.TV – Fahrrad-Service & Beratung | Salzburg, Innviertel">
+<meta name="twitter:description" content="Unabhängiger Fahrrad-Service & Beratung im Raum Salzburg / Innviertel mit über 27 Jahren Erfahrung. Kein Sponsoring. Keine Provision.">
+<meta name="twitter:image" content="https://radlhias.tv/Fotos/RadlHias_Portrait_2026.jpg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
     "name": "RadlHias.TV",
-    "url": "https://radlhias.tv/"
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "RadlHias.TV", "item": "https://radlhias.tv/" },
-    { "@type": "ListItem", "position": 2, "name": "Tour de Hias", "item": "https://radlhias.tv/spiel/" }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Was kostet Tour de Hias?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Nichts. Tour de Hias ist zu 100 % kostenlos – ohne Werbung, ohne In-App-Käufe und ohne Abo." }
-    },
-    {
-      "@type": "Question",
-      "name": "Muss ich etwas installieren oder mich anmelden?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Nein. Das Spiel läuft direkt im Browser – auf Handy, Tablet und Desktop. Es ist keine Installation und keine Registrierung nötig." }
-    },
-    {
-      "@type": "Question",
-      "name": "Wie wird Tour de Hias gesteuert?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Mit der Pfeiltaste nach oben springst du (kurz tippen für einen kleinen Hupfer, halten für einen hohen Sprung), mit der Pfeiltaste nach unten duckst du dich unter Flugzeugen durch. Am Handy gibt es dafür eigene Touch-Buttons." }
-    },
-    {
-      "@type": "Question",
-      "name": "Wer steckt hinter dem Spiel?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Tour de Hias ist ein Feierabend-Projekt von Mathias Blumreich, dem Radl Hias von RadlHias.TV – Grafik und Sound sind komplett selbst gebaut, ohne fertige Spiele-Engine." }
+    "url": "https://radlhias.tv/",
+    "description": "Fahrrad-Service & unabhängige Bike-Beratung im Raum Salzburg / Innviertel mit über 27 Jahren Erfahrung. Kein Sponsoring. Keine Provision.",
+    "author": {
+      "@type": "Person",
+      "name": "Mathias Blumreich",
+      "url": "https://radlhias.tv/",
+      "jobTitle": "Fahrradmechaniker & unabhängiger Bike-Berater",
+      "sameAs": [
+        "https://www.instagram.com/radlhias.tv/"
+      ]
     }
-  ]
-}
-</script>
-<link rel="icon" type="image/x-icon" href="../favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
-<style>
-  :root {
-    --navy: #1c3448;
-    --navy-dark: #111e28;
-    --orange: #c85a14;
-    --orange-light: #e06820;
-    --cream: #f5f1eb;
-    --cream2: #e8e2d8;
-    --cream3: #ddd6c8;
-    --text: #1c3448;
-    --text-dim: #5a7a8a;
-    --blue-muted: #a8c8dc;
-    --card-bg: #ffffff;
-    --card-border: #ddd6c8;
-    --shadow: 0 2px 20px rgba(28,52,72,0.10);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; overflow-x: hidden; }
-  body { font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 
-  /* ===== GAME HERO (Titelbild im Stil einer Store-Keyart) ===== */
-  .game-hero {
-    position: relative;
-    margin-top: 56px;
-    height: clamp(460px, 68vw, 660px);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    color: var(--cream);
-  }
-  .game-hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 52%;
-  }
-  .game-hero-tint {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(155deg, rgba(28,52,72,0.55) 0%, rgba(28,52,72,0.25) 45%, rgba(200,90,20,0.22) 100%);
-    mix-blend-mode: multiply;
-  }
-  .game-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 30%, transparent 30%, rgba(8,13,18,0.6) 100%);
-  }
-  .game-hero::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 78%;
-    background: linear-gradient(to top, rgba(8,13,18,1) 0%, rgba(8,13,18,0.92) 22%, rgba(8,13,18,0.55) 52%, rgba(8,13,18,0.08) 82%, transparent 100%);
-  }
-  .game-hero-tag {
-    position: relative;
-    z-index: 2;
-    align-self: flex-start;
-    margin: 22px 0 0 24px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(8,13,18,0.5);
-    border: 1px solid rgba(245,241,235,0.25);
-    backdrop-filter: blur(6px);
-    color: var(--cream2);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 11.5px;
-    padding: 7px 14px;
-    border-radius: 20px;
-  }
-  .game-hero-tag b { color: var(--orange-light); font-weight: 700; }
-  .game-hero-content { position: relative; z-index: 2; padding: 0 26px 32px; }
-  .game-hero-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: clamp(44px, 9vw, 104px);
-    line-height: 0.92;
-    color: #fff;
-    text-shadow:
-      0 1px 0 rgba(8,13,18,0.9), 0 -1px 0 rgba(8,13,18,0.9),
-      1px 0 0 rgba(8,13,18,0.9), -1px 0 0 rgba(8,13,18,0.9),
-      0 6px 30px rgba(0,0,0,0.85), 0 2px 4px rgba(0,0,0,0.6);
-    margin-bottom: 14px;
-  }
-  .game-hero-logo span { color: var(--orange-light); }
-  .game-hero-tagline {
-    max-width: 560px;
-    font-size: 15.5px;
-    color: var(--cream2);
-    line-height: 1.65;
-    margin-bottom: 24px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-  }
-  .game-hero-content .btn-play { box-shadow: 0 10px 30px rgba(224,104,32,0.45); }
-  .game-hero-meta {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 26px;
-    margin-top: 24px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(245,241,235,0.18);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--blue-muted);
-  }
-  .game-hero-meta span b { color: var(--cream); font-weight: 700; }
-  @media (max-width: 560px) {
-    .game-hero-meta { gap: 8px 18px; }
-  }
-  .btn-play {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 18px;
-    background: var(--orange);
-    color: #fff;
-    text-decoration: none;
-    padding: 17px 34px;
-    border-radius: 10px;
-    transition: background 0.15s ease, transform 0.1s ease;
-  }
-  .btn-play:hover { background: var(--orange-light); transform: translateY(-1px); }
+  <style>
+    body { background: var(--cream); }
 
-  /* ===== SECTION WRAP ===== */
-  section.content-block { max-width: 880px; margin: 0 auto; padding: 56px 20px; }
-  .content-block h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: clamp(26px, 5vw, 36px);
-    color: var(--navy);
-    margin-bottom: 18px;
-    text-align: center;
-  }
-  .content-block > p.lead {
-    max-width: 640px;
-    margin: 0 auto 8px;
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 16px;
-    line-height: 1.7;
-  }
+    /* ===== HERO (Foto-Collage) ===== */
+    .hero {
+      margin-top: 56px;
+      position: relative;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--navy);
+      padding: 60px 20px 50px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 46%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--orange);
+      clip-path: polygon(100% 0, 100% 100%, 40% 100%);
+      opacity: 0.9;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      max-width: 1150px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.7fr 1.6fr 0.7fr;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-photos { display: flex; flex-direction: column; gap: 18px; }
+    .hero-photos.right { align-items: flex-end; }
+    .hero-tile {
+      position: relative;
+      background: #fbfaf7;
+      padding: 10px 10px 0;
+      border-radius: 2px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.6) inset;
+      width: 78%;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+    .hero-tile:hover {
+      transform: rotate(var(--rot, 0deg)) translateY(-6px) scale(1.04);
+      box-shadow: 0 22px 42px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.6) inset;
+      z-index: 2;
+    }
+    .hero-tile::before {
+      content: '';
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      width: 54px;
+      height: 20px;
+      background: rgba(230,224,210,0.55);
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      transform: translateX(-50%) rotate(-4deg);
+    }
+    .hero-photos.left .hero-tile:first-child { width: 92%; --rot: -7deg; }
+    .hero-photos.left .hero-tile:last-child { width: 68%; align-self: flex-end; --rot: 5deg; margin-top: -10px; }
+    .hero-photos.right .hero-tile:first-child { width: 92%; --rot: 7deg; }
+    .hero-photos.right .hero-tile:last-child { width: 68%; align-self: flex-start; --rot: -5deg; margin-top: -10px; }
+    .hero-photos.left .hero-tile:first-child::before { transform: translateX(-50%) rotate(3deg); }
+    .hero-photos.left .hero-tile:last-child::before { transform: translateX(-50%) rotate(-5deg); }
+    .hero-photos.right .hero-tile:first-child::before { transform: translateX(-50%) rotate(-3deg); }
+    .hero-photos.right .hero-tile:last-child::before { transform: translateX(-50%) rotate(5deg); }
+    .polaroid-photo { overflow: hidden; background: #111; }
+    .polaroid-photo img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1/1; object-position: center; }
+    .polaroid-photo img.photo-top { object-position: center 8%; }
+    .polaroid-year {
+      display: block;
+      text-align: center;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--navy);
+      padding: 9px 0 12px;
+    }
 
-  /* ===== SCREENSHOTS ===== */
-  .shot-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 36px;
-  }
-  .shot-card {
-    background: var(--navy-dark);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--card-border);
-  }
-  .shot-card img { display: block; width: 100%; height: auto; }
-  .shot-caption {
-    padding: 12px 14px;
-    font-size: 13px;
-    color: var(--blue-muted);
-    background: var(--navy-dark);
-    text-align: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-  @media (max-width: 640px) {
-    .shot-grid { grid-template-columns: 1fr; }
-  }
+    .hero-center { text-align: center; color: var(--cream); padding: 0 6px; }
+    .hero-logo-badge { width: 117px; height: auto; margin: 0 auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
+    .hero-bio {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #dbe6ee;
+      margin: 0 auto 16px;
+      max-width: 460px;
+    }
+    .hero-bio strong { color: var(--cream); }
+    .hero-bio:last-of-type { margin-bottom: 0; }
 
-  /* ===== STEPS ===== */
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-top: 36px;
-  }
-  .step-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 22px 18px;
-    text-align: center;
-    box-shadow: var(--shadow);
-  }
-  .step-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 28px;
-    color: var(--orange);
-    margin-bottom: 8px;
-  }
-  .step-card h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 14.5px;
-    color: var(--navy);
-    margin-bottom: 8px;
-  }
-  .step-card p { font-size: 13.5px; color: var(--text-dim); line-height: 1.55; }
-  @media (max-width: 760px) {
-    .steps { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 440px) {
-    .steps { grid-template-columns: 1fr; }
-  }
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-photos { flex-direction: row; justify-content: center; order: 2; margin-top: 30px; }
+      .hero-photos.left .hero-tile:first-child,
+      .hero-photos.right .hero-tile:first-child { width: 46%; margin-top: 0; }
+      .hero-photos.left .hero-tile:last-child,
+      .hero-photos.right .hero-tile:last-child { width: 46%; align-self: center; margin-top: 0; }
+      .hero-photos.left .hero-tile:first-child { --rot: -5deg; }
+      .hero-photos.left .hero-tile:last-child { --rot: 3deg; }
+      .hero-photos.right .hero-tile:first-child { --rot: 5deg; }
+      .hero-photos.right .hero-tile:last-child { --rot: -3deg; }
+      .hero-center { order: 1; }
+      .hero::before { width: 100%; clip-path: polygon(100% 0, 100% 30%, 0 0); opacity: 0.85; }
+    }
 
-  /* ===== LEGEND (Hindernisse & Sammelobjekte) ===== */
-  .legend-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    margin-top: 36px;
-  }
-  .legend-col-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-  .legend-col-title.good { color: var(--blue); }
-  .legend-col-title.bad { color: var(--orange); }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14.5px;
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-  /* Original-Pictogramme aus dem Spiel – auf Navy-Kachel wie im Game */
-  .legend-item .lem {
-    flex-shrink: 0;
-    width: 46px;
-    height: 46px;
-    padding: 8px;
-    background: linear-gradient(180deg, #16273D 0%, #0A1219 100%);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-  }
-  @media (max-width: 560px) {
-    .legend-grid { grid-template-columns: 1fr; gap: 20px; }
-  }
+    /* ===== FEATURE BAR ===== */
+    .feature-bar {
+      background: var(--cream);
+      position: relative;
+      z-index: 1;
+      padding: 0;
+    }
+    .feature-bar-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 32px 20px;
+    }
+    .feature-item {
+      text-align: center;
+      color: var(--navy);
+      max-width: 220px;
+      flex: 1 1 190px;
+      text-decoration: none;
+      padding: 14px 14px;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .feature-item:hover { background: rgba(28,52,72,0.06); }
+    .feature-item .fi-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 12px;
+      display: block;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .feature-item:hover .fi-icon { transform: scale(1.15) rotate(-6deg); }
+    .feature-item .fi-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      min-height: 2.3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+    }
+    .feature-item .fi-desc { font-size: 15px; color: var(--text-dim); }
 
-  /* ===== FEATURES ===== */
-  .feature-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 36px;
-  }
-  .feature-list li {
-    list-style: none;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    font-size: 14.5px;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    box-shadow: var(--shadow);
-  }
-  .feature-list li strong { color: var(--navy); }
-  @media (max-width: 620px) {
-    .feature-list { grid-template-columns: 1fr; }
-  }
+    /* ===== VALUE HERO (Nutzenversprechen) ===== */
+    .value-hero {
+      position: relative;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        var(--navy);
+      padding: 66px 20px 56px;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .value-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+    .value-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--orange);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .value-hero-eyebrow::before,
+    .value-hero-eyebrow::after {
+      content: '';
+      width: 26px;
+      height: 2px;
+      background: var(--orange);
+      opacity: 0.55;
+    }
+    .value-hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--cream);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .value-hero p { color: var(--cream); font-size: 18px; line-height: 1.6; opacity: 0.92; }
 
-  /* ===== FAQ ===== */
-  .faq-list { max-width: 680px; margin: 36px auto 0; }
-  .faq-item {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    margin-bottom: 12px;
-    padding: 18px 20px;
-  }
-  .faq-item h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 16px;
-    color: var(--navy);
-    margin-bottom: 8px;
-  }
-  .faq-item p { font-size: 14.5px; color: var(--text-dim); line-height: 1.65; }
-  .faq-item p a { color: var(--orange); }
+    /* Kennzahlen mit Count-up */
+    .value-stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 0;
+      max-width: 640px;
+      margin: 34px auto 0;
+    }
+    .vstat {
+      position: relative;
+      flex: 1 1 0;
+      min-width: 150px;
+      padding: 6px 20px;
+    }
+    .vstat + .vstat::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 48px;
+      background: rgba(245,241,235,0.18);
+    }
+    .vstat-num {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(38px, 6vw, 52px);
+      line-height: 1;
+      color: var(--cream);
+    }
+    .vstat-label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 12.5px;
+      color: var(--blue-lt);
+      margin-top: 9px;
+      line-height: 1.3;
+    }
 
-  /* ===== BOTTOM CTA ===== */
-  .cta-block {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2, #254560) 100%);
-    color: var(--cream);
-    text-align: center;
-    padding: 56px 20px;
-  }
-  .cta-block h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: clamp(24px, 5vw, 32px);
-    margin-bottom: 14px;
-  }
-  .cta-block p { max-width: 480px; margin: 0 auto 26px; color: #dbe6ee; font-size: 15.5px; }
-</style>
+    @media (max-width: 640px) {
+      .value-stats { max-width: 340px; }
+      .vstat { flex: 1 1 40%; }
+      .vstat:nth-child(3) { flex: 1 1 60%; margin-top: 4px; }
+      .vstat:nth-child(3)::before { display: none; }
+    }
+
+    /* ===== SECTION SHARED ===== */
+    .section { max-width: 1100px; margin: 0 auto; padding: 64px 20px; }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-bottom: 40px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== FÜR WEN (SEO-Textblock) ===== */
+    .fuer-wen {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 20px;
+    }
+    .fuer-wen h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--navy);
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .fuer-wen h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      font-size: 19px;
+      line-height: 1.25;
+      margin: 28px 0 12px;
+    }
+    .fuer-wen p {
+      line-height: 1.6;
+      margin-bottom: 16px;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+    }
+    .fuer-wen p:last-child { margin-bottom: 0; }
+
+    /* ===== KONFIGURATOR-WERBEBANNER ===== */
+    .kfg-banner { position: relative; background: var(--navy); }
+    .kfg-banner-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .kfg-banner-media > img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .kfg-banner-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(16,28,38,0.9) 0%,
+        rgba(16,28,38,0.55) 24%,
+        rgba(16,28,38,0) 42%,
+        rgba(16,28,38,0) 58%,
+        rgba(16,28,38,0.55) 76%,
+        rgba(16,28,38,0.9) 100%);
+    }
+    .kfg-banner-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .kfg-col { max-width: 300px; }
+    .kfg-col-left { max-width: 480px; }
+    .kfg-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffb787;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .kfg-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--cream);
+      font-size: clamp(44px, 6vw, 64px);
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      margin: 0 0 36px;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+    }
+    .kfg-checks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .kfg-checks li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--cream);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.55);
+    }
+    .kfg-checks li::before {
+      content: '✓';
+      color: var(--orange);
+      background: rgba(245,241,235,0.18);
+      width: 18px; height: 18px;
+      min-width: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10.5px;
+      margin-top: 1px;
+    }
+    .kfg-features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .kfg-features li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--cream);
+      font-size: 19px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .kfg-features .kf-check {
+      color: var(--orange);
+      background: rgba(245,241,235,0.18);
+      width: 28px; height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .kfg-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 22px 48px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    .kfg-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .kfg-cta:active { transform: translateY(0) scale(0.97); }
+    .kfg-stats {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 18px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue-lt);
+    }
+    .kfg-stats strong { color: var(--cream); }
+    .kfg-stats .dot { opacity: 0.4; }
+    @media (max-width: 760px) {
+      .kfg-banner-media { aspect-ratio: unset; min-height: 340px; }
+      .kfg-banner-media > img { position: absolute; }
+      .kfg-banner-scrim {
+        background: linear-gradient(180deg,
+          rgba(16,28,38,0.88) 0%,
+          rgba(16,28,38,0.55) 22%,
+          rgba(16,28,38,0.55) 78%,
+          rgba(16,28,38,0.92) 100%);
+      }
+      .kfg-banner-inner { height: auto; flex-direction: column; justify-content: flex-start; padding: 32px 20px; text-align: center; gap: 30px; }
+      .kfg-col { max-width: 100%; margin: 0 auto; }
+      .kfg-checks, .kfg-features { align-items: center; }
+      .kfg-checks li, .kfg-features li { text-align: left; }
+    }
+
+    /* ===== BLOG TEASER ===== */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .blog-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--cream2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(28,52,72,0.15); }
+    .blog-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; transition: transform 0.45s ease; }
+    .blog-card:hover img { transform: scale(1.06); }
+    .blog-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .blog-card-cat {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(200,90,20,0.12);
+      color: var(--orange);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .blog-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .blog-card-excerpt { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; flex: 1; }
+    .blog-card-date { font-size: 12px; color: var(--text-dim); }
+    .blog-view-all { text-align: center; }
+    .btn-view-all {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--cream);
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .btn-view-all:hover { background: var(--navy2); }
+
+    /* ===== KONTAKT ===== */
+    .kontakt-section {
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+    }
+    .kontakt-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 36px 30px;
+      text-align: center;
+    }
+    .kontakt-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--blue-lt);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .kontakt-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: #dbe6ee;
+      margin-bottom: 24px;
+    }
+    .btn-mail {
+      display: block;
+      background: var(--orange);
+      color: white;
+      text-align: center;
+      padding: 15px 24px;
+      border-radius: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: background 0.2s;
+    }
+    .btn-mail:hover { background: #a04a10; }
+    .kontakt-email-row {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .kontakt-email-row span { font-size: 14px; color: var(--cream); font-weight: 600; word-break: break-all; }
+    .kontakt-copy-btn {
+      flex-shrink: 0;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .kontakt-note { font-size: 12px; color: var(--blue-lt); margin-top: 16px; line-height: 1.6; }
+
+
+    /* ===== ADMIN (versteckt, Ctrl+Shift+A) ===== */
+    #admin-toggle {
+      position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+      background: rgba(28,52,72,0.85); border: none; border-radius: 50%;
+      color: var(--cream); font-size: 22px; cursor: pointer; z-index: 999;
+      display: none; align-items: center; justify-content: center;
+    }
+    #admin-toggle.visible { display: flex; }
+
+    @media (max-width: 640px) {
+      .hero { min-height: 460px; }
+      .hero-inner { padding: 40px 20px 36px; }
+    }
+
+    /* ===== SCROLL REVEAL (Micro-Interaktion) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.22,0.61,0.36,1), transform 0.65s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+    .feature-item.reveal:nth-child(1) { transition-delay: 0ms; }
+    .feature-item.reveal:nth-child(2) { transition-delay: 70ms; }
+    .feature-item.reveal:nth-child(3) { transition-delay: 140ms; }
+    .feature-item.reveal:nth-child(4) { transition-delay: 210ms; }
+    .feature-item.reveal:nth-child(5) { transition-delay: 280ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal.in-view, .hero-tile, .fi-icon, .blog-card img, .kfg-cta {
+        transition: none !important;
+      }
+      .reveal { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ===== TOUR DE HIAS AKTIONS-POPUP ===== */
+    .promo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(10,18,26,0.72);
+      backdrop-filter: blur(3px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 56px 20px 20px;
+      box-sizing: border-box;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .promo-overlay.is-visible { opacity: 1; pointer-events: auto; }
+    .promo-modal {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      margin: 20px auto;
+      background:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+        linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%);
+      border: 1px solid rgba(255,183,135,0.35);
+      border-radius: 18px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,183,135,0.08), 0 0 60px rgba(224,104,32,0.35);
+      transform: translateY(18px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .promo-overlay.is-visible .promo-modal { transform: translateY(0) scale(1); }
+    .promo-hero {
+      position: relative;
+      height: 200px;
+      margin-bottom: -12px;
+    }
+    .promo-hero img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 70%;
+    }
+    .promo-hero::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 90px;
+      background: linear-gradient(to bottom, transparent, var(--navy) 85%);
+    }
+    .promo-body { padding: 24px 32px 32px; }
+    .promo-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 1;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(245,241,235,0.12);
+      color: var(--cream);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .promo-close:hover { background: rgba(245,241,235,0.22); }
+    .promo-modal h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+      font-size: clamp(26px, 6vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .promo-modal p { color: #dbe6ee; font-size: 15px; line-height: 1.65; margin-bottom: 12px; }
+    .promo-modal p:last-of-type { margin-bottom: 24px; }
+    .promo-prize {
+      display: inline-block;
+      background: rgba(200,90,20,0.18);
+      border: 1px solid rgba(255,183,135,0.35);
+      border-radius: 10px;
+      padding: 10px 18px;
+      margin-bottom: 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+    .promo-prize strong { color: #ffb787; }
+    .promo-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 16px 34px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+    .promo-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .promo-fine { margin-top: 16px; font-size: 12px; color: var(--blue-lt); }
+    @media (max-width: 480px) {
+      .promo-hero { height: 160px; }
+      .promo-body { padding: 20px 22px 26px; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== NAV ===== -->
+<!-- ===== TOUR DE HIAS AKTIONS-POPUP ===== -->
+<div class="promo-overlay" id="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promo-title">
+  <div class="promo-modal">
+    <div class="promo-hero"><img src="img/Tour-de-Hias-web.jpg" alt="Nächtliche Radltour aus der Fahrer-Perspektive"></div>
+    <button class="promo-close" id="promo-close" aria-label="Popup schließen">&times;</button>
+    <div class="promo-body">
+      <h2 id="promo-title">Servus Nachbarn!<br>Mach mit bei der Tour de Hias</h2>
+      <p>Spiel dich durch mein kleines Fahrrad-Game, weiche Kindern, Autos &amp; Schlaglöchern aus und lad dir am Ende deine persönliche Urkunde herunter.</p>
+      <p>Folge mir auf <strong>Instagram (@radlhias.tv)</strong> und schick mir deine Urkunde per DM. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht hat, gewinnt einen <strong>Rad-Service bei mir</strong> (exklusive Material)!</p>
+      <div class="promo-prize">🏆 Gewinn: <strong>1× Rad-Service</strong><br>(exkl. Material)<br><br>Teilnahme: Instagram folgen + Urkunde per DM<br><br>Nur für Biker aus <strong>5120 St. Pantaleon</strong></div>
+      <br>
+      <a href="spiel/index.html" class="promo-cta">Jetzt mitspielen</a>
+      <div class="promo-fine">Einsendeschluss 31.08.2026 · Gewinner wird über die Bestenliste ermittelt</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NAVIGATION ===== -->
 <nav class="main-nav">
-  <a href="../index.html" class="nav-logo">RadlHias.TV</a>
+  <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">RadlHias.TV</a>
   <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
   <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
     <span></span><span></span><span></span>
   </label>
   <div class="nav-links">
-    <a href="../konfigurator.html">Konfigurator</a>
-    <a href="../index.html#blog">Blog</a>
-    <a href="../videos.html">Videos</a>
-    <a href="../bikeservice.html">Bike Service</a>
-    <a href="index.html" class="active">Tour de Hias</a>
-    <a href="../faq.html">FAQ</a>
-    <a href="../history.html">Meine Laufbahn</a>
-    <a href="../index.html#kontakt" class="nav-cta">Kontakt</a>
+    <a href="konfigurator.html">Konfigurator</a>
+    <a href="#blog">Blog</a>
+    <a href="videos.html">Videos</a>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="spiel/index.html">Tour de Hias</a>
+    <a href="faq.html">FAQ</a>
+    <a href="history.html">Meine Laufbahn</a>
+    <a href="#kontakt" class="nav-cta">Kontakt</a>
   </div>
 </nav>
 
-<!-- ===== GAME HERO ===== -->
-<section class="game-hero">
-  <img class="game-hero-bg" src="../img/Tour-de-Hias-web.jpg" alt="Nächtliche Radltour aus der Fahrer-Perspektive – Szene aus Tour de Hias" loading="eager" fetchpriority="high">
-  <div class="game-hero-tint"></div>
-  <div class="game-hero-tag">Kostenloses Browsergame · <b>RadlHias.TV</b></div>
-  <div class="game-hero-content">
-    <h1 class="game-hero-logo">Tour <span>de Hias</span></h1>
-    <p class="game-hero-tagline">Schwing dich aufs virtuelle Radl: Weiche Schlaglöchern, Autos und Kindern aus, duck dich unter tieffliegenden Flugzeugen weg und schnapp dir Sterne für Bonuspunkte. Wie weit schaffst du es, bis der Radl Hias ausgebremst wird?</p>
-    <a href="tour_de_hias.html" class="btn-play">🚲 Jetzt kostenlos spielen</a>
-    <div class="game-hero-meta">
-      <span>Genre <b>Arcade</b></span>
-      <span>Plattform <b>Browser</b></span>
-      <span>Preis <b>Kostenlos</b></span>
-      <span>Anmeldung <b>Keine</b></span>
-    </div>
-  </div>
-</section>
+<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
+<section class="value-hero">
+  <div class="value-hero-inner">
+    <div class="value-hero-eyebrow">Bei RadlHias.TV profitierst Du von</div>
+    <h1>Wissen &amp; Erfahrung aus mehr als <span class="js-years">27</span> Jahren. Ohne etwas kaufen zu müssen!</h1>
+    <p>Niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
 
-<!-- ===== SCREENSHOTS ===== -->
-<section class="content-block">
-  <h2>So sieht's aus</h2>
-  <p class="lead">Echte Ausschnitte aus dem Spiel: entspannte Dorf-Runde bei Nacht und mittendrin im Verkehr – Schlagloch, Auto und Flugzeug gleichzeitig.</p>
-  <div class="shot-grid">
-    <div class="shot-card">
-      <img src="screenshots/tour-de-hias-screenshot-dorf.png" alt="Tour de Hias Spielszene: Radl Hias fährt nachts durch das Dorf" loading="lazy" width="760" height="1040">
-      <div class="shot-caption">Ruhige Fahrt durchs Dorf</div>
-    </div>
-    <div class="shot-card">
-      <img src="screenshots/tour-de-hias-screenshot-action.png" alt="Tour de Hias Spielszene mit Schlagloch, Auto und Flugzeug als Hindernisse" loading="lazy" width="760" height="1040">
-      <div class="shot-caption">Schlagloch, Auto &amp; Flugzeug im Anmarsch</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SO SPIELST DU ===== -->
-<section class="content-block" style="background:var(--cream2); border-radius:20px;">
-  <h2>So spielst du</h2>
-  <p class="lead">Die Steuerung ist bewusst simpel gehalten – Pfeiltasten oder Touch-Buttons, mehr braucht's nicht.</p>
-  <div class="steps">
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <h3>Losfahren</h3>
-      <p>Öffne das Spiel im Browser und drück auf „Los geht's" – ganz ohne Download oder Registrierung.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <h3>Springen</h3>
-      <p>Pfeiltaste hoch (oder „Springen"-Button): kurz tippen für einen Hupfer, halten für einen hohen Sprung.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">3</div>
-      <h3>Ducken</h3>
-      <p>Pfeiltaste runter (oder „Ducken"-Button) halten, um unter tieffliegenden Flugzeugen durchzurutschen.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">4</div>
-      <h3>Punkten</h3>
-      <p>Sammle Sterne für Bonuspunkte und trag deine Distanz in die Bestenliste ein.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ===== HINDERNISSE & SAMMELOBJEKTE (Original-Pictogramme aus dem Spiel) ===== -->
-<section class="content-block">
-  <h2>Einsammeln &amp; ausweichen</h2>
-  <p class="lead">Drei Szenen – Dorf, Wald und Alm – mit immer neuen Hindernissen, die dir laufend schneller entgegenkommen. So sehen sie im Spiel aus:</p>
-  <div class="legend-grid">
-    <div>
-      <div class="legend-col-title good">Einsammeln</div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 24 24" role="img" aria-label="Stern"><path d="M12 1.5 L14.8 8.9 22.5 9.4 16.4 14.4 18.4 22 12 17.7 5.6 22 7.6 14.4 1.5 9.4 9.2 8.9 Z" fill="#FFD447"/></svg>
-        Stern – Bonuspunkte
+    <div class="value-stats">
+      <div class="vstat">
+        <span class="vstat-num" data-years-since="1999">27</span>
+        <span class="vstat-label">Jahre Bike Business</span>
       </div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 24 24" role="img" aria-label="Wheelie">
-          <path d="M2.6 19.5 L5.4 18.7 M2 17 L5 16.7 M2.4 14.4 L5.2 14.7" stroke="#E06820" stroke-width="1.2" stroke-linecap="round"/>
-          <g transform="rotate(-30 8.5 19)">
-            <circle cx="8.5" cy="19" r="3" fill="#0A1219" stroke="rgba(245,241,235,0.45)" stroke-width="1.1"/>
-            <circle cx="18.5" cy="19" r="3" fill="#0A1219" stroke="rgba(245,241,235,0.45)" stroke-width="1.1"/>
-            <path d="M8.5 19 L13 16.5 M8.5 19 L11.3 13.2 L13 16.5 L16 13 L18.5 19 M11.3 13.2 L16 13" stroke="#C85A14" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="13" cy="16.5" r="0.9" fill="#2A3B4C"/>
-            <path d="M11 12.5 L13.5 17.6" stroke="#1F3346" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <path d="M11 12.5 L12.8 9.2" stroke="#E06820" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M12.8 9.2 L16.4 12" stroke="#E06820" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <circle cx="14" cy="8" r="1.8" fill="#E8B48C"/>
-            <path d="M12.1 8 a1.9 1.9 0 0 1 3.8 0 Z" fill="#F5F1EB"/>
-          </g>
-        </svg>
-        Wheelie – 2,4× Meter
+      <div class="vstat">
+        <span class="vstat-num" data-target="4">4</span>
+        <span class="vstat-label">Kostenlose Tools</span>
       </div>
-    </div>
-    <div>
-      <div class="legend-col-title bad">Ausweichen</div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 40 24" role="img" aria-label="Schlagloch"><ellipse cx="20" cy="12" rx="17" ry="9" fill="#0A1219" stroke="rgba(245,241,235,0.35)" stroke-width="1.5"/></svg>
-        Schlagloch – springen
-      </div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 24 24" role="img" aria-label="Kind mit Luftballon">
-          <ellipse cx="17.5" cy="4.5" rx="3" ry="3.7" fill="#E4568C"/>
-          <path d="M17.5 8 Q15 12 11 13.5" stroke="rgba(245,241,235,0.6)" stroke-width="0.8" fill="none"/>
-          <circle cx="9" cy="10.5" r="3" fill="#E8B48C"/>
-          <path d="M6.1 10.2 a2.9 2.9 0 0 1 5.8 0" fill="#7A4A22"/>
-          <path d="M4.5 19.5 L9 13.5 L13.5 19.5 Z" fill="#E4568C"/>
-          <line x1="7" y1="19.5" x2="7" y2="23" stroke="#E8B48C" stroke-width="1.6" stroke-linecap="round"/>
-          <line x1="11" y1="19.5" x2="11" y2="23" stroke="#E8B48C" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        Kind – springen
-      </div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 24 24" role="img" aria-label="Auto">
-          <rect x="1" y="10" width="22" height="7" rx="2.4" fill="#F5F1EB"/>
-          <path d="M5 10 L8 5.5 L16.5 5.5 L19.5 10 Z" fill="#F5F1EB"/>
-          <path d="M6.8 9.4 L9 6.4 L11.6 6.4 L11.6 9.4 Z" fill="#16273D"/>
-          <path d="M13 6.4 L15.6 6.4 L17.6 9.4 L13 9.4 Z" fill="#16273D"/>
-          <circle cx="6.5" cy="17.5" r="2.8" fill="#10181F"/><circle cx="6.5" cy="17.5" r="1.1" fill="#93A9BB"/>
-          <circle cx="17.5" cy="17.5" r="2.8" fill="#10181F"/><circle cx="17.5" cy="17.5" r="1.1" fill="#93A9BB"/>
-        </svg>
-        Auto – springen
-      </div>
-      <div class="legend-item">
-        <svg class="lem" viewBox="0 0 24 24" role="img" aria-label="Flugzeug">
-          <path d="M18 12 L23 7 L23 11.5 L19.5 13.5 Z" fill="#E06820"/>
-          <ellipse cx="12" cy="13" rx="9.5" ry="3.4" fill="#F5F1EB"/>
-          <rect x="5" y="13.4" width="12" height="1.6" fill="#E06820"/>
-          <path d="M8.5 11.4 a2.4 2.4 0 0 1 4.4 0 Z" fill="#16273D"/>
-          <ellipse cx="11" cy="14.6" rx="4.4" ry="1.6" fill="#E3DACB"/>
-          <line x1="2" y1="8.5" x2="2" y2="17.5" stroke="rgba(245,241,235,0.8)" stroke-width="1.4" stroke-linecap="round"/>
-          <circle cx="2.4" cy="13" r="1.1" fill="#E06820"/>
-        </svg>
-        Flugzeug – ducken
+      <div class="vstat">
+        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
+        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== WARUM TOUR DE HIAS ===== -->
-<section class="content-block" style="background:var(--cream2); border-radius:20px;">
-  <h2>Warum Tour de Hias?</h2>
-  <p class="lead">Ein kleines Feierabend-Projekt vom Radl Hias – für alle, die zwischendurch ein paar Meter Radl fahren wollen, ohne aufs echte Rad zu steigen.</p>
-  <ul class="feature-list">
-    <li>🆓 <span><strong>100 % kostenlos</strong> – keine Käufe, keine Werbung, kein Abo.</span></li>
-    <li>⚡ <span><strong>Sofort spielbar</strong> – läuft direkt im Browser, auf Handy, Tablet und Desktop.</span></li>
-    <li>🏆 <span><strong>Eigene Bestenliste</strong> – trag deine Distanz ein und knack deine Bestleistung.</span></li>
-    <li>🎨 <span><strong>Handgemacht</strong> – Grafik &amp; Sound komplett selbst gebaut, ohne fertige Spiele-Engine.</span></li>
-  </ul>
-</section>
+<!-- ===== FEATURE BAR ===== -->
+<div class="feature-bar">
+  <div class="feature-bar-inner">
+    <a href="bikeservice.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        <circle cx="7.5" cy="16.5" r="1" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Bike Service</div>
+      <div class="fi-desc">Wartung, Reparatur, Beratung</div>
+    </a>
+    <a href="konfigurator.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="4" y1="21" x2="4" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="3"/>
+        <line x1="20" y1="21" x2="20" y2="3"/>
+        <circle cx="4" cy="8" r="2.6" fill="#c85a14" stroke="none"/>
+        <circle cx="12" cy="15" r="2.6" fill="#c85a14" stroke="none"/>
+        <circle cx="20" cy="7" r="2.6" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Fahrrad Konfigurator</div>
+      <div class="fi-desc">Dein perfektes Fahrrad in 10 Schritten</div>
+    </a>
+    <a href="videos.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#c85a14" stroke="none"/>
+      </svg>
+      <div class="fi-title">Tutorials</div>
+      <div class="fi-desc">YouTube-Archiv mit Suchfunktion</div>
+    </a>
+    <a href="#blog" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        <path d="M5 8h3.5M5 11.5h3.5M15.5 8H19M15.5 11.5H19" stroke="#c85a14" stroke-width="1.6"/>
+      </svg>
+      <div class="fi-title">Blog</div>
+      <div class="fi-desc">Tipps, Tests, ehrliche Erfahrungen</div>
+    </a>
+    <a href="spiel/index.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="5.5" cy="17" r="3.6"/>
+        <circle cx="18.5" cy="17" r="3.6"/>
+        <path d="M5.5 17 L9 9 L15.5 9 L18.5 17 M9 9 L11 17 L15.5 9 M5.5 17 H11" stroke="#c85a14"/>
+        <path d="M7.9 9 H10.3 M14.3 9 H16.7"/>
+      </svg>
+      <div class="fi-title">Tour de Hias</div>
+      <div class="fi-desc">Spiel: Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne</div>
+    </a>
+  </div>
+</div>
 
-<!-- ===== FAQ ===== -->
-<section class="content-block">
-  <h2>Häufige Fragen</h2>
-  <div class="faq-list">
-    <div class="faq-item">
-      <h3>Was kostet Tour de Hias?</h3>
-      <p>Nichts. Tour de Hias ist zu 100 % kostenlos – ohne Werbung, ohne In-App-Käufe und ohne Abo.</p>
+<!-- ===== HERO (Foto-Collage mit echten Fotos) ===== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-photos left">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.jpg" alt="Mathias in seiner Werkstatt" width="469" height="700"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.jpg" alt="Mathias beim Schrauben am Mountainbike" width="466" height="700"></div>
+        <span class="polaroid-year">2019</span>
+      </div>
     </div>
-    <div class="faq-item">
-      <h3>Muss ich etwas installieren oder mich anmelden?</h3>
-      <p>Nein. Das Spiel läuft direkt im Browser – auf Handy, Tablet und Desktop. Es ist keine Installation und keine Registrierung nötig.</p>
+    <div class="hero-center">
+      <img src="RadlHias_Logo_freigestellt_cream.png" alt="RadlHias.TV Logo" class="hero-logo-badge" width="500" height="500">
+      <p class="hero-bio">
+        Ich bin Mathias (45) und Fahrräder begleiten mich mein gesamtes Leben. Seit inzwischen mehr
+        als <span class="js-years">27</span> Jahren auch beruflich. Ob als Mechaniker, als Verkäufer, als Kundendienstmitarbeiter
+        bei KTM Fahrrad, mit eigenem Bike Shop namens „<strong>FEINSCHLIFF BIKES</strong>" und
+        natürlich als begeisterter Radfahrer.
+      </p>
+      <p class="hero-bio">
+        Ich kenne die Methoden der Industrie. Das Marketing dahinter und was ein wirklich gutes,
+        ehrliches Verkaufsgespräch ausmacht. Diese Seite ist mein Ort, um dir genau das
+        weiterzugeben. Erfahrung und Wissen, mit dem ich Dir weiterhelfen möchte. Genau so, wie ich
+        meinen Freunden helfe. Ganz ohne Verkaufsdruck und ohne Markenwerbung.
+      </p>
     </div>
-    <div class="faq-item">
-      <h3>Wie wird Tour de Hias gesteuert?</h3>
-      <p>Mit der Pfeiltaste nach oben springst du (kurz tippen für einen kleinen Hupfer, halten für einen hohen Sprung), mit der Pfeiltaste nach unten duckst du dich unter Flugzeugen durch. Am Handy gibt es dafür eigene Touch-Buttons.</p>
-    </div>
-    <div class="faq-item">
-      <h3>Wer steckt hinter dem Spiel?</h3>
-      <p>Tour de Hias ist ein Feierabend-Projekt von Mathias Blumreich, dem Radl Hias von <a href="../index.html">RadlHias.TV</a>. Mehr vom Radl Hias findest du im <a href="../blog/index.html">Blog</a> und in den <a href="../videos.html">Videos</a>.</p>
+    <div class="hero-photos right">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.jpg" alt="Mathias bei der Fahrradmontage" width="1000" height="670"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.jpg" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;" width="604" height="900"></div>
+        <span class="polaroid-year">2026</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== BOTTOM CTA ===== -->
-<section class="cta-block">
-  <h2>Bereit für eine Runde?</h2>
-  <p>Schnapp dir dein virtuelles Radl und leg los – dauert keine Minute.</p>
-  <a href="tour_de_hias.html" class="btn-play">🚲 Tour de Hias spielen</a>
+<!-- ===== FÜR WEN ===== -->
+<section class="fuer-wen reveal">
+  <h2>Für wen ist RadlHias.TV?</h2>
+
+  <p>Nicht jeder Radfahrer oder Fahrradkäufer hat die gleichen Bedürfnisse oder die gleichen Ziele. RadlHias.TV ist mein Kanal, mit dem ich Dir mehr als nur ein Verkaufsgespräch anbiete. Ich möchte Dich unabhängig, kostenlos und ganzheitlich beraten, ohne Dir etwas verkaufen zu müssen. Ich möchte einfach nur, dass Du mit deinem Fahrrad eine gute Zeit hast.</p>
+
+  <h3>Das liest sich sehr nobel. Aber was habe ich davon?</h3>
+
+  <p>In mehr als <span class="js-years">27</span> Jahren habe ich auf verschiedenen Ebenen gelernt, wie ein Business und speziell die Fahrradbranche funktioniert. Und wie jede andere Branche lebt auch diese vom Verkauf.</p>
+
+  <p>Das ist legitim. Jedoch sollte der reine Verkauf nicht das Ziel sein. Während meiner Ausbildung zum Einzelhandelskaufmann (Fachrichtung Radsport) habe ich zuerst gelernt, worum es in einem Verkaufsgespräch geht. Nämlich um den Bedarf des Kunden – und darum, das Produkt zu finden, das zu genau diesem Bedarf und den Zielen des Kunden passt.</p>
+
+  <p>In meiner Laufbahn habe ich immer wieder Situationen erlebt, die genau das nicht zum Ziel hatten.</p>
+
+  <p>Mein Ziel ist es, meine Erfahrung weiterzugeben. Menschen mit ihrem Fahrrad glücklich werden zu lassen. Und nicht den Konzernen die Taschen zu füllen, sondern meiner Community den Rücken zu stärken.</p>
+</section>
+
+<!-- ===== KONFIGURATOR-WERBEBANNER ===== -->
+<section class="kfg-banner">
+  <div class="kfg-banner-media">
+    <img src="konfigurator-banner-foto.jpg" alt="Hände halten ein Smartphone mit dem RadlHias Luftdruck-Rechner, im Hintergrund eine Fahrrad-Werkstatt" width="2200" height="1228">
+    <div class="kfg-banner-scrim"></div>
+    <div class="kfg-banner-inner reveal">
+      <div class="kfg-col kfg-col-left">
+        <div class="kfg-eyebrow">100% Kostenlos · Keine Werbung · Wertvoll für jeden Radfahrer</div>
+        <h2 class="kfg-title"><span class="js-years">27</span> Jahre Bike Erfahrung<br>in deiner Hand</h2>
+        <a href="konfigurator.html" class="kfg-cta">Jetzt die App starten!</a>
+      </div>
+      <div class="kfg-col">
+        <ul class="kfg-features">
+          <li><span class="kf-check">✓</span> Fahrrad Konfigurator</li>
+          <li><span class="kf-check">✓</span> Gebraucht Check</li>
+          <li><span class="kf-check">✓</span> Bike Fitting</li>
+          <li><span class="kf-check">✓</span> Luftdruck Rechner</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FÜR WEN: TOOLS IM DETAIL ===== -->
+<section class="fuer-wen reveal">
+  <h3>Fahrrad kaufen, aber unsicher welches?</h3>
+
+  <p>Der Fachhandel zeigt dir oft, was gerade auf Lager ist oder die beste Marge bringt. Ich zeige dir, worauf es bei deinem Einsatzzweck tatsächlich ankommt – egal ob Alltagsrad für die Stadt, Mountainbike fürs Gelände oder Rennrad für die Straße. Mit dem Fahrrad-Konfigurator findest du in wenigen Schritten heraus, welcher Bike-Typ wirklich zu deinem Fahrstil und Budget passt.</p>
+
+  <h3>Ein gebrauchtes Fahrrad im Blick?</h3>
+
+  <p>Rahmenschaden, verschlissene Lager, falsche Rahmengröße – das sind die Fehler, die die meisten Käufer beim Gebrauchtkauf machen. Mit dem Gebraucht-Check gehst du strukturiert vor statt nach Bauchgefühl, und erkennst in wenigen Minuten, ob sich der Kauf wirklich lohnt.</p>
+
+  <h3>Schmerzen oder Unwohlsein beim Radfahren?</h3>
+
+  <p>Rückenschmerzen, taube Finger oder Knieprobleme sind fast immer eine Frage der richtigen Einstellung, nicht des falschen Rahmens. Mit den Bike-Fitting-Grundlagen findest du heraus, welche Anpassungen an Sattel, Lenker und Position dir sofort mehr Komfort bringen – oft ganz ohne neues Material.</p>
+
+  <h3>Dein Fahrrad selbst warten und verstehen?</h3>
+
+  <p>Kette reinigen, Reifendruck richtig einstellen, erkennen wann ein Bauteil wirklich hin ist und wann es nur ein Verkaufsgespräch ist – nach <span class="js-years">27</span> Jahren im Bike-Business weiß ich, worauf es ankommt. Mit dem Luftdruck-Rechner und den weiteren Tools sparst du dir unnötige Werkstattbesuche und unnötige Ausgaben.</p>
+</section>
+
+<!-- ===== BLOG TEASER ===== -->
+<section class="section" id="blog">
+  <h2 class="section-title">Aktuelle Artikel</h2>
+  <p class="section-sub">Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.</p>
+
+  <div class="blog-grid" id="blog-teaser-grid">
+    <!-- wird per JavaScript aus posts.json geladen -->
+  </div>
+
+  <div class="blog-view-all">
+    <a href="blog/index.html" class="btn-view-all">Alle Artikel ansehen</a>
+  </div>
+</section>
+
+<!-- ===== KONTAKT ===== -->
+<section class="section kontakt-section" id="kontakt">
+  <div class="kontakt-wrap">
+    <div class="kontakt-title">Feedback & Beratung</div>
+    <p class="kontakt-text">
+      Du hast Fragen zu deinem Fahrrad, einen Verbesserungsvorschlag oder willst einfach Hallo sagen?
+      Ich freue mich über jede Nachricht.
+    </p>
+    <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20über%20RadlHias.TV" class="btn-mail">✉️ E-Mail schreiben</a>
+    <div class="kontakt-email-row">
+      <span id="kontakt-email">radlhias.tv@gmail.com</span>
+      <button class="kontakt-copy-btn" onclick="
+        navigator.clipboard.writeText('radlhias.tv@gmail.com');
+        this.textContent='✓ Kopiert';
+        setTimeout(() => this.textContent='Kopieren', 2000);
+      ">Kopieren</button>
+    </div>
+    <p class="kontakt-note">Kein Formular, kein Tracking – deine Nachricht geht direkt an mich.</p>
+  </div>
 </section>
 
 <!-- FLOATING SOCIAL BAR -->
@@ -658,16 +1106,17 @@
   <div class="footer-content">
     <div class="footer-wordmark">RadlHias.TV</div>
     <nav class="footer-nav">
-      <a href="../blog/index.html">Blog</a>
-      <a href="../konfigurator.html">Konfigurator</a>
-      <a href="../videos.html">Videos</a>
-      <a href="index.html">Tour de Hias</a>
-      <a href="../faq.html">FAQ</a>
-      <a href="../history.html">Meine Laufbahn</a>
-      <a href="../fuer-haendler.html">Für Fahrradhändler</a>
-      <a href="../impressum.html">Impressum</a>
-      <a href="../datenschutz.html">Datenschutz</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="konfigurator.html">Konfigurator</a>
+      <a href="videos.html">Videos</a>
+      <a href="spiel/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="history.html">Meine Laufbahn</a>
+      <a href="fuer-haendler.html">Für Fahrradhändler</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
     </nav>
+
     <div class="footer-social">
       <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -676,12 +1125,269 @@
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </span>
     </div>
+
     <div class="footer-bottom">
       <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
     </div>
   </div>
 </footer>
 
+<!-- ===== ADMIN BUTTON (versteckt, Ctrl+Shift+A) ===== -->
+<button id="admin-toggle" onclick="toggleAdmin(event)">⚙️</button>
+
+<!-- ===== ADMIN PANEL (versteckt) ===== -->
+<div id="admin-panel" style="display:none; padding:24px 20px; background:var(--cream2); border-top:3px solid var(--orange); margin-top:0;">
+  <div style="max-width:700px; margin:0 auto;">
+    <h2 style="color:var(--navy); margin-bottom:20px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:1px;">📝 Admin Panel – Blog Verwaltung</h2>
+
+    <div style="background:white; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:var(--shadow);">
+      <h3 style="color:var(--navy); margin-bottom:15px;">Neuen Artikel erstellen</h3>
+
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Titel:</label>
+        <input type="text" id="admin-title" placeholder="Artikel-Titel" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Slug (URL):</label>
+        <input type="text" id="admin-slug" placeholder="artikel-slug" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Excerpt:</label>
+        <textarea id="admin-excerpt" placeholder="Kurze Beschreibung..." rows="3" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;"></textarea>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Datum (YYYY-MM-DD):</label>
+        <input type="text" id="admin-date" placeholder="2026-01-15" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Kategorie:</label>
+        <select id="admin-category" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
+          <option>Erfahrung</option>
+          <option>Technik</option>
+          <option>Meinung</option>
+          <option>Kaufberatung</option>
+          <option>Wartung</option>
+        </select>
+      </div>
+      <button onclick="createPost()" style="background:var(--blue); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">✅ Artikel hinzufügen</button>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:10px; box-shadow:var(--shadow);">
+      <h3 style="color:var(--navy); margin-bottom:15px;">Bestehende Artikel</h3>
+      <div id="admin-posts-list" style="max-height:400px; overflow-y:auto;">(wird geladen...)</div>
+      <p style="margin-top:12px; font-size:13px; color:var(--text-dim);">
+        Artikel löschen entfernt sie nur in dieser Ansicht. Lade die posts.json danach neu herunter und lade sie auf GitHub hoch.
+        Neu angelegte Artikel brauchen zusätzlich noch eine eigene Seite im <code>blog/</code>-Ordner.
+      </p>
+      <div style="margin-top:16px;">
+        <button onclick="downloadPostsJson()" style="background:var(--green); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">📥 posts.json herunterladen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Admin-Toggle
+let adminVisible = false;
+function toggleAdmin(e) {
+  e.preventDefault();
+  adminVisible = !adminVisible;
+  document.getElementById('admin-panel').style.display = adminVisible ? 'block' : 'none';
+}
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+    document.getElementById('admin-toggle').classList.toggle('visible');
+  }
+});
+
+// Blogartikel laden
+let postsData = [];
+function loadBlogTeasers() {
+  fetch('posts.json')
+    .then(r => r.json())
+    .then(data => {
+      postsData = (data && data.posts) || [];
+      renderBlogTeasers();
+      renderAdminPostsList();
+    })
+    .catch(err => {
+      console.error('Fehler beim Laden von posts.json:', err);
+      document.getElementById('blog-teaser-grid').innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-dim);">Keine Artikel verfügbar.</p>';
+    });
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  const monate = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  return `${parseInt(d,10)}. ${monate[parseInt(m,10)-1]} ${y}`;
+}
+
+function renderBlogTeasers() {
+  const grid = document.getElementById('blog-teaser-grid');
+  grid.innerHTML = '';
+  const featured = postsData.slice(0, 3);
+
+  featured.forEach((post, idx) => {
+    const card = document.createElement('a');
+    card.className = 'blog-card reveal';
+    card.style.transitionDelay = (idx * 90) + 'ms';
+    card.href = `blog/${post.slug}.html`;
+    card.innerHTML = `
+      <img src="${post.image || ''}" alt="${escapeHtml(post.title)}" loading="lazy">
+      <div class="blog-card-body">
+        <span class="blog-card-cat">${escapeHtml(post.category || 'Blog')}</span>
+        <div class="blog-card-title">${escapeHtml(post.title)}</div>
+        <div class="blog-card-excerpt">${escapeHtml(post.excerpt || '')}</div>
+        <div class="blog-card-date">${formatDate(post.date)}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  observeReveals();
+}
+
+function renderAdminPostsList() {
+  const list = document.getElementById('admin-posts-list');
+  list.innerHTML = '';
+  postsData.forEach((post, idx) => {
+    const item = document.createElement('div');
+    item.style.padding = '10px';
+    item.style.borderBottom = '1px solid var(--cream2)';
+    item.innerHTML = `
+      <strong>${escapeHtml(post.title)}</strong>
+      <div style="font-size:13px; color:var(--text-dim); margin:4px 0;">${post.date} · ${post.category}</div>
+      <button onclick="deletePost(${idx})" style="background:var(--orange); color:white; padding:4px 12px; border:none; border-radius:4px; cursor:pointer; font-size:12px;">🗑 Löschen</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function createPost() {
+  const title = document.getElementById('admin-title').value;
+  const slug = document.getElementById('admin-slug').value;
+  const excerpt = document.getElementById('admin-excerpt').value;
+  const date = document.getElementById('admin-date').value;
+  const category = document.getElementById('admin-category').value;
+
+  if (!title || !slug) { alert('Bitte Titel und Slug eingeben!'); return; }
+
+  postsData.unshift({ title, slug, excerpt, date, category, tag: category });
+  document.getElementById('admin-title').value = '';
+  document.getElementById('admin-slug').value = '';
+  document.getElementById('admin-excerpt').value = '';
+  document.getElementById('admin-date').value = '';
+
+  renderBlogTeasers();
+  renderAdminPostsList();
+  alert('✅ Artikel in der Liste ergänzt! Vergiss nicht: posts.json herunterladen, hochladen – und eine eigene Artikelseite im blog/-Ordner anlegen.');
+}
+
+function deletePost(idx) {
+  if (confirm('Artikel wirklich löschen?')) {
+    postsData.splice(idx, 1);
+    renderBlogTeasers();
+    renderAdminPostsList();
+  }
+}
+
+function downloadPostsJson() {
+  const data = JSON.stringify({ posts: postsData }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'posts.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text == null ? '' : text;
+  return div.innerHTML;
+}
+
+loadBlogTeasers();
+
+// Scroll-Reveal (Micro-Interaktion)
+const revealReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el => {
+    if (revealReduceMotion) { el.classList.add('in-view'); }
+    else { revealObserver.observe(el); }
+  });
+}
+observeReveals();
+
+// Count-up der Kennzahlen im Value-Hero
+(function () {
+  const nums = document.querySelectorAll('.value-hero .vstat-num');
+  if (!nums.length) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(el) {
+    const yearsSince = el.getAttribute('data-years-since');
+    const target = yearsSince
+      ? (new Date().getFullYear() - parseInt(yearsSince, 10))
+      : (parseInt(el.getAttribute('data-target'), 10) || 0);
+    const suffix = el.getAttribute('data-suffix') || '';
+    if (reduce) { el.textContent = target + suffix; return; }
+    const dur = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { run(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  nums.forEach(n => io.observe(n));
+})();
+</script>
+
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+
+<!-- Tour de Hias Aktions-Popup: Anzeige & bewusstes Schließen -->
+<script>
+(function () {
+  var STORAGE_KEY = 'radlhias_tour_promo_dismissed_2026';
+  if (sessionStorage.getItem(STORAGE_KEY)) return;
+
+  var overlay = document.getElementById('promo-overlay');
+  var closeBtn = document.getElementById('promo-close');
+  if (!overlay || !closeBtn) return;
+
+  function dismiss() {
+    overlay.classList.remove('is-visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+  }
+
+  closeBtn.addEventListener('click', dismiss);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-visible')) dismiss();
+  });
+
+  setTimeout(function () { overlay.classList.add('is-visible'); }, 400);
+})();
+</script>
 </body>
 </html>
