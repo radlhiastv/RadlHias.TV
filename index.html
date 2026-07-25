@@ -732,16 +732,36 @@
         linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%);
       border: 1px solid rgba(255,183,135,0.35);
       border-radius: 18px;
-      padding: 40px 32px 32px;
+      overflow: hidden;
       text-align: center;
       box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,183,135,0.08), 0 0 60px rgba(224,104,32,0.35);
       transform: translateY(18px) scale(0.97);
       transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
     }
     .promo-overlay.is-visible .promo-modal { transform: translateY(0) scale(1); }
+    .promo-hero {
+      position: relative;
+      height: 200px;
+      margin-bottom: -12px;
+    }
+    .promo-hero img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 70%;
+    }
+    .promo-hero::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 90px;
+      background: linear-gradient(to bottom, transparent, var(--navy) 85%);
+    }
+    .promo-body { padding: 24px 32px 32px; }
     .promo-sticker {
       position: absolute;
-      top: 8px;
+      top: 14px;
       left: -16px;
       background: var(--orange);
       color: white;
@@ -755,11 +775,13 @@
       transform: rotate(-9deg);
       box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 0 3px var(--navy);
       white-space: nowrap;
+      z-index: 1;
     }
     .promo-close {
       position: absolute;
       top: 14px;
       right: 14px;
+      z-index: 1;
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -820,7 +842,8 @@
     .promo-cta:hover { background: #a04a10; transform: translateY(-1px); }
     .promo-fine { margin-top: 16px; font-size: 12px; color: var(--blue-lt); }
     @media (max-width: 480px) {
-      .promo-modal { padding: 36px 22px 26px; }
+      .promo-hero { height: 160px; }
+      .promo-body { padding: 20px 22px 26px; }
     }
   </style>
 </head>
@@ -830,15 +853,18 @@
 <!-- ===== TOUR DE HIAS AKTIONS-POPUP ===== -->
 <div class="promo-overlay" id="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promo-title">
   <div class="promo-modal">
+    <div class="promo-hero"><img src="img/Tour-de-Hias.jpg" alt="Nächtliche Radltour aus der Fahrer-Perspektive"></div>
     <div class="promo-sticker">Nur bis 31.8.!</div>
     <button class="promo-close" id="promo-close" aria-label="Popup schließen">&times;</button>
-    <h2 id="promo-title">Servus Nachbarn!<br>Mach mit bei der Tour de Hias</h2>
-    <p>Spiel dich durch mein kleines Fahrrad-Game, weiche Kindern, Autos &amp; Schlaglöchern aus und lad dir am Ende deine persönliche Urkunde herunter.</p>
-    <p>Folge mir auf <strong>Instagram (@radlhias.tv)</strong> und schick mir deine Urkunde per DM. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht hat, gewinnt einen <strong>Rad-Service bei mir</strong> (exklusive Material)!</p>
-    <div class="promo-prize">🏆 Gewinn: <strong>1× Rad-Service</strong><br>(exkl. Material)<br><br>Teilnahme: Instagram folgen + Urkunde per DM<br><br>Nur für Biker aus <strong>5120 St. Pantaleon</strong></div>
-    <br>
-    <a href="spiel/index.html" class="promo-cta">Jetzt mitspielen</a>
-    <div class="promo-fine">Einsendeschluss 31.08.2026 · Gewinner wird über die Bestenliste ermittelt</div>
+    <div class="promo-body">
+      <h2 id="promo-title">Servus Nachbarn!<br>Mach mit bei der Tour de Hias</h2>
+      <p>Spiel dich durch mein kleines Fahrrad-Game, weiche Kindern, Autos &amp; Schlaglöchern aus und lad dir am Ende deine persönliche Urkunde herunter.</p>
+      <p>Folge mir auf <strong>Instagram (@radlhias.tv)</strong> und schick mir deine Urkunde per DM. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht hat, gewinnt einen <strong>Rad-Service bei mir</strong> (exklusive Material)!</p>
+      <div class="promo-prize">🏆 Gewinn: <strong>1× Rad-Service</strong><br>(exkl. Material)<br><br>Teilnahme: Instagram folgen + Urkunde per DM<br><br>Nur für Biker aus <strong>5120 St. Pantaleon</strong></div>
+      <br>
+      <a href="spiel/index.html" class="promo-cta">Jetzt mitspielen</a>
+      <div class="promo-fine">Einsendeschluss 31.08.2026 · Gewinner wird über die Bestenliste ermittelt</div>
+    </div>
   </div>
 </div>
 
