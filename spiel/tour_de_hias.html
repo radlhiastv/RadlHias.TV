@@ -46,7 +46,8 @@
   .topbar::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:linear-gradient(90deg, var(--navy-panel), var(--blue), var(--orange), var(--navy-panel)); }
   .brand{ display:flex; align-items:center; gap:8px; }
   .brand img{ height:22px; width:22px; object-fit:contain; }
-  .brandtext{ font-family:'Abuget', cursive; font-weight:400; color:var(--cream); font-size:36px; line-height:1; }
+  .brandtext{ font-family:'Barlow Condensed', sans-serif; font-weight:900; text-transform:uppercase; letter-spacing:1px; color:var(--cream); font-size:26px; line-height:1; }
+  .brandtext b{ color:var(--orange-bright); font-weight:900; }
   .topright{ display:flex; align-items:center; gap:10px; }
   .icon-btn{ background:transparent; border:1px solid var(--line); color:var(--blue-lt); border-radius:6px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; line-height:1; padding:0; }
   .icon-btn:active{ background:var(--orange); color:#fff; border-color:var(--orange); }
@@ -79,7 +80,8 @@
   .ic-stern{ width:64px; top:14px; left:78px; transform:rotate(-8deg); z-index:5; filter:drop-shadow(0 0 14px rgba(255,212,71,0.6)); }
   .ic-auto{ width:72px; top:76px; left:132px; transform:rotate(7deg); z-index:3; }
   .ic-schlagloch{ width:48px; height:29px; top:120px; left:84px; transform:rotate(4deg); z-index:1; }
-  .welcome-headline{ font-family:'Abuget', cursive; font-weight:400; font-size:52px; color:var(--cream); text-align:center; margin-bottom:6px; }
+  .welcome-headline{ font-family:'Barlow Condensed', sans-serif; font-weight:900; text-transform:uppercase; letter-spacing:1px; font-size:44px; line-height:0.95; color:var(--cream); text-align:center; margin-bottom:6px; }
+  .welcome-headline b{ color:var(--orange-bright); font-weight:900; }
   .welcome-eyebrow{ font-family:'Barlow Condensed'; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--blue-lt); font-size:12px; text-align:center; margin-bottom:28px; }
   .welcome-card{ background:rgba(255,255,255,0.07); border-radius:14px; padding:24px 20px; max-width:480px; width:100%; border:1px solid rgba(255,255,255,0.12); }
   .welcome-card p{ color:var(--cream); font-size:15px; line-height:1.7; margin:0 0 16px; }
@@ -215,6 +217,9 @@
   .board li .rank{ font-family:'Barlow Condensed'; font-weight:700; color:var(--blue-lt); width:22px; text-align:right; font-size:15px; }
   .board li .rname{ flex:1; color:var(--cream); }
   .board li .rtime{ font-variant-numeric:tabular-nums; color:var(--orange-bright); font-weight:600; }
+  .board li.board-more{ border-bottom:none; justify-content:center; padding-top:12px; }
+  .btn-more{ font-family:'Barlow Condensed'; font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:12px; background:none; border:1px solid var(--line); color:var(--blue-lt); border-radius:8px; padding:8px 18px; cursor:pointer; transition:color .15s ease, border-color .15s ease; }
+  .btn-more:hover{ color:var(--cream); border-color:var(--blue-lt); }
   .signoff{ font-family:'Permanent Marker', cursive; font-weight:400; color:var(--cream); font-size:18px; text-align:center; margin-top:18px; line-height:1.4; }
   .sharerow{ display:flex; gap:10px; margin-top:14px; }
   .sharerow .btn{ flex:1; }
@@ -254,7 +259,7 @@
 <div class="start-wrap" id="startWrap"></div>
 <div class="stage" id="gameStage">
   <div class="topbar">
-    <div class="brand"><span class="brandtext">Tour de Hias</span></div>
+    <div class="brand"><span class="brandtext">Tour <b>de Hias</b></span></div>
     <div class="topright">
       <button class="icon-btn" id="muteBtn" title="Ton an/aus">🔊</button>
       <div class="scoretop" id="scoreTop">0 m</div>
@@ -289,9 +294,11 @@ const CONFIG = {
   PUMP_MIN_PENALTY: 8,
   PUMP_MAX_PENALTY: 42,
   SCENES: [
-    { at:0,    name:"Dorf", sky:['#0A1219','#1C3450'], ridge:'#111F30', hill:'#182D44', back:'#1F3A55', side:'dorf' },
-    { at:450,  name:"Wald", sky:['#081411','#173029'], ridge:'#0C1D17', hill:'#12281F', back:'#1A3629', side:'wald' },
-    { at:1000, name:"Alm",  sky:['#0B1526','#2C5078'], ridge:'#152A40', hill:'#1E3C58', back:'#28496A', side:'alm' }
+    { at:0,    name:"Dorf",      sky:['#0A1219','#1C3450'], ridge:'#111F30', hill:'#182D44', back:'#1F3A55', side:'dorf' },
+    { at:450,  name:"Wald",      sky:['#081411','#173029'], ridge:'#0C1D17', hill:'#12281F', back:'#1A3629', side:'wald' },
+    { at:1000, name:"Strand",    sky:['#0A1B26','#2E6070'], ridge:'#12303E', hill:'#1A4452', back:'#255C68', side:'strand' },
+    { at:1600, name:"Großstadt", sky:['#100E1E','#2E2A50'], ridge:'#1A1830', hill:'#242044', back:'#302B58', side:'stadt' },
+    { at:2300, name:"Alm",       sky:['#0B1526','#2C5078'], ridge:'#152A40', hill:'#1E3C58', back:'#28496A', side:'alm' }
   ]
 };
 
@@ -476,7 +483,7 @@ function renderStart(){
       </svg>
       <svg viewBox="0 0 40 24" class="ic-schlagloch"><ellipse cx="20" cy="12" rx="17" ry="9" fill="#0A1219" stroke="rgba(245,241,235,0.3)" stroke-width="1.5"/></svg>
     </div>
-    <div class="welcome-headline">Tour de Hias</div>
+    <div class="welcome-headline">Tour <b>de Hias</b></div>
     <div class="welcome-eyebrow">Bevor du losfährst – kurz zum Spiel</div>
     <div class="welcome-card">
       <p>Hallo... schön, dass Du da bist. Ich wollte gerade eine kleine Runde Rad fahren. Bist Du dabei? Super! Dann heiße ich Dich willkommen zur "Tour de Hias". Los geht's. Wir fahren ganz entspannt. Drücke einfach nur die Pfeile nach oben und nach unten. Der Rest spielt sich ein.</p>
@@ -910,7 +917,7 @@ function spawnEntity(){
   } else if(roll < 0.58){
     obstacles.push({ kind:'auto', x: CONFIG.CW+10, w:40, h:22, y: CONFIG.GROUND_Y-22, seed });
   } else if(roll < 0.72){
-    obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:28, y: CONFIG.GROUND_Y-58, seed });
+    obstacles.push({ kind:'flugzeug', x: CONFIG.CW+10, w:46, h:32, y: CONFIG.GROUND_Y-64, seed });
   } else {
     collectibles.push({ kind:'stern', x: CONFIG.CW+10, w:20, h:20, y: CONFIG.GROUND_Y-70, seed });
   }
@@ -1221,6 +1228,24 @@ function drawFirShape(ctx, x, gy, h, col1, col2, trunk){
     ctx.beginPath(); ctx.moveTo(x-w,y0); ctx.lineTo(x,y1); ctx.lineTo(x+w,y0); ctx.closePath(); ctx.fill();
   }
 }
+function drawPalmShape(ctx, x, gy, h, col, frond){
+  // Gebogener Stamm
+  ctx.strokeStyle = col; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x, gy);
+  ctx.quadraticCurveTo(x+2, gy-h*0.55, x+h*0.18, gy-h);
+  ctx.stroke();
+  // Palmwedel: Bögen in beide Richtungen
+  const tx = x+h*0.18, ty = gy-h;
+  ctx.strokeStyle = frond || col; ctx.lineWidth = 2.4;
+  for(let k=0;k<5;k++){
+    const ang = -0.5 - k*0.5;
+    const len = h*0.42;
+    ctx.beginPath(); ctx.moveTo(tx, ty);
+    ctx.quadraticCurveTo(tx + Math.cos(ang)*len*0.6, ty + Math.sin(ang)*len*0.6 - 4,
+                         tx + Math.cos(ang)*len, ty + Math.sin(ang)*len + len*0.28);
+    ctx.stroke();
+  }
+}
 function drawBackdropChunk(ctx, i, x, gy, col, side){
   const h = hash1(i*29.7);
   if(side === 'dorf'){
@@ -1246,6 +1271,39 @@ function drawBackdropChunk(ctx, i, x, gy, col, side){
     for(let k=0;k<3;k++){
       const hk = hash1(i*17.3 + k*7.9);
       drawFirShape(ctx, x+(k-1)*(16+hk*10), gy, 26+hk*26, col, col, null);
+    }
+  } else if(side === 'strand'){
+    if(h > 0.72){
+      // Segelboot am Horizont
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(x-14,gy-8); ctx.lineTo(x+14,gy-8); ctx.lineTo(x+9,gy-3); ctx.lineTo(x-9,gy-3); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x+1,gy-9); ctx.lineTo(x+1,gy-30); ctx.lineTo(x+12,gy-11); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x-1,gy-12); ctx.lineTo(x-1,gy-27); ctx.lineTo(x-9,gy-12); ctx.closePath(); ctx.fill();
+    } else if(h > 0.4){
+      // Strandhütte mit Flachdach
+      const w = 26 + h*10, rx = x - w/2;
+      ctx.fillStyle = col;
+      ctx.fillRect(rx, gy-15, w, 15);
+      ctx.fillRect(rx-4, gy-19, w+8, 5);
+      ctx.fillStyle = 'rgba(255,212,71,0.4)';
+      ctx.fillRect(rx+w*0.3, gy-11, 4.5, 5);
+    } else {
+      drawPalmShape(ctx, x, gy, 30+h*22, col);
+    }
+  } else if(side === 'stadt'){
+    // Hochhaus-Silhouetten mit beleuchteten Fenstern
+    const w = 22 + h*16, hh = 46 + h*40, rx = x - w/2;
+    ctx.fillStyle = col;
+    ctx.fillRect(rx, gy-hh, w, hh);
+    if(h > 0.7){ ctx.fillRect(x-1.5, gy-hh-10, 3, 10); }        // Antenne
+    else if(h > 0.45){ ctx.fillRect(rx+3, gy-hh-6, w-6, 6); }   // Dachaufbau
+    ctx.fillStyle = 'rgba(255,212,71,' + (0.22 + h*0.22).toFixed(2) + ')';
+    for(let fy=0; fy<4; fy++){
+      for(let fxi=0; fxi<3; fxi++){
+        if(hash1(i*31.7 + fy*5.1 + fxi*2.3) > 0.45){
+          ctx.fillRect(rx + 4 + fxi*(w-8)/3, gy-hh + 7 + fy*(hh-14)/4, 3.5, 4.5);
+        }
+      }
     }
   } else {
     if(h > 0.62){
@@ -1283,6 +1341,62 @@ function drawRoadsideChunk(ctx, i, x, gy, side){
     }
   } else if(side === 'wald'){
     drawFirShape(ctx, x, gy, 38+h*30, PAL.greenDark, PAL.green, PAL.wood);
+  } else if(side === 'strand'){
+    if(h > 0.62){
+      drawPalmShape(ctx, x, gy, 44+h*22, PAL.wood, PAL.green);
+    } else if(h > 0.34){
+      // Sonnenschirm
+      ctx.strokeStyle = PAL.wood; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x,gy-26); ctx.stroke();
+      ctx.fillStyle = h > 0.48 ? PAL.pink : PAL.orangeBright;
+      ctx.beginPath(); ctx.moveTo(x-16,gy-24); ctx.quadraticCurveTo(x,gy-40,x+16,gy-24); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(245,241,235,0.35)';
+      ctx.beginPath(); ctx.moveTo(x-5,gy-27); ctx.quadraticCurveTo(x,gy-38,x+5,gy-27); ctx.closePath(); ctx.fill();
+    } else {
+      // Strandgras und Seestern
+      ctx.strokeStyle = '#B9A671'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+      for(let k=0;k<4;k++){
+        const gx = x + (hash1(i*6.1+k)-0.5)*40;
+        ctx.beginPath(); ctx.moveTo(gx,gy); ctx.lineTo(gx-2,gy-8); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(gx,gy); ctx.lineTo(gx+2,gy-9); ctx.stroke();
+      }
+      if(h > 0.15){
+        const sx = x + (h-0.5)*30;
+        ctx.fillStyle = PAL.star;
+        for(let k=0;k<5;k++){
+          const a = k*(Math.PI*2/5) - Math.PI/2;
+          ctx.beginPath(); ctx.moveTo(sx,gy-3);
+          ctx.lineTo(sx+Math.cos(a)*5, gy-3+Math.sin(a)*5);
+          ctx.lineWidth = 2.2; ctx.strokeStyle = PAL.star; ctx.stroke();
+        }
+      }
+    }
+  } else if(side === 'stadt'){
+    if(h > 0.6){
+      // Moderne Straßenlaterne mit kühlem Licht
+      ctx.strokeStyle = '#3A3654'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x,gy-50); ctx.lineTo(x+12,gy-50); ctx.stroke();
+      const g = ctx.createRadialGradient(x+12,gy-48,1,x+12,gy-48,15);
+      g.addColorStop(0,'rgba(180,215,255,0.5)'); g.addColorStop(1,'rgba(180,215,255,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x+12,gy-48,15,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#BCD8F5'; ctx.fillRect(x+8,gy-51,8,3);
+    } else if(h > 0.35){
+      // Verkehrsschild
+      ctx.strokeStyle = '#8A93A8'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x,gy-22); ctx.stroke();
+      ctx.fillStyle = h > 0.47 ? '#2D6E9E' : PAL.orangeBright;
+      ctx.beginPath(); ctx.arc(x,gy-26,5.5,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(245,241,235,0.7)';
+      ctx.fillRect(x-3,gy-27,6,2);
+    } else {
+      // Hydrant
+      ctx.fillStyle = '#B0402A';
+      ctx.fillRect(x-4, gy-11, 8, 11);
+      ctx.beginPath(); ctx.arc(x, gy-11, 4, Math.PI, 0); ctx.fill();
+      ctx.fillRect(x-6, gy-7, 12, 2.5);
+      ctx.fillStyle = 'rgba(245,241,235,0.3)';
+      ctx.fillRect(x-1.5, gy-13, 3, 2);
+    }
   } else {
     // Alm: Zaunpfahl, Grasbüschel und Blumen
     if(h > 0.6){
@@ -1742,7 +1856,7 @@ function renderResult(finalScore){
     <button class="btn ghost" id="againBtn" style="margin-top:14px;">Nochmal fahren</button>
     <div class="signoff">Kette rechts! Euer Radl Hias 🔧</div>
   `;
-  setupBoardTabs('resultTabs', 'resultBoard', 10);
+  setupBoardTabs('resultTabs', 'resultBoard', 5);
 
   let selectedSource = '';
   const sourceGroup = document.getElementById('sourceGroup');
@@ -1770,7 +1884,7 @@ function renderResult(finalScore){
     btn.textContent = "Eingetragen ✓";
     document.getElementById('resultBoard').innerHTML = '<li class="loading">Lade…</li>';
     const activeMode = document.querySelector('#resultTabs .tab.active').dataset.mode;
-    loadBoardInto('resultBoard', 10, activeMode);
+    loadBoardInto('resultBoard', 5, activeMode);
     document.getElementById('submitMsg').style.display = 'block';
     document.getElementById('submitMsg').textContent = "Deine Distanz wurde in der Bestenliste gespeichert.";
   };
@@ -1996,9 +2110,20 @@ async function loadBoardInto(elementId, limit, mode){
     el.innerHTML = '<li class="loading">Noch keine Einträge — sei der Erste.</li>';
     return;
   }
-  el.innerHTML = list.slice(0, limit).map((entry, i)=>`
+  const renderRows = n => list.slice(0, n).map((entry, i)=>`
     <li><span class="rank">${i+1}</span><span class="rname">${escapeHtml(entry.name)}</span><span class="rtime">${entry.score} m</span></li>
   `).join('');
+  el.innerHTML = renderRows(limit);
+  if(list.length > limit){
+    const li = document.createElement('li');
+    li.className = 'board-more';
+    const btn = document.createElement('button');
+    btn.className = 'btn-more';
+    btn.textContent = 'Mehr anzeigen (' + (list.length - limit) + ')';
+    btn.addEventListener('click', ()=>{ el.innerHTML = renderRows(list.length); });
+    li.appendChild(btn);
+    el.appendChild(li);
+  }
 }
 function escapeHtml(str){
   const div = document.createElement('div');
