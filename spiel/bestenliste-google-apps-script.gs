@@ -31,9 +31,22 @@ function getSheet_() {
   let sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['Zeitstempel', 'Name', 'Meter', 'Datum']);
+    sh.appendRow(['Zeitstempel', 'Name', 'Meter', 'Datum', 'Herkunft']);
+  }
+  // Bestehende Tabellen (vor Einfuehrung der Herkunfts-Spalte) um Header E ergaenzen,
+  // ohne bestehende Zeilen 2-12 anzutasten.
+  if (!sh.getRange(1, 5).getValue()) {
+    sh.getRange(1, 5).setValue('Herkunft');
   }
   return sh;
+}
+
+const SOURCE_OPTIONS = ['Flyer', 'Instagram', 'Empfehlung', 'Sonstiges'];
+
+// Herkunft validieren: nur die vier erlaubten Optionen, sonst leer
+function cleanSource_(raw) {
+  const s = String(raw || '').trim();
+  return SOURCE_OPTIONS.indexOf(s) !== -1 ? s : '';
 }
 
 // Bestenliste abrufen:  ...?mode=all  oder  ...?mode=daily
@@ -71,13 +84,14 @@ function cleanName_(raw) {
   return res || 'Anonym';
 }
 
-// Neuen Score eintragen (POST mit JSON-Body: {name, score})
+// Neuen Score eintragen (POST mit JSON-Body: {name, score, source})
 function doPost(e) {
-  let name = 'Anonym', score = 0;
+  let name = 'Anonym', score = 0, source = '';
   try {
     const body = JSON.parse(e.postData.contents);
     name = cleanName_(body.name);
     score = Math.floor(Number(body.score));
+    source = cleanSource_(body.source);
   } catch (err) {
     return json_({ ok: false, error: 'bad_request' });
   }
@@ -86,7 +100,7 @@ function doPost(e) {
   }
   const now = new Date();
   const date = Utilities.formatDate(now, TZ, 'yyyy-MM-dd');
-  getSheet_().appendRow([now, name, score, date]);
+  getSheet_().appendRow([now, name, score, date, source]);
   return json_({ ok: true });
 }
 

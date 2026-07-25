@@ -191,6 +191,15 @@
   }
   .tab.active{ background:var(--orange); color:#fff; border-color:var(--orange); }
 
+  .source-label{ font-family:'Barlow Condensed'; font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:11.5px; color:var(--blue-lt); margin:0 0 8px; text-align:center; }
+  .source-group{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .source-btn{
+    font-family:'Barlow Condensed'; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; font-size:13px;
+    color:var(--blue-lt); background:var(--navy-panel); border:1px solid var(--line); border-radius:8px; padding:10px 6px; cursor:pointer;
+  }
+  .source-btn.active{ background:var(--orange); color:#fff; border-color:var(--orange); }
+  .source-btn.error{ border-color:#e05050; }
+
   .result-time{ font-family:'Barlow Condensed'; font-weight:900; font-size:48px; color:var(--orange-bright); text-align:center; margin:4px 0 2px; font-variant-numeric:tabular-nums; }
   .result-sub{ text-align:center; color:#9AA7B8; font-size:12.5px; margin-bottom:12px; }
   .badges{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:14px; }
@@ -258,6 +267,7 @@
 /* ============================================================
    KONFIG
    ============================================================ */
+const SOURCE_OPTIONS = ["Flyer", "Instagram", "Empfehlung", "Sonstiges"];
 const CONFIG = {
   GEWINNSPIEL_AKTIV: true,
   GEWINNSPIEL_DEADLINE: "31.08.2026",
@@ -1711,6 +1721,10 @@ function renderResult(finalScore){
     ${badges.length ? `<div class="badges">${badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>` : ''}
     ${CONFIG.GEWINNSPIEL_AKTIV ? `<div class="banner">🏆 ${CONFIG.GEWINNSPIEL_TEXT}</div>` : ''}
     <input type="text" id="nameInput" placeholder="Dein Name oder Instagram-Handle" maxlength="24">
+    <div class="source-label">Wie hast du uns gefunden?</div>
+    <div class="source-group" id="sourceGroup">
+      ${SOURCE_OPTIONS.map(opt => `<button type="button" class="source-btn" data-source="${opt}">${opt}</button>`).join('')}
+    </div>
     <button class="btn" id="submitBtn">In Bestenliste eintragen</button>
     <div id="submitMsg" class="hint" style="display:none;"></div>
     <div class="sharerow">
@@ -1730,13 +1744,29 @@ function renderResult(finalScore){
   `;
   setupBoardTabs('resultTabs', 'resultBoard', 10);
 
+  let selectedSource = '';
+  const sourceGroup = document.getElementById('sourceGroup');
+  sourceGroup.querySelectorAll('.source-btn').forEach(sBtn=>{
+    sBtn.onclick = ()=>{
+      selectedSource = sBtn.dataset.source;
+      sourceGroup.querySelectorAll('.source-btn').forEach(b=>{ b.classList.remove('active'); b.classList.remove('error'); });
+      sBtn.classList.add('active');
+    };
+  });
+
   document.getElementById('submitBtn').onclick = async ()=>{
+    if(!selectedSource){
+      sourceGroup.querySelectorAll('.source-btn').forEach(b=>b.classList.add('error'));
+      document.getElementById('submitMsg').style.display = 'block';
+      document.getElementById('submitMsg').textContent = "Bitte auswählen, wie du uns gefunden hast.";
+      return;
+    }
     const nameInput = document.getElementById('nameInput');
     let name = nameInput.value.trim() || "Anonym";
     name = name.slice(0,24);
     const btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = "Speichere…";
-    await submitScore(name, finalScore);
+    await submitScore(name, finalScore, selectedSource);
     btn.textContent = "Eingetragen ✓";
     document.getElementById('resultBoard').innerHTML = '<li class="loading">Lade…</li>';
     const activeMode = document.querySelector('#resultTabs .tab.active').dataset.mode;
@@ -1935,14 +1965,14 @@ async function getLeaderboard(mode){
   }
   return await storageGet(storageKeyFor(mode));
 }
-async function submitScore(name, score){
+async function submitScore(name, score, source){
   score = Math.max(0, Math.floor(score));
   let sentGlobal = false;
   // An die globale Bestenliste senden – bewusst ohne Content-Type-Header,
   // damit es eine "einfache" Anfrage ohne CORS-Preflight bleibt (Apps Script mag keinen Preflight)
   if(CONFIG.LEADERBOARD_URL && score <= CONFIG.LEADERBOARD_MAX_SCORE){
     try{
-      const res = await fetch(CONFIG.LEADERBOARD_URL, { method:'POST', body: JSON.stringify({ name, score }) });
+      const res = await fetch(CONFIG.LEADERBOARD_URL, { method:'POST', body: JSON.stringify({ name, score, source }) });
       sentGlobal = res.ok;
     }catch(e){ sentGlobal = false; }
   }
