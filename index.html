@@ -722,6 +722,7 @@
       transition: opacity 0.35s ease;
     }
     .promo-overlay.is-visible { opacity: 1; pointer-events: auto; }
+    body.promo-open { overflow: hidden; }
     .promo-modal {
       position: relative;
       width: 100%;
@@ -1380,6 +1381,7 @@ observeReveals();
 
   function dismiss() {
     overlay.classList.remove('is-visible');
+    document.body.classList.remove('promo-open');
     sessionStorage.setItem(STORAGE_KEY, '1');
   }
 
@@ -1388,7 +1390,10 @@ observeReveals();
     if (e.key === 'Escape' && overlay.classList.contains('is-visible')) dismiss();
   });
 
-  setTimeout(function () { overlay.classList.add('is-visible'); }, 400);
+  setTimeout(function () {
+    overlay.classList.add('is-visible');
+    document.body.classList.add('promo-open');
+  }, 400);
 })();
 </script>
 </body>

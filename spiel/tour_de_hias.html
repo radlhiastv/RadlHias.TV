@@ -296,7 +296,7 @@ const CONFIG = {
   SCENES: [
     { at:0,    name:"Dorf",      sky:['#0A1219','#1C3450'], ridge:'#111F30', hill:'#182D44', back:'#1F3A55', side:'dorf' },
     { at:450,  name:"Wald",      sky:['#081411','#173029'], ridge:'#0C1D17', hill:'#12281F', back:'#1A3629', side:'wald' },
-    { at:1000, name:"Strand",    sky:['#0A1B26','#2E6070'], ridge:'#12303E', hill:'#1A4452', back:'#255C68', side:'strand' },
+    { at:1000, name:"Strand",    sky:['#0A1B26','#2E6070'], ridge:'#2E3A46', hill:'#55492F', back:'#75663F', side:'strand' },
     { at:1600, name:"Großstadt", sky:['#100E1E','#2E2A50'], ridge:'#1A1830', hill:'#242044', back:'#302B58', side:'stadt' },
     { at:2300, name:"Alm",       sky:['#0B1526','#2C5078'], ridge:'#152A40', hill:'#1E3C58', back:'#28496A', side:'alm' }
   ]
@@ -1273,13 +1273,13 @@ function drawBackdropChunk(ctx, i, x, gy, col, side){
       drawFirShape(ctx, x+(k-1)*(16+hk*10), gy, 26+hk*26, col, col, null);
     }
   } else if(side === 'strand'){
-    if(h > 0.72){
+    if(h > 0.78){
       // Segelboot am Horizont
       ctx.fillStyle = col;
       ctx.beginPath(); ctx.moveTo(x-14,gy-8); ctx.lineTo(x+14,gy-8); ctx.lineTo(x+9,gy-3); ctx.lineTo(x-9,gy-3); ctx.closePath(); ctx.fill();
       ctx.beginPath(); ctx.moveTo(x+1,gy-9); ctx.lineTo(x+1,gy-30); ctx.lineTo(x+12,gy-11); ctx.closePath(); ctx.fill();
       ctx.beginPath(); ctx.moveTo(x-1,gy-12); ctx.lineTo(x-1,gy-27); ctx.lineTo(x-9,gy-12); ctx.closePath(); ctx.fill();
-    } else if(h > 0.4){
+    } else if(h > 0.55){
       // Strandhütte mit Flachdach
       const w = 26 + h*10, rx = x - w/2;
       ctx.fillStyle = col;
@@ -1287,6 +1287,14 @@ function drawBackdropChunk(ctx, i, x, gy, col, side){
       ctx.fillRect(rx-4, gy-19, w+8, 5);
       ctx.fillStyle = 'rgba(255,212,71,0.4)';
       ctx.fillRect(rx+w*0.3, gy-11, 4.5, 5);
+    } else if(h > 0.32){
+      // Sonnenschirm in der Kulisse
+      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x,gy-17); ctx.stroke();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(x-11,gy-16); ctx.quadraticCurveTo(x,gy-27,x+11,gy-16); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(245,241,235,0.22)';
+      ctx.beginPath(); ctx.moveTo(x-3.5,gy-18); ctx.quadraticCurveTo(x,gy-25,x+3.5,gy-18); ctx.closePath(); ctx.fill();
     } else {
       drawPalmShape(ctx, x, gy, 30+h*22, col);
     }
@@ -1342,16 +1350,12 @@ function drawRoadsideChunk(ctx, i, x, gy, side){
   } else if(side === 'wald'){
     drawFirShape(ctx, x, gy, 38+h*30, PAL.greenDark, PAL.green, PAL.wood);
   } else if(side === 'strand'){
-    if(h > 0.62){
-      drawPalmShape(ctx, x, gy, 44+h*22, PAL.wood, PAL.green);
-    } else if(h > 0.34){
-      // Sonnenschirm
-      ctx.strokeStyle = PAL.wood; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x,gy-26); ctx.stroke();
-      ctx.fillStyle = h > 0.48 ? PAL.pink : PAL.orangeBright;
-      ctx.beginPath(); ctx.moveTo(x-16,gy-24); ctx.quadraticCurveTo(x,gy-40,x+16,gy-24); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = 'rgba(245,241,235,0.35)';
-      ctx.beginPath(); ctx.moveTo(x-5,gy-27); ctx.quadraticCurveTo(x,gy-38,x+5,gy-27); ctx.closePath(); ctx.fill();
+    if(h > 0.38){
+      // Palmen prägen den Vordergrund – Größe variiert je Position
+      drawPalmShape(ctx, x, gy, 40+h*28, PAL.wood, PAL.green);
+      if(h > 0.72){
+        drawPalmShape(ctx, x+18+h*10, gy, 30+h*16, PAL.wood, PAL.green);
+      }
     } else {
       // Strandgras und Seestern
       ctx.strokeStyle = '#B9A671'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
