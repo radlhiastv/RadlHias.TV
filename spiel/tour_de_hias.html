@@ -297,7 +297,7 @@ const CONFIG = {
     { at:0,    name:"Dorf",      sky:['#0A1219','#1C3450'], ridge:'#111F30', hill:'#182D44', back:'#1F3A55', side:'dorf' },
     { at:450,  name:"Wald",      sky:['#081411','#173029'], ridge:'#0C1D17', hill:'#12281F', back:'#1A3629', side:'wald' },
     { at:1000, name:"Strand",    sky:['#0A1B26','#2E6070'], ridge:'#2E3A46', hill:'#55492F', back:'#75663F', side:'strand' },
-    { at:1600, name:"Großstadt", sky:['#100E1E','#2E2A50'], ridge:'#1A1830', hill:'#242044', back:'#302B58', side:'stadt' },
+    { at:1600, name:"Großstadt", sky:['#080E18','#183050'], ridge:'#0E1D2C', hill:'#15293C', back:'#1C3A52', side:'stadt' },
     { at:2300, name:"Alm",       sky:['#0B1526','#2C5078'], ridge:'#152A40', hill:'#1E3C58', back:'#28496A', side:'alm' }
   ]
 };
@@ -492,11 +492,25 @@ function renderStart(){
       <div class="legend">
         <div>
           <div class="legend-col-title good">Einsammeln</div>
-          <div class="legend-item"><svg class="lem" viewBox="0 0 24 24"><path d="M12 1.5 L14.8 8.9 22.5 9.4 16.4 14.4 18.4 22 12 17.7 5.6 22 7.6 14.4 1.5 9.4 9.2 8.9 Z" fill="#FFD447"/></svg> Stern – Bonuspunkte</div>
+          <div class="legend-item"><svg class="lem" viewBox="0 0 24 24"><path d="M12 1.5 L14.8 8.9 22.5 9.4 16.4 14.4 18.4 22 12 17.7 5.6 22 7.6 14.4 1.5 9.4 9.2 8.9 Z" fill="#FFD447"/></svg> Stern – Extra Meter</div>
+          <div class="legend-item"><svg class="lem" viewBox="0 0 24 24">
+            <path d="M2.6 19.5 L5.4 18.7 M2 17 L5 16.7 M2.4 14.4 L5.2 14.7" stroke="#E06820" stroke-width="1.2" stroke-linecap="round"/>
+            <g transform="rotate(-30 8.5 19)">
+              <circle cx="8.5" cy="19" r="3" fill="#0A1219" stroke="rgba(245,241,235,0.45)" stroke-width="1.1"/>
+              <circle cx="18.5" cy="19" r="3" fill="#0A1219" stroke="rgba(245,241,235,0.45)" stroke-width="1.1"/>
+              <path d="M8.5 19 L13 16.5 M8.5 19 L11.3 13.2 L13 16.5 L16 13 L18.5 19 M11.3 13.2 L16 13" stroke="#C85A14" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="13" cy="16.5" r="0.9" fill="#2A3B4C"/>
+              <path d="M11 12.5 L13.5 17.6" stroke="#1F3346" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+              <path d="M11 12.5 L12.8 9.2" stroke="#E06820" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M12.8 9.2 L16.4 12" stroke="#E06820" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+              <circle cx="14" cy="8" r="1.8" fill="#E8B48C"/>
+              <path d="M12.1 8 a1.9 1.9 0 0 1 3.8 0 Z" fill="#F5F1EB"/>
+            </g>
+          </svg> Wheelie – Drücke 2 x DUCKEN um auf dem Hinterrad zu fahren. Das gibt Extra Meter.</div>
         </div>
         <div>
           <div class="legend-col-title bad">Ausweichen</div>
-          <div class="legend-item"><svg class="lem lem-hole" viewBox="0 0 40 24"><ellipse cx="20" cy="12" rx="17" ry="9" fill="#0A1219" stroke="rgba(245,241,235,0.35)" stroke-width="1.5"/></svg> Schlagloch – springen</div>
+          <div class="legend-item"><svg class="lem lem-hole" viewBox="0 0 40 24"><ellipse cx="20" cy="12" rx="17" ry="9" fill="#0A1219" stroke="rgba(245,241,235,0.35)" stroke-width="1.5"/></svg> Schlagloch – SPRINGEN</div>
           <div class="legend-item"><svg class="lem" viewBox="0 0 24 24">
             <ellipse cx="17.5" cy="4.5" rx="3" ry="3.7" fill="#E4568C"/>
             <path d="M17.5 8 Q15 12 11 13.5" stroke="rgba(245,241,235,0.6)" stroke-width="0.8" fill="none"/>
@@ -505,7 +519,7 @@ function renderStart(){
             <path d="M4.5 19.5 L9 13.5 L13.5 19.5 Z" fill="#E4568C"/>
             <line x1="7" y1="19.5" x2="7" y2="23" stroke="#E8B48C" stroke-width="1.6" stroke-linecap="round"/>
             <line x1="11" y1="19.5" x2="11" y2="23" stroke="#E8B48C" stroke-width="1.6" stroke-linecap="round"/>
-          </svg> Kind – springen</div>
+          </svg> Kind – SPRINGEN</div>
           <div class="legend-item"><svg class="lem" viewBox="0 0 24 24">
             <rect x="1" y="10" width="22" height="7" rx="2.4" fill="#F5F1EB"/>
             <path d="M5 10 L8 5.5 L16.5 5.5 L19.5 10 Z" fill="#F5F1EB"/>
@@ -513,7 +527,7 @@ function renderStart(){
             <path d="M13 6.4 L15.6 6.4 L17.6 9.4 L13 9.4 Z" fill="#16273D"/>
             <circle cx="6.5" cy="17.5" r="2.8" fill="#10181F"/><circle cx="6.5" cy="17.5" r="1.1" fill="#93A9BB"/>
             <circle cx="17.5" cy="17.5" r="2.8" fill="#10181F"/><circle cx="17.5" cy="17.5" r="1.1" fill="#93A9BB"/>
-          </svg> Auto – springen</div>
+          </svg> Auto – SPRINGEN</div>
           <div class="legend-item"><svg class="lem" viewBox="0 0 24 24">
             <path d="M18 12 L23 7 L23 11.5 L19.5 13.5 Z" fill="#E06820"/>
             <ellipse cx="12" cy="13" rx="9.5" ry="3.4" fill="#F5F1EB"/>
@@ -522,7 +536,7 @@ function renderStart(){
             <ellipse cx="11" cy="14.6" rx="4.4" ry="1.6" fill="#E3DACB"/>
             <line x1="2" y1="8.5" x2="2" y2="17.5" stroke="rgba(245,241,235,0.8)" stroke-width="1.4" stroke-linecap="round"/>
             <circle cx="2.4" cy="13" r="1.1" fill="#E06820"/>
-          </svg> Flugzeug – ducken</div>
+          </svg> Flugzeug – DUCKEN</div>
         </div>
       </div>
       <div class="colorpick">
@@ -1299,17 +1313,21 @@ function drawBackdropChunk(ctx, i, x, gy, col, side){
       drawPalmShape(ctx, x, gy, 30+h*22, col);
     }
   } else if(side === 'stadt'){
-    // Hochhaus-Silhouetten mit beleuchteten Fenstern
-    const w = 22 + h*16, hh = 46 + h*40, rx = x - w/2;
+    // Skyline mit echten Hochhaeusern: ein paar hohe Tuerme, dazwischen niedrigere Baukoerper
+    const tall = h > 0.78;
+    const w = tall ? (20 + h*12) : (28 + h*16);
+    const hh = tall ? (120 + h*70) : (48 + h*30);
+    const rx = x - w/2;
+    const rows = tall ? 7 : 3;
     ctx.fillStyle = col;
     ctx.fillRect(rx, gy-hh, w, hh);
-    if(h > 0.7){ ctx.fillRect(x-1.5, gy-hh-10, 3, 10); }        // Antenne
-    else if(h > 0.45){ ctx.fillRect(rx+3, gy-hh-6, w-6, 6); }   // Dachaufbau
-    ctx.fillStyle = 'rgba(255,212,71,' + (0.22 + h*0.22).toFixed(2) + ')';
-    for(let fy=0; fy<4; fy++){
-      for(let fxi=0; fxi<3; fxi++){
-        if(hash1(i*31.7 + fy*5.1 + fxi*2.3) > 0.45){
-          ctx.fillRect(rx + 4 + fxi*(w-8)/3, gy-hh + 7 + fy*(hh-14)/4, 3.5, 4.5);
+    if(tall){ ctx.fillRect(x-1.5, gy-hh-12, 3, 12); }           // Antenne auf dem Hochhaus
+    else if(h > 0.5){ ctx.fillRect(rx+3, gy-hh-6, w-6, 6); }    // Dachaufbau
+    ctx.fillStyle = 'rgba(255,196,102,0.45)';
+    for(let fy=0; fy<rows; fy++){
+      for(let fxi=0; fxi<2; fxi++){
+        if(hash1(i*31.7 + fy*5.1 + fxi*2.3) > 0.68){
+          ctx.fillRect(rx + 5 + fxi*(w-10)/2, gy-hh + 9 + fy*(hh-18)/rows, 3, 4);
         }
       }
     }
