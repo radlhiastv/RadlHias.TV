@@ -49,3 +49,24 @@ Ersetze `radlhias2024` durch dein gewünschtes Passwort.
 1. Repo → Settings → Pages
 2. Source: Deploy from a branch → main → / (root)
 3. Save → Die Seite ist unter `https://USERNAME.github.io/REPO-NAME` erreichbar
+
+## Cache-Control Header (Performance)
+
+GitHub Pages liefert alle Dateien aktuell mit `Cache-Control: max-age=600` aus (10 Minuten) –
+das lässt sich **nicht** über eine Datei im Repo ändern (kein `_headers`/`vercel.json`-Äquivalent,
+GitHub Pages setzt seine Header serverseitig fix). Um Bilder/CSS/JS ein Jahr lang cachen zu lassen,
+muss ein CDN vorgeschaltet werden:
+
+1. Kostenlosen Cloudflare-Account anlegen, Domain `radlhias.tv` hinzufügen.
+2. Nameserver bei INWX auf die von Cloudflare angezeigten Werte umstellen (DNS-Records vorher
+   1:1 übernehmen, insbesondere den `A`/`CNAME`-Eintrag auf GitHub Pages).
+3. In Cloudflare unter **Caching → Cache Rules** eine Regel anlegen:
+   - Wenn URI-Pfad endet auf `.webp`, `.jpg`, `.png`, `.css`, `.js`, `.woff2` → Edge Cache TTL 1 Jahr,
+     Browser Cache TTL 1 Jahr (entspricht `Cache-Control: public, max-age=31536000, immutable`).
+   - HTML-Dateien (`.html` bzw. `/`) explizit ausnehmen bzw. auf kurze TTL lassen, damit
+     Content-Updates sofort sichtbar bleiben.
+4. Proxy-Status (oranges Wölkchen) für den DNS-Eintrag aktivieren, sonst greifen die Cache Rules nicht.
+
+Da Bild-/CSS-/JS-Dateinamen sich bei Änderungen aktuell nicht automatisch ändern (kein
+Cache-Busting per Hash), sollte man nach dem Ersetzen einer Datei mit gleichem Namen in Cloudflare
+einmal **Purge Cache** auslösen, damit Besucher nicht bis zu ein Jahr lang eine alte Version sehen.
