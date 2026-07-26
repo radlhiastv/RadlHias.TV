@@ -153,6 +153,16 @@
 
     /* ===== ZIELGRUPPEN-WEGWEISER ===== */
     .audience-picker { background: var(--cream); padding: 28px 20px; margin-top: 56px; }
+    .audience-picker-title {
+      max-width: 1100px;
+      margin: 0 auto 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
     .audience-picker-inner {
       max-width: 1100px;
       margin: 0 auto;
@@ -535,57 +545,116 @@
     }
 
     /* ===== TOUR DE HIAS TEASER ===== */
-    .tdh-teaser { background: var(--cream2); }
-    .tdh-teaser-inner {
+    .tdh-hero {
+      position: relative;
+      background: var(--navy);
+      overflow: hidden;
+      border-top: 4px solid var(--orange);
+      border-bottom: 4px solid var(--orange);
+    }
+    .tdh-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(224,104,32,0.28) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(224,104,32,0.18) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .tdh-hero-inner {
+      position: relative;
       max-width: 1000px;
       margin: 0 auto;
-      padding: 56px 20px;
+      padding: 60px 20px;
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 48px;
     }
-    .tdh-teaser-media {
-      flex: 0 0 260px;
-      border-radius: 14px;
+    .tdh-hero-media {
+      flex: 0 0 300px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,241,235,0.08);
+      transform: rotate(-2deg);
     }
-    .tdh-teaser-media img { display: block; width: 100%; height: auto; }
-    .tdh-teaser-text { flex: 1 1 420px; }
-    .tdh-teaser-text h2 {
+    .tdh-hero-media img { display: block; width: 100%; height: auto; }
+    .tdh-hero-text { flex: 1 1 420px; }
+    .tdh-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(224,104,32,0.16);
+      border: 1px solid rgba(224,104,32,0.5);
+      color: var(--orange-light);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 30px;
+      margin-bottom: 18px;
+    }
+    .tdh-hero-text h2 {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--navy);
-      font-size: clamp(24px, 4vw, 32px);
-      line-height: 1.2;
-      margin-bottom: 14px;
+      color: var(--cream);
+      font-size: clamp(30px, 4.6vw, 42px);
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.4);
     }
-    .tdh-teaser-text p {
-      color: var(--text-dim);
-      font-size: 15px;
+    .tdh-hero-text h2 span { color: var(--orange-light); }
+    .tdh-hero-text > p {
+      color: var(--blue-lt);
+      font-size: 15.5px;
       line-height: 1.65;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
+      max-width: 480px;
     }
-    .tdh-teaser-cta {
+    .tdh-hero-conditions {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 26px;
+      font-size: 14.5px;
+      color: var(--cream2);
+    }
+    .tdh-hero-conditions li { display: flex; gap: 8px; align-items: baseline; }
+    .tdh-hero-conditions b {
+      color: var(--orange-light);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+    .tdh-hero-cta {
       display: inline-block;
       background: var(--orange);
       color: white;
-      padding: 14px 30px;
+      padding: 16px 34px;
       border-radius: 10px;
       text-decoration: none;
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
       letter-spacing: 1.5px;
       text-transform: uppercase;
+      box-shadow: 0 10px 30px rgba(224,104,32,0.4);
       transition: background 0.2s, transform 0.15s;
     }
-    .tdh-teaser-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .tdh-hero-cta:hover { background: var(--orange-light); transform: translateY(-2px); }
     @media (max-width: 700px) {
-      .tdh-teaser-inner { flex-direction: column; text-align: center; }
-      .tdh-teaser-media { flex: 0 0 auto; max-width: 260px; }
+      .tdh-hero-inner { flex-direction: column; text-align: center; padding: 44px 20px; }
+      .tdh-hero-media { flex: 0 0 auto; max-width: 220px; transform: rotate(-1.5deg); }
+      .tdh-hero-conditions { align-items: center; }
+      .tdh-hero-conditions li { flex-direction: column; gap: 2px; text-align: center; }
+      .tdh-hero-text > p { margin-left: auto; margin-right: auto; }
     }
 
     /* ===== KONFIGURATOR-WERBEBANNER ===== */
@@ -963,6 +1032,7 @@
 
 <!-- ===== ZIELGRUPPEN-WEGWEISER ===== -->
 <section class="audience-picker">
+  <div class="audience-picker-title">Wähle eine Abkürzung!</div>
   <div class="audience-picker-inner">
     <a href="fuer-haendler.html" class="audience-card">
       <span class="audience-card-label">Ich bin Fahrradhändler</span>
@@ -1181,16 +1251,22 @@
   <p>Kette reinigen, Reifendruck richtig einstellen, erkennen wann ein Bauteil wirklich hin ist und wann es nur ein Verkaufsgespräch ist – nach <span class="js-years">27</span> Jahren im Bike-Business weiß ich, worauf es ankommt. Mit dem Luftdruck-Rechner und den weiteren Tools sparst du dir unnötige Werkstattbesuche und unnötige Ausgaben.</p>
 </section>
 
-<!-- ===== TOUR DE HIAS TEASER ===== -->
-<section class="tdh-teaser reveal">
-  <div class="tdh-teaser-inner">
-    <div class="tdh-teaser-media">
-      <img src="tour-de-hias/screenshots/tour-de-hias-screenshot-action.png" alt="Spielszene aus Tour de Hias mit Schlagloch, Auto und Flugzeug als Hindernisse" loading="lazy" width="760" height="1040">
+<!-- ===== TOUR DE HIAS GEWINNSPIEL-HERO ===== -->
+<section class="tdh-hero reveal">
+  <div class="tdh-hero-inner">
+    <div class="tdh-hero-media">
+      <img src="img/Tour-de-Hias.jpg" alt="Nächtliche Radltour-Szene aus dem Browsergame Tour de Hias mit Schlagloch, Auto und Flugzeug als Hindernisse" loading="lazy" width="1344" height="1680">
     </div>
-    <div class="tdh-teaser-text">
-      <h2>Mach mit bei der Tour de Hias</h2>
-      <p>Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne – direkt im Browser, ganz ohne Installation. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht, gewinnt einen Rad-Service bei mir (exklusive Material). Nur für Biker aus <strong>5120 St. Pantaleon</strong>.</p>
-      <a href="tour-de-hias/index.html" class="tdh-teaser-cta">Zur Tour de Hias →</a>
+    <div class="tdh-hero-text">
+      <div class="tdh-hero-badge">🏆 Es gibt was zu gewinnen!</div>
+      <h2>Tour de Hias spielen &amp; <span>Rad-Service gewinnen</span></h2>
+      <p>Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne – direkt im Browser, ganz ohne Installation.</p>
+      <ul class="tdh-hero-conditions">
+        <li><b>Frist</b> Bis 31.08.2026 die höchste Punktzahl erreichen</li>
+        <li><b>Preis</b> Ein Rad-Service bei mir (exklusive Material)</li>
+        <li><b>Teilnahme</b> Nur für Biker aus 5120 St. Pantaleon</li>
+      </ul>
+      <a href="tour-de-hias/index.html" class="tdh-hero-cta">Jetzt spielen &amp; gewinnen →</a>
     </div>
   </div>
 </section>
