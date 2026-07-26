@@ -44,7 +44,6 @@
 
     /* ===== HERO (Foto-Collage) ===== */
     .hero {
-      margin-top: 56px;
       position: relative;
       background:
         radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
@@ -126,7 +125,7 @@
     }
 
     .hero-center { text-align: center; color: var(--cream); padding: 0 6px; }
-    .hero-logo-badge { width: 117px; height: auto; margin: 0 auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
+    .hero-logo-badge { width: 190px; height: auto; margin: -30px auto 24px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35)); }
     .hero-bio {
       font-size: 16px;
       line-height: 1.75;
@@ -151,6 +150,45 @@
       .hero-center { order: 1; }
       .hero::before { width: 100%; clip-path: polygon(100% 0, 100% 30%, 0 0); opacity: 0.85; }
     }
+
+    /* ===== ZIELGRUPPEN-WEGWEISER ===== */
+    .audience-picker { background: var(--cream); padding: 28px 20px; margin-top: 56px; }
+    .audience-picker-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .audience-card {
+      flex: 1 1 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: white;
+      border: 1px solid var(--cream3);
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .audience-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 26px rgba(28,52,72,0.14);
+      border-color: var(--orange);
+    }
+    .audience-card-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: clamp(19px, 2.4vw, 23px);
+      line-height: 1.2;
+      color: var(--navy);
+    }
+    .audience-card-label::before { content: '→ '; color: var(--orange); }
+    .audience-card-desc { font-size: 16px; color: var(--text-dim); line-height: 1.55; }
 
     /* ===== FEATURE BAR ===== */
     .feature-bar {
@@ -357,6 +395,190 @@
       hyphens: auto;
     }
     .fuer-wen p:last-child { margin-bottom: 0; }
+
+    /* ===== HÄNDLER-HERO ===== */
+    .haendler-hero {
+      position: relative;
+      background: var(--navy);
+      border-top: 5px solid var(--orange);
+      box-shadow: 0 -14px 26px -14px rgba(0,0,0,0.55) inset;
+    }
+    .haendler-hero-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21/9;
+      min-height: 340px;
+      overflow: hidden;
+    }
+    .haendler-hero-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 55%;
+      display: block;
+    }
+    .haendler-hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,18,26,0.25) 0%, rgba(10,18,26,0.55) 55%, rgba(10,18,26,0.88) 100%);
+    }
+    .haendler-hero-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      text-align: left;
+    }
+    .haendler-hero-text { max-width: 560px; }
+    .haendler-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--orange);
+      font-size: 15px;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .haendler-hero h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+      font-size: clamp(32px, 4.6vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+    }
+    .haendler-hero p {
+      color: #dbe6ee;
+      font-size: 17px;
+      line-height: 1.65;
+      margin-bottom: 26px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .haendler-hero-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 16px 34px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .haendler-hero-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    .haendler-hero-points {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 0 0 auto;
+    }
+    .haendler-hero-points li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--cream);
+      font-size: 17px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+    .haendler-hero-points .hp-check {
+      color: var(--orange);
+      background: rgba(245,241,235,0.18);
+      width: 28px; height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    @media (max-width: 860px) {
+      .haendler-hero-media { aspect-ratio: unset; min-height: 620px; }
+      .haendler-hero-inner { flex-direction: column; justify-content: center; text-align: center; padding: 40px 24px; }
+      .haendler-hero-text { max-width: 100%; }
+      .haendler-hero-points { align-items: center; }
+      .haendler-hero-points li { white-space: normal; }
+    }
+
+    /* ===== TOUR DE HIAS TEASER ===== */
+    .tdh-teaser { background: var(--cream2); }
+    .tdh-teaser-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 56px 20px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .tdh-teaser-media {
+      flex: 0 0 260px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .tdh-teaser-media img { display: block; width: 100%; height: auto; }
+    .tdh-teaser-text { flex: 1 1 420px; }
+    .tdh-teaser-text h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      font-size: clamp(24px, 4vw, 32px);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .tdh-teaser-text p {
+      color: var(--text-dim);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .tdh-teaser-cta {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .tdh-teaser-cta:hover { background: #a04a10; transform: translateY(-1px); }
+    @media (max-width: 700px) {
+      .tdh-teaser-inner { flex-direction: column; text-align: center; }
+      .tdh-teaser-media { flex: 0 0 auto; max-width: 260px; }
+    }
 
     /* ===== KONFIGURATOR-WERBEBANNER ===== */
     .kfg-banner { position: relative; background: var(--navy); }
@@ -706,151 +928,10 @@
       .reveal { opacity: 1 !important; transform: none !important; }
     }
 
-    /* ===== TOUR DE HIAS AKTIONS-POPUP ===== */
-    .promo-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      background: rgba(10,18,26,0.72);
-      backdrop-filter: blur(3px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 56px 20px 20px;
-      box-sizing: border-box;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-    .promo-overlay.is-visible { opacity: 1; pointer-events: auto; }
-    body.promo-open { overflow: hidden; }
-    .promo-modal {
-      position: relative;
-      width: 100%;
-      max-width: 460px;
-      margin: 20px auto;
-      background:
-        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
-        linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%);
-      border: 1px solid rgba(255,183,135,0.35);
-      border-radius: 18px;
-      overflow: hidden;
-      text-align: center;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,183,135,0.08), 0 0 60px rgba(224,104,32,0.35);
-      transform: translateY(18px) scale(0.97);
-      transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1);
-    }
-    .promo-overlay.is-visible .promo-modal { transform: translateY(0) scale(1); }
-    .promo-hero {
-      position: relative;
-      height: 200px;
-      margin-bottom: -12px;
-    }
-    .promo-hero img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 70%;
-    }
-    .promo-hero::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: 90px;
-      background: linear-gradient(to bottom, transparent, var(--navy) 85%);
-    }
-    .promo-body { padding: 24px 32px 32px; }
-    .promo-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      z-index: 1;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 2px solid rgba(245,241,235,0.85);
-      background: rgba(8,13,18,0.75);
-      color: #fff;
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.45);
-      transition: background 0.2s, transform 0.15s;
-    }
-    .promo-close:hover { background: var(--orange, #C85A14); transform: scale(1.08); }
-    .promo-modal h2 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--cream);
-      font-size: clamp(26px, 6vw, 34px);
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
-    .promo-modal p { color: #dbe6ee; font-size: 15px; line-height: 1.65; margin-bottom: 12px; }
-    .promo-modal p:last-of-type { margin-bottom: 24px; }
-    .promo-prize {
-      display: inline-block;
-      background: rgba(200,90,20,0.18);
-      border: 1px solid rgba(255,183,135,0.35);
-      border-radius: 10px;
-      padding: 10px 18px;
-      margin-bottom: 22px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--cream);
-      font-size: 14.5px;
-      line-height: 1.5;
-    }
-    .promo-prize strong { color: #ffb787; }
-    .promo-cta {
-      display: inline-block;
-      background: var(--orange);
-      color: white;
-      padding: 16px 34px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-    }
-    .promo-cta:hover { background: #a04a10; transform: translateY(-1px); }
-    .promo-fine { margin-top: 16px; font-size: 12px; color: var(--blue-lt); }
-    @media (max-width: 480px) {
-      .promo-hero { height: 160px; }
-      .promo-body { padding: 20px 22px 26px; }
-    }
   </style>
 </head>
 
 <body>
-
-<!-- ===== TOUR DE HIAS AKTIONS-POPUP ===== -->
-<div class="promo-overlay" id="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promo-title">
-  <div class="promo-modal">
-    <div class="promo-hero"><img src="img/Tour-de-Hias-web.jpg" alt="Nächtliche Radltour aus der Fahrer-Perspektive"></div>
-    <button class="promo-close" id="promo-close" aria-label="Popup schließen">&times;</button>
-    <div class="promo-body">
-      <h2 id="promo-title">Servus Nachbarn!<br>Mach mit bei der Tour de Hias</h2>
-      <p>Spiel dich durch mein kleines Fahrrad-Game, weiche Kindern, Autos &amp; Schlaglöchern aus und lad dir am Ende deine persönliche Urkunde herunter.</p>
-      <p>Folge mir auf <strong>Instagram (@radlhias.tv)</strong> und schick mir deine Urkunde per DM. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht hat, gewinnt einen <strong>Rad-Service bei mir</strong> (exklusive Material)!</p>
-      <div class="promo-prize">🏆 Gewinn: <strong>1× Rad-Service</strong><br>(exkl. Material)<br><br>Teilnahme: Instagram folgen + Urkunde per DM<br><br>Nur für Biker aus <strong>5120 St. Pantaleon</strong></div>
-      <br>
-      <a href="spiel/index.html" class="promo-cta">Jetzt mitspielen</a>
-      <div class="promo-fine">Einsendeschluss 31.08.2026 · Gewinner wird über die Bestenliste ermittelt</div>
-    </div>
-  </div>
-</div>
 
 <!-- ===== NAVIGATION ===== -->
 <nav class="main-nav">
@@ -860,43 +941,63 @@
     <span></span><span></span><span></span>
   </label>
   <div class="nav-links">
+    <a href="fuer-haendler.html">Für Händler</a>
     <a href="konfigurator.html">Konfigurator</a>
     <a href="#blog">Blog</a>
     <a href="videos.html">Videos</a>
     <a href="bikeservice.html">Bike Service</a>
-    <a href="spiel/index.html">Tour de Hias</a>
+    <a href="tour-de-hias/index.html">Tour de Hias</a>
     <a href="faq.html">FAQ</a>
     <a href="history.html">Meine Laufbahn</a>
     <a href="#kontakt" class="nav-cta">Kontakt</a>
   </div>
 </nav>
 
-<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
-<section class="value-hero">
-  <div class="value-hero-inner">
-    <div class="value-hero-eyebrow">Bei RadlHias.TV profitierst Du von</div>
-    <h1>Wissen &amp; Erfahrung aus mehr als <span class="js-years">27</span> Jahren. Ohne etwas kaufen zu müssen!</h1>
-    <p>Niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
+<!-- ===== ZIELGRUPPEN-WEGWEISER ===== -->
+<section class="audience-picker">
+  <div class="audience-picker-inner">
+    <a href="fuer-haendler.html" class="audience-card">
+      <span class="audience-card-label">Ich bin Fahrradhändler</span>
+      <span class="audience-card-desc">Marketing-Systeme &amp; digitale Tools für dein Geschäft</span>
+    </a>
+    <a href="#tools" class="audience-card">
+      <span class="audience-card-label">Ich will dazulernen</span>
+      <span class="audience-card-desc">Kostenlose Tools, Tipps &amp; 27 Jahre Erfahrung</span>
+    </a>
+    <a href="bikeservice.html" class="audience-card">
+      <span class="audience-card-label">Ich brauche einen Radservice</span>
+      <span class="audience-card-desc">Wartung &amp; Beratung in St. Pantaleon / Innviertel</span>
+    </a>
+    <a href="tour-de-hias/index.html" class="audience-card">
+      <span class="audience-card-label">Ich will "Tour de Hias" spielen</span>
+      <span class="audience-card-desc">Kostenloses Browsergame – Sterne sammeln &amp; Bestenliste knacken</span>
+    </a>
+  </div>
+</section>
 
-    <div class="value-stats">
-      <div class="vstat">
-        <span class="vstat-num" data-years-since="1999">27</span>
-        <span class="vstat-label">Jahre Bike Business</span>
+<!-- ===== HÄNDLER-HERO ===== -->
+<section class="haendler-hero reveal">
+  <div class="haendler-hero-media">
+    <img src="img/haendler-hero.png" alt="Beleuchtetes Fahrradgeschäft bei Nacht, Blick von der Straße durchs Schaufenster" width="2304" height="1296">
+    <div class="haendler-hero-scrim"></div>
+    <div class="haendler-hero-inner">
+      <div class="haendler-hero-text">
+        <div class="haendler-hero-eyebrow">Für Fahrradhändler &amp; Fachgeschäfte</div>
+        <h2>Du betreibst einen Fahrradladen?</h2>
+        <p>Ich entwickle effiziente Marketing-Systeme und digitale Lösungen für Bikeshops – auf Basis von 27 Jahren Brancheninsider-Wissen. Kein Agentur-Blabla, sondern was wirklich funktioniert.</p>
+        <a href="fuer-haendler.html" class="haendler-hero-cta">Zum Angebot für Händler →</a>
       </div>
-      <div class="vstat">
-        <span class="vstat-num" data-target="4">4</span>
-        <span class="vstat-label">Kostenlose Tools</span>
-      </div>
-      <div class="vstat">
-        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
-        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
-      </div>
+      <ul class="haendler-hero-points">
+        <li><span class="hp-check">✓</span> Website &amp; Google-Sichtbarkeit</li>
+        <li><span class="hp-check">✓</span> Kundenbindung &amp; Terminbuchung</li>
+        <li><span class="hp-check">✓</span> Automatisierte Prozesse</li>
+      </ul>
     </div>
   </div>
 </section>
 
 <!-- ===== FEATURE BAR ===== -->
-<div class="feature-bar">
+<div class="feature-bar" id="tools">
   <div class="feature-bar-inner">
     <a href="bikeservice.html" class="feature-item reveal">
       <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -904,7 +1005,7 @@
         <circle cx="7.5" cy="16.5" r="1" fill="#c85a14" stroke="none"/>
       </svg>
       <div class="fi-title">Bike Service</div>
-      <div class="fi-desc">Wartung, Reparatur, Beratung</div>
+      <div class="fi-desc">Wartung, Reparatur &amp; Beratung – vor Ort in St. Pantaleon</div>
     </a>
     <a href="konfigurator.html" class="feature-item reveal">
       <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -935,7 +1036,7 @@
       <div class="fi-title">Blog</div>
       <div class="fi-desc">Tipps, Tests, ehrliche Erfahrungen</div>
     </a>
-    <a href="spiel/index.html" class="feature-item reveal">
+    <a href="tour-de-hias/index.html" class="feature-item reveal">
       <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="5.5" cy="17" r="3.6"/>
         <circle cx="18.5" cy="17" r="3.6"/>
@@ -947,6 +1048,30 @@
     </a>
   </div>
 </div>
+
+<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
+<section class="value-hero">
+  <div class="value-hero-inner">
+    <div class="value-hero-eyebrow">Bei RadlHias.TV profitierst Du von</div>
+    <h1>Wissen &amp; Erfahrung aus mehr als <span class="js-years">27</span> Jahren. Ohne etwas kaufen zu müssen!</h1>
+    <p>Niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
+
+    <div class="value-stats">
+      <div class="vstat">
+        <span class="vstat-num" data-years-since="1999">27</span>
+        <span class="vstat-label">Jahre Bike Business</span>
+      </div>
+      <div class="vstat">
+        <span class="vstat-num" data-target="4">4</span>
+        <span class="vstat-label">Kostenlose Tools</span>
+      </div>
+      <div class="vstat">
+        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
+        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== HERO (Foto-Collage mit echten Fotos) ===== -->
 <section class="hero">
@@ -1048,6 +1173,20 @@
   <p>Kette reinigen, Reifendruck richtig einstellen, erkennen wann ein Bauteil wirklich hin ist und wann es nur ein Verkaufsgespräch ist – nach <span class="js-years">27</span> Jahren im Bike-Business weiß ich, worauf es ankommt. Mit dem Luftdruck-Rechner und den weiteren Tools sparst du dir unnötige Werkstattbesuche und unnötige Ausgaben.</p>
 </section>
 
+<!-- ===== TOUR DE HIAS TEASER ===== -->
+<section class="tdh-teaser reveal">
+  <div class="tdh-teaser-inner">
+    <div class="tdh-teaser-media">
+      <img src="tour-de-hias/screenshots/tour-de-hias-screenshot-action.png" alt="Spielszene aus Tour de Hias mit Schlagloch, Auto und Flugzeug als Hindernisse" loading="lazy" width="760" height="1040">
+    </div>
+    <div class="tdh-teaser-text">
+      <h2>Mach mit bei der Tour de Hias</h2>
+      <p>Weich Kindern, Autos &amp; Schlaglöchern aus und sammle Sterne – direkt im Browser, ganz ohne Installation. Wer bis <strong>31.08.2026</strong> die höchste Punktzahl erreicht, gewinnt einen Rad-Service bei mir (exklusive Material). Nur für Biker aus <strong>5120 St. Pantaleon</strong>.</p>
+      <a href="tour-de-hias/index.html" class="tdh-teaser-cta">Zur Tour de Hias →</a>
+    </div>
+  </div>
+</section>
+
 <!-- ===== BLOG TEASER ===== -->
 <section class="section" id="blog">
   <h2 class="section-title">Aktuelle Artikel</h2>
@@ -1112,10 +1251,11 @@
       <a href="blog/index.html">Blog</a>
       <a href="konfigurator.html">Konfigurator</a>
       <a href="videos.html">Videos</a>
-      <a href="spiel/index.html">Tour de Hias</a>
+      <a href="bikeservice.html">Bike Service</a>
+      <a href="tour-de-hias/index.html">Tour de Hias</a>
       <a href="faq.html">FAQ</a>
       <a href="history.html">Meine Laufbahn</a>
-      <a href="fuer-haendler.html">Für Fahrradhändler</a>
+      <a href="fuer-haendler.html">Für Händler</a>
       <a href="impressum.html">Impressum</a>
       <a href="datenschutz.html">Datenschutz</a>
     </nav>
@@ -1368,33 +1508,5 @@ observeReveals();
 </script>
 
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
-
-<!-- Tour de Hias Aktions-Popup: Anzeige & bewusstes Schließen -->
-<script>
-(function () {
-  var STORAGE_KEY = 'radlhias_tour_promo_dismissed_2026';
-  if (sessionStorage.getItem(STORAGE_KEY)) return;
-
-  var overlay = document.getElementById('promo-overlay');
-  var closeBtn = document.getElementById('promo-close');
-  if (!overlay || !closeBtn) return;
-
-  function dismiss() {
-    overlay.classList.remove('is-visible');
-    document.body.classList.remove('promo-open');
-    sessionStorage.setItem(STORAGE_KEY, '1');
-  }
-
-  closeBtn.addEventListener('click', dismiss);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.classList.contains('is-visible')) dismiss();
-  });
-
-  setTimeout(function () {
-    overlay.classList.add('is-visible');
-    document.body.classList.add('promo-open');
-  }, 400);
-})();
-</script>
 </body>
 </html>
