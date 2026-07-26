@@ -1223,6 +1223,9 @@ details.truth-box > summary:hover {
     bottom: 24px;
     transform: none;
     flex-direction: row;
+    gap: 8px;
   }
+  .social-btn { width: 38px; height: 38px; }
+  .social-btn svg { width: 18px; height: 18px; }
   .social-tooltip { display: none; }
 }
