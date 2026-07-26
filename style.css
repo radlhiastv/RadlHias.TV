@@ -7,10 +7,10 @@
   --blue:     #2d6e9e;
   --blue-mid: #4a8aaa;
   --blue-lt:  #a8c8dc;
-  --orange:   #c85a14;
+  --orange:   #bc5412;
   --orange2:  #e06820;
   --text:     #2a3a48;
-  --text-dim: #7a8a98;
+  --text-dim: #616e79;
   --border:   #ccc8c0;
   --white:    #ffffff;
   --green:    #2a6a3a;
@@ -21,7 +21,8 @@
 /* Abuget: RadlHias.TV-Schriftzug (.brand-wordmark, .nav-logo) und Konfigurator-Zwischenüberschriften (.logo-script). */
 @font-face {
   font-family: 'Abuget';
-  src: url('Abuget.ttf') format('truetype');
+  src: url('Abuget.woff2') format('woff2'),
+       url('Abuget.ttf') format('truetype');
   font-display: swap;
 }
 
