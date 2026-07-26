@@ -56,13 +56,21 @@
 
   /* ===== PAGE HEADER ===== */
   .page-header {
-    padding: 120px 20px 76px;
+    padding: 130px 20px 84px;
     text-align: center;
+    position: relative;
     background:
+      linear-gradient(180deg, rgba(10,18,26,0.82) 0%, rgba(10,18,26,0.72) 45%, rgba(10,18,26,0.92) 100%),
       radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 24px 24px,
+      url('img/haendler-shop-hero.png') center 30% / cover no-repeat,
       var(--navy);
     border-bottom: 3px solid var(--orange);
   }
+  .page-header .eyebrow,
+  .page-header h1,
+  .page-header p { position: relative; z-index: 1; }
+  .page-header h1 { text-shadow: 0 2px 14px rgba(0,0,0,0.6); }
+  .page-header p { text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
   .page-header .eyebrow {
     display: inline-flex;
     align-items: center;
