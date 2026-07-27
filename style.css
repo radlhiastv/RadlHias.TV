@@ -18,7 +18,7 @@
 }
 
 /* ===== MARKENSCHRIFT ===== */
-/* Abuget: RadlHias.TV-Schriftzug (.brand-wordmark, .nav-logo) und Konfigurator-Zwischenüberschriften (.logo-script). */
+/* Abuget: RadlHias.TV-Schriftzug (.brand-wordmark, .nav-logo). */
 @font-face {
   font-family: 'Abuget';
   src: url('Abuget.woff2') format('woff2'),
@@ -62,7 +62,10 @@ header::after {
   margin-top: 16px;
 }
 .logo-script {
-  font-family: 'Abuget', cursive;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   font-size: clamp(45px, 10.5vw, 78px);
   color: var(--cream);
   line-height: 1;
