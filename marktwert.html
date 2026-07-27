@@ -328,6 +328,35 @@
     margin-bottom: 16px;
   }
   .mw-modal-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .mw-vorhanden {
+    background: var(--cream2);
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+  .mw-vorhanden b { color: var(--navy); }
+
+  /* Hinweis auf das Alter der Datenbasis */
+  .mw-alterhinweis {
+    /* bewusst kein Flex: der Inhalt ist Fliesstext mit <strong>,
+       als Flex-Container wuerde jedes Textstueck zur eigenen Zeile */
+    background: var(--cream2);
+    border-left: 3px solid var(--blue);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .mw-alterhinweis.veraltet {
+    background: #fff3cd;
+    border-left-color: #e0900a;
+    color: #7a5c04;
+  }
+  .mw-alterhinweis strong { color: inherit; }
 </style>
 </head>
 <body>
@@ -557,6 +586,8 @@
           <div class="mw-price-range" id="spanne"></div>
         </div>
 
+        <div class="mw-alterhinweis" id="alterHinweis" style="display:none;"></div>
+
         <div class="mw-matchinfo" id="matchInfo"></div>
 
         <div class="mw-table-scroll">
@@ -599,6 +630,22 @@
     </div>
   </div>
 </div>
+</div>
+
+<!-- POPUP: KONFIGURATION NICHT IN DER DATENBANK ABBILDBAR -->
+<div class="mw-modal mw-tool" id="noDataModal">
+  <div class="mw-modal-box">
+    <div class="mw-modal-head">
+      <h3>Kein Rad mit diesem Setup</h3>
+    </div>
+    <div class="mw-modal-inner">
+      <p id="noDataText"></p>
+      <div class="mw-vorhanden" id="noDataVorhanden"></div>
+      <div class="mw-modal-actions">
+        <button type="button" class="mw-btn" id="noDataClose">Eingabe anpassen</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- POPUP: MARKE NICHT IN DER DATENBANK -->
@@ -2044,6 +2091,84 @@ function markenInKategorie(kategorie){
     .map(name => ({marke: name, anzahl: zaehler[name]}));
 }
 
+/* =========================================================
+   PASSGENAUIGKEIT
+   Das Scoring sortiert nur, es schliesst nichts aus. Ohne harte
+   Toleranzen bekam auch ein Rad, zu dem es nichts Vergleichbares
+   gibt, einen selbstbewussten Preis. Diese Grenzen entscheiden,
+   ob ein Eintrag ueberhaupt als Vergleich taugt.
+   ========================================================= */
+const TOLERANZ = {
+  jahre: 5,          // maximaler Abstand im Baujahr
+  rahmenCm: 10,      // maximaler Abstand der Rahmenhoehe in cm
+  laufradZoll: 4     // maximaler Abstand der Laufradgroesse bei Kinderraedern
+};
+
+function maxMassAbstand(kategorie){
+  return kategorie === "kinderrad" ? TOLERANZ.laufradZoll : TOLERANZ.rahmenCm;
+}
+
+// Liefert die Gruende, warum ein Eintrag NICHT als Vergleich taugt.
+// Leeres Array bedeutet: passt.
+function passtNichtWeil(input, entry){
+  const gruende = [];
+  if(Math.abs(entry.baujahr - input.baujahr) > TOLERANZ.jahre) gruende.push("baujahr");
+  if(Math.abs(entry.rahmenhoehe - input.rahmenhoehe) > maxMassAbstand(input.kategorie)) gruende.push("mass");
+  return gruende;
+}
+
+// Beschreibt, was zu dieser Marke/Kategorie ueberhaupt in der Datenbank liegt.
+// Wird gebraucht, um dem Nutzer konkret zu sagen, woran es scheitert.
+function poolUeberblick(pool){
+  const jahre = pool.map(e => e.baujahr);
+  const masse = pool.map(e => e.rahmenhoehe);
+  return {
+    anzahl: pool.length,
+    jahrVon: Math.min(...jahre),
+    jahrBis: Math.max(...jahre),
+    massVon: Math.min(...masse),
+    massBis: Math.max(...masse)
+  };
+}
+
+/* =========================================================
+   ALTER DER DATENBASIS
+   Die Datenbank waechst mit der Zeit, alte Eintraege bleiben drin.
+   Stammen die verwendeten Vergleichsangebote aus einer laenger
+   zurueckliegenden Zeit, muss das im Ergebnis stehen.
+   ========================================================= */
+const DATEN_FRISCH_MONATE = 12;   // bis hierhin gilt die Basis als aktuell
+
+function monateSeit(datum){
+  const jetzt = new Date();
+  return (jetzt.getFullYear() - datum.getFullYear()) * 12 + (jetzt.getMonth() - datum.getMonth());
+}
+
+function monatJahr(datum){
+  const monate = ["Jänner","Februar","März","April","Mai","Juni",
+                  "Juli","August","September","Oktober","November","Dezember"];
+  return monate[datum.getMonth()] + " " + datum.getFullYear();
+}
+
+// Wie alt sind die Angebote, auf denen der Preis beruht?
+// Massgeblich ist das juengste davon.
+function datenAlter(matches){
+  const daten = matches
+    .map(m => new Date(m.datum))
+    .filter(d => !isNaN(d.getTime()));
+
+  if(daten.length === 0) return null;
+
+  const juengstes = new Date(Math.max(...daten.map(d => d.getTime())));
+  const monate = monateSeit(juengstes);
+  return {
+    juengstes,
+    monate,
+    beschriftung: monatJahr(juengstes),
+    veraltet: monate >= DATEN_FRISCH_MONATE
+  };
+}
+
 /*
   ersatzMarke: wird gesetzt, wenn der Nutzer im Popup bewusst eine andere,
   vergleichbare Marke als Referenz gewählt hat. Der Modellname wird dann
@@ -2076,11 +2201,31 @@ function calcMarktwert(input, ersatzMarke){
     };
   }
 
+  // Nur Angebote, die innerhalb der Toleranzen liegen, taugen als Vergleich.
+  const passende = brandPool.filter(e => passtNichtWeil(input, e).length === 0);
+
+  if(passende.length === 0){
+    // Auswerten, woran es konkret scheitert – eine pauschale Meldung
+    // "keine Daten" hilft dem Nutzer nicht weiter.
+    const gruende = {};
+    brandPool.forEach(e => passtNichtWeil(input, e).forEach(g => gruende[g] = true));
+    return {
+      keinePassendenDaten: true,
+      hersteller: gesuchteMarke,
+      kategorie: input.kategorie,
+      gesucht: {baujahr: input.baujahr, mass: input.rahmenhoehe},
+      gruende: Object.keys(gruende),
+      vorhanden: poolUeberblick(brandPool),
+      massEinheit: input.kategorie === "kinderrad" ? "Zoll" : "cm",
+      massFeld: input.kategorie === "kinderrad" ? "Laufradgröße" : "Rahmenhöhe"
+    };
+  }
+
   // Scoring und Sortierung (nur innerhalb der passenden Marke).
   // Bei Ersatzmarke muss der Hersteller-Bonus über die Ersatzmarke laufen,
   // sonst bekäme kein Eintrag den Bonus und die Reihung wäre verzerrt.
   const scoreInput = ersatzMarke ? {...input, hersteller: ersatzMarke} : input;
-  const scored = brandPool.map(e => ({...e, score: scoreEntry(scoreInput, e)}));
+  const scored = passende.map(e => ({...e, score: scoreEntry(scoreInput, e)}));
   scored.sort((a,b) => b.score - a.score);
 
   const matches = scored.slice(0, MAX_MATCHES_ANGEZEIGT);
@@ -2095,6 +2240,8 @@ function calcMarktwert(input, ersatzMarke){
     von,
     bis,
     zuWenigDaten: matches.length < MIN_MATCHES_EMPFOHLEN,
+    alter: datenAlter(matches),
+    gesuchtesBaujahr: input.baujahr,
     ersatzMarke: ersatzMarke || null,
     originalHersteller: input.hersteller
   };
@@ -2348,11 +2495,51 @@ function readForm(){
   };
 }
 
+/*
+  Die Datenbank waechst mit der Zeit und alte Angebote bleiben erhalten.
+  Beruht ein Preis auf laenger zurueckliegenden Angeboten, muss im Ergebnis
+  stehen, aus welcher Zeit diese stammen.
+*/
+function renderAlterHinweis(res){
+  const box = document.getElementById('alterHinweis');
+  const alter = res.alter;
+
+  if(!alter){
+    box.style.display = "none";
+    return;
+  }
+
+  box.classList.toggle('veraltet', alter.veraltet);
+
+  if(alter.veraltet){
+    const jahre = Math.floor(alter.monate / 12);
+    const zeitraum = jahre >= 1
+      ? (jahre === 1 ? "über einem Jahr" : "über " + jahre + " Jahren")
+      : alter.monate + " Monaten";
+
+    let text = "🕒 <strong>Der Preis beruht auf älteren Daten.</strong> Ein vergleichbares Rad wurde zuletzt im "
+             + alter.beschriftung + " angeboten – das ist seit " + zeitraum + " her. "
+             + "Neuere Angebote zu dieser Marke und Ausstattung liegen nicht vor, deshalb wird mit diesen älteren Daten gerechnet.";
+
+    // Das Rad selbst ist seither aelter geworden - das drueckt den Wert zusaetzlich.
+    if(jahre >= 1){
+      text += " Bedenke dabei: Dein Rad ist seit damals " + (jahre === 1 ? "ein Jahr" : jahre + " Jahre")
+            + " älter geworden, der tatsächliche Wert liegt heute eher am unteren Ende der Spanne.";
+    }
+    box.innerHTML = text;
+  } else {
+    box.innerHTML = "🕒 Aktuellstes verwendetes Vergleichsangebot: <strong>" + alter.beschriftung + "</strong>.";
+  }
+
+  box.style.display = "block";
+}
+
 function renderResult(res){
   const card = document.getElementById('resultCard');
   card.style.display = "block";
 
   if(res.error){
+    document.getElementById('alterHinweis').style.display = "none";
     document.getElementById('richtpreis').textContent = "\u2014";
     document.getElementById('spanne').textContent = "";
     document.getElementById('matchInfo').textContent = res.error;
@@ -2377,6 +2564,8 @@ function renderResult(res){
   }
   document.getElementById('matchInfo').textContent = info;
 
+  renderAlterHinweis(res);
+
   const tbody = document.getElementById('matchTbody');
   tbody.innerHTML = "";
   res.matches.forEach(m => {
@@ -2393,6 +2582,51 @@ function renderResult(res){
    Der Nutzer muss selbst eine vergleichbare Ersatzmarke wählen.
    Es wird bewusst nicht automatisch eine beliebige Marke gesetzt.
    ========================================================= */
+/* =========================================================
+   POPUP: KONFIGURATION NICHT ABBILDBAR
+   Es gibt Angebote dieser Marke in dieser Kategorie, aber keines
+   liegt nah genug an der eingegebenen Konfiguration. Statt einen
+   Preis zu erfinden, wird genau das gesagt.
+   ========================================================= */
+function openNoDataModal(res){
+  const v = res.vorhanden;
+  const marke = res.hersteller;
+  const kat = kategorieLabel(res.kategorie);
+
+  let text = "Zu einem " + marke + " " + kat + " mit genau diesem Setup gibt es in der Vergleichsdatenbank "
+           + "keine passenden Angebote. Damit kein erfundener Preis entsteht, wird hier bewusst kein Wert berechnet.\n\n";
+
+  const details = [];
+  if(res.gruende.includes("baujahr")){
+    details.push("Baujahr " + res.gesucht.baujahr + " liegt zu weit von allem entfernt, was vorliegt "
+      + "(zulässiger Abstand: " + TOLERANZ.jahre + " Jahre)");
+  }
+  if(res.gruende.includes("mass")){
+    details.push(res.massFeld + " " + res.gesucht.mass + " " + res.massEinheit + " liegt zu weit daneben "
+      + "(zulässiger Abstand: " + maxMassAbstand(res.kategorie) + " " + res.massEinheit + ")");
+  }
+  text += "Woran es liegt: " + details.join(" · ") + ".";
+
+  document.getElementById('noDataText').textContent = text;
+
+  document.getElementById('noDataVorhanden').innerHTML =
+      "Vorhanden sind zu <b>" + marke + " " + kat + "</b>:<br>"
+    + "· <b>" + v.anzahl + "</b> Angebote<br>"
+    + "· Baujahre <b>" + v.jahrVon + " bis " + v.jahrBis + "</b><br>"
+    + "· " + res.massFeld + " <b>" + v.massVon + " bis " + v.massBis + " " + res.massEinheit + "</b>";
+
+  document.getElementById('noDataModal').classList.add('open');
+}
+
+function closeNoDataModal(){
+  document.getElementById('noDataModal').classList.remove('open');
+}
+
+document.getElementById('noDataClose').addEventListener('click', closeNoDataModal);
+document.getElementById('noDataModal').addEventListener('click', function(e){
+  if(e.target === this) closeNoDataModal();
+});
+
 let pendingInput = null;
 
 function kategorieLabel(kategorie){
@@ -2456,7 +2690,13 @@ document.getElementById('brandModalConfirm').addEventListener('click', function(
   }
   const input = pendingInput;
   closeBrandModal();
-  renderResult(calcMarktwert(input, ersatz));
+  const res = calcMarktwert(input, ersatz);
+  // Auch die Ersatzmarke kann zu weit vom eingegebenen Setup entfernt liegen.
+  if(res.keinePassendenDaten){
+    openNoDataModal(res);
+    return;
+  }
+  renderResult(res);
 });
 
 document.getElementById('calcBtn').addEventListener('click', function(){
@@ -2465,6 +2705,10 @@ document.getElementById('calcBtn').addEventListener('click', function(){
   const res = calcMarktwert(input);
   if(res.brandNotFound){
     openBrandModal(input, res);
+    return;
+  }
+  if(res.keinePassendenDaten){
+    openNoDataModal(res);
     return;
   }
   renderResult(res);
