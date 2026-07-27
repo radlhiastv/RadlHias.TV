@@ -4,7 +4,7 @@
   <!-- Hauptseite -->
   <url>
     <loc>https://radlhias.tv/</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,63 +12,63 @@
   <!-- Hauptbereiche -->
   <url>
     <loc>https://radlhias.tv/konfigurator.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/videos.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/bikeservice.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/faq.html</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/history.html</loc>
-    <lastmod>2026-07-20</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/fuer-haendler.html</loc>
-    <lastmod>2026-07-21</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/tour-de-hias/</loc>
-    <lastmod>2026-07-26</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/tour-de-hias/tour_de_hias.html</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -76,14 +76,14 @@
   <!-- Statische Seiten -->
   <url>
     <loc>https://radlhias.tv/impressum.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/datenschutz.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -91,56 +91,56 @@
   <!-- Blog-Beiträge -->
   <url>
     <loc>https://radlhias.tv/blog/10-000-fuer-ein-ebike-das-ist-ganz-normal.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/wichtiger-rueckruf-cube-e-bike-besitzer-aufgepasst.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/sollte-jeder-ein-ebike-fahren-duerfen.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/fahrradgeschaeft-eroeffnen-was-ich-wirklich-gelernt-habe.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/ich-fahre-kein-ebike-aber-ich-verstehe-jeden-der-es-tut.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/fahrrad-technik-mehr-gaenge-mehr-kosten-wer-profitiert.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/die-schmutzige-meisterpruefung-die-mich-stolz-machte.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://radlhias.tv/blog/ist-ktm-ein-gutes-fahrrad-ist-canyon-gut-ist-stevens-was-wert.html</loc>
-    <lastmod>2026-07-07</lastmod>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
