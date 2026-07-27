@@ -224,9 +224,10 @@
       max-width: 1300px;
       margin: 0 auto;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
+      justify-content: center;
+      align-items: flex-start;
       flex-wrap: wrap;
+      gap: 4px 10px;
       padding: 32px 20px;
     }
     .feature-item {
@@ -753,23 +754,53 @@
       font-size: 10.5px;
       margin-top: 1px;
     }
+    .kfg-lead {
+      color: var(--cream);
+      font-size: 17px;
+      line-height: 1.65;
+      max-width: 440px;
+      margin: 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .kfg-col-tools { max-width: 340px; }
     .kfg-features {
       list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
-    .kfg-features li {
+    .kfg-features li { display: block; }
+    .kfg-features a {
       display: flex;
       align-items: center;
       gap: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(10,18,25,0.45);
+      border: 1px solid rgba(245,241,235,0.18);
       color: var(--cream);
       font-size: 19px;
       font-weight: 600;
+      text-decoration: none;
       text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
     }
+    .kfg-features a:hover {
+      background: rgba(200,90,20,0.9);
+      border-color: var(--orange);
+      transform: translateX(3px);
+    }
+    .kfg-features a:active { transform: translateX(0) scale(0.98); }
+    .kfg-features .kf-label { flex: 1; }
+    .kfg-features .kf-arrow {
+      font-size: 20px;
+      color: var(--orange);
+      flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .kfg-features a:hover .kf-arrow { color: #fff; transform: translateX(3px); }
     .kfg-features .kf-check {
       color: var(--orange);
       background: rgba(245,241,235,0.18);
@@ -782,24 +813,16 @@
       font-size: 16px;
       font-weight: 900;
       flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
     }
-    .kfg-cta {
-      display: inline-block;
-      background: var(--orange);
-      color: white;
-      padding: 22px 48px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    .kfg-features a:hover .kf-check { background: rgba(255,255,255,0.3); color: #fff; }
+    /* Schmale Desktop-Breiten: sonst brechen die Tool-Labels ungleichmäßig um */
+    @media (max-width: 1000px) {
+      .kfg-col-left { max-width: 400px; }
+      .kfg-features a { font-size: 16px; padding: 11px 14px; gap: 11px; }
+      .kfg-features .kf-check { width: 24px; height: 24px; min-width: 24px; font-size: 14px; }
+      .kfg-features .kf-arrow { font-size: 18px; }
     }
-    .kfg-cta:hover { background: #a04a10; transform: translateY(-1px); }
-    .kfg-cta:active { transform: translateY(0) scale(0.97); }
     .kfg-stats {
       position: relative;
       z-index: 1;
@@ -832,8 +855,11 @@
       }
       .kfg-banner-inner { height: auto; flex-direction: column; justify-content: flex-start; padding: 32px 20px; text-align: center; gap: 30px; }
       .kfg-col { max-width: 100%; margin: 0 auto; }
-      .kfg-checks, .kfg-features { align-items: center; }
+      .kfg-lead { margin: 0 auto; }
+      .kfg-checks { align-items: center; }
       .kfg-checks li, .kfg-features li { text-align: left; }
+      .kfg-col-tools { max-width: 360px; width: 100%; }
+      .kfg-features { align-items: stretch; width: 100%; }
     }
 
     /* ===== BLOG TEASER ===== */
@@ -1000,9 +1026,12 @@
     .feature-item.reveal:nth-child(3) { transition-delay: 140ms; }
     .feature-item.reveal:nth-child(4) { transition-delay: 210ms; }
     .feature-item.reveal:nth-child(5) { transition-delay: 280ms; }
+    .feature-item.reveal:nth-child(6) { transition-delay: 350ms; }
+    .feature-item.reveal:nth-child(7) { transition-delay: 420ms; }
+    .feature-item.reveal:nth-child(8) { transition-delay: 490ms; }
 
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .reveal.in-view, .hero-tile, .fi-icon, .blog-card img, .kfg-cta {
+      .reveal, .reveal.in-view, .hero-tile, .fi-icon, .blog-card img, .kfg-features a {
         transition: none !important;
       }
       .reveal { opacity: 1 !important; transform: none !important; }
@@ -1022,7 +1051,16 @@
   </label>
   <div class="nav-links">
     <a href="fuer-haendler.html">Für Händler</a>
-    <a href="konfigurator.html">Konfigurator</a>
+    <div class="nav-dd">
+      <input type="checkbox" id="nav-tools-toggle" class="nav-dd-check">
+      <label for="nav-tools-toggle" class="nav-dd-label">Tools<span class="nav-dd-caret"></span></label>
+      <div class="nav-dd-menu">
+        <a href="konfigurator.html">🚴&nbsp; Fahrrad Konfigurator</a>
+        <a href="luftdruckrechner.html">🔧&nbsp; Reifen-Luftdruckrechner</a>
+        <a href="bikefitting.html">🔩&nbsp; Bike-Fitting</a>
+        <a href="gebrauchtcheck.html">🔍&nbsp; Gebrauchtrad-Check</a>
+      </div>
+    </div>
     <a href="bikeservice.html">Bike Service</a>
     <a href="#blog">Blog</a>
     <a href="videos.html">Videos</a>
@@ -1101,6 +1139,37 @@
       </svg>
       <div class="fi-title">Fahrrad Konfigurator</div>
       <div class="fi-desc">Dein perfektes Fahrrad in 10 Schritten</div>
+    </a>
+    <a href="luftdruckrechner.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="13" r="8"/>
+        <path d="M12 13L16 9" stroke="#c85a14" stroke-width="2.4"/>
+        <circle cx="12" cy="13" r="1.4" fill="#c85a14" stroke="none"/>
+        <path d="M9 3h6"/>
+        <path d="M12 3v2"/>
+      </svg>
+      <div class="fi-title">Luftdruck-Rechner</div>
+      <div class="fi-desc">Der richtige Reifendruck für dein Gewicht &amp; deinen Untergrund</div>
+    </a>
+    <a href="bikefitting.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="4.4" r="2.2"/>
+        <path d="M12 6.6v5.2"/>
+        <path d="M12 11.8L7.6 20"/>
+        <path d="M12 11.8L16.4 20"/>
+        <path d="M8.4 9.2L15.6 9.2" stroke="#c85a14" stroke-width="2.4"/>
+      </svg>
+      <div class="fi-title">Bike-Fitting</div>
+      <div class="fi-desc">In 5 Schritten zur perfekten Sitzposition</div>
+    </a>
+    <a href="gebrauchtcheck.html" class="feature-item reveal">
+      <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.5"/>
+        <path d="M15.4 15.4L21 21"/>
+        <path d="M7.6 10.6l2.1 2.1 3.9-4.2" stroke="#c85a14" stroke-width="2.4"/>
+      </svg>
+      <div class="fi-title">Gebraucht-Check</div>
+      <div class="fi-desc">Checkliste für den Gebrauchtkauf – in 8 Schritten</div>
     </a>
     <a href="videos.html" class="feature-item reveal">
       <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="#1c3448" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
@@ -1223,14 +1292,14 @@
       <div class="kfg-col kfg-col-left">
         <div class="kfg-eyebrow">100% Kostenlos · Keine Werbung · Wertvoll für jeden Radfahrer</div>
         <h2 class="kfg-title"><span class="js-years">27</span> Jahre Bike Erfahrung<br>in deiner Hand</h2>
-        <a href="konfigurator.html" class="kfg-cta">Jetzt die App starten!</a>
+        <p class="kfg-lead">Vier Werkzeuge aus meiner täglichen Praxis – jedes einzeln startklar, ohne Anmeldung. Nimm dir das, was du gerade brauchst.</p>
       </div>
-      <div class="kfg-col">
+      <div class="kfg-col kfg-col-tools">
         <ul class="kfg-features">
-          <li><span class="kf-check">✓</span> Fahrrad Konfigurator</li>
-          <li><span class="kf-check">✓</span> Gebraucht Check</li>
-          <li><span class="kf-check">✓</span> Bike Fitting</li>
-          <li><span class="kf-check">✓</span> Luftdruck Rechner</li>
+          <li><a href="konfigurator.html"><span class="kf-check">✓</span><span class="kf-label">Fahrrad Konfigurator</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="gebrauchtcheck.html"><span class="kf-check">✓</span><span class="kf-label">Gebraucht-Check</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="bikefitting.html"><span class="kf-check">✓</span><span class="kf-label">Bike-Fitting</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="luftdruckrechner.html"><span class="kf-check">✓</span><span class="kf-label">Luftdruck-Rechner</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
         </ul>
       </div>
     </div>
@@ -1340,7 +1409,10 @@
     <div class="footer-wordmark">RadlHias.TV</div>
     <nav class="footer-nav" aria-label="Footer-Navigation">
       <a href="fuer-haendler.html">Für Händler</a>
-      <a href="konfigurator.html">Konfigurator</a>
+      <a href="konfigurator.html">Fahrrad Konfigurator</a>
+      <a href="luftdruckrechner.html">Luftdruck-Rechner</a>
+      <a href="bikefitting.html">Bike-Fitting</a>
+      <a href="gebrauchtcheck.html">Gebraucht-Check</a>
       <a href="bikeservice.html">Bike Service</a>
       <a href="blog/index.html">Blog</a>
       <a href="videos.html">Videos</a>

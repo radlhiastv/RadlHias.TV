@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reifen-Luftdruckrechner – RadlHias.TV</title>
+<meta name="description" content="Kostenloser Luftdruck-Rechner für Fahrradreifen: Empfohlener Druck vorne und hinten – abhängig von Gewicht, Reifenbreite, Profil, Tubeless und Untergrund.">
+<link rel="canonical" href="https://radlhias.tv/luftdruckrechner.html">
+<meta property="og:title" content="Reifen-Luftdruckrechner – RadlHias.TV">
+<meta property="og:description" content="Der richtige Druck für deine Reifen – Richtwerte aus 27 Jahren Praxis, kostenlos und ohne Werbung.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radlhias.tv/luftdruckrechner.html">
+<meta property="og:image" content="https://radlhias.tv/konfigurator-banner-foto.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reifen-Luftdruckrechner – RadlHias.TV">
+<meta name="twitter:description" content="Der richtige Druck für deine Reifen – Richtwerte aus 27 Jahren Praxis, kostenlos und ohne Werbung.">
+<meta name="twitter:image" content="https://radlhias.tv/konfigurator-banner-foto.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" as="style" href="style.css">
+<link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="style.css"></noscript>
+<link rel="icon" type="image/png" href="img/konfig-favicon.png">
+</head>
+<body>
+
+<nav class="main-nav" aria-label="Hauptnavigation">
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="fuer-haendler.html">Für Händler</a>
+    <div class="nav-dd active">
+      <input type="checkbox" id="nav-tools-toggle" class="nav-dd-check">
+      <label for="nav-tools-toggle" class="nav-dd-label">Tools<span class="nav-dd-caret"></span></label>
+      <div class="nav-dd-menu">
+        <a href="konfigurator.html">🚴&nbsp; Fahrrad Konfigurator</a>
+        <a href="luftdruckrechner.html" class="active">🔧&nbsp; Reifen-Luftdruckrechner</a>
+        <a href="bikefitting.html">🔩&nbsp; Bike-Fitting</a>
+        <a href="gebrauchtcheck.html">🔍&nbsp; Gebrauchtrad-Check</a>
+      </div>
+    </div>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="index.html#blog">Blog</a>
+    <a href="videos.html">Videos</a>
+    <a href="tour-de-hias/index.html">Tour de Hias</a>
+    <a href="faq.html">FAQ</a>
+    <a href="history.html">Meine Laufbahn</a>
+    <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<div class="tool-page">
+<div class="tool-hinweis">
+  <strong>Kurz vorweg:</strong> Alle Richtwerte in diesem Tool stammen aus meiner persönlichen Praxis aus mehr als <span class="js-years">27</span> Jahren im Bike-Business – keine Werbung, kein Sponsoring, keine Provision.
+  <a href="konfigurator.html">Mehr dazu →</a>
+</div>
+<!-- ===== LUFTDRUCK-RECHNER ===== -->
+<div id="druck-bereich" style="max-width:640px; margin: 25px auto 80px; padding: 0 16px;">
+  <div class="result-wrap">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Luftdruck-Rechner</div>
+      <div class="result-title">Der richtige Druck für deine Reifen</div>
+    </div>
+
+    <div style="padding: 25px 20px 25px;">
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Fahrergewicht (inkl. Ausrüstung)</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="range" id="druck-gewicht" min="20" max="160" value="80" step="1"
+            style="flex:1; accent-color:var(--navy);"
+            oninput="document.getElementById('druck-gewicht-val').textContent=this.value; berechneDruck();">
+          <span style="font-size:22px; font-weight:700; color:var(--navy); min-width:60px;" id="druck-gewicht-val">80</span>
+          <span style="color:var(--text-dim); font-size:14px;">kg</span>
+        </div>
+      </div>
+
+      <!-- Radgröße -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Laufradgröße</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-rad-opts">
+          <button type="button" class="druck-opt" data-val="26" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">26" | 559 mm<br><small>MTB klassisch</small></button>
+          <button type="button" class="druck-opt" data-val="27.5" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">27,5" | 584 mm<br><small>MTB / Trekking</small></button>
+          <button type="button" class="druck-opt selected" data-val="28" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">28" | 622 mm<br><small>Trekking / City</small></button>
+          <button type="button" class="druck-opt" data-val="29" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">29" | 622 mm<br><small>MTB / Gravel</small></button>
+          <button type="button" class="druck-opt" data-val="rennrad" onclick="druckOpt('druck-rad-opts',this); berechneDruck();">700c | 622 mm<br><small>Rennrad, schmale Reifen</small></button>
+        </div>
+      </div>
+
+      <!-- Reifenmass Grafik -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:#7a8a98;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">So findest du deine Reifenmaße</div>
+        <img src="img/reifenmass.jpg"
+             alt="Reifenbezeichnungen: ETRTO, Zoll und Französisch erklärt"
+             width="900" height="375"
+             style="width:100%;max-width:900px;height:auto;border-radius:8px;display:block;">
+        <div style="font-size:11px;color:#7a8a98;margin-top:6px;line-height:1.5;">Die Zahlen auf deiner Reifenflanke: <strong>ETRTO</strong> (z.B. 40-622) gibt Breite und Innendurchmesser in mm an – das sind die präzisesten Werte für den Rechner.</div>
+      </div>
+
+      <!-- Reifenbreite -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Reifenbreite</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="range" id="druck-breite-slider" min="23" max="70" value="23" step="1"
+            style="flex:1; accent-color:var(--navy);"
+            oninput="updateBreiteSlider(this.value); berechneDruck();">
+          <span style="font-size:22px; font-weight:700; color:var(--navy); min-width:60px;" id="druck-breite-val">23</span>
+          <span style="color:var(--text-dim); font-size:14px;">mm</span>
+        </div>
+        <div id="druck-breite-label" style="font-size:13px; color:var(--text-dim); margin-top:4px;">Rennrad schmal</div>
+      </div>
+
+      <!-- Profil -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Profil / Einsatz</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-profil-opts">
+          <button type="button" class="druck-opt selected" data-val="slick" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">Slick / Halbslick<br><small>Asphalt</small></button>
+          <button type="button" class="druck-opt" data-val="gravel" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">Gravel-Profil<br><small>Schotter/Mix</small></button>
+          <button type="button" class="druck-opt" data-val="mtb" onclick="druckOpt('druck-profil-opts',this); berechneDruck();">MTB-Profil<br><small>Trail/Offroad</small></button>
+        </div>
+      </div>
+
+      <!-- Reifentyp -->
+      <div style="margin-bottom:20px;">
+        <div class="input-label">Reifentyp</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-typ-opts">
+          <button type="button" class="druck-opt selected" data-val="schlauch" onclick="druckOpt('druck-typ-opts',this); berechneDruck();">Mit Schlauch<br><small>Draht- oder Faltreifen</small></button>
+          <button type="button" class="druck-opt" data-val="tubeless" onclick="druckOpt('druck-typ-opts',this); berechneDruck();">Tubeless<br><small>Kein Schlauch</small></button>
+        </div>
+      </div>
+
+      <!-- Untergrund -->
+      <div style="margin-bottom:24px;">
+        <div class="input-label">Hauptuntergrund</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;" id="druck-grund-opts">
+          <button type="button" class="druck-opt selected" data-val="asphalt" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Asphalt<br><small>Straße</small></button>
+          <button type="button" class="druck-opt" data-val="schotter" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Waldwege<br><small>Forst, Kies</small></button>
+          <button type="button" class="druck-opt" data-val="trail" onclick="druckOpt('druck-grund-opts',this); berechneDruck();">Singletrail<br><small>Wurzeln, Steine</small></button>
+        </div>
+      </div>
+
+      <!-- Ergebnis -->
+      <div id="druck-ergebnis" style="background:var(--navy); border-radius:12px; padding:20px; color:var(--cream); margin-bottom:20px;">
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--blue-lt); margin-bottom:16px;">Empfohlener Luftdruck</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div style="background:rgba(255,255,255,0.08); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; color:var(--blue-lt); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">Vorderrad</div>
+            <div id="druck-vorne" style="font-size:28px; font-weight:700; color:white;">–</div>
+            <div style="font-size:12px; color:var(--blue-lt);">bar</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.08); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; color:var(--blue-lt); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">Hinterrad</div>
+            <div id="druck-hinten" style="font-size:28px; font-weight:700; color:white;">–</div>
+            <div style="font-size:12px; color:var(--blue-lt);">bar</div>
+          </div>
+        </div>
+        <div id="druck-erklaerung" style="font-size:13px; color:var(--blue-lt); line-height:1.6; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px;"></div>
+      </div>
+      <div id="druck-warnung" style="display:none; background:#fff3cd; border:1px solid #f0ad4e; border-radius:8px; padding:12px 16px; font-size:13px; color:#856404; line-height:1.5; margin-top:12px;"></div>
+
+      <!-- Hinweis -->
+      <div style="background:var(--cream2); border-radius:8px; padding:14px 16px; font-size:13px; color:var(--text-dim); line-height:1.6;">
+        💡 <strong style="color:var(--text);">Wichtiger Hinweis:</strong> Das sind Richtwerte aus der Praxis. Das optimale Gefühl findest du durch Ausprobieren in 0,1-bar-Schritten. Zu wenig Druck = Schlaglochrisk (Felgenschlag), zu viel = weniger Grip und harte Fahrt. Bei Tubeless generell 0,2–0,3 bar weniger möglich als mit Schlauch.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="script.js"></script>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="fuer-haendler.html">Für Händler</a>
+      <a href="konfigurator.html">Fahrrad Konfigurator</a>
+      <a href="luftdruckrechner.html">Luftdruck-Rechner</a>
+      <a href="bikefitting.html">Bike-Fitting</a>
+      <a href="gebrauchtcheck.html">Gebraucht-Check</a>
+      <a href="bikeservice.html">Bike Service</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="videos.html">Videos</a>
+      <a href="tour-de-hias/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="history.html">Meine Laufbahn</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <span title="YouTube – kommt bald" aria-label="YouTube – kommt bald">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </span>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+    </div>
+  </div>
+</footer>
+
+<script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+
+<script>berechneDruck();</script>
+</body>
+</html>

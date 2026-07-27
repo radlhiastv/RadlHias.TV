@@ -18,6 +18,27 @@
   </url>
 
   <url>
+    <loc>https://radlhias.tv/luftdruckrechner.html</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://radlhias.tv/bikefitting.html</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://radlhias.tv/gebrauchtcheck.html</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://radlhias.tv/videos.html</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>weekly</changefreq>

@@ -1108,59 +1108,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function showTab(tab) {
-  const beraterWrap = document.querySelector('.wizard-wrap-outer');
-  const beraterBanner = document.getElementById('berater-banner');
-  const druckBereich = document.getElementById('druck-bereich');
-  const fittingBereich = document.getElementById('fitting-bereich');
-  const gebrauchtBereich = document.getElementById('gebraucht-bereich');
-  const kontaktBereich = document.getElementById('kontakt-bereich');
-  const tabBerater = document.getElementById('tab-berater');
-  const tabDruck = document.getElementById('tab-druck');
-  const tabFitting = document.getElementById('tab-fitting');
-  const tabGebraucht = document.getElementById('tab-gebraucht');
-
-  // Reset all
-  [tabBerater, tabDruck, tabFitting, tabGebraucht].forEach(function(t) {
-    if (t) { t.style.borderBottomColor = 'transparent'; t.style.color = 'var(--text-dim)'; }
-  });
-
-  // Alle Bereiche verstecken
-  function hideAll() {
-    beraterWrap.style.display = 'none';
-    if (beraterBanner) beraterBanner.style.display = 'none';
-    druckBereich.style.display = 'none';
-    fittingBereich.style.display = 'none';
-    if (gebrauchtBereich) gebrauchtBereich.style.display = 'none';
-    if (kontaktBereich) kontaktBereich.style.display = 'none';
-  }
-
-  if (tab === 'gebraucht') {
-    hideAll();
-    if (gebrauchtBereich) gebrauchtBereich.style.display = 'block';
-    if (tabGebraucht) { tabGebraucht.style.borderBottomColor = 'var(--orange)'; tabGebraucht.style.color = 'var(--navy)'; }
-  } else if (tab === 'fitting') {
-    hideAll();
-    fittingBereich.style.display = 'block';
-    if (tabFitting) { tabFitting.style.borderBottomColor = 'var(--orange)'; tabFitting.style.color = 'var(--navy)'; }
-  } else if (tab === 'druck') {
-    hideAll();
-    druckBereich.style.display = 'block';
-    if (tabDruck) { tabDruck.style.borderBottomColor = 'var(--orange)'; tabDruck.style.color = 'var(--navy)'; }
-    berechneDruck();
-  } else if (tab === 'kontakt') {
-    hideAll();
-    if (kontaktBereich) kontaktBereich.style.display = 'block';
-  } else {
-    hideAll();
-    beraterWrap.style.display = '';
-    if (beraterBanner) beraterBanner.style.display = '';
-    if (tabBerater) { tabBerater.style.borderBottomColor = 'var(--orange)'; tabBerater.style.color = 'var(--navy)'; }
-  }
-
-  window.scrollTo(0, 0);
-}
-
 // ---- LUFTDRUCK LOGIK ----
 function updateBreiteSlider(val) {
   val = parseInt(val);
@@ -1417,29 +1364,3 @@ function restartWizard() {
   updateProgress(1);
   window.scrollTo(0, 0);
 }
-
-/* ===== NAV DROPDOWN ===== */
-function toggleNavDropdown() {
-  var dd = document.getElementById('nav-dropdown');
-  var arrow = document.getElementById('nav-arrow');
-  var isOpen = dd.style.display !== 'none';
-  dd.style.display = isOpen ? 'none' : 'block';
-  arrow.style.opacity = isOpen ? '1' : '0.7';
-}
-
-function navSelect(tab, label) {
-  document.getElementById('nav-active-label').textContent = label;
-  document.getElementById('nav-dropdown').style.display = 'none';
-  document.getElementById('nav-arrow').style.transform = '';
-  showTab(tab);
-}
-
-document.addEventListener('click', function(e) {
-  var nav = document.getElementById('main-nav');
-  if (nav && !nav.contains(e.target)) {
-    var dd = document.getElementById('nav-dropdown');
-    var arrow = document.getElementById('nav-arrow');
-    if (dd) dd.style.display = 'none';
-    if (arrow) arrow.style.transform = '';
-  }
-});

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bike-Fitting Anleitung – RadlHias.TV</title>
+<meta name="description" content="Bike-Fitting selbst gemacht: In 5 Schritten zur perfekten Sitzposition – Sattelhöhe, Sattelposition, Lenkerhöhe, Cockpit und Bremshebel richtig einstellen.">
+<link rel="canonical" href="https://radlhias.tv/bikefitting.html">
+<meta property="og:title" content="Bike-Fitting Anleitung – RadlHias.TV">
+<meta property="og:description" content="In 5 Schritten zur perfekten Sitzposition – die wichtigsten Einstellungen selbst vornehmen, kostenlos und ohne Werbung.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radlhias.tv/bikefitting.html">
+<meta property="og:image" content="https://radlhias.tv/konfigurator-banner-foto.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bike-Fitting Anleitung – RadlHias.TV">
+<meta name="twitter:description" content="In 5 Schritten zur perfekten Sitzposition – die wichtigsten Einstellungen selbst vornehmen, kostenlos und ohne Werbung.">
+<meta name="twitter:image" content="https://radlhias.tv/konfigurator-banner-foto.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&family=Permanent+Marker&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" as="style" href="style.css">
+<link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="style.css"></noscript>
+<link rel="icon" type="image/png" href="img/konfig-favicon.png">
+</head>
+<body>
+
+<nav class="main-nav" aria-label="Hauptnavigation">
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="fuer-haendler.html">Für Händler</a>
+    <div class="nav-dd active">
+      <input type="checkbox" id="nav-tools-toggle" class="nav-dd-check">
+      <label for="nav-tools-toggle" class="nav-dd-label">Tools<span class="nav-dd-caret"></span></label>
+      <div class="nav-dd-menu">
+        <a href="konfigurator.html">🚴&nbsp; Fahrrad Konfigurator</a>
+        <a href="luftdruckrechner.html">🔧&nbsp; Reifen-Luftdruckrechner</a>
+        <a href="bikefitting.html" class="active">🔩&nbsp; Bike-Fitting</a>
+        <a href="gebrauchtcheck.html">🔍&nbsp; Gebrauchtrad-Check</a>
+      </div>
+    </div>
+    <a href="bikeservice.html">Bike Service</a>
+    <a href="index.html#blog">Blog</a>
+    <a href="videos.html">Videos</a>
+    <a href="tour-de-hias/index.html">Tour de Hias</a>
+    <a href="faq.html">FAQ</a>
+    <a href="history.html">Meine Laufbahn</a>
+    <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<div class="tool-page">
+<div class="tool-hinweis">
+  <strong>Kurz vorweg:</strong> Alle Richtwerte in diesem Tool stammen aus meiner persönlichen Praxis aus mehr als <span class="js-years">27</span> Jahren im Bike-Business – keine Werbung, kein Sponsoring, keine Provision.
+  <a href="konfigurator.html">Mehr dazu →</a>
+</div>
+<!-- ===== BIKE-FITTING ===== -->
+<div id="fitting-bereich" style="max-width:640px; margin: 0 auto 80px; padding: 0 16px 20px;">
+
+  <div class="result-wrap" style="margin-top:25px;">
+    <div class="result-header">
+      <div class="logo-script" style="font-size:48px;">Bike-Fitting</div>
+      <div class="result-title">In 5 Schritten zur perfekten Sitzposition</div>
+    </div>
+
+    <div style="padding:16px 20px 8px;">
+      <p style="font-size:13px; color:var(--text-dim); font-style:italic; line-height:1.6; padding-bottom:14px; border-bottom:1px solid var(--cream2);">
+        Ein professionelles Bikefitting kostet mehrere Hundert Euro – aber mit den richtigen Handgriffen kannst du die wichtigsten Einstellungen selbst vornehmen. Nimm dir Zeit, probiere aus und vertraue deinem Körpergefühl.
+      </p>
+    </div>
+
+    <!-- SCHRITT 1: SATTELHÖHE -->
+    <div class="fitting-step" id="fit-step-1">
+      <div class="fitting-step-header" onclick="toggleFitStep(1)">
+        <div class="fitting-step-num">01</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Sattelhöhe</div>
+          <div class="fitting-step-sub">Die wichtigste Einstellung am ganzen Rad</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-1">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-1">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid">
+            <div class="fitting-polaroid-photo"><img src="img/fit-sattelhoehe-foto.jpg" alt="Sattelhöhe einstellen – Fersen-Methode" width="900" height="900" loading="lazy"></div>
+            <span class="fitting-polaroid-caption">Sattelhöhe</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Ziehe dir die Schuhe an, die du vorhast, auch beim Radfahren zu tragen!</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Suche dir eine Wand oder etwas zum Anlehnen. Setz dich auf dein Rad und stütze dich an der Wand ab. So kannst du sicher pedalieren ohne umzufallen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Setze beide Fersen auf die Pedale und tritt gleichmäßig rückwärts.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Achte dabei auf Folgendes: Die Fersen müssen auf den Pedalen bleiben können und die Hüfte muss beim Pedalieren horizontal bleiben. Sie darf nicht nach links oder rechts kippen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">5</div>
+            <div>Probiere so lange aus, bis die <strong>optimale Höhe</strong> gefunden ist. Das braucht manchmal ein paar Versuche – das ist normal.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↕</span>
+            <div><strong>Hüfte kippt seitlich</strong> → Sattel zu hoch. Etwas nach unten verstellen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↕</span>
+            <div><strong>Beine nicht vollständig gestreckt</strong> → Sattel noch zu niedrig. Etwas nach oben verstellen.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Hüfte bleibt gerade, Beine voll gestreckt</strong> → Sattelhöhe passt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Die Sattelstütze wird mit einer Klemme oder Schraube am Rahmen fixiert. Lösen, Höhe anpassen, wieder festziehen – und nochmal testen.</div>
+      </div>
+    </div>
+
+
+    <!-- SCHRITT 2: SATTEL VOR/RÜCK -->
+    <div class="fitting-step" id="fit-step-2">
+      <div class="fitting-step-header" onclick="toggleFitStep(2)">
+        <div class="fitting-step-num">02</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Sattel-Position</div>
+          <div class="fitting-step-sub">Vor/Rück – das Knie über der Pedalachse</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-2">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-2" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-sattelposition-foto.jpg" alt="Sattelposition – Knie über Pedalachse" width="900" height="900" loading="lazy"></div>
+            <span class="fitting-polaroid-caption">Sattel Einstellung</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Bleibe an der Wand angelehnt. Setze beide Füße mit den <strong>Ballen auf die Pedale</strong>. Also mit den Bereichen, mit denen du dann tatsächlich treten wirst.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Drehe die Kurbeln, bis sie <strong>exakt horizontal</strong> stehen. Eine Kurbel zeigt nach vorne, eine nach hinten.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Neige die Füße um etwa <strong>10° mit der Ferse nach oben</strong> – so wie beim echten Fahren.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">4</div>
+            <div>Schaue <strong>senkrecht von oben</strong> auf dein vorderes Knie: Die <strong>Kniescheibe sollte nun genau über der Pedalachse</strong> stehen.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">←</span>
+            <div><strong>Knie vor der Pedalachse</strong> → Sattel zu weit vorne. Sattel nach hinten schieben.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">→</span>
+            <div><strong>Knie hinter der Pedalachse</strong> → Sattel zu weit hinten. Sattel nach vorne schieben.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Knie genau über der Pedalachse</strong> → Position passt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Unter dem Sattel befinden sich eine oder zwei Schrauben. Löse diese, schiebe den Sattel in Position, ziehe wieder an – und teste nochmal.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 3: LENKERHÖHE -->
+    <div class="fitting-step" id="fit-step-3">
+      <div class="fitting-step-header" onclick="toggleFitStep(3)">
+        <div class="fitting-step-num">03</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Lenkerhöhe</div>
+          <div class="fitting-step-sub">Komfort vs. Sportlichkeit – deine Wahl</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-3">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-3" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(-2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-lenkerhoehe-foto.jpg" alt="Lenkerhöhe einstellen – Griffe über Satteloberkante" width="900" height="900" loading="lazy"></div>
+            <span class="fitting-polaroid-caption">Lenkerhöhe</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Als Faustregel gilt: Die Lenkergriffe sollten etwa <strong>10 cm über der Satteloberkante</strong> liegen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Je fitter und sportlicher du fährst, desto tiefer darf der Lenker. Im Leistungssport liegt der Lenker oft sogar <strong>unter dem Sattel</strong>.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Bei Trekkingrädern und Citybikes: Verstellbarer Vorbau – einfach drehen und fixieren. Bei Sporträdern: Spacer unter dem Vorbau entfernen oder hinzufügen.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Orientierung nach Fahrertyp</div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🏙</span>
+            <div><strong>Alltag & Komfort:</strong> Lenker deutlich über dem Sattel – aufrechte, entspannte Haltung.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🗺</span>
+            <div><strong>Trekking & Touren:</strong> Lenker auf Sattelhöhe oder bis 10 cm drüber – gute Balance aus Komfort und Effizienz.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">🏎</span>
+            <div><strong>Sport & Rennrad:</strong> Lenker auf oder unter Sattelhöhe – aerodynamisch, aber braucht gewöhnungsbedürftige Körperspannung.</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">💡 Rückenschmerzen nach längeren Fahrten? Lenker etwas höher stellen. Nackenschmerzen durch zu aufrechte Haltung? Lenker leicht tiefer.</div>
+      </div>
+    </div>
+
+    <!-- SCHRITT 4: REACH -->
+    <div class="fitting-step" id="fit-step-4">
+      <div class="fitting-step-header" onclick="toggleFitStep(4)">
+        <div class="fitting-step-num">04</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Reach – Abstand zum Lenker</div>
+          <div class="fitting-step-sub">Zu weit oder zu nah? So findest du es heraus.</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-4">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-4" style="display:none;">
+
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-reach-foto.jpg" alt="Reach – Abstand zum Lenker prüfen" width="900" height="900" loading="lazy"></div>
+            <span class="fitting-polaroid-caption">Lenker Entfernung</span>
+          </div>
+        </div>
+
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Setz dich in deine normale Fahrposition. Hände an den Griffen, Blick geradeaus. <strong>Schultern locker</strong> – nicht hochziehen.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div>Kontrolliere den Armwinkel: Die Arme sollten <strong>leicht angewinkelt</strong> sein – etwa 10–15°. Nicht gestreckt, nicht stark gebeugt.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">3</div>
+            <div>Schau auf die Vorderradnabe: Wenn du entspannt sitzt, sollte die Nabe <strong>knapp hinter dem Lenker verschwinden</strong> – also vom Lenker verdeckt sein.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box">
+          <div class="fitting-check-title">Was du siehst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↔</span>
+            <div><strong>Arme komplett gestreckt</strong> → Lenker zu weit weg. Kürzerer Vorbau oder verstellbaren Vorbau nach hinten drehen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">↔</span>
+            <div><strong>Ellbogen stark angewinkelt, zusammengefaltet</strong> → Lenker zu nah. Längerer Vorbau oder nach vorne drehen.</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <span class="fitting-check-icon">→</span>
+            <div><strong>Vorderradnabe weit vor dem Lenker sichtbar</strong> → Sitzposition zu aufrecht, Lenker zu nah.</div>
+          </div>
+          <div class="fitting-check-row good">
+            <span class="fitting-check-icon">✓</span>
+            <div><strong>Arme leicht angewinkelt, Nabe hinter dem Lenker</strong> → Reach passt perfekt.</div>
+          </div>
+        </div>
+
+        <div class="fitting-check-box" style="margin-top:12px; background:#fff8f5; border-color:var(--orange);">
+          <div class="fitting-check-title" style="color:var(--orange);">⚠ Typische Beschwerden als Hinweis</div>
+          <div class="fitting-check-row" style="border-color:transparent;">
+            <span class="fitting-check-icon" style="color:var(--orange);">↔</span>
+            <div><strong>Nackenschmerzen, Schultern hochgezogen, Kribbeln in Händen</strong> → Reach zu groß (zu weit gestreckt)</div>
+          </div>
+          <div class="fitting-check-row" style="border-color:transparent;">
+            <span class="fitting-check-icon" style="color:var(--orange);">↔</span>
+            <div><strong>Knieschmerzen durch Behinderung des Kniehubs, Rückenschmerzen</strong> → Reach zu klein (zu aufrecht)</div>
+          </div>
+        </div>
+
+        <div class="fitting-hint">🔧 Der Reach wird über die <strong>Vorbaul­änge</strong> angepasst. Kürzerer Vorbau = Lenker näher. Längerer Vorbau = Lenker weiter weg. Bei City- und Trekkingrädern oft direkt über den verstellbaren Vorbau einstellbar.</div>
+
+      </div>
+    </div>
+
+    <div class="fitting-step" id="fit-step-5">
+      <div class="fitting-step-header" onclick="toggleFitStep(5)">
+        <div class="fitting-step-num">05</div>
+        <div class="fitting-step-title">
+          <div class="fitting-step-label">Bremshebel und Griffe ausrichten</div>
+          <div class="fitting-step-sub">Ergonomische Position für Hände und Handgelenke</div>
+        </div>
+        <div class="fitting-chevron" id="fit-chev-5">›</div>
+      </div>
+      <div class="fitting-step-body" id="fit-body-5" style="display:none;">
+        <div class="fitting-polaroid-wrap">
+          <div class="fitting-polaroid" style="transform:rotate(-2deg);">
+            <div class="fitting-polaroid-photo"><img src="img/fit-bremshebel-foto.jpg" alt="Bremshebel und Griffe ausrichten" width="900" height="900" loading="lazy"></div>
+            <span class="fitting-polaroid-caption">Griffe einstellen</span>
+          </div>
+        </div>
+        <div class="fitting-instruction">
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">1</div>
+            <div>Setze Dich aufs Rad. Lege die Finger auf die <strong>Bremshebel</strong> – so als würdest Du bremsen wollen. In dieser Position sollten Finger, Handrücken und Unterarm eine gerade Linie bilden. Drehe die Bremsgriffe in die erforderliche Position.</div>
+          </div>
+          <div class="fitting-instruction-step">
+            <div class="fitting-step-dot">2</div>
+            <div><strong>„Ergo"-Griffe</strong> sollen deine Hände unterstützen, in der richtigen Position zu bleiben. Diese müssen genau so montiert bzw. gedreht werden, dass der Knick zwischen Hand und Unterarm vermieden wird. Drehe die erweiterte Grifffläche so weit nach oben, bis sich die gerade Linie ergibt!</div>
+          </div>
+        </div>
+        <div class="fitting-hint" style="margin-bottom:16px;">💡 Ein Knick im Handgelenk kann dafür sorgen, dass Nerven eingeklemmt werden und die Hände einschlafen.</div>
+        <div class="fitting-check-box" style="margin-bottom:0">
+          <div class="fitting-check-title">Was du spürst – was es bedeutet</div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Handgelenk knickt ab</strong> → Bremshebel und Griffe neu ausrichten</div>
+          </div>
+          <div class="fitting-check-row bad">
+            <div class="fitting-check-icon">✗</div>
+            <div><strong>Griffe verdrehen oder sitzen lose</strong> → Befestigung prüfen und festziehen</div>
+          </div>
+          <div class="fitting-check-row good">
+            <div class="fitting-check-icon">✓</div>
+            <div><strong>Hände und Unterarme bilden eine Gerade und der Hebel ist gut erreichbar</strong> → Position passt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abschluss -->
+    <div style="margin:20px 0 8px; padding:18px 20px; background:var(--navy); border-radius:12px; color:var(--cream);">
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--blue-lt); margin-bottom:10px;">🏁 Letzter Check</div>
+      <p style="font-size:13px; line-height:1.7; margin:0;">Mach nach dem Einstellen eine kurze Probefahrt – mindestens 10–15 Minuten. Der Körper braucht etwas Zeit um sich zu melden. Kleinere Korrekturen danach sind völlig normal. Wenn nach mehreren Ausfahrten noch Beschwerden da sind: ein professionelles Bikefitting beim Fachhandel lohnt sich – besonders bei Rädern über 1.500 €.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script src="script.js"></script>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="fuer-haendler.html">Für Händler</a>
+      <a href="konfigurator.html">Fahrrad Konfigurator</a>
+      <a href="luftdruckrechner.html">Luftdruck-Rechner</a>
+      <a href="bikefitting.html">Bike-Fitting</a>
+      <a href="gebrauchtcheck.html">Gebraucht-Check</a>
+      <a href="bikeservice.html">Bike Service</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="videos.html">Videos</a>
+      <a href="tour-de-hias/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="history.html">Meine Laufbahn</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <span title="YouTube – kommt bald" aria-label="YouTube – kommt bald">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </span>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+    </div>
+  </div>
+</footer>
+
+<script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+</body>
+</html>

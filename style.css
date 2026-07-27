@@ -208,6 +208,133 @@ header.compact .logo-tagline {
   .main-nav .nav-toggle-checkbox:checked ~ .nav-toggle-burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 }
 
+/* ===== TOOLS-DROPDOWN IN DER HAUPTNAVIGATION ===== */
+/* Volle Navi-Höhe, damit das Dropdown exakt an der Unterkante andockt */
+.main-nav .nav-links { align-self: stretch; }
+.main-nav .nav-dd {
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+.main-nav .nav-dd-check { display: none; }
+.main-nav .nav-dd-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #a8c8dc;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.main-nav .nav-dd:hover .nav-dd-label,
+.main-nav .nav-dd:focus-within .nav-dd-label,
+.main-nav .nav-dd.active .nav-dd-label { color: #f5f1eb; }
+.main-nav .nav-dd-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  transition: transform 0.2s ease;
+}
+.main-nav .nav-dd-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 240px;
+  background: #0a1219;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 2px solid var(--orange);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+  padding: 6px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s ease;
+}
+.main-nav .nav-dd:hover .nav-dd-menu,
+.main-nav .nav-dd:focus-within .nav-dd-menu,
+.main-nav .nav-dd-check:checked ~ .nav-dd-menu { opacity: 1; visibility: visible; }
+.main-nav .nav-dd-menu a {
+  display: block;
+  padding: 11px 18px;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  white-space: nowrap;
+}
+.main-nav .nav-dd-menu a:hover { background: rgba(255,255,255,0.07); }
+.main-nav .nav-dd-menu a.active { background: rgba(200,90,20,0.16); }
+@media (max-width: 540px) {
+  .main-nav .nav-dd-label { font-size: 11px; }
+}
+@media (max-width: 640px) {
+  .main-nav .nav-dd {
+    display: block;
+    align-self: auto;
+    position: static;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .main-nav .nav-dd-label { padding: 14px 0; justify-content: space-between; }
+  .main-nav .nav-dd-menu {
+    position: static;
+    transform: none;
+    min-width: 0;
+    margin: 0 0 10px;
+    padding: 0;
+    background: rgba(255,255,255,0.04);
+    border: none;
+    border-left: 2px solid var(--orange);
+    border-radius: 6px;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    display: none;
+  }
+  .main-nav .nav-dd:hover .nav-dd-menu,
+  .main-nav .nav-dd:focus-within .nav-dd-menu { display: none; }
+  .main-nav .nav-dd-check:checked ~ .nav-dd-menu { display: block; }
+  .main-nav .nav-dd-check:checked ~ .nav-dd-label .nav-dd-caret { transform: rotate(180deg); }
+  .main-nav .nav-links .nav-dd-menu a {
+    border-top: none;
+    padding: 12px 14px;
+    font-size: 12.5px;
+  }
+}
+
+/* ===== EIGENSTÄNDIGE TOOL-SEITEN (Konfigurator-Look ohne App-Rahmen) ===== */
+.tool-page { padding-top: 56px; }
+.tool-hinweis {
+  max-width: 640px;
+  margin: 22px auto 0;
+  padding: 14px 18px;
+  background: var(--cream2);
+  border-left: 3px solid var(--orange);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+.tool-hinweis strong { color: var(--text); }
+.tool-hinweis a {
+  color: var(--orange);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tool-hinweis a:hover { text-decoration: underline; }
+@media (max-width: 672px) {
+  .tool-hinweis { margin: 22px 16px 0; }
+}
+
 /* ===== EINHEITLICHER FOOTER (alle Seiten) ===== */
 footer {
   background:
@@ -261,26 +388,6 @@ footer {
 }
 
 /* NAV DROPDOWN */
-.nav-dd-item {
-  width: 100%;
-  padding: 12px 20px;
-  background: none;
-  border: none;
-  border-top: 1px solid var(--cream2);
-  color: var(--text-dim);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  text-align: left;
-}
-.nav-dd-item:hover {
-  background: var(--cream);
-  color: var(--navy);
-}
-
 /* PROGRESS */
 .prog-wrap {
   max-width: 640px;
