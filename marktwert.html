@@ -338,6 +338,29 @@
   }
   .mw-vorhanden b { color: var(--navy); }
 
+  /* Hinweis auf Angaben, die es im Datenbestand noch nicht gab */
+  .mw-neuhinweis {
+    background: #eef4f8;
+    border-left: 3px solid var(--blue);
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .mw-neuhinweis strong { color: var(--navy); }
+  .mw-neuhinweis ul { list-style: none; margin: 10px 0; padding: 0; }
+  .mw-neuhinweis li {
+    padding: 7px 0 7px 14px;
+    border-left: 2px solid var(--blue-lt);
+    margin-bottom: 6px;
+  }
+  .mw-neuhinweis li b { color: var(--navy); }
+  .mw-neuhinweis li span { display: block; font-size: 12px; opacity: 0.85; }
+  .mw-neuhinweis .mw-ausblick { font-size: 12px; font-style: italic; margin-top: 10px; }
+  .mw-neuhinweis.mw-bekannt { background: #eef6ef; border-left-color: var(--green); }
+
   /* Hinweis auf das Alter der Datenbasis */
   .mw-alterhinweis {
     /* bewusst kein Flex: der Inhalt ist Fliesstext mit <strong>,
@@ -585,6 +608,8 @@
           <div class="mw-price-big" id="richtpreis">—</div>
           <div class="mw-price-range" id="spanne"></div>
         </div>
+
+        <div class="mw-neuhinweis" id="neuHinweis" style="display:none;"></div>
 
         <div class="mw-alterhinweis" id="alterHinweis" style="display:none;"></div>
 
@@ -2169,6 +2194,75 @@ function datenAlter(matches){
   };
 }
 
+/* =========================================================
+   NEUHEITS-ANALYSE
+   Auch wenn gerechnet werden kann, muss offen dastehen, welche
+   Angaben in den Vergleichsangeboten ueberhaupt nicht vorkommen.
+   Je mehr Datensaetze mit der Zeit dazukommen, desto seltener
+   schlaegt diese Pruefung an.
+   ========================================================= */
+
+// Beschriftung aus dem Formular holen, statt sie hier zu doppeln.
+function wertLabel(selectId, wert){
+  const opt = document.querySelector('#' + selectId + ' option[value="' + wert + '"]');
+  if(!opt) return wert;
+  // Bei langen Beschreibungen nur den Teil vor dem Gedankenstrich nehmen.
+  return opt.textContent.split("–")[0].trim();
+}
+
+const SETUP_MERKMALE = [
+  // Beim Baujahr zaehlt der abgedeckte Bereich, nicht der exakte Treffer:
+  // Fehlt genau 2020, liegen aber 2019 und 2021 vor, ist das kein neues Setup.
+  {label: "Baujahr",         eingabe: i => i.baujahr,         spalte: "baujahr",
+   anzeige: (w) => w, bereich: true},
+  {label: "Zustand",         eingabe: i => i.zustand,         spalte: "zustand",
+   anzeige: (w) => wertLabel("zustand", w)},
+  {label: "Rahmenmaterial",  eingabe: i => i.rahmenmaterial,  spalte: "rahmenmaterial",
+   anzeige: (w) => wertLabel("rahmenmaterial", w), ueberspringen: w => w === "unbekannt"},
+  {label: "Schaltung",       eingabe: i => i.schaltungTyp,    spalte: "schaltung_typ",
+   anzeige: (w) => wertLabel("schaltungTyp", w)},
+  {label: "Bremsen",         eingabe: i => i.bremsen,         spalte: "bremsen",
+   anzeige: (w) => wertLabel("bremsen", w)},
+  {label: "Motor",           eingabe: i => i.motorHersteller, spalte: "motor_hersteller",
+   anzeige: (w) => wertLabel("motorHersteller", w), ueberspringen: w => w === "kein"},
+  {label: "Beleuchtung",     eingabe: i => i.beleuchtung,     spalte: "beleuchtung",
+   anzeige: (w) => wertLabel("beleuchtung", w)}
+];
+
+// Welche Angaben kommen im Vergleichspool kein einziges Mal vor?
+function analysiereSetup(input, pool){
+  const neu = [];
+
+  SETUP_MERKMALE.forEach(function(merkmal){
+    const wert = merkmal.eingabe(input);
+    if(wert === null || wert === "" || wert === undefined) return;
+    if(merkmal.ueberspringen && merkmal.ueberspringen(wert)) return;
+
+    const vorhandeneWerte = [...new Set(pool.map(e => e[merkmal.spalte]))]
+      .filter(w => w !== "" && w !== null && w !== undefined);
+
+    let stattdessen;
+
+    if(merkmal.bereich){
+      const zahlen = vorhandeneWerte.map(Number).sort((a,b) => a - b);
+      const von = zahlen[0], bis = zahlen[zahlen.length - 1];
+      if(wert >= von && wert <= bis) return;   // liegt im abgedeckten Bereich
+      stattdessen = von === bis ? String(von) : (von + " bis " + bis);
+    } else {
+      if(pool.some(e => String(e[merkmal.spalte]) === String(wert))) return;
+      stattdessen = vorhandeneWerte.map(merkmal.anzeige).sort((a,b) => a.localeCompare(b, 'de')).join(", ");
+    }
+
+    neu.push({
+      label: merkmal.label,
+      wert: merkmal.anzeige(wert),
+      stattdessen
+    });
+  });
+
+  return neu;
+}
+
 /*
   ersatzMarke: wird gesetzt, wenn der Nutzer im Popup bewusst eine andere,
   vergleichbare Marke als Referenz gewählt hat. Der Modellname wird dann
@@ -2241,6 +2335,11 @@ function calcMarktwert(input, ersatzMarke){
     bis,
     zuWenigDaten: matches.length < MIN_MATCHES_EMPFOHLEN,
     alter: datenAlter(matches),
+    // Bewusst gegen den gesamten Markenpool, nicht nur gegen die zehn
+    // angezeigten Treffer: "gab es noch nie" muss sich auf alles beziehen,
+    // was zu dieser Marke und Kategorie vorliegt.
+    neuImDatenbestand: analysiereSetup(input, brandPool),
+    vergleichsbasis: brandPool.length,
     gesuchtesBaujahr: input.baujahr,
     ersatzMarke: ersatzMarke || null,
     originalHersteller: input.hersteller
@@ -2496,6 +2595,45 @@ function readForm(){
 }
 
 /*
+  Kam eine Angabe im Vergleichspool noch nie vor, wird das offen gesagt -
+  auch dann, wenn ein Preis berechnet werden konnte.
+*/
+function renderNeuHinweis(res){
+  const box = document.getElementById('neuHinweis');
+  const neu = res.neuImDatenbestand;
+
+  if(!neu){
+    box.style.display = "none";
+    return;
+  }
+
+  const marke = res.ersatzMarke || res.originalHersteller;
+
+  if(neu.length === 0){
+    box.className = "mw-neuhinweis mw-bekannt";
+    box.innerHTML = "✓ <strong>Setup bekannt.</strong> Jede einzelne Angabe deines Rads kommt in den "
+      + res.vergleichsbasis + " vorliegenden Angeboten zu " + marke + " vor. Der Richtpreis steht damit auf vergleichsweise sicherem Boden.";
+    box.style.display = "block";
+    return;
+  }
+
+  box.className = "mw-neuhinweis";
+  let html = "<strong>Dieses Setup gab es so noch nie.</strong> Folgende Angaben kommen in keinem einzigen der "
+           + res.vergleichsbasis + " vorliegenden Angebote zu " + marke + " vor:<ul>";
+
+  neu.forEach(function(n){
+    html += "<li><b>" + n.label + ": " + n.wert + "</b>"
+          + "<span>Vorhanden ist stattdessen: " + n.stattdessen + "</span></li>";
+  });
+
+  html += "</ul>Der Richtpreis beruht deshalb auf ähnlichen, aber nicht identischen Rädern – nimm ihn als groben Anhaltspunkt."
+        + "<div class=\"mw-ausblick\">Je mehr Angebote mit der Zeit dazukommen, desto seltener wird dieser Hinweis.</div>";
+
+  box.innerHTML = html;
+  box.style.display = "block";
+}
+
+/*
   Die Datenbank waechst mit der Zeit und alte Angebote bleiben erhalten.
   Beruht ein Preis auf laenger zurueckliegenden Angeboten, muss im Ergebnis
   stehen, aus welcher Zeit diese stammen.
@@ -2539,6 +2677,7 @@ function renderResult(res){
   card.style.display = "block";
 
   if(res.error){
+    document.getElementById('neuHinweis').style.display = "none";
     document.getElementById('alterHinweis').style.display = "none";
     document.getElementById('richtpreis').textContent = "\u2014";
     document.getElementById('spanne').textContent = "";
@@ -2564,6 +2703,7 @@ function renderResult(res){
   }
   document.getElementById('matchInfo').textContent = info;
 
+  renderNeuHinweis(res);
   renderAlterHinweis(res);
 
   const tbody = document.getElementById('matchTbody');
