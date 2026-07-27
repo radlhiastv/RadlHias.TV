@@ -139,6 +139,26 @@
     margin-bottom: 18px;
   }
 
+  .mw-datenbasis {
+    background: #fff3cd;
+    border: 1px solid #f0ad4e;
+    border-left: 4px solid #e0900a;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #7a5c04;
+    margin-bottom: 18px;
+  }
+  .mw-datenbasis strong { color: #5c4503; }
+
+  .mw-fieldhint {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.45;
+    margin-top: 5px;
+  }
+
   .mw-dbline {
     display: flex;
     align-items: center;
@@ -361,6 +381,10 @@
         Verkaufen ohne Bauchgefühl: Trag dein Rad einmal sauber ein, und du bekommst einen realistischen Richtpreis samt Verhandlungsspanne – berechnet aus vergleichbaren Angeboten derselben Marke und Kategorie.
       </p>
 
+      <div class="mw-datenbasis">
+        <strong>Wichtig zur Einordnung:</strong> Die hinterlegte Vergleichsdatenbank ist noch ein Beispieldatensatz und keine vollständig recherchierte Marktübersicht. Das Tool zeigt dir, <em>wie</em> sich ein Gebrauchtpreis zusammensetzt und in welchem Korridor du ungefähr landest – es ersetzt keine Bewertung durch mich oder deinen Händler. Besonders bei hochwertigen Rädern über etwa 2.000 € liegen die Zahlen tendenziell zu niedrig.
+      </div>
+
       <div class="mw-notice" id="dbNotice"></div>
 
       <div class="mw-dbline">
@@ -408,8 +432,9 @@
             <input type="number" id="baujahr" min="1990" max="2026" placeholder="z.B. 2021">
           </div>
           <div class="mw-field">
-            <label class="input-label" for="rahmenhoehe">Rahmenhöhe (cm) *</label>
+            <label class="input-label" for="rahmenhoehe" id="rahmenhoeheLabel">Rahmenhöhe (cm) *</label>
             <input type="number" id="rahmenhoehe" min="30" max="70" placeholder="z.B. 54">
+            <div class="mw-fieldhint" id="rahmenhoeheHint">In Zentimetern, nicht in Zoll. Steht meist auf dem Sitzrohr oder im Fahrradpass.</div>
           </div>
         </div>
       </div>
@@ -1914,9 +1939,9 @@ let dbSource = "Platzhalter";
 
 function loadEmbeddedDatabase(){
   try{
-    const rows = parseCsv(CSV_DATA_RAW);
-    if(rows.length === 0) throw new Error("Eingebettete Datenbank ist leer.");
-    currentDB = rows;
+    // Gleiche Pruefung wie beim CSV-Upload, damit ein Fehler in den
+    // eingebetteten Daten nicht unbemerkt bis in die Preisanzeige laeuft.
+    currentDB = pruefeDatensaetze(parseCsv(CSV_DATA_RAW)).brauchbar;
     dbSource = "RadlHias-Datenbank";
   } catch(err){
     console.error("Konnte eingebettete Datenbank nicht laden, nutze Platzhalter:", err);
@@ -2144,9 +2169,46 @@ function parseCsv(text){
     r.akkukapazitaet = r.akkukapazitaet ? parseFloat(r.akkukapazitaet) : null;
     out.push(r);
   }
+  // Die echte Kopfzeile mitgeben: nach dem Parsen existieren Pflichtfelder
+  // sonst scheinbar immer (als NaN), und die Fehlermeldung wird unscharf.
+  out.headers = headers;
   return out;
 }
 
+
+/* Ohne diese Spalten ist keine Berechnung moeglich. Fehlt eine davon,
+   liefen frueher NaN-Werte bis in die Preisanzeige durch. */
+const PFLICHT_SPALTEN = ["hersteller", "kategorie", "baujahr", "rahmenhoehe", "zustand", "preis"];
+
+function pruefeDatensaetze(rows){
+  if(rows.length === 0){
+    throw new Error("Die Datei enthält keine Datensätze.");
+  }
+
+  const vorhanden = rows.headers || Object.keys(rows[0]);
+  const fehlend = PFLICHT_SPALTEN.filter(s => !vorhanden.includes(s));
+  if(fehlend.length){
+    throw new Error("Es fehlen Pflichtspalten: " + fehlend.join(", ")
+      + ".\n\nGefunden wurden: " + vorhanden.join(", ")
+      + "\n\nDie Kopfzeile muss exakt den Vorgaben im Abschnitt \"Für Profis\" entsprechen.");
+  }
+
+  // Zeilen mit unbrauchbaren Zahlenwerten aussortieren statt sie durchzureichen.
+  const brauchbar = rows.filter(r =>
+    r.hersteller && r.kategorie &&
+    Number.isFinite(r.preis) && r.preis > 0 &&
+    Number.isFinite(r.baujahr) &&
+    Number.isFinite(r.rahmenhoehe) &&
+    Number.isFinite(r.zustand)
+  );
+
+  if(brauchbar.length === 0){
+    throw new Error("Keine einzige Zeile enthält vollständige Werte. "
+      + "Prüfe, ob Preis, Baujahr, Rahmenhöhe und Zustand als Zahlen ohne Einheit eingetragen sind.");
+  }
+
+  return {brauchbar, verworfen: rows.length - brauchbar.length};
+}
 
 document.getElementById('csvInput').addEventListener('change', function(e){
   const file = e.target.files[0];
@@ -2154,17 +2216,75 @@ document.getElementById('csvInput').addEventListener('change', function(e){
   const reader = new FileReader();
   reader.onload = function(evt){
     try{
-      const rows = parseCsv(evt.target.result);
-      if(rows.length === 0) throw new Error("Datei enthält keine Datensätze.");
-      currentDB = rows;
+      const geprueft = pruefeDatensaetze(parseCsv(evt.target.result));
+      currentDB = geprueft.brauchbar;
       dbSource = file.name;
       updateDbStatusUI();
+      // Ein Ergebnis aus der alten Datenbasis waere jetzt irrefuehrend.
+      document.getElementById('resultCard').style.display = "none";
+      document.getElementById('formError').textContent = "";
+      if(geprueft.verworfen > 0){
+        alert(geprueft.brauchbar.length + " Datensätze geladen.\n\n"
+          + geprueft.verworfen + " Zeile(n) wurden übersprungen, weil Pflichtwerte fehlten oder keine Zahlen waren.");
+      }
     } catch(err){
-      alert("Fehler beim Einlesen der CSV-Datei: " + err.message);
+      alert("Die CSV-Datei konnte nicht geladen werden.\n\n" + err.message);
+      e.target.value = "";
     }
   };
   reader.readAsText(file, "UTF-8");
 });
+
+/* =========================================================
+   PLAUSIBILITAETSPRUEFUNG
+   Ohne <form>-Element greifen die min/max-Attribute nicht,
+   deshalb wird hier explizit geprueft.
+   ========================================================= */
+const JAHR_MIN = 1980;
+const JAHR_MAX = new Date().getFullYear() + 1;
+
+// Kinderraeder werden ueber die Laufradgroesse in Zoll erfasst,
+// alle anderen Kategorien ueber die Rahmenhoehe in Zentimetern.
+const MASS_GRENZEN = {
+  kinderrad: {min: 12, max: 30, einheit: "Zoll",       feld: "Laufradgröße"},
+  standard:  {min: 38, max: 70, einheit: "Zentimeter", feld: "Rahmenhöhe"}
+};
+
+function massRegeln(kategorie){
+  return kategorie === "kinderrad" ? MASS_GRENZEN.kinderrad : MASS_GRENZEN.standard;
+}
+
+// Kategorie und Motorangabe duerfen sich nicht widersprechen.
+function motorWiderspruch(kategorie, motorHersteller){
+  const istEbikeKategorie = kategorie.startsWith("ebike");
+  const hatMotor = motorHersteller !== "kein";
+  if(istEbikeKategorie && !hatMotor){
+    return "Du hast eine E-Bike-Kategorie gewählt, aber bei \"Motor\" steht \"Kein E-Antrieb\". "
+         + "Bitte wähle den Motor-Hersteller aus – oder wechsle auf die Kategorie ohne E-Antrieb.";
+  }
+  if(!istEbikeKategorie && hatMotor){
+    return "Du hast einen Motor-Hersteller angegeben, aber eine Kategorie ohne E-Antrieb gewählt. "
+         + "Bitte wechsle auf die passende E-Bike-Kategorie – sonst wird mit den falschen Vergleichsrädern gerechnet.";
+  }
+  return null;
+}
+
+// Label, Platzhalter und Hilfetext an die gewaehlte Kategorie anpassen.
+function updateMassFeld(){
+  const kategorie = document.getElementById('kategorie').value;
+  const regel = massRegeln(kategorie);
+  const istKind = kategorie === "kinderrad";
+  document.getElementById('rahmenhoeheLabel').textContent = regel.feld + " (" + (istKind ? "Zoll" : "cm") + ") *";
+  const feld = document.getElementById('rahmenhoehe');
+  feld.min = regel.min;
+  feld.max = regel.max;
+  feld.placeholder = istKind ? "z.B. 24" : "z.B. 54";
+  document.getElementById('rahmenhoeheHint').textContent = istKind
+    ? "Der Durchmesser des Laufrads in Zoll (12, 16, 20, 24 …) – steht auf der Reifenflanke."
+    : "In Zentimetern, nicht in Zoll. Steht meist auf dem Sitzrohr oder im Fahrradpass.";
+}
+
+document.getElementById('kategorie').addEventListener('change', updateMassFeld);
 
 function readForm(){
   const errorEl = document.getElementById('formError');
@@ -2178,6 +2298,30 @@ function readForm(){
 
   if(!kategorie || !hersteller || !baujahr || !rahmenhoehe){
     errorEl.textContent = "Bitte Kategorie, Hersteller, Baujahr und Rahmenhöhe ausfüllen (Pflichtfelder).";
+    return null;
+  }
+
+  if(baujahr < JAHR_MIN || baujahr > JAHR_MAX){
+    errorEl.textContent = "Das Baujahr muss zwischen " + JAHR_MIN + " und " + JAHR_MAX + " liegen. "
+      + "Für ältere Räder ist dieses Tool nicht gedacht – bei Klassikern entscheidet der Liebhaberwert, nicht der Gebrauchtmarkt.";
+    return null;
+  }
+
+  const regel = massRegeln(kategorie);
+  if(rahmenhoehe < regel.min || rahmenhoehe > regel.max){
+    // Typischer Fehler bei Erwachsenenraedern: Rahmengroesse in Zoll statt in cm.
+    if(kategorie !== "kinderrad" && rahmenhoehe >= 13 && rahmenhoehe <= 24){
+      errorEl.textContent = "Das sieht nach einer Rahmengröße in Zoll aus (" + rahmenhoehe + "\"). "
+        + "Bitte in Zentimetern angeben – " + rahmenhoehe + " Zoll entspricht etwa " + Math.round(rahmenhoehe * 2.54) + " cm.";
+    } else {
+      errorEl.textContent = regel.feld + " muss zwischen " + regel.min + " und " + regel.max + " " + regel.einheit + " liegen.";
+    }
+    return null;
+  }
+
+  const motorFehler = motorWiderspruch(kategorie, document.getElementById('motorHersteller').value);
+  if(motorFehler){
+    errorEl.textContent = motorFehler;
     return null;
   }
 
@@ -2327,13 +2471,26 @@ document.getElementById('calcBtn').addEventListener('click', function(){
 });
 
 document.getElementById('resetBtn').addEventListener('click', function(){
-  document.querySelectorAll('input[type=text], input[type=number], input[type=date], textarea').forEach(el => el.value = "");
+  // Textfelder leeren ...
+  document.querySelectorAll('#marktwert-bereich input[type=text], #marktwert-bereich input[type=number], #marktwert-bereich input[type=date], #marktwert-bereich textarea')
+    .forEach(el => el.value = "");
+  // ... und alle Auswahlfelder zurueck auf ihre Vorgabe.
+  document.querySelectorAll('#marktwert-bereich select').forEach(function(sel){
+    const vorgabe = sel.querySelector('option[selected]');
+    sel.value = vorgabe ? vorgabe.value : sel.options[0].value;
+  });
+  document.querySelectorAll('#marktwert-bereich input[type=radio]').forEach(function(radio){
+    radio.checked = radio.defaultChecked;
+  });
+  updateMassFeld();
   document.getElementById('resultCard').style.display = "none";
   document.getElementById('formError').textContent = "";
+  document.getElementById('kategorie').focus();
 });
 
 loadEmbeddedDatabase();
 updateDbStatusUI();
+updateMassFeld();
 </script>
 </body>
 </html>
