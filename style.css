@@ -269,7 +269,7 @@ header.compact .logo-tagline {
 .main-nav .nav-dd-menu a {
   display: block;
   padding: 11px 18px;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.3px;
   text-transform: none;
   white-space: nowrap;
@@ -309,7 +309,7 @@ header.compact .logo-tagline {
   .main-nav .nav-links .nav-dd-menu a {
     border-top: none;
     padding: 12px 14px;
-    font-size: 12.5px;
+    font-size: 13px;
   }
 }
 
