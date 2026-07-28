@@ -64,14 +64,10 @@
   display:flex; flex-direction:column;
   padding:0 0 40px 0;
 ">
-  <div style="display:flex; flex-direction:column; align-items:center; padding:40px 24px 0;">
-
-    <!-- Logo -->
-    <img src="img/konfig-logo.png" alt="Radl Hias" width="320" height="320" style="height:150px; width:auto; border-radius:10px; margin-bottom:28px;">
+  <div style="display:flex; flex-direction:column; align-items:center; padding:24px 24px 0;">
 
     <!-- Headline -->
-    <div id="welcome-headline" style="font-family:'Abuget',cursive; font-size:54px; color:#f5f1eb; text-align:center; margin-bottom:6px;">Hallo!</div>
-    <div style="font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#a8c8dc; text-align:center; margin-bottom:28px;">Bevor du startest – kurz zu dieser App</div>
+    <div style="font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#a8c8dc; text-align:center; margin-bottom:20px;">Bevor du startest – kurz zu dieser App</div>
 
     <!-- Karte -->
     <div style="background:rgba(255,255,255,0.07); border-radius:14px; padding:24px 20px; max-width:480px; width:100%; border:1px solid rgba(255,255,255,0.12);">
@@ -119,19 +115,6 @@
 
   </div>
 </div>
-
-<script>
-  (function() {
-    var params = new URLSearchParams(window.location.search);
-    var name = params.get('name');
-    var el = document.getElementById('welcome-headline');
-    if (name) {
-      el.innerHTML = 'Hallo ' + name + '\!';
-    } else {
-      el.innerHTML = 'Hallo\!';
-    }
-  })();
-</script>
 
 
 <div id="konfig-app-content" style="display:none; padding-top:56px;">
