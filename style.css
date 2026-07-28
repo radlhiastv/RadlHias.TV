@@ -286,7 +286,7 @@ header.compact .logo-tagline {
     position: static;
     border-top: 1px solid rgba(255,255,255,0.07);
   }
-  .main-nav .nav-dd-label { padding: 14px 0; justify-content: space-between; }
+  .main-nav .nav-dd-label { padding: 14px 0; font-size: 13px; justify-content: space-between; }
   .main-nav .nav-dd-menu {
     position: static;
     transform: none;
@@ -835,9 +835,25 @@ details.truth-box > summary:hover {
   overflow: hidden;
 }
 .result-header {
+  position: relative;
   background: var(--navy);
   padding: 22px;
   text-align: center;
+}
+.beta-sticker {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--orange);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  transform: rotate(4deg);
 }
 .result-title {
   font-family: 'Barlow Condensed', sans-serif;

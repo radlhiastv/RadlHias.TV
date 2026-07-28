@@ -207,10 +207,21 @@
 
     @media (max-width: 640px) {
       .audience-picker { padding: 18px 16px; }
-      .audience-picker-inner { gap: 10px; }
-      .audience-card { padding: 12px 16px; gap: 2px; }
-      .audience-card-label { font-size: 15px; }
-      .audience-card-desc { font-size: 13px; line-height: 1.4; }
+      .audience-picker-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .audience-card {
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px 12px;
+        min-height: 92px;
+      }
+      .audience-card-label { font-size: 14px; }
+      .audience-card-desc { display: none; }
     }
 
     /* ===== FEATURE BAR ===== */
@@ -1059,7 +1070,7 @@
         <a href="luftdruckrechner.html">🔧&nbsp; Reifen-Luftdruckrechner</a>
         <a href="bikefitting.html">🔩&nbsp; Bike-Fitting</a>
         <a href="gebrauchtcheck.html">🔍&nbsp; Gebrauchtrad-Check</a>
-        <a href="marktwert.html">💶&nbsp; Marktwert-Rechner</a>
+        <a href="marktwert.html">💶&nbsp; Preisradar</a>
       </div>
     </div>
     <a href="bikeservice.html">Bike Service</a>
@@ -1169,7 +1180,7 @@
         <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.83 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/>
         <circle cx="7.4" cy="7.4" r="1.6" fill="#c85a14" stroke="none"/>
       </svg>
-      <div class="fi-title">Marktwert-Rechner</div>
+      <div class="fi-title">Preisradar</div>
       <div class="fi-desc">Was dein Gebrauchtrad wirklich wert ist – Richtpreis &amp; Spanne</div>
     </a>
   </div>
@@ -1274,7 +1285,7 @@
           <li><a href="gebrauchtcheck.html"><span class="kf-check">✓</span><span class="kf-label">Gebraucht-Check</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
           <li><a href="bikefitting.html"><span class="kf-check">✓</span><span class="kf-label">Bike-Fitting</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
           <li><a href="luftdruckrechner.html"><span class="kf-check">✓</span><span class="kf-label">Luftdruck-Rechner</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
-          <li><a href="marktwert.html"><span class="kf-check">✓</span><span class="kf-label">Marktwert-Rechner</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="marktwert.html"><span class="kf-check">✓</span><span class="kf-label">Preisradar</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
         </ul>
       </div>
     </div>
@@ -1388,7 +1399,7 @@
       <a href="luftdruckrechner.html">Luftdruck-Rechner</a>
       <a href="bikefitting.html">Bike-Fitting</a>
       <a href="gebrauchtcheck.html">Gebraucht-Check</a>
-      <a href="marktwert.html">Marktwert-Rechner</a>
+      <a href="marktwert.html">Preisradar</a>
       <a href="bikeservice.html">Bike Service</a>
       <a href="blog/index.html">Blog</a>
       <a href="videos.html">Videos</a>
