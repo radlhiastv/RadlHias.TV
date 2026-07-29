@@ -267,13 +267,16 @@ header.compact .logo-tagline {
 .main-nav .nav-dd:focus-within .nav-dd-menu,
 .main-nav .nav-dd-check:checked ~ .nav-dd-menu { opacity: 1; visibility: visible; }
 .main-nav .nav-dd-menu a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 11px 18px;
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.3px;
   text-transform: none;
   white-space: nowrap;
 }
+.main-nav .nav-dd-icon { width: 18px; height: 18px; flex-shrink: 0; }
 .main-nav .nav-dd-menu a:hover { background: rgba(255,255,255,0.07); }
 .main-nav .nav-dd-menu a.active { background: rgba(200,90,20,0.16); }
 @media (max-width: 540px) {
