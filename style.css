@@ -1261,6 +1261,42 @@ details.truth-box > summary:hover {
 .fitting-check-row.bad .fitting-check-icon { color: var(--orange); }
 .fitting-check-row.good .fitting-check-icon { color: var(--green); }
 
+/* ===== CHECK-GRID: kompakte Kachel-Variante der Check-Boxen (aktuell nur Gebraucht-Check) ===== */
+.fitting-check-box.check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  padding: 14px;
+}
+.fitting-check-box.check-grid .fitting-check-title {
+  grid-column: 1 / -1;
+  border-bottom: none;
+  padding: 0 0 4px;
+}
+.fitting-check-box.check-grid .fitting-check-row {
+  border-bottom: none;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 10px 12px;
+}
+.fitting-check-box.check-grid .fitting-check-row.bad { border-color: #f0c9a8; }
+.fitting-check-box.check-grid .fitting-check-row.good { border-color: #bfe0c4; }
+.fitting-check-box.check-grid .fitting-check-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.fitting-check-box.check-grid .fitting-check-row.bad .fitting-check-icon { background: var(--orange); }
+.fitting-check-box.check-grid .fitting-check-row.good .fitting-check-icon { background: var(--green); }
+
 .fitting-hint {
   background: var(--cream2);
   border-radius: 8px;
