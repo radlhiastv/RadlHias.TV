@@ -856,6 +856,7 @@ details.truth-box > summary:hover {
   align-items: center;
   justify-content: center;
   gap: 14px;
+  color: var(--cream);
 }
 .logo-title-row .tool-title-icon {
   width: 40px;
