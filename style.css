@@ -372,6 +372,14 @@ footer {
   transition: color 0.2s;
 }
 .footer-nav a:hover { color: var(--blue-lt); }
+@media (max-width: 640px) {
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+    text-align: center;
+  }
+}
 .footer-social { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; }
 .footer-social a, .footer-social span {
   color: var(--cream);
