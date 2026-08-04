@@ -70,3 +70,13 @@ muss ein CDN vorgeschaltet werden:
 Da Bild-/CSS-/JS-Dateinamen sich bei Änderungen aktuell nicht automatisch ändern (kein
 Cache-Busting per Hash), sollte man nach dem Ersetzen einer Datei mit gleichem Namen in Cloudflare
 einmal **Purge Cache** auslösen, damit Besucher nicht bis zu ein Jahr lang eine alte Version sehen.
+
+## Werkstatt-Terminbuchung
+
+`termin.html` (Kunden-Buchungsseite, verlinkt von `bikeservice.html`) und `admin-termine.html`
+(passwortgeschütztes Admin-Panel) sind statische Frontends für das Terminanfrage-System. Das
+Backend (Cloudflare Worker + D1-Datenbank + Google-Calendar- + Brevo-Anbindung) liegt in
+[`worker/`](worker/) – Einrichtung und Deployment sind in [`worker/SETUP.md`](worker/SETUP.md)
+Schritt für Schritt beschrieben. Kunden stellen dort nur eine **Anfrage**; erst wenn Mathias sie
+im Admin-Panel mit fixer Uhrzeit freigibt, entsteht ein Termin im Google-Kalender und der Kunde
+bekommt eine Bestätigung.
