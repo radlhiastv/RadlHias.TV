@@ -181,7 +181,7 @@
     }
 
     /* ===== ZIELGRUPPEN-WEGWEISER ===== */
-    .audience-picker { background: var(--cream); padding: 28px 20px; margin-top: 56px; }
+    .audience-picker { background: var(--cream); padding: 28px 20px; margin-top: 56px; border-bottom: 3px solid var(--orange); }
     .audience-picker-title {
       max-width: 1100px;
       margin: 0 auto 12px;
@@ -234,7 +234,7 @@
       .audience-picker-title { margin-bottom: 8px; }
       .audience-picker-inner {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 8px;
       }
       .audience-card {
@@ -244,7 +244,7 @@
         text-align: center;
         padding: 10px 10px;
       }
-      .audience-card-label { font-size: 12.5px; }
+      .audience-card-label { font-size: 14px; }
       .audience-card-desc { display: none; }
     }
 
@@ -378,6 +378,8 @@
       font-size: clamp(38px, 6vw, 52px);
       line-height: 1;
       color: var(--cream);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
     .vstat-label {
       display: block;
@@ -704,6 +706,7 @@
       aspect-ratio: 16/9;
       overflow: hidden;
     }
+    .kfg-banner-flat .kfg-banner-media { aspect-ratio: 21/8; }
     .kfg-banner-media > img {
       position: absolute;
       inset: 0;
@@ -798,6 +801,25 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.6);
     }
     .kfg-col-tools { max-width: 340px; }
+    .kfg-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 26px;
+      border-radius: 12px;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 19px;
+      text-decoration: none;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .kfg-cta-btn:hover { background: var(--orange-light, #e06820); transform: translateY(-2px); }
+    .kfg-cta-btn:active { transform: translateY(0); }
     .kfg-features {
       list-style: none;
       margin: 0;
@@ -1250,7 +1272,7 @@
 </div>
 
 <!-- ===== BIKE-SERVICE-WERBEBANNER ===== -->
-<section class="kfg-banner">
+<section class="kfg-banner kfg-banner-flat">
   <div class="kfg-banner-media">
     <img src="Fotos/foto-werkstatt-shop.webp" alt="Mathias bei der Fahrradmontage in seiner Werkstatt" width="1000" height="670" loading="lazy">
     <div class="kfg-banner-scrim"></div>
@@ -1261,11 +1283,7 @@
         <p class="kfg-lead">Wartung, Reparatur und Pflege für dein Fahrrad – ehrlich kalkuliert, mit <span class="js-years">27</span> Jahren Praxiserfahrung und ohne Verkaufsdruck. Ich sage dir, was dein Rad wirklich braucht, nicht was gerade im Regal liegt.</p>
       </div>
       <div class="kfg-col kfg-col-tools">
-        <ul class="kfg-features">
-          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Wartung &amp; Reparatur</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
-          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Transparente Kalkulation</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
-          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Termin online anfragen</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
-        </ul>
+        <a href="bikeservice.html" class="kfg-cta-btn">Service-Termin vereinbaren <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
