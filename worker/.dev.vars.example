@@ -1,0 +1,9 @@
+# Kopieren nach ".dev.vars" für lokale Tests mit `wrangler dev`.
+# ".dev.vars" NIEMALS committen (steht in .gitignore).
+
+ADMIN_PASSWORD=change-me
+SESSION_SECRET=change-me-to-a-long-random-string
+GOOGLE_CLIENT_ID=xxxxxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=xxxxxxxx
+GOOGLE_REFRESH_TOKEN=xxxxxxxx
+BREVO_API_KEY=xkeysib-xxxxxxxx

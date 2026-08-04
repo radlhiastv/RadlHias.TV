@@ -1,0 +1,14 @@
+{
+  "name": "radlhias-termin-api",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 migrations apply radlhias-termine --local",
+    "migrate:remote": "wrangler d1 migrations apply radlhias-termine --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

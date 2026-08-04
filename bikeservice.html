@@ -256,6 +256,34 @@
     transform: translateY(-2px);
   }
 
+  .philosophy-cta-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(245,241,235,0.5);
+    color: var(--cream);
+  }
+  .philosophy-cta-secondary:hover {
+    background: rgba(245,241,235,0.12);
+    color: var(--cream);
+  }
+
+  .service-booking-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+  }
+  .service-booking-cta p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 420px;
+  }
+  .service-booking-cta .philosophy-cta { flex-shrink: 0; }
+
   @media (max-width: 480px) {
     .service-hero-cta { gap: 8px; }
     .service-hero-cta .philosophy-cta,
@@ -310,7 +338,8 @@
     <h1 class="service-hero-logo">Bike<span>Service</span></h1>
     <p class="service-hero-tagline">Wartung, Reparatur und Pflege für dein Fahrrad.</p>
     <div class="service-hero-cta">
-      <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta">Service anfragen</a>
+      <a href="termin.html" class="philosophy-cta">Termin anfragen</a>
+      <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta philosophy-cta-secondary">Service anfragen</a>
       <a href="https://wa.me/4367762985544?text=Hallo%20Mathias%2C%20ich%20habe%20eine%20Anfrage%20zum%20Bike%20Service" target="_blank" rel="noopener noreferrer" class="whatsapp-cta">
         <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.19.588 4.24 1.617 6.007L4 29l8.2-1.578A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.818a9.77 9.77 0 0 1-4.98-1.362l-.357-.212-4.868.937.955-4.75-.233-.367A9.76 9.76 0 0 1 6.182 15c0-5.412 4.41-9.818 9.822-9.818S25.818 9.588 25.818 15 21.416 24.818 16.004 24.818zm5.373-7.34c-.294-.148-1.74-.858-2.01-.956-.27-.099-.467-.148-.663.148-.196.295-.762.956-.934 1.152-.172.196-.344.221-.638.074-.294-.148-1.24-.457-2.362-1.457-.873-.779-1.463-1.741-1.635-2.036-.172-.295-.018-.454.13-.601.134-.133.294-.344.442-.516.147-.172.196-.295.294-.492.098-.196.049-.369-.025-.517-.074-.148-.663-1.598-.908-2.19-.239-.575-.482-.497-.663-.506l-.565-.01c-.196 0-.516.074-.786.369-.27.295-1.03 1.006-1.03 2.455 0 1.449 1.055 2.85 1.202 3.046.147.196 2.077 3.17 5.033 4.445.703.304 1.252.485 1.68.62.706.224 1.348.192 1.856.117.566-.085 1.74-.712 1.985-1.4.246-.688.246-1.277.172-1.4-.074-.123-.27-.196-.564-.344z"/></svg>
         WhatsApp
@@ -332,6 +361,10 @@
     <p>Jedes Fahrrad kommt in einem anderen Zustand zu mir – ein Kinderrad nach dem ersten Sommer braucht etwas anderes als ein E-Bike nach drei Jahren im Alltag. Ein Pauschalpreis, der das ignoriert, wäre für mich nicht ehrlich.</p>
     <p>Was du von mir bekommst: Ich schaue mir dein Rad in Ruhe an und sage dir, was wirklich notwendig ist – und was nicht. Du bekommst vorher ein klares, verbindliches Angebot. Erst wenn du zustimmst, wird geschraubt. Keine Überraschungen auf der Rechnung, keine Leistungen, die du nicht brauchst.</p>
     <p>Egal ob kurzer Check nach dem Neukauf, normale Wartung oder eine Komplett-Aufbereitung deines Rads: Schreib mir kurz, was ansteht – ich melde mich mit einer ehrlichen Einschätzung.</p>
+    <div class="service-booking-cta">
+      <p>Am schnellsten geht's über die Terminanfrage: Zeitfenster wählen, kurz Kontaktdaten angeben – ich melde mich mit einer fixen Uhrzeit zurück.</p>
+      <a href="termin.html" class="philosophy-cta">Termin anfragen</a>
+    </div>
   </div>
 </div>
 

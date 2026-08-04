@@ -1,0 +1,50 @@
+name = "radlhias-termin-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# ---------------------------------------------------------------------------
+# D1-Datenbank
+# ---------------------------------------------------------------------------
+# Datenbank einmalig anlegen:
+#   wrangler d1 create radlhias-termine
+# Die Ausgabe enthält eine database_id, die hier eingetragen werden muss.
+[[d1_databases]]
+binding = "DB"
+database_name = "radlhias-termine"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# ---------------------------------------------------------------------------
+# Nicht-geheime Variablen (öffentlich im Bundle sichtbar, KEINE Secrets!)
+# ---------------------------------------------------------------------------
+[vars]
+ADMIN_EMAIL = "radlhias.tv@gmail.com"
+GOOGLE_CALENDAR_ID = "radlhias.tv@gmail.com"
+SENDER_EMAIL = "radlhias.tv@gmail.com"
+SENDER_NAME = "RadlHias.TV Werkstatt"
+WORKSHOP_ADDRESS = "Wildshuter Str. 11b, 5120 St. Pantaleon"
+REPLY_WINDOW_TEXT = "1-2 Werktagen"
+ADMIN_PANEL_URL = "https://radlhias.tv/admin-termine.html"
+# Erlaubter Frontend-Origin für CORS (bei Same-Origin-Route via radlhias.tv/api/*
+# technisch nicht zwingend nötig, schadet aber nicht als Fallback / für lokale Tests)
+ALLOWED_ORIGIN = "https://radlhias.tv"
+
+# ---------------------------------------------------------------------------
+# Secrets (NIEMALS hier eintragen, sondern per Wrangler CLI setzen!)
+# ---------------------------------------------------------------------------
+#   wrangler secret put ADMIN_PASSWORD
+#   wrangler secret put SESSION_SECRET
+#   wrangler secret put GOOGLE_CLIENT_ID
+#   wrangler secret put GOOGLE_CLIENT_SECRET
+#   wrangler secret put GOOGLE_REFRESH_TOKEN
+#   wrangler secret put BREVO_API_KEY
+# Details siehe SETUP.md
+
+# ---------------------------------------------------------------------------
+# Route (empfohlen: Same-Origin unter radlhias.tv/api/*, dann kein CORS/Cookie-
+# SameSite-Sondertheater nötig, weil das Frontend auf GitHub Pages hinter
+# demselben Cloudflare-Proxy läuft). Auskommentiert bis DNS/Proxy dafür
+# eingerichtet ist -- siehe SETUP.md.
+# ---------------------------------------------------------------------------
+# routes = [
+#   { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" }
+# ]
