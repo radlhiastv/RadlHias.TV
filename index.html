@@ -35,6 +35,30 @@
     }
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "RadlHias.TV – Fahrrad-Service Mathias Blumreich",
+    "image": "https://radlhias.tv/Fotos/foto-werkstatt-shop.jpg",
+    "url": "https://radlhias.tv/bikeservice.html",
+    "email": "radlhias.tv@gmail.com",
+    "description": "Fahrrad-Service (Wartung & Reparatur) im Raum Salzburg / Innviertel, ausschließlich nach Terminvereinbarung. Ehrlich, transparent, ohne Pauschalpreise.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Wildshuter Str. 11b",
+      "postalCode": "5120",
+      "addressLocality": "St. Pantaleon",
+      "addressCountry": "AT"
+    },
+    "areaServed": ["Salzburg", "Innviertel", "St. Pantaleon", "Braunau am Inn"],
+    "priceRange": "€€",
+    "founder": {
+      "@type": "Person",
+      "name": "Mathias Blumreich"
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;700;900&family=Permanent+Marker&display=swap">
@@ -1061,7 +1085,7 @@
     <span></span><span></span><span></span>
   </label>
   <div class="nav-links">
-    <a href="fuer-haendler.html">Für Händler</a>
+    <a href="bikeservice.html">Bike Service</a>
     <div class="nav-dd">
       <input type="checkbox" id="nav-tools-toggle" class="nav-dd-check">
       <label for="nav-tools-toggle" class="nav-dd-label">Tools<span class="nav-dd-caret"></span></label>
@@ -1073,7 +1097,6 @@
         <a href="preisradar.html"><svg class="nav-dd-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.83 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.4" cy="7.4" r="1.6" fill="#c85a14" stroke="none"/></svg>Preisradar</a>
       </div>
     </div>
-    <a href="bikeservice.html">Bike Service</a>
     <a href="#blog">Blog</a>
     <a href="videos.html">Videos</a>
     <a href="tour-de-hias/index.html">Tour de Hias</a>
@@ -1089,17 +1112,13 @@
 <section class="audience-picker">
   <div class="audience-picker-title">Nimm eine Abkürzung!</div>
   <div class="audience-picker-inner">
-    <a href="fuer-haendler.html" class="audience-card">
-      <span class="audience-card-label">Ich bin Fahrradhändler</span>
-      <span class="audience-card-desc">Marketing-Systeme &amp; digitale Tools für dein Geschäft</span>
+    <a href="bikeservice.html" class="audience-card">
+      <span class="audience-card-label">Ich brauche einen Radservice</span>
+      <span class="audience-card-desc">Wartung &amp; Beratung in St. Pantaleon / Innviertel</span>
     </a>
     <a href="#tools" class="audience-card">
       <span class="audience-card-label">Ich will dazulernen</span>
       <span class="audience-card-desc">Kostenlose Tools, Tipps &amp; 27 Jahre Erfahrung</span>
-    </a>
-    <a href="bikeservice.html" class="audience-card">
-      <span class="audience-card-label">Ich brauche einen Radservice</span>
-      <span class="audience-card-desc">Wartung &amp; Beratung in St. Pantaleon / Innviertel</span>
     </a>
     <a href="tour-de-hias/index.html" class="audience-card">
       <span class="audience-card-label">Ich will "Tour de Hias" spielen</span>
@@ -1108,23 +1127,67 @@
   </div>
 </section>
 
-<!-- ===== HÄNDLER-HERO ===== -->
-<section class="haendler-hero reveal">
-  <div class="haendler-hero-media">
-    <img src="img/haendler-hero.webp" alt="Beleuchtetes Fahrradgeschäft bei Nacht, Blick von der Straße durchs Schaufenster" width="1600" height="900" fetchpriority="high" loading="eager">
-    <div class="haendler-hero-scrim"></div>
-    <div class="haendler-hero-inner">
-      <div class="haendler-hero-text">
-        <div class="haendler-hero-eyebrow">Für Fahrradhändler &amp; Fachgeschäfte</div>
-        <h2>Du betreibst einen Fahrradladen?</h2>
-        <p>Ich entwickle effiziente Marketing-Systeme und digitale Lösungen für Bikeshops – fundiert auf 27 Jahren Brancheninsider-Wissen und konsequent auf messbare Ergebnisse statt austauschbarer Standardlösungen ausgerichtet.</p>
-        <a href="fuer-haendler.html" class="haendler-hero-cta">Zum Angebot für Händler →</a>
+<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
+<section class="value-hero">
+  <div class="value-hero-inner">
+    <div class="value-hero-eyebrow">Fahrrad-Service in St. Pantaleon / Innviertel</div>
+    <h1>Fahrrad-Service mit <span class="js-years">27</span> Jahren Erfahrung. Ehrlich, transparent, ohne Verkaufsdruck.</h1>
+    <p>Dazu: kostenlose Tools &amp; Wissen aus der Praxis – niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
+
+    <div class="value-stats">
+      <div class="vstat">
+        <span class="vstat-num" data-years-since="1999">27</span>
+        <span class="vstat-label">Jahre Bike Business</span>
       </div>
-      <ul class="haendler-hero-points">
-        <li><span class="hp-check">✓</span> Website &amp; Google-Sichtbarkeit</li>
-        <li><span class="hp-check">✓</span> Kundenbindung &amp; Terminbuchung</li>
-        <li><span class="hp-check">✓</span> Automatisierte Prozesse</li>
-      </ul>
+      <div class="vstat">
+        <span class="vstat-num" data-target="5">5</span>
+        <span class="vstat-label">Kostenlose Tools</span>
+      </div>
+      <div class="vstat">
+        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
+        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HERO (Foto-Collage mit echten Fotos) ===== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-photos left">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.webp" alt="Mathias in seiner Werkstatt" width="469" height="700" loading="lazy"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.webp" alt="Mathias beim Schrauben am Mountainbike" width="466" height="700" loading="lazy"></div>
+        <span class="polaroid-year">2019</span>
+      </div>
+    </div>
+    <div class="hero-center">
+      <img src="RadlHias_Logo_freigestellt_cream.webp" alt="RadlHias.TV Logo" class="hero-logo-badge" width="500" height="500" loading="lazy">
+      <p class="hero-bio">
+        Ich bin Mathias (45) und Fahrräder begleiten mich mein gesamtes Leben. Seit inzwischen mehr
+        als <span class="js-years">27</span> Jahren auch beruflich. Ob als Mechaniker, als Verkäufer, als Kundendienstmitarbeiter
+        bei KTM Fahrrad, mit eigenem Bike Shop namens „<strong>FEINSCHLIFF BIKES</strong>" und
+        natürlich als begeisterter Radfahrer.
+      </p>
+      <p class="hero-bio">
+        Ich kenne die Methoden der Industrie. Das Marketing dahinter und was ein wirklich gutes,
+        ehrliches Verkaufsgespräch ausmacht. Diese Seite ist mein Ort, um dir genau das
+        weiterzugeben. Erfahrung und Wissen, mit dem ich Dir weiterhelfen möchte. Genau so, wie ich
+        meinen Freunden helfe. Ganz ohne Verkaufsdruck und ohne Markenwerbung.
+      </p>
+    </div>
+    <div class="hero-photos right">
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.webp" alt="Mathias bei der Fahrradmontage" width="1000" height="670" loading="lazy"></div>
+        <span class="polaroid-year">2012</span>
+      </div>
+      <div class="hero-tile">
+        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.webp" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;" width="604" height="900" loading="lazy"></div>
+        <span class="polaroid-year">2026</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1186,66 +1249,23 @@
   </div>
 </div>
 
-<!-- ===== VALUE HERO (Nutzenversprechen) ===== -->
-<section class="value-hero">
-  <div class="value-hero-inner">
-    <div class="value-hero-eyebrow">Bei RadlHias.TV profitierst Du von</div>
-    <h1>Wissen &amp; Erfahrung aus mehr als <span class="js-years">27</span> Jahren. Ohne etwas kaufen zu müssen!</h1>
-    <p>Niemals mehr als Du brauchst, aber immer mehr als Du erwartest!</p>
-
-    <div class="value-stats">
-      <div class="vstat">
-        <span class="vstat-num" data-years-since="1999">27</span>
-        <span class="vstat-label">Jahre Bike Business</span>
+<!-- ===== BIKE-SERVICE-WERBEBANNER ===== -->
+<section class="kfg-banner">
+  <div class="kfg-banner-media">
+    <img src="Fotos/foto-werkstatt-shop.webp" alt="Mathias bei der Fahrradmontage in seiner Werkstatt" width="1000" height="670" loading="lazy">
+    <div class="kfg-banner-scrim"></div>
+    <div class="kfg-banner-inner reveal">
+      <div class="kfg-col kfg-col-left">
+        <div class="kfg-eyebrow">St. Pantaleon · Innviertel · Nach Terminvereinbarung</div>
+        <h2 class="kfg-title">Bike Service<br>ohne Pauschalpreise</h2>
+        <p class="kfg-lead">Wartung, Reparatur und Pflege für dein Fahrrad – ehrlich kalkuliert, mit <span class="js-years">27</span> Jahren Praxiserfahrung und ohne Verkaufsdruck. Ich sage dir, was dein Rad wirklich braucht, nicht was gerade im Regal liegt.</p>
       </div>
-      <div class="vstat">
-        <span class="vstat-num" data-target="5">5</span>
-        <span class="vstat-label">Kostenlose Tools</span>
-      </div>
-      <div class="vstat">
-        <span class="vstat-num" data-target="100" data-suffix="%">100%</span>
-        <span class="vstat-label">Unabhängig &amp; werbefrei</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== HERO (Foto-Collage mit echten Fotos) ===== -->
-<section class="hero">
-  <div class="hero-grid">
-    <div class="hero-photos left">
-      <div class="hero-tile">
-        <div class="polaroid-photo"><img class="photo-top" src="Fotos/foto-portrait-hund.webp" alt="Mathias in seiner Werkstatt" width="469" height="700" loading="lazy"></div>
-        <span class="polaroid-year">2012</span>
-      </div>
-      <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/foto-mtb-schrauben.webp" alt="Mathias beim Schrauben am Mountainbike" width="466" height="700" loading="lazy"></div>
-        <span class="polaroid-year">2019</span>
-      </div>
-    </div>
-    <div class="hero-center">
-      <img src="RadlHias_Logo_freigestellt_cream.webp" alt="RadlHias.TV Logo" class="hero-logo-badge" width="500" height="500" loading="lazy">
-      <p class="hero-bio">
-        Ich bin Mathias (45) und Fahrräder begleiten mich mein gesamtes Leben. Seit inzwischen mehr
-        als <span class="js-years">27</span> Jahren auch beruflich. Ob als Mechaniker, als Verkäufer, als Kundendienstmitarbeiter
-        bei KTM Fahrrad, mit eigenem Bike Shop namens „<strong>FEINSCHLIFF BIKES</strong>" und
-        natürlich als begeisterter Radfahrer.
-      </p>
-      <p class="hero-bio">
-        Ich kenne die Methoden der Industrie. Das Marketing dahinter und was ein wirklich gutes,
-        ehrliches Verkaufsgespräch ausmacht. Diese Seite ist mein Ort, um dir genau das
-        weiterzugeben. Erfahrung und Wissen, mit dem ich Dir weiterhelfen möchte. Genau so, wie ich
-        meinen Freunden helfe. Ganz ohne Verkaufsdruck und ohne Markenwerbung.
-      </p>
-    </div>
-    <div class="hero-photos right">
-      <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/foto-werkstatt-shop.webp" alt="Mathias bei der Fahrradmontage" width="1000" height="670" loading="lazy"></div>
-        <span class="polaroid-year">2012</span>
-      </div>
-      <div class="hero-tile">
-        <div class="polaroid-photo"><img src="Fotos/RadlHias_Portrait_2026.webp" alt="Mathias in seiner Werkstatt, 2026" style="object-position: center 22%;" width="604" height="900" loading="lazy"></div>
-        <span class="polaroid-year">2026</span>
+      <div class="kfg-col kfg-col-tools">
+        <ul class="kfg-features">
+          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Wartung &amp; Reparatur</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Transparente Kalkulation</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+          <li><a href="bikeservice.html"><span class="kf-check">✓</span><span class="kf-label">Termin online anfragen</span><span class="kf-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -1394,13 +1414,12 @@
   <div class="footer-content">
     <div class="footer-wordmark">RadlHias.TV</div>
     <nav class="footer-nav" aria-label="Footer-Navigation">
-      <a href="fuer-haendler.html">Für Händler</a>
+      <a href="bikeservice.html">Bike Service</a>
       <a href="konfigurator.html">Fahrrad Konfigurator</a>
       <a href="luftdruckrechner.html">Reifendruck Rechner</a>
       <a href="bikefitting.html">Bike-Fitting</a>
       <a href="gebrauchtcheck.html">Gebraucht-Check</a>
       <a href="preisradar.html">Preisradar</a>
-      <a href="bikeservice.html">Bike Service</a>
       <a href="blog/index.html">Blog</a>
       <a href="videos.html">Videos</a>
       <a href="tour-de-hias/index.html">Tour de Hias</a>
