@@ -8,8 +8,12 @@
 <meta name="description" content="Alle Blogartikel von RadlHias.TV – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.">
 <link rel="canonical" href="https://radlhias.tv/blog/">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=optional" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=optional">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=optional" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="../style.css?v=12">
 <style>
   :root {
     --navy:#1c3448; --navy2:#254560; --blue:#2d6e9e; --blue-lt:#a8c8dc;
@@ -161,7 +165,7 @@ fetch('../posts.json')
       card.className = 'blog-card';
       card.href = `${post.slug}.html`;
       card.innerHTML = `
-        <img src="../${post.image || ''}" alt="${escapeHtml(post.title)}" loading="lazy">
+        <img src="../${post.image || ''}" alt="${escapeHtml(post.title)}" width="800" height="450" loading="lazy">
         <div class="blog-card-body">
           <span class="blog-card-cat">${escapeHtml(post.category || 'Blog')}</span>
           <div class="blog-card-title">${escapeHtml(post.title)}</div>
