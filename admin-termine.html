@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Terminanfragen – RadlHias.TV</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1c3448;
+    --navy-dark: #111e28;
+    --orange: #c85a14;
+    --orange-light: #e06820;
+    --cream: #f5f1eb;
+    --cream2: #e8e2d8;
+    --cream3: #ddd6c8;
+    --text: #1c3448;
+    --text-dim: #5a7a8a;
+    --card-bg: #ffffff;
+    --card-border: #ddd6c8;
+    --shadow: 0 2px 20px rgba(28,52,72,0.10);
+    --ok: #2e7d4f;
+    --ok-bg: #e6f3ea;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+    --pending-bg: #fff4e0;
+    --pending-text: #8a5a00;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Barlow', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  a { color: var(--orange); }
+
+  .topbar {
+    background: linear-gradient(155deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--cream);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--orange);
+  }
+  .topbar-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+  }
+  .topbar-title span { color: var(--orange-light); }
+  .logout-btn {
+    background: transparent;
+    border: 1px solid rgba(245,241,235,0.4);
+    color: var(--cream2);
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .logout-btn:hover { border-color: var(--cream); color: var(--cream); }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 28px 20px 70px; }
+
+  /* ---------- Login ---------- */
+  .login-wrap { max-width: 380px; margin: 80px auto; padding: 0 20px; }
+  .login-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .login-card h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 22px;
+    margin: 0 0 20px;
+  }
+  .login-card input {
+    width: 100%;
+    font-size: 15px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .login-card button {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .login-card button:hover { background: var(--orange-light); }
+  .login-error { color: var(--err); font-size: 13.5px; margin-bottom: 12px; min-height: 1em; }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+  .tab-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-dim);
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .badge {
+    background: var(--orange);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* ---------- Cards ---------- */
+  .req-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .req-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .req-name { font-size: 17px; font-weight: 700; }
+  .req-window {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--orange);
+    font-size: 13.5px;
+    text-transform: uppercase;
+  }
+  .status-pill {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .status-pill.pending { background: var(--pending-bg); color: var(--pending-text); }
+  .status-pill.approved { background: var(--ok-bg); color: var(--ok); }
+  .status-pill.rejected { background: var(--err-bg); color: var(--err); }
+
+  .req-meta { font-size: 13.5px; color: var(--text-dim); line-height: 1.8; margin-bottom: 12px; }
+  .req-meta b { color: var(--text); }
+  .req-desc {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .req-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: none;
+    border-radius: 7px;
+    padding: 9px 16px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-approve { background: var(--ok); color: #fff; }
+  .btn-approve:hover { background: #26643f; }
+  .btn-reject { background: var(--err-bg); color: var(--err); }
+  .btn-reject:hover { background: #f5d5d1; }
+  .btn-cancel { background: var(--cream); color: var(--text-dim); }
+
+  .inline-form {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--card-border);
+  }
+  .inline-form.visible { display: block; }
+  .inline-form .field-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .inline-form .field { flex: 1; min-width: 160px; }
+  .inline-form label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: var(--text-dim); }
+  .inline-form input, .inline-form textarea {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 7px;
+  }
+  .inline-form textarea { min-height: 60px; resize: vertical; }
+  .inline-error { color: var(--err); font-size: 12.5px; margin-bottom: 8px; min-height: 1em; }
+
+  .empty-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+  .loading-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <h1>Admin-Login</h1>
+    <p class="login-error" id="login-error"></p>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password" required>
+      <button type="submit" id="login-btn">Anmelden</button>
+    </form>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-title">RadlHias<span>.</span> Terminverwaltung</div>
+    <button class="logout-btn" id="logout-btn">Abmelden</button>
+  </div>
+
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="pending">Offene Anfragen <span class="badge" id="pending-badge" style="display:none;">0</span></button>
+      <button class="tab-btn" data-tab="history">Historie</button>
+    </div>
+
+    <div id="pending-panel"><div class="loading-state">Lade Anfragen …</div></div>
+    <div id="history-panel" style="display:none;"><div class="loading-state">Lade Historie …</div></div>
+  </div>
+</div>
+
+<script>
+// Same-Origin-Route empfohlen (siehe worker/SETUP.md). Bei separater
+// Subdomain hier die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
+const API_BASE_URL = "/api";
+
+const loginView = document.getElementById("login-view");
+const app = document.getElementById("app");
+const loginForm = document.getElementById("login-form");
+const loginError = document.getElementById("login-error");
+const loginBtn = document.getElementById("login-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const pendingPanel = document.getElementById("pending-panel");
+const historyPanel = document.getElementById("history-panel");
+const pendingBadge = document.getElementById("pending-badge");
+const tabBtns = document.querySelectorAll(".tab-btn");
+
+function api(path, options) {
+  return fetch(API_BASE_URL + path, Object.assign({ credentials: "include" }, options || {}));
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("de-AT", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric" }) +
+    ", " + d.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" }) + " Uhr";
+}
+
+// Schlägt eine Startzeit für das <input type="datetime-local"> vor, ausgehend
+// von requested_day ("YYYY-MM-DD") + requested_window ("Montag 17:00-19:00").
+function suggestStart(row) {
+  const match = (row.requested_window || "").match(/(\d{2}:\d{2})/);
+  const time = match ? match[1] : "17:00";
+  return `${row.requested_day}T${time}`;
+}
+
+// ---------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------
+async function checkAuth() {
+  try {
+    const res = await api("/admin/me");
+    const data = await res.json();
+    return !!data.authenticated;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function showApp() {
+  loginView.style.display = "none";
+  app.style.display = "block";
+  await Promise.all([loadPending(), refreshBadge()]);
+}
+
+function showLogin() {
+  app.style.display = "none";
+  loginView.style.display = "block";
+}
+
+loginForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  loginError.textContent = "";
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Anmelden …";
+
+  try {
+    const res = await api("/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: document.getElementById("login-password").value }),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      loginError.textContent = data.error || "Login fehlgeschlagen.";
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Anmelden";
+      return;
+    }
+    document.getElementById("login-password").value = "";
+    await showApp();
+  } catch (err) {
+    loginError.textContent = "Login fehlgeschlagen. Bitte erneut versuchen.";
+  }
+  loginBtn.disabled = false;
+  loginBtn.textContent = "Anmelden";
+});
+
+logoutBtn.addEventListener("click", async function() {
+  await api("/admin/logout", { method: "POST" });
+  showLogin();
+});
+
+// ---------------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------------
+tabBtns.forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    tabBtns.forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    pendingPanel.style.display = tab === "pending" ? "block" : "none";
+    historyPanel.style.display = tab === "history" ? "block" : "none";
+    if (tab === "history") loadHistory();
+  });
+});
+
+// ---------------------------------------------------------------------
+// Badge
+// ---------------------------------------------------------------------
+async function refreshBadge() {
+  try {
+    const res = await api("/admin/summary");
+    const data = await res.json();
+    if (data.pending > 0) {
+      pendingBadge.style.display = "inline-block";
+      pendingBadge.textContent = data.pending;
+    } else {
+      pendingBadge.style.display = "none";
+    }
+  } catch (err) { /* ignore */ }
+}
+
+// ---------------------------------------------------------------------
+// Offene Anfragen
+// ---------------------------------------------------------------------
+async function loadPending() {
+  pendingPanel.innerHTML = '<div class="loading-state">Lade Anfragen …</div>';
+  try {
+    const res = await api("/admin/requests?status=pending");
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json();
+    renderPending(data.requests || []);
+  } catch (err) {
+    pendingPanel.innerHTML = '<div class="empty-state">Anfragen konnten nicht geladen werden.</div>';
+  }
+}
+
+function renderPending(rows) {
+  if (!rows.length) {
+    pendingPanel.innerHTML = '<div class="empty-state">Keine offenen Anfragen. 🎉</div>';
+    return;
+  }
+  pendingPanel.innerHTML = rows.map(renderPendingCard).join("");
+  rows.forEach(function(row) { wireCard(row); });
+}
+
+function renderPendingCard(row) {
+  return `
+    <div class="req-card" data-id="${row.id}">
+      <div class="req-head">
+        <div>
+          <div class="req-name">${escapeHtml(row.customer_name)}</div>
+          <div class="req-window">${escapeHtml(row.requested_window)} · ${escapeHtml(row.requested_day)}</div>
+        </div>
+        <span class="status-pill pending">Offen</span>
+      </div>
+      <div class="req-meta">
+        <div><b>Reparatur:</b> ${escapeHtml(row.repair_type)}</div>
+        <div><b>E-Mail:</b> ${escapeHtml(row.customer_email)}</div>
+        <div><b>Telefon:</b> ${escapeHtml(row.customer_phone)}</div>
+        <div><b>Eingegangen:</b> ${fmtDateTime(row.created_at)}</div>
+      </div>
+      ${row.description ? `<div class="req-desc">${escapeHtml(row.description)}</div>` : ""}
+      <div class="req-actions">
+        <button class="btn btn-approve" data-action="show-approve">Freigeben</button>
+        <button class="btn btn-reject" data-action="show-reject">Ablehnen</button>
+      </div>
+
+      <div class="inline-form" data-form="approve">
+        <p class="inline-error"></p>
+        <div class="field-row">
+          <div class="field">
+            <label>Startzeit</label>
+            <input type="datetime-local" data-field="start_time" value="${suggestStart(row)}">
+          </div>
+          <div class="field">
+            <label>Dauer (Minuten)</label>
+            <input type="number" data-field="duration_minutes" value="30" min="10" step="5">
+          </div>
+        </div>
+        <div class="req-actions">
+          <button class="btn btn-approve" data-action="confirm-approve">Termin freigeben</button>
+          <button class="btn btn-cancel" data-action="cancel">Abbrechen</button>
+        </div>
+      </div>
+
+      <div class="inline-form" data-form="reject">
+        <p class="inline-error"></p>
+        <div class="field">
+          <label>Kommentar an den Kunden (optional)</label>
+          <textarea data-field="admin_note" placeholder="z.B. Grund oder Alternativvorschlag …"></textarea>
+        </div>
+        <div class="req-actions">
+          <button class="btn btn-reject" data-action="confirm-reject">Ablehnen</button>
+          <button class="btn btn-cancel" data-action="cancel">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function wireCard(row) {
+  const card = document.querySelector(`.req-card[data-id="${row.id}"]`);
+  if (!card) return;
+  const approveForm = card.querySelector('[data-form="approve"]');
+  const rejectForm = card.querySelector('[data-form="reject"]');
+
+  card.querySelectorAll('[data-action="show-approve"]').forEach(function(b) {
+    b.addEventListener("click", function() {
+      rejectForm.classList.remove("visible");
+      approveForm.classList.toggle("visible");
+    });
+  });
+  card.querySelectorAll('[data-action="show-reject"]').forEach(function(b) {
+    b.addEventListener("click", function() {
+      approveForm.classList.remove("visible");
+      rejectForm.classList.toggle("visible");
+    });
+  });
+  card.querySelectorAll('[data-action="cancel"]').forEach(function(b) {
+    b.addEventListener("click", function() {
+      approveForm.classList.remove("visible");
+      rejectForm.classList.remove("visible");
+    });
+  });
+
+  approveForm.querySelector('[data-action="confirm-approve"]').addEventListener("click", async function() {
+    const errEl = approveForm.querySelector(".inline-error");
+    errEl.textContent = "";
+    const startVal = approveForm.querySelector('[data-field="start_time"]').value;
+    const durationVal = approveForm.querySelector('[data-field="duration_minutes"]').value;
+    if (!startVal || !durationVal) {
+      errEl.textContent = "Bitte Startzeit und Dauer angeben.";
+      return;
+    }
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = "Wird freigegeben …";
+    try {
+      const res = await api(`/admin/requests/${row.id}/approve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          start_time: new Date(startVal).toISOString(),
+          duration_minutes: Number(durationVal),
+        }),
+      });
+      const data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) {
+        errEl.textContent = data.error || "Freigabe fehlgeschlagen.";
+        btn.disabled = false;
+        btn.textContent = "Termin freigeben";
+        return;
+      }
+      await loadPending();
+      await refreshBadge();
+    } catch (err) {
+      errEl.textContent = "Freigabe fehlgeschlagen. Bitte erneut versuchen.";
+      btn.disabled = false;
+      btn.textContent = "Termin freigeben";
+    }
+  });
+
+  rejectForm.querySelector('[data-action="confirm-reject"]').addEventListener("click", async function() {
+    const errEl = rejectForm.querySelector(".inline-error");
+    errEl.textContent = "";
+    const note = rejectForm.querySelector('[data-field="admin_note"]').value;
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = "Wird abgelehnt …";
+    try {
+      const res = await api(`/admin/requests/${row.id}/reject`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admin_note: note }),
+      });
+      const data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) {
+        errEl.textContent = data.error || "Ablehnung fehlgeschlagen.";
+        btn.disabled = false;
+        btn.textContent = "Ablehnen";
+        return;
+      }
+      await loadPending();
+      await refreshBadge();
+    } catch (err) {
+      errEl.textContent = "Ablehnung fehlgeschlagen. Bitte erneut versuchen.";
+      btn.disabled = false;
+      btn.textContent = "Ablehnen";
+    }
+  });
+}
+
+// ---------------------------------------------------------------------
+// Historie
+// ---------------------------------------------------------------------
+async function loadHistory() {
+  historyPanel.innerHTML = '<div class="loading-state">Lade Historie …</div>';
+  try {
+    const res = await api("/admin/requests");
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json();
+    const rows = (data.requests || []).filter(function(r) { return r.status !== "pending"; });
+    renderHistory(rows);
+  } catch (err) {
+    historyPanel.innerHTML = '<div class="empty-state">Historie konnte nicht geladen werden.</div>';
+  }
+}
+
+function renderHistory(rows) {
+  if (!rows.length) {
+    historyPanel.innerHTML = '<div class="empty-state">Noch keine bearbeiteten Anfragen.</div>';
+    return;
+  }
+  historyPanel.innerHTML = rows.map(function(row) {
+    const isApproved = row.status === "approved";
+    return `
+      <div class="req-card">
+        <div class="req-head">
+          <div>
+            <div class="req-name">${escapeHtml(row.customer_name)}</div>
+            <div class="req-window">${escapeHtml(row.requested_window)} · ${escapeHtml(row.requested_day)}</div>
+          </div>
+          <span class="status-pill ${isApproved ? "approved" : "rejected"}">${isApproved ? "Bestätigt" : "Abgelehnt"}</span>
+        </div>
+        <div class="req-meta">
+          <div><b>Reparatur:</b> ${escapeHtml(row.repair_type)}</div>
+          <div><b>E-Mail:</b> ${escapeHtml(row.customer_email)}</div>
+          ${isApproved ? `<div><b>Termin:</b> ${fmtDateTime(row.final_start_time)} (${escapeHtml(row.final_duration_minutes)} Min.)</div>` : ""}
+          ${row.admin_note ? `<div><b>Kommentar:</b> ${escapeHtml(row.admin_note)}</div>` : ""}
+          <div><b>Entschieden:</b> ${fmtDateTime(row.decided_at)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ---------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------
+(async function init() {
+  const authed = await checkAuth();
+  if (authed) {
+    await showApp();
+  } else {
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>

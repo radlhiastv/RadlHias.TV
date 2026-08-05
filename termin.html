@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Werkstatttermin anfragen – RadlHias.TV</title>
+<meta name="description" content="Werkstatttermin bei RadlHias.TV anfragen: Zeitfenster wählen, kurz Kontaktdaten angeben – Mathias meldet sich mit einer verbindlichen Uhrzeit zurück.">
+<link rel="canonical" href="https://radlhias.tv/termin.html">
+<meta name="robots" content="noindex, follow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=fallback">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=fallback" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=fallback" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="style.css?v=12">
+<style>
+  :root {
+    --navy: #1c3448;
+    --navy-dark: #111e28;
+    --orange: #c85a14;
+    --orange-light: #e06820;
+    --cream: #f5f1eb;
+    --cream2: #e8e2d8;
+    --cream3: #ddd6c8;
+    --text: #1c3448;
+    --text-dim: #5a7a8a;
+    --card-bg: #ffffff;
+    --card-border: #ddd6c8;
+    --shadow: 0 2px 20px rgba(28,52,72,0.10);
+    --ok: #2e7d4f;
+    --err: #b3261e;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .termin-hero {
+    margin-top: 56px;
+    padding: 46px 20px 30px;
+    background: linear-gradient(155deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--cream);
+    border-bottom: 3px solid var(--orange);
+    text-align: center;
+  }
+  .termin-hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: clamp(30px, 6vw, 46px);
+    margin: 0 0 12px;
+  }
+  .termin-hero h1 span { color: var(--orange-light); }
+  .termin-hero p {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--cream2);
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+
+  .termin-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 36px 20px 70px;
+  }
+
+  .termin-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+  }
+
+  .termin-note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 26px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+  .termin-note b { color: var(--text); }
+
+  fieldset { border: none; padding: 0; margin: 0 0 24px; }
+  legend {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    color: var(--orange);
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .slot-option { position: relative; }
+  .slot-option input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .slot-option label {
+    display: block;
+    text-align: center;
+    border: 2px solid var(--card-border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+  }
+  .slot-option label .slot-day { display: block; font-weight: 700; }
+  .slot-option label .slot-time { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 2px; }
+  .slot-option input:checked + label {
+    border-color: var(--orange);
+    background: rgba(200,90,20,0.08);
+  }
+  .slot-option input:focus-visible + label { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+  /* Honeypot – für Menschen unsichtbar */
+  .hp-field { position: absolute; left: -9999px; top: -9999px; }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    padding: 14px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--orange-light); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .form-error {
+    display: none;
+    background: #fbe9e7;
+    border: 1px solid var(--err);
+    color: var(--err);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin-bottom: 16px;
+  }
+  .form-error.visible { display: block; }
+
+  .success-state { text-align: center; padding: 10px 4px; }
+  .success-state .success-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--ok);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .success-state h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 24px;
+    margin: 0 0 12px;
+  }
+  .success-state p { color: var(--text-dim); line-height: 1.7; margin-bottom: 10px; }
+
+  .slots-empty { color: var(--text-dim); font-size: 14px; }
+
+  footer { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="main-nav">
+  <a href="index.html" class="nav-logo">RadlHias.TV</a>
+  <input type="checkbox" id="nav-burger-toggle" class="nav-toggle-checkbox">
+  <label for="nav-burger-toggle" class="nav-toggle-burger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </label>
+  <div class="nav-links">
+    <a href="bikeservice.html">Bike Service</a>
+    <div class="nav-dd">
+      <input type="checkbox" id="nav-tools-toggle" class="nav-dd-check">
+      <label for="nav-tools-toggle" class="nav-dd-label">Tools<span class="nav-dd-caret"></span></label>
+      <div class="nav-dd-menu">
+        <a href="konfigurator.html">Fahrrad Konfigurator</a>
+        <a href="luftdruckrechner.html">Reifendruck Rechner</a>
+        <a href="bikefitting.html">Bike-Fitting</a>
+        <a href="gebrauchtcheck.html">Gebrauchtrad-Check</a>
+        <a href="preisradar.html">Preisradar</a>
+      </div>
+    </div>
+    <a href="index.html#blog">Blog</a>
+    <a href="videos.html">Videos</a>
+    <a href="tour-de-hias/index.html">Tour de Hias</a>
+    <a href="faq.html">FAQ</a>
+    <a href="history.html">Meine Laufbahn</a>
+    <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="termin-hero">
+  <h1>Werkstatt<span>termin</span> anfragen</h1>
+  <p>Wähle ein Zeitfenster, trag kurz deine Daten ein – ich melde mich mit einer verbindlichen Uhrzeit zurück.</p>
+</section>
+
+<div class="termin-wrap">
+  <div class="termin-card">
+
+    <div class="termin-note">
+      <span>ℹ️</span>
+      <span><b>Wichtig:</b> Das ist eine <b>Terminanfrage</b>, kein Direkt-Booking. Du bekommst innerhalb von <span id="reply-window">1-2 Werktagen</span> eine Rückmeldung mit fixer Uhrzeit – oder eine Absage, falls es sich nicht ausgeht.</span>
+    </div>
+
+    <div id="form-error" class="form-error"></div>
+
+    <form id="termin-form" novalidate>
+      <fieldset>
+        <legend>Zeitfenster</legend>
+        <div id="slot-grid" class="slot-grid">
+          <p class="slots-empty">Verfügbare Termine werden geladen …</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Deine Daten</legend>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name">Name *</label>
+            <input type="text" id="f-name" name="customer_name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="f-phone">Telefon *</label>
+            <input type="tel" id="f-phone" name="customer_phone" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-email">E-Mail *</label>
+          <input type="email" id="f-email" name="customer_email" required autocomplete="email">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Reparatur</legend>
+        <div class="field">
+          <label for="repair-type">Art der Reparatur *</label>
+          <select id="repair-type" name="repair_type" required>
+            <option value="" disabled selected>Bitte wählen …</option>
+            <option value="Wartung / Service">Wartung / Service</option>
+            <option value="Bremsen">Bremsen</option>
+            <option value="Schaltung">Schaltung</option>
+            <option value="Reifen / Schlauch">Reifen / Schlauch</option>
+            <option value="E-Bike Check">E-Bike Check</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-description">Details (optional)</label>
+          <textarea id="f-description" name="description" placeholder="z.B. was genau nicht funktioniert, welches Rad, Besonderheiten …"></textarea>
+        </div>
+      </fieldset>
+
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website">Website</label>
+        <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">Terminanfrage senden</button>
+    </form>
+
+    <div id="success-view" class="success-state" style="display:none;">
+      <div class="success-icon">✓</div>
+      <h2>Anfrage gesendet</h2>
+      <p>Deine Terminanfrage ist bei mir eingegangen. Du bekommst innerhalb von <span class="reply-window-inline">1-2 Werktagen</span> eine Rückmeldung per E-Mail – entweder eine Bestätigung mit fixer Uhrzeit oder einen Hinweis, falls es sich nicht ausgeht.</p>
+      <p><a href="bikeservice.html">Zurück zu Bike Service</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FLOATING SOCIAL BAR -->
+<div class="social-bar">
+  <a class="social-btn social-btn-instagram"
+     href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Instagram">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+    <span class="social-tooltip">Instagram</span>
+  </a>
+  <div class="social-btn social-btn-youtube" aria-label="YouTube – kommt bald">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+    </svg>
+    <span class="social-tooltip">Kommt bald</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-wordmark">RadlHias.TV</div>
+    <nav class="footer-nav">
+      <a href="bikeservice.html">Bike Service</a>
+      <a href="konfigurator.html">Fahrrad Konfigurator</a>
+      <a href="luftdruckrechner.html">Reifendruck Rechner</a>
+      <a href="bikefitting.html">Bike-Fitting</a>
+      <a href="gebrauchtcheck.html">Gebraucht-Check</a>
+      <a href="preisradar.html">Preisradar</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="videos.html">Videos</a>
+      <a href="tour-de-hias/index.html">Tour de Hias</a>
+      <a href="faq.html">FAQ</a>
+      <a href="history.html">Meine Laufbahn</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/radlhias.tv?igsh=eWN5dnBrcjZrY3M3" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <span title="YouTube – kommt bald" aria-label="YouTube – kommt bald">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </span>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RadlHias.TV – Mathias Blumreich</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var y=new Date().getFullYear()-1999;
+  document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});
+})();
+
+// Same-Origin-Route empfohlen (siehe worker/SETUP.md). Bei separater
+// Subdomain hier die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
+const API_BASE_URL = "/api";
+
+const form = document.getElementById("termin-form");
+const slotGrid = document.getElementById("slot-grid");
+const formError = document.getElementById("form-error");
+const submitBtn = document.getElementById("submit-btn");
+const successView = document.getElementById("success-view");
+
+function showError(msg) {
+  formError.textContent = msg;
+  formError.classList.add("visible");
+}
+function clearError() {
+  formError.textContent = "";
+  formError.classList.remove("visible");
+}
+
+async function loadSlots() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/availability`);
+    if (!res.ok) throw new Error("availability request failed");
+    const data = await res.json();
+    renderSlots(data.slots || []);
+  } catch (err) {
+    slotGrid.innerHTML = '<p class="slots-empty">Termine konnten gerade nicht geladen werden. Bitte Seite neu laden oder direkt per E-Mail/WhatsApp melden.</p>';
+  }
+}
+
+function renderSlots(slots) {
+  if (!slots.length) {
+    slotGrid.innerHTML = '<p class="slots-empty">Aktuell sind keine Termine hinterlegt. Bitte direkt per E-Mail oder WhatsApp melden.</p>';
+    return;
+  }
+  slotGrid.innerHTML = slots.map(function(s, i) {
+    var id = "slot-" + i;
+    return (
+      '<div class="slot-option">' +
+        '<input type="radio" name="window_value" id="' + id + '" value="' + s.value + '" ' + (i === 0 ? "checked" : "") + '>' +
+        '<label for="' + id + '"><span class="slot-day">' + s.label + '</span><span class="slot-time">' + s.start + '–' + s.end + ' Uhr</span></label>' +
+      '</div>'
+    );
+  }).join("");
+}
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  clearError();
+
+  const fd = new FormData(form);
+  const windowValue = fd.get("window_value");
+  if (!windowValue) {
+    showError("Bitte ein Zeitfenster auswählen.");
+    return;
+  }
+
+  const payload = {
+    customer_name: (fd.get("customer_name") || "").toString().trim(),
+    customer_email: (fd.get("customer_email") || "").toString().trim(),
+    customer_phone: (fd.get("customer_phone") || "").toString().trim(),
+    repair_type: (fd.get("repair_type") || "").toString().trim(),
+    description: (fd.get("description") || "").toString().trim(),
+    window_value: windowValue.toString(),
+    website: (fd.get("website") || "").toString(), // Honeypot
+  };
+
+  if (!payload.customer_name || !payload.customer_email || !payload.customer_phone || !payload.repair_type) {
+    showError("Bitte alle Pflichtfelder ausfüllen.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Wird gesendet …";
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/requests`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+
+    if (!res.ok) {
+      showError(data.error || "Anfrage konnte nicht gesendet werden. Bitte später erneut versuchen.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Terminanfrage senden";
+      return;
+    }
+
+    form.style.display = "none";
+    successView.style.display = "block";
+  } catch (err) {
+    showError("Anfrage konnte nicht gesendet werden. Bitte später erneut versuchen.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Terminanfrage senden";
+  }
+});
+
+loadSlots();
+</script>
+</body>
+</html>

@@ -14,8 +14,12 @@
 <meta property="og:image" content="https://radlhias.tv/RadlHias_Logo_500x500.jpg">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=10">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=fallback">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=fallback" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=fallback" rel="stylesheet"></noscript>
+<link rel="preload" as="font" type="font/woff2" href="../Abuget.woff2" crossorigin>
+<link rel="stylesheet" href="../style.css?v=12">
 <style>
   @font-face {
     font-family: 'Abuget';
@@ -2060,7 +2064,7 @@ function saveShareImage(finalScore, playerName){
     const logo = new Image();
     logo.onload = ()=> finishDownload(drawCard(logo), true);
     logo.onerror = ()=> finishDownload(drawCard(null), false);
-    logo.src = '../RadlHias_Logo_freigestellt_cream.png';
+    logo.src = '../RadlHias_Logo_freigestellt_cream.webp';
   }
 
   if(document.fonts && document.fonts.ready){
