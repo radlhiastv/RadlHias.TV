@@ -34,8 +34,8 @@ ALLOWED_ORIGIN = "https://radlhias.tv"
 # REFRESH_TOKEN-Secrets wie die Google-Calendar-Anbindung oben, der
 # Refresh-Token braucht dafür zusätzlich den Scope .../auth/spreadsheets.
 # ---------------------------------------------------------------------------
-GOOGLE_SHEETS_SPREADSHEET_ID = "REPLACE_WITH_SPREADSHEET_ID"
-GOOGLE_SHEETS_SHEET_NAME = "Reparaturen"
+GOOGLE_SHEETS_SPREADSHEET_ID = "1CCHc2s0dh0f7RrjhMSC8prf0e2MD32lrFUKh477phHg"
+GOOGLE_SHEETS_SHEET_NAME = "Tabellenblatt1"
 
 # ---------------------------------------------------------------------------
 # Secrets (NIEMALS hier eintragen, sondern per Wrangler CLI setzen!)
