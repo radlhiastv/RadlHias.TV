@@ -11,6 +11,7 @@ import {
 import { createSessionCookie, clearSessionCookie, isAuthenticated } from "./lib/auth.js";
 import { createCalendarEvent } from "./lib/calendar.js";
 import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./lib/email.js";
+import { listReparaturen, appendReparatur, updateReparatur, STATUS_VALUES } from "./lib/sheets.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -206,6 +207,65 @@ export default {
         );
 
         return json({ ok: true }, { status: 200 }, cors);
+      }
+
+      // ---------------------------------------------------------------
+      // Admin: Werkstatt-Reparaturverwaltung (Google Sheets)
+      // ---------------------------------------------------------------
+      if (path === "/api/admin/reparaturen" && request.method === "GET") {
+        const rows = await listReparaturen(env);
+        return json({ reparaturen: rows }, { status: 200 }, cors);
+      }
+
+      if (path === "/api/admin/reparaturen" && request.method === "POST") {
+        const body = await request.json().catch(() => null);
+        if (!body) return badRequest("Ungültige Anfrage.");
+
+        const { kundeName, telefon, email, fahrradTyp, auftrag } = body;
+        if (!kundeName || !fahrradTyp || !auftrag) {
+          return badRequest("Bitte Kunde, Fahrradtyp und Auftrag ausfüllen.");
+        }
+        if (!telefon && !email) {
+          return badRequest("Bitte Telefonnummer oder E-Mail-Adresse angeben.");
+        }
+
+        const record = await appendReparatur(env, {
+          angenommenAm: body.angenommenAm ? String(body.angenommenAm).slice(0, 10) : undefined,
+          fahrradTyp: String(fahrradTyp).slice(0, 120),
+          hersteller: body.hersteller ? String(body.hersteller).slice(0, 120) : "",
+          modell: body.modell ? String(body.modell).slice(0, 120) : "",
+          farbe: body.farbe ? String(body.farbe).slice(0, 60) : "",
+          bemerkungen: body.bemerkungen ? String(body.bemerkungen).slice(0, 2000) : "",
+          kundeName: String(kundeName).slice(0, 200),
+          telefon: telefon ? String(telefon).slice(0, 60) : "",
+          email: email ? String(email).slice(0, 200) : "",
+          auftrag: String(auftrag).slice(0, 2000),
+          richtpreis: body.richtpreis != null ? String(body.richtpreis).slice(0, 40) : "",
+        });
+
+        return json({ ok: true, reparatur: record }, { status: 201 }, cors);
+      }
+
+      const reparaturMatch = path.match(/^\/api\/admin\/reparaturen\/([^/]+)$/);
+      if (reparaturMatch && request.method === "PATCH") {
+        const id = reparaturMatch[1];
+        const body = await request.json().catch(() => null);
+        if (!body) return badRequest("Ungültige Anfrage.");
+
+        if (body.status !== undefined && !STATUS_VALUES.includes(body.status)) {
+          return badRequest("Ungültiger Status.");
+        }
+
+        const patch = {};
+        if (body.status !== undefined) patch.status = body.status;
+        if (body.erledigt !== undefined) patch.erledigt = String(body.erledigt).slice(0, 2000);
+        if (body.endpreis !== undefined) patch.endpreis = String(body.endpreis).slice(0, 40);
+        if (body.bemerkungen !== undefined) patch.bemerkungen = String(body.bemerkungen).slice(0, 2000);
+
+        const updated = await updateReparatur(env, id, patch);
+        if (!updated) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);
+
+        return json({ ok: true, reparatur: updated }, { status: 200 }, cors);
       }
 
       return json({ error: "Not found" }, { status: 404 }, cors);

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Werkstatt – RadlHias.TV</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1c3448;
+    --navy-dark: #111e28;
+    --orange: #c85a14;
+    --orange-light: #e06820;
+    --cream: #f5f1eb;
+    --cream2: #e8e2d8;
+    --cream3: #ddd6c8;
+    --text: #1c3448;
+    --text-dim: #5a7a8a;
+    --card-bg: #ffffff;
+    --card-border: #ddd6c8;
+    --shadow: 0 2px 20px rgba(28,52,72,0.10);
+    --ok: #2e7d4f;
+    --ok-bg: #e6f3ea;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+    --pending-bg: #fff4e0;
+    --pending-text: #8a5a00;
+    --wait-bg: #e6eef6;
+    --wait-text: #2f5d82;
+    --progress-bg: #efe6f6;
+    --progress-text: #6a3d99;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Barlow', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  a { color: var(--orange); }
+
+  .topbar {
+    background: linear-gradient(155deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--cream);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--orange);
+  }
+  .topbar-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+  }
+  .topbar-title span { color: var(--orange-light); }
+  .logout-btn {
+    background: transparent;
+    border: 1px solid rgba(245,241,235,0.4);
+    color: var(--cream2);
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .logout-btn:hover { border-color: var(--cream); color: var(--cream); }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 70px; }
+
+  /* ---------- Login ---------- */
+  .login-wrap { max-width: 380px; margin: 80px auto; padding: 0 20px; }
+  .login-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .login-card h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 22px;
+    margin: 0 0 20px;
+  }
+  .login-card input {
+    width: 100%;
+    font-size: 15px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .login-card button {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .login-card button:hover { background: var(--orange-light); }
+  .login-error { color: var(--err); font-size: 13.5px; margin-bottom: 12px; min-height: 1em; }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+  .tab-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-dim);
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .badge {
+    background: var(--orange);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* ---------- Formular "Neue Annahme" ---------- */
+  .form-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px 26px;
+  }
+  .form-card h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 19px;
+    margin: 0 0 18px;
+  }
+  .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
+  .form-grid .field.full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: var(--text-dim); }
+  .field .hint { font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14.5px;
+    padding: 9px 11px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 7px;
+    background: #fff;
+  }
+  .field textarea { min-height: 64px; resize: vertical; }
+  .form-actions { margin-top: 18px; display: flex; align-items: center; gap: 14px; }
+  .form-msg { font-size: 13.5px; min-height: 1em; }
+  .form-msg.ok { color: var(--ok); }
+  .form-msg.err { color: var(--err); }
+
+  .btn {
+    border: none;
+    border-radius: 7px;
+    padding: 9px 16px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--orange); color: #fff; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-approve { background: var(--ok); color: #fff; }
+  .btn-approve:hover { background: #26643f; }
+  .btn-cancel { background: var(--cream); color: var(--text-dim); }
+  .btn-ghost { background: transparent; border: 1px solid var(--card-border); color: var(--text-dim); }
+  .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+
+  /* ---------- Filterleiste ---------- */
+  .filter-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+    margin-bottom: 18px;
+  }
+  .filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .chip {
+    border: 1.5px solid var(--card-border);
+    background: #fff;
+    color: var(--text-dim);
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip .chip-count {
+    background: var(--cream2);
+    color: var(--text-dim);
+    font-size: 11px;
+    padding: 0px 6px;
+    border-radius: 10px;
+  }
+  .chip.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+  .chip.active .chip-count { background: rgba(255,255,255,0.2); color: #fff; }
+
+  .filter-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; }
+  .filter-row .field { flex: 1; min-width: 170px; margin-bottom: 0; }
+  .filter-row .field.small { max-width: 160px; min-width: 140px; }
+
+  /* ---------- Karten ---------- */
+  .req-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .req-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .req-name { font-size: 17px; font-weight: 700; }
+  .req-window {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--orange);
+    font-size: 13.5px;
+    text-transform: uppercase;
+  }
+  .status-pill {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .status-pill.st-angenommen { background: var(--pending-bg); color: var(--pending-text); }
+  .status-pill.st-bestellt { background: var(--wait-bg); color: var(--wait-text); }
+  .status-pill.st-bearbeitung { background: var(--progress-bg); color: var(--progress-text); }
+  .status-pill.st-fertig { background: var(--ok-bg); color: var(--ok); }
+
+  .req-meta { font-size: 13.5px; color: var(--text-dim); line-height: 1.8; margin-bottom: 12px; }
+  .req-meta b { color: var(--text); }
+  .req-desc {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .req-desc + .req-desc { margin-top: -8px; }
+
+  .req-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .inline-form {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--card-border);
+  }
+  .inline-form.visible { display: block; }
+  .inline-form .field-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .inline-form .field { flex: 1; min-width: 160px; }
+  .inline-form label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: var(--text-dim); }
+  .inline-form input, .inline-form textarea, .inline-form select {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 7px;
+  }
+  .inline-form textarea { min-height: 60px; resize: vertical; }
+  .inline-error { color: var(--err); font-size: 12.5px; margin-bottom: 8px; min-height: 1em; }
+
+  .empty-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+  .loading-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+
+  .list-toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+
+  #app { display: none; }
+
+  @media (max-width: 620px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <h1>Admin-Login</h1>
+    <p class="login-error" id="login-error"></p>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password" required>
+      <button type="submit" id="login-btn">Anmelden</button>
+    </form>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-title">RadlHias<span>.</span> Werkstatt</div>
+    <button class="logout-btn" id="logout-btn">Abmelden</button>
+  </div>
+
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="neu">Neue Annahme</button>
+      <button class="tab-btn" data-tab="liste">Alle Reparaturen <span class="badge" id="liste-badge" style="display:none;">0</span></button>
+    </div>
+
+    <!-- ===== Tab: Neue Annahme ===== -->
+    <div id="neu-panel">
+      <div class="form-card">
+        <h2>Rad annehmen</h2>
+        <p class="form-msg" id="neu-msg"></p>
+        <form id="neu-form">
+          <div class="form-grid">
+            <div class="field">
+              <label>Angenommen am</label>
+              <input type="date" id="f-angenommenAm" required>
+            </div>
+            <div class="field">
+              <label>Fahrrad Typ <span class="hint">z.B. Rennrad, MTB, Trekking, E-Bike</span></label>
+              <input type="text" id="f-fahrradTyp" list="fahrradtyp-optionen" required>
+              <datalist id="fahrradtyp-optionen">
+                <option value="Rennrad"></option>
+                <option value="Mountainbike"></option>
+                <option value="Trekkingrad"></option>
+                <option value="E-Bike"></option>
+                <option value="Kinderrad"></option>
+                <option value="Gravelbike"></option>
+                <option value="Sonstiges"></option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label>Hersteller</label>
+              <input type="text" id="f-hersteller">
+            </div>
+            <div class="field">
+              <label>Modell</label>
+              <input type="text" id="f-modell">
+            </div>
+            <div class="field">
+              <label>Farbe</label>
+              <input type="text" id="f-farbe">
+            </div>
+            <div class="field">
+              <label>Richtpreis</label>
+              <input type="text" id="f-richtpreis" placeholder="z.B. 45 €">
+            </div>
+            <div class="field full">
+              <label>Bemerkungen</label>
+              <textarea id="f-bemerkungen" placeholder="z.B. Zustand des Rades, Besonderheiten …"></textarea>
+            </div>
+            <div class="field full">
+              <label>Was soll gemacht werden?</label>
+              <textarea id="f-auftrag" required></textarea>
+            </div>
+            <div class="field">
+              <label>Name des Kunden</label>
+              <input type="text" id="f-kundeName" required>
+            </div>
+            <div class="field">
+              <label>Telefonnummer</label>
+              <input type="tel" id="f-telefon">
+            </div>
+            <div class="field full">
+              <label>E-Mail-Adresse</label>
+              <input type="email" id="f-email">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="neu-submit-btn">Rad annehmen</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Tab: Alle Reparaturen ===== -->
+    <div id="liste-panel" style="display:none;">
+      <div class="filter-bar">
+        <div class="filter-chips" id="status-chips"></div>
+        <div class="filter-row">
+          <div class="field">
+            <label>Suche</label>
+            <input type="text" id="filter-search" placeholder="Kunde, Hersteller, Modell, Auftrag …">
+          </div>
+          <div class="field small">
+            <label>Angenommen von</label>
+            <input type="date" id="filter-von">
+          </div>
+          <div class="field small">
+            <label>Angenommen bis</label>
+            <input type="date" id="filter-bis">
+          </div>
+          <button type="button" class="btn btn-ghost" id="filter-reset">Filter zurücksetzen</button>
+        </div>
+      </div>
+      <div class="list-toolbar">
+        <button type="button" class="btn btn-ghost" id="liste-refresh">Aktualisieren</button>
+      </div>
+      <div id="liste-results"><div class="loading-state">Lade Reparaturen …</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Same-Origin-Route empfohlen (siehe worker/SETUP.md). Bei separater
+// Subdomain hier die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
+const API_BASE_URL = "/api";
+
+const STATUS_VALUES = ["Angenommen", "Ware bestellt", "In Bearbeitung", "Kunde informiert/fertig"];
+const STATUS_CLASS = {
+  "Angenommen": "st-angenommen",
+  "Ware bestellt": "st-bestellt",
+  "In Bearbeitung": "st-bearbeitung",
+  "Kunde informiert/fertig": "st-fertig",
+};
+
+const loginView = document.getElementById("login-view");
+const app = document.getElementById("app");
+const loginForm = document.getElementById("login-form");
+const loginError = document.getElementById("login-error");
+const loginBtn = document.getElementById("login-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const tabBtns = document.querySelectorAll(".tab-btn");
+const neuPanel = document.getElementById("neu-panel");
+const listePanel = document.getElementById("liste-panel");
+const listeBadge = document.getElementById("liste-badge");
+
+function api(path, options) {
+  return fetch(API_BASE_URL + path, Object.assign({ credentials: "include" }, options || {}));
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function fmtDate(iso) {
+  if (!iso) return "";
+  // "YYYY-MM-DD" -> "DD.MM.YYYY"; alles andere unverändert anzeigen.
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  return `${m[3]}.${m[2]}.${m[1]}`;
+}
+
+function fmtPreis(val) {
+  if (val === undefined || val === null || val === "") return "";
+  const str = String(val).trim();
+  return /€/.test(str) ? str : `${str} €`;
+}
+
+// ---------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------
+async function checkAuth() {
+  try {
+    const res = await api("/admin/me");
+    const data = await res.json();
+    return !!data.authenticated;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function showApp() {
+  loginView.style.display = "none";
+  app.style.display = "block";
+  document.getElementById("f-angenommenAm").value = todayIso();
+  await loadReparaturen();
+}
+
+function showLogin() {
+  app.style.display = "none";
+  loginView.style.display = "block";
+}
+
+loginForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  loginError.textContent = "";
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Anmelden …";
+
+  try {
+    const res = await api("/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: document.getElementById("login-password").value }),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      loginError.textContent = data.error || "Login fehlgeschlagen.";
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Anmelden";
+      return;
+    }
+    document.getElementById("login-password").value = "";
+    await showApp();
+  } catch (err) {
+    loginError.textContent = "Login fehlgeschlagen. Bitte erneut versuchen.";
+  }
+  loginBtn.disabled = false;
+  loginBtn.textContent = "Anmelden";
+});
+
+logoutBtn.addEventListener("click", async function() {
+  await api("/admin/logout", { method: "POST" });
+  showLogin();
+});
+
+// ---------------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------------
+tabBtns.forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    tabBtns.forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    neuPanel.style.display = tab === "neu" ? "block" : "none";
+    listePanel.style.display = tab === "liste" ? "block" : "none";
+  });
+});
+
+// ---------------------------------------------------------------------
+// Tab: Neue Annahme
+// ---------------------------------------------------------------------
+document.getElementById("neu-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const msgEl = document.getElementById("neu-msg");
+  msgEl.textContent = "";
+  msgEl.className = "form-msg";
+  const btn = document.getElementById("neu-submit-btn");
+  btn.disabled = true;
+  btn.textContent = "Wird gespeichert …";
+
+  const payload = {
+    angenommenAm: document.getElementById("f-angenommenAm").value,
+    fahrradTyp: document.getElementById("f-fahrradTyp").value.trim(),
+    hersteller: document.getElementById("f-hersteller").value.trim(),
+    modell: document.getElementById("f-modell").value.trim(),
+    farbe: document.getElementById("f-farbe").value.trim(),
+    richtpreis: document.getElementById("f-richtpreis").value.trim(),
+    bemerkungen: document.getElementById("f-bemerkungen").value.trim(),
+    auftrag: document.getElementById("f-auftrag").value.trim(),
+    kundeName: document.getElementById("f-kundeName").value.trim(),
+    telefon: document.getElementById("f-telefon").value.trim(),
+    email: document.getElementById("f-email").value.trim(),
+  };
+
+  try {
+    const res = await api("/admin/reparaturen", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      msgEl.textContent = data.error || "Speichern fehlgeschlagen.";
+      msgEl.classList.add("err");
+      btn.disabled = false;
+      btn.textContent = "Rad annehmen";
+      return;
+    }
+    document.getElementById("neu-form").reset();
+    document.getElementById("f-angenommenAm").value = todayIso();
+    msgEl.textContent = "Rad angenommen und gespeichert. ✓";
+    msgEl.classList.add("ok");
+    reparaturenCache = null; // beim nächsten Besuch der Liste neu laden
+    updateListeBadgeFromCache();
+  } catch (err) {
+    msgEl.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+    msgEl.classList.add("err");
+  }
+  btn.disabled = false;
+  btn.textContent = "Rad annehmen";
+});
+
+// ---------------------------------------------------------------------
+// Tab: Alle Reparaturen
+// ---------------------------------------------------------------------
+let reparaturenCache = null;
+let activeStatuses = new Set(); // leer = alle Status
+
+function updateListeBadgeFromCache() {
+  if (!reparaturenCache) return;
+  const offen = reparaturenCache.filter(function(r) { return r.status !== "Kunde informiert/fertig"; }).length;
+  if (offen > 0) {
+    listeBadge.style.display = "inline-block";
+    listeBadge.textContent = offen;
+  } else {
+    listeBadge.style.display = "none";
+  }
+}
+
+async function loadReparaturen() {
+  const resultsEl = document.getElementById("liste-results");
+  resultsEl.innerHTML = '<div class="loading-state">Lade Reparaturen …</div>';
+  try {
+    const res = await api("/admin/reparaturen");
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json();
+    reparaturenCache = data.reparaturen || [];
+    updateListeBadgeFromCache();
+    renderStatusChips();
+    renderList();
+  } catch (err) {
+    resultsEl.innerHTML = '<div class="empty-state">Reparaturen konnten nicht geladen werden.</div>';
+  }
+}
+
+document.getElementById("liste-refresh").addEventListener("click", loadReparaturen);
+
+document.querySelectorAll("#liste-panel .filter-row input").forEach(function(el) {
+  el.addEventListener("input", renderList);
+});
+
+document.getElementById("filter-reset").addEventListener("click", function() {
+  document.getElementById("filter-search").value = "";
+  document.getElementById("filter-von").value = "";
+  document.getElementById("filter-bis").value = "";
+  activeStatuses = new Set();
+  renderStatusChips();
+  renderList();
+});
+
+function renderStatusChips() {
+  const counts = {};
+  STATUS_VALUES.forEach(function(s) { counts[s] = 0; });
+  (reparaturenCache || []).forEach(function(r) {
+    if (counts[r.status] !== undefined) counts[r.status]++;
+  });
+
+  const chipsEl = document.getElementById("status-chips");
+  chipsEl.innerHTML = STATUS_VALUES.map(function(status) {
+    const active = activeStatuses.has(status);
+    return `<button type="button" class="chip ${active ? "active" : ""}" data-status="${escapeHtml(status)}">
+      ${escapeHtml(status)} <span class="chip-count">${counts[status]}</span>
+    </button>`;
+  }).join("");
+
+  chipsEl.querySelectorAll(".chip").forEach(function(chip) {
+    chip.addEventListener("click", function() {
+      const status = chip.dataset.status;
+      if (activeStatuses.has(status)) activeStatuses.delete(status);
+      else activeStatuses.add(status);
+      renderStatusChips();
+      renderList();
+    });
+  });
+}
+
+function renderList() {
+  const resultsEl = document.getElementById("liste-results");
+  if (!reparaturenCache) return;
+
+  const search = document.getElementById("filter-search").value.trim().toLowerCase();
+  const von = document.getElementById("filter-von").value;
+  const bis = document.getElementById("filter-bis").value;
+
+  const rows = reparaturenCache.filter(function(r) {
+    if (activeStatuses.size > 0 && !activeStatuses.has(r.status)) return false;
+    if (von && r.angenommenAm && r.angenommenAm < von) return false;
+    if (bis && r.angenommenAm && r.angenommenAm > bis) return false;
+    if (search) {
+      const haystack = [r.kundeName, r.hersteller, r.modell, r.farbe, r.auftrag, r.bemerkungen, r.fahrradTyp]
+        .join(" ").toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    return true;
+  });
+
+  if (!rows.length) {
+    resultsEl.innerHTML = '<div class="empty-state">Keine Reparaturen für diese Filter gefunden.</div>';
+    return;
+  }
+
+  resultsEl.innerHTML = rows.map(renderCard).join("");
+  rows.forEach(wireCard);
+}
+
+function radBeschreibung(row) {
+  return [row.fahrradTyp, row.hersteller, row.modell, row.farbe].filter(Boolean).join(" · ");
+}
+
+function renderCard(row) {
+  const statusClass = STATUS_CLASS[row.status] || "st-angenommen";
+  const statusOptions = STATUS_VALUES.map(function(s) {
+    return `<option value="${escapeHtml(s)}" ${s === row.status ? "selected" : ""}>${escapeHtml(s)}</option>`;
+  }).join("");
+
+  return `
+    <div class="req-card" data-id="${escapeHtml(row.id)}">
+      <div class="req-head">
+        <div>
+          <div class="req-name">${escapeHtml(row.kundeName)}</div>
+          <div class="req-window">${escapeHtml(radBeschreibung(row) || "—")}</div>
+        </div>
+        <span class="status-pill ${statusClass}">${escapeHtml(row.status)}</span>
+      </div>
+      <div class="req-meta">
+        <div><b>Angenommen am:</b> ${fmtDate(row.angenommenAm)}</div>
+        ${row.telefon ? `<div><b>Telefon:</b> ${escapeHtml(row.telefon)}</div>` : ""}
+        ${row.email ? `<div><b>E-Mail:</b> ${escapeHtml(row.email)}</div>` : ""}
+        ${row.richtpreis ? `<div><b>Richtpreis:</b> ${escapeHtml(fmtPreis(row.richtpreis))}</div>` : ""}
+        ${row.endpreis ? `<div><b>Endpreis:</b> ${escapeHtml(fmtPreis(row.endpreis))}</div>` : ""}
+      </div>
+      ${row.auftrag ? `<div class="req-desc"><b>Auftrag:</b> ${escapeHtml(row.auftrag)}</div>` : ""}
+      ${row.bemerkungen ? `<div class="req-desc"><b>Bemerkungen:</b> ${escapeHtml(row.bemerkungen)}</div>` : ""}
+      ${row.erledigt ? `<div class="req-desc"><b>Erledigt:</b> ${escapeHtml(row.erledigt)}</div>` : ""}
+      <div class="req-actions">
+        <button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button>
+      </div>
+
+      <div class="inline-form" data-form="edit">
+        <p class="inline-error"></p>
+        <div class="field-row">
+          <div class="field">
+            <label>Status</label>
+            <select data-field="status">${statusOptions}</select>
+          </div>
+          <div class="field">
+            <label>Endpreis</label>
+            <input type="text" data-field="endpreis" value="${escapeHtml(row.endpreis || "")}" placeholder="z.B. 52 €">
+          </div>
+        </div>
+        <div class="field">
+          <label>Was wurde gemacht?</label>
+          <textarea data-field="erledigt">${escapeHtml(row.erledigt || "")}</textarea>
+        </div>
+        <div class="req-actions">
+          <button class="btn btn-approve" data-action="confirm-edit">Speichern</button>
+          <button class="btn btn-cancel" data-action="cancel-edit">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function wireCard(row) {
+  const card = document.querySelector(`.req-card[data-id="${CSS.escape(row.id)}"]`);
+  if (!card) return;
+  const editForm = card.querySelector('[data-form="edit"]');
+
+  card.querySelectorAll('[data-action="toggle-edit"]').forEach(function(b) {
+    b.addEventListener("click", function() { editForm.classList.toggle("visible"); });
+  });
+  card.querySelectorAll('[data-action="cancel-edit"]').forEach(function(b) {
+    b.addEventListener("click", function() { editForm.classList.remove("visible"); });
+  });
+
+  editForm.querySelector('[data-action="confirm-edit"]').addEventListener("click", async function() {
+    const errEl = editForm.querySelector(".inline-error");
+    errEl.textContent = "";
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = "Wird gespeichert …";
+
+    const patch = {
+      status: editForm.querySelector('[data-field="status"]').value,
+      erledigt: editForm.querySelector('[data-field="erledigt"]').value.trim(),
+      endpreis: editForm.querySelector('[data-field="endpreis"]').value.trim(),
+    };
+
+    try {
+      const res = await api(`/admin/reparaturen/${encodeURIComponent(row.id)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) {
+        errEl.textContent = data.error || "Speichern fehlgeschlagen.";
+        btn.disabled = false;
+        btn.textContent = "Speichern";
+        return;
+      }
+      await loadReparaturen();
+    } catch (err) {
+      errEl.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+      btn.disabled = false;
+      btn.textContent = "Speichern";
+    }
+  });
+}
+
+// ---------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------
+(async function init() {
+  const authed = await checkAuth();
+  if (authed) {
+    await showApp();
+  } else {
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>

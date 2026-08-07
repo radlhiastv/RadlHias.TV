@@ -29,6 +29,15 @@ ADMIN_PANEL_URL = "https://radlhias.tv/admin-termine.html"
 ALLOWED_ORIGIN = "https://radlhias.tv"
 
 # ---------------------------------------------------------------------------
+# Werkstatt-Reparaturverwaltung (Google Sheets) – siehe SETUP.md Abschnitt
+# "Google Sheets Anbindung". Nutzt dieselben GOOGLE_CLIENT_ID/SECRET/
+# REFRESH_TOKEN-Secrets wie die Google-Calendar-Anbindung oben, der
+# Refresh-Token braucht dafür zusätzlich den Scope .../auth/spreadsheets.
+# ---------------------------------------------------------------------------
+GOOGLE_SHEETS_SPREADSHEET_ID = "REPLACE_WITH_SPREADSHEET_ID"
+GOOGLE_SHEETS_SHEET_NAME = "Reparaturen"
+
+# ---------------------------------------------------------------------------
 # Secrets (NIEMALS hier eintragen, sondern per Wrangler CLI setzen!)
 # ---------------------------------------------------------------------------
 #   wrangler secret put ADMIN_PASSWORD

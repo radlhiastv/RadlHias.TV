@@ -135,7 +135,61 @@ const API_BASE_URL = "/api";
 Das passt zur empfohlenen Same-Origin-Route. Bei einer separaten Subdomain
 hier die volle URL eintragen, z.B. `https://api.radlhias.tv`.
 
-## 8. Noch offen (aus dem Briefing, Punkt 11)
+## 8. Google Sheets Anbindung (Werkstatt-Reparaturverwaltung)
+
+`admin-werkstatt.html` (Annahme-Formular + Liste mit Filter/Statuspflege für
+Fahrradreparaturen) speichert direkt in ein Google Sheet – kein
+zusätzliches D1 nötig.
+
+1. Google Sheet anlegen (neue Datei oder ein neuer Tab in einer
+   bestehenden), Tab-Name z.B. `Reparaturen`. In Zeile 1 exakt diese
+   Kopfzeile eintragen (Reihenfolge ist egal, die Namen müssen aber genau
+   passen):
+
+   ```
+   ID | Status | Angenommen am | Fahrrad Typ | Hersteller | Modell | Farbe |
+   Bemerkungen | Kunde Name | Telefon | Email | Was soll gemacht werden |
+   Richtpreis | Was wurde gemacht | Endpreis | Kunde informiert am |
+   Erstellt am | Zuletzt geändert am
+   ```
+
+2. Das Sheet muss für **dasselbe Google-Konto** zugänglich sein, mit dem
+   auch der Calendar-OAuth-Flow (Schritt 3) durchgeführt wird/wurde
+   (`radlhias.tv@gmail.com`) – entweder das Konto ist Eigentümer, oder das
+   Sheet wurde für dieses Konto freigegeben (Bearbeiten-Rechte).
+
+3. **Wichtig, falls Schritt 3 (Google Calendar) schon erledigt ist:** Der
+   bestehende `GOOGLE_REFRESH_TOKEN` trägt bisher nur den Scope
+   `calendar.events` und reicht für Sheets **nicht** aus. Der komplette
+   OAuth-Playground-Flow aus Schritt 3 muss **erneut** durchlaufen werden –
+   diesmal mit **beiden** Scopes gleichzeitig im Scope-Feld (Leerzeichen-
+   getrennt):
+
+   ```
+   https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/spreadsheets
+   ```
+
+   Danach den neuen Refresh-Token setzen (überschreibt den alten – die
+   Kalenderanbindung bleibt dabei funktionsfähig, weil der neue Token
+   beide Scopes trägt):
+
+   ```bash
+   wrangler secret put GOOGLE_REFRESH_TOKEN
+   ```
+
+   Falls Schritt 3 noch gar nicht gemacht wurde: einfach direkt mit beiden
+   Scopes einmalig durchführen, dann sind Calendar und Sheets in einem
+   Rutsch erledigt.
+
+4. Die Spreadsheet-ID aus der URL kopieren
+   (`https://docs.google.com/spreadsheets/d/`**`SPREADSHEET_ID`**`/edit`)
+   und in `wrangler.toml` bei `GOOGLE_SHEETS_SPREADSHEET_ID` eintragen.
+   `GOOGLE_SHEETS_SHEET_NAME` anpassen, falls der Tab nicht `Reparaturen`
+   heißt.
+
+5. `wrangler deploy`.
+
+## 9. Noch offen (aus dem Briefing, Punkt 11)
 
 - [ ] Google Cloud Projekt + OAuth-Setup durchführen (Schritt 3)
 - [ ] Brevo-Account-Frage klären + API-Key hinterlegen (Schritt 4)
@@ -145,3 +199,5 @@ hier die volle URL eintragen, z.B. `https://api.radlhias.tv`.
       E-Bike-Check, Sonstiges). Liste liegt im `<select id="repair-type">`.
 - [ ] `ADMIN_PASSWORD` und `SESSION_SECRET` setzen (Schritt 5)
 - [ ] D1-`database_id` in `wrangler.toml` eintragen (Schritt 2)
+- [ ] Google Sheet für die Reparaturverwaltung anlegen + `GOOGLE_SHEETS_SPREADSHEET_ID`
+      eintragen, Refresh-Token ggf. mit Sheets-Scope neu ausstellen (Schritt 8)
