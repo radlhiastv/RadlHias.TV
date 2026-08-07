@@ -11,7 +11,7 @@ compatibility_date = "2024-11-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "radlhias-termine"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "ec574743-2b60-4318-af72-089479bb0b6a"
 
 # ---------------------------------------------------------------------------
 # Nicht-geheime Variablen (öffentlich im Bundle sichtbar, KEINE Secrets!)
@@ -45,6 +45,6 @@ ALLOWED_ORIGIN = "https://radlhias.tv"
 # demselben Cloudflare-Proxy läuft). Auskommentiert bis DNS/Proxy dafür
 # eingerichtet ist -- siehe SETUP.md.
 # ---------------------------------------------------------------------------
-# routes = [
-#   { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" }
-# ]
+routes = [
+  { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" }
+]

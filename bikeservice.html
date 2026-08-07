@@ -267,24 +267,6 @@
     color: var(--cream);
   }
 
-  .service-booking-cta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 28px;
-    padding-top: 24px;
-    border-top: 1px solid var(--card-border);
-  }
-  .service-booking-cta p {
-    margin: 0;
-    font-size: 15px;
-    color: var(--text-dim);
-    max-width: 420px;
-  }
-  .service-booking-cta .philosophy-cta { flex-shrink: 0; }
-
   @media (max-width: 480px) {
     .service-hero-cta { gap: 8px; }
     .service-hero-cta .philosophy-cta,
@@ -297,6 +279,166 @@
   }
 
   footer { margin-top: 40px; }
+
+  /* ===== TERMINFORMULAR (eingebettet, siehe termin.html) ===== */
+  .termin-section { max-width: 640px; margin: 0 auto; padding: 0 20px 70px; }
+  .termin-section .philosophy-card { padding: 32px 28px; }
+  .termin-section h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: clamp(24px, 4vw, 32px);
+    margin: 0 0 8px;
+  }
+  .termin-section h2 span { color: var(--orange); }
+  .termin-section > p.termin-intro {
+    color: var(--text-dim);
+    font-size: 15px;
+    margin: 0 0 24px;
+    line-height: 1.6;
+  }
+
+  .termin-note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 26px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+  .termin-note b { color: var(--text); }
+
+  #termin-form fieldset { border: none; padding: 0; margin: 0 0 24px; }
+  #termin-form legend {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    color: var(--orange);
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .slot-option { position: relative; }
+  .slot-option input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .slot-option label {
+    display: block;
+    text-align: center;
+    border: 2px solid var(--card-border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+  }
+  .slot-option label .slot-day { display: block; font-weight: 700; }
+  .slot-option label .slot-time { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 2px; }
+  .slot-option input:checked + label {
+    border-color: var(--orange);
+    background: rgba(200,90,20,0.08);
+  }
+  .slot-option input:focus-visible + label { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+  #termin-form .field { margin-bottom: 16px; }
+  #termin-form .field label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  #termin-form .field input,
+  #termin-form .field select,
+  #termin-form .field textarea {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+  }
+  #termin-form .field input:focus,
+  #termin-form .field select:focus,
+  #termin-form .field textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+  }
+  #termin-form .field textarea { resize: vertical; min-height: 90px; }
+
+  #termin-form .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 480px) { #termin-form .field-row { grid-template-columns: 1fr; } }
+
+  /* Honeypot – für Menschen unsichtbar */
+  .hp-field { position: absolute; left: -9999px; top: -9999px; }
+
+  .termin-submit-btn {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    padding: 14px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .termin-submit-btn:hover:not(:disabled) { background: var(--orange-light); transform: translateY(-1px); }
+  .termin-submit-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .form-error {
+    display: none;
+    background: #fbe9e7;
+    border: 1px solid var(--err, #b3261e);
+    color: var(--err, #b3261e);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin-bottom: 16px;
+  }
+  .form-error.visible { display: block; }
+
+  .termin-success-state { text-align: center; padding: 10px 4px; }
+  .termin-success-state .success-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #2e7d4f;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .termin-success-state h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 24px;
+    margin: 0 0 12px;
+  }
+  .termin-success-state p { color: var(--text-dim); line-height: 1.7; margin-bottom: 10px; }
+
+  .slots-empty { color: var(--text-dim); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -339,8 +481,6 @@
     <h1 class="service-hero-logo">Bike<span>Service</span></h1>
     <p class="service-hero-tagline">Wartung, Reparatur und Pflege für dein Fahrrad.</p>
     <div class="service-hero-cta">
-      <a href="termin.html" class="philosophy-cta">Termin anfragen</a>
-      <a href="mailto:radlhias.tv@gmail.com?subject=Anfrage%20Bike%20Service" class="philosophy-cta philosophy-cta-secondary">Service anfragen</a>
       <a href="https://wa.me/4367762985544?text=Hallo%20Mathias%2C%20ich%20habe%20eine%20Anfrage%20zum%20Bike%20Service" target="_blank" rel="noopener noreferrer" class="whatsapp-cta">
         <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.19.588 4.24 1.617 6.007L4 29l8.2-1.578A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.818a9.77 9.77 0 0 1-4.98-1.362l-.357-.212-4.868.937.955-4.75-.233-.367A9.76 9.76 0 0 1 6.182 15c0-5.412 4.41-9.818 9.822-9.818S25.818 9.588 25.818 15 21.416 24.818 16.004 24.818zm5.373-7.34c-.294-.148-1.74-.858-2.01-.956-.27-.099-.467-.148-.663.148-.196.295-.762.956-.934 1.152-.172.196-.344.221-.638.074-.294-.148-1.24-.457-2.362-1.457-.873-.779-1.463-1.741-1.635-2.036-.172-.295-.018-.454.13-.601.134-.133.294-.344.442-.516.147-.172.196-.295.294-.492.098-.196.049-.369-.025-.517-.074-.148-.663-1.598-.908-2.19-.239-.575-.482-.497-.663-.506l-.565-.01c-.196 0-.516.074-.786.369-.27.295-1.03 1.006-1.03 2.455 0 1.449 1.055 2.85 1.202 3.046.147.196 2.077 3.17 5.033 4.445.703.304 1.252.485 1.68.62.706.224 1.348.192 1.856.117.566-.085 1.74-.712 1.985-1.4.246-.688.246-1.277.172-1.4-.074-.123-.27-.196-.564-.344z"/></svg>
         WhatsApp
@@ -362,9 +502,80 @@
     <p>Jedes Fahrrad kommt in einem anderen Zustand zu mir – ein Kinderrad nach dem ersten Sommer braucht etwas anderes als ein E-Bike nach drei Jahren im Alltag. Ein Pauschalpreis, der das ignoriert, wäre für mich nicht ehrlich.</p>
     <p>Was du von mir bekommst: Ich schaue mir dein Rad in Ruhe an und sage dir, was wirklich notwendig ist – und was nicht. Du bekommst vorher ein klares, verbindliches Angebot. Erst wenn du zustimmst, wird geschraubt. Keine Überraschungen auf der Rechnung, keine Leistungen, die du nicht brauchst.</p>
     <p>Egal ob kurzer Check nach dem Neukauf, normale Wartung oder eine Komplett-Aufbereitung deines Rads: Schreib mir kurz, was ansteht – ich melde mich mit einer ehrlichen Einschätzung.</p>
-    <div class="service-booking-cta">
-      <p>Am schnellsten geht's über die Terminanfrage: Zeitfenster wählen, kurz Kontaktdaten angeben – ich melde mich mit einer fixen Uhrzeit zurück.</p>
-      <a href="termin.html" class="philosophy-cta">Termin anfragen</a>
+  </div>
+</div>
+
+<!-- ===== TERMINFORMULAR (eingebettet) ===== -->
+<div id="termin-formular" class="termin-section">
+  <div class="philosophy-card">
+    <h2>Werkstatt<span>termin</span> anfragen</h2>
+    <p class="termin-intro">Wähle ein Zeitfenster, trag kurz deine Daten ein – ich melde mich mit einer verbindlichen Uhrzeit zurück.</p>
+
+    <div class="termin-note">
+      <span>ℹ️</span>
+      <span><b>Wichtig:</b> Das ist eine <b>Terminanfrage</b>, kein Direkt-Booking. Du bekommst innerhalb von <span id="reply-window">1-2 Werktagen</span> eine Rückmeldung mit fixer Uhrzeit – oder eine Absage, falls es sich nicht ausgeht.</span>
+    </div>
+
+    <div id="form-error" class="form-error"></div>
+
+    <form id="termin-form" novalidate>
+      <fieldset>
+        <legend>Zeitfenster</legend>
+        <div id="slot-grid" class="slot-grid">
+          <p class="slots-empty">Verfügbare Termine werden geladen …</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Deine Daten</legend>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name">Name *</label>
+            <input type="text" id="f-name" name="customer_name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="f-phone">Telefon *</label>
+            <input type="tel" id="f-phone" name="customer_phone" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-email">E-Mail *</label>
+          <input type="email" id="f-email" name="customer_email" required autocomplete="email">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Reparatur</legend>
+        <div class="field">
+          <label for="repair-type">Art der Reparatur *</label>
+          <select id="repair-type" name="repair_type" required>
+            <option value="" disabled selected>Bitte wählen …</option>
+            <option value="Wartung / Service">Wartung / Service</option>
+            <option value="Bremsen">Bremsen</option>
+            <option value="Schaltung">Schaltung</option>
+            <option value="Reifen / Schlauch">Reifen / Schlauch</option>
+            <option value="E-Bike Check">E-Bike Check</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-description">Details (optional)</label>
+          <textarea id="f-description" name="description" placeholder="z.B. was genau nicht funktioniert, welches Rad, Besonderheiten …"></textarea>
+        </div>
+      </fieldset>
+
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website">Website</label>
+        <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" class="termin-submit-btn" id="submit-btn">Terminanfrage senden</button>
+    </form>
+
+    <div id="success-view" class="termin-success-state" style="display:none;">
+      <div class="success-icon">✓</div>
+      <h2>Anfrage gesendet</h2>
+      <p>Deine Terminanfrage ist bei mir eingegangen. Du bekommst innerhalb von <span class="reply-window-inline">1-2 Werktagen</span> eine Rückmeldung per E-Mail – entweder eine Bestätigung mit fixer Uhrzeit oder einen Hinweis, falls es sich nicht ausgeht.</p>
     </div>
   </div>
 </div>
@@ -424,5 +635,108 @@
 </footer>
 
 <script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>
+
+<script>
+// Same-Origin-Route empfohlen (siehe worker/SETUP.md). Bei separater
+// Subdomain hier die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
+const API_BASE_URL = "/api";
+
+const terminForm = document.getElementById("termin-form");
+const slotGrid = document.getElementById("slot-grid");
+const formError = document.getElementById("form-error");
+const submitBtn = document.getElementById("submit-btn");
+const successView = document.getElementById("success-view");
+
+function showError(msg) {
+  formError.textContent = msg;
+  formError.classList.add("visible");
+}
+function clearError() {
+  formError.textContent = "";
+  formError.classList.remove("visible");
+}
+
+async function loadSlots() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/availability`);
+    if (!res.ok) throw new Error("availability request failed");
+    const data = await res.json();
+    renderSlots(data.slots || []);
+  } catch (err) {
+    slotGrid.innerHTML = '<p class="slots-empty">Termine konnten gerade nicht geladen werden. Bitte Seite neu laden oder direkt per E-Mail/WhatsApp melden.</p>';
+  }
+}
+
+function renderSlots(slots) {
+  if (!slots.length) {
+    slotGrid.innerHTML = '<p class="slots-empty">Aktuell sind keine Termine hinterlegt. Bitte direkt per E-Mail oder WhatsApp melden.</p>';
+    return;
+  }
+  slotGrid.innerHTML = slots.map(function(s, i) {
+    var id = "slot-" + i;
+    return (
+      '<div class="slot-option">' +
+        '<input type="radio" name="window_value" id="' + id + '" value="' + s.value + '" ' + (i === 0 ? "checked" : "") + '>' +
+        '<label for="' + id + '"><span class="slot-day">' + s.label + '</span><span class="slot-time">' + s.start + '–' + s.end + ' Uhr</span></label>' +
+      '</div>'
+    );
+  }).join("");
+}
+
+terminForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  clearError();
+
+  const fd = new FormData(terminForm);
+  const windowValue = fd.get("window_value");
+  if (!windowValue) {
+    showError("Bitte ein Zeitfenster auswählen.");
+    return;
+  }
+
+  const payload = {
+    customer_name: (fd.get("customer_name") || "").toString().trim(),
+    customer_email: (fd.get("customer_email") || "").toString().trim(),
+    customer_phone: (fd.get("customer_phone") || "").toString().trim(),
+    repair_type: (fd.get("repair_type") || "").toString().trim(),
+    description: (fd.get("description") || "").toString().trim(),
+    window_value: windowValue.toString(),
+    website: (fd.get("website") || "").toString(), // Honeypot
+  };
+
+  if (!payload.customer_name || !payload.customer_email || !payload.customer_phone || !payload.repair_type) {
+    showError("Bitte alle Pflichtfelder ausfüllen.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Wird gesendet …";
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/requests`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+
+    if (!res.ok) {
+      showError(data.error || "Anfrage konnte nicht gesendet werden. Bitte später erneut versuchen.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Terminanfrage senden";
+      return;
+    }
+
+    terminForm.style.display = "none";
+    successView.style.display = "block";
+  } catch (err) {
+    showError("Anfrage konnte nicht gesendet werden. Bitte später erneut versuchen.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Terminanfrage senden";
+  }
+});
+
+loadSlots();
+</script>
 </body>
 </html>

@@ -40,12 +40,12 @@ RadlHias.TV Werkstatt &middot; ${''}
 
 function formatDe(dateIso) {
   const d = new Date(dateIso);
-  return d.toLocaleDateString("de-AT", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+  return d.toLocaleDateString("de-AT", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric", timeZone: "Europe/Vienna" });
 }
 
 function formatTimeDe(dateIso) {
   const d = new Date(dateIso);
-  return d.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Vienna" });
 }
 
 /** 1. Neue Anfrage -> an Mathias */
