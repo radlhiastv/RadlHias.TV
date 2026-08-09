@@ -162,6 +162,15 @@
 <script>
 (function(){
 
+  /* ---------- Diagnose (temporär): Fehler sichtbar machen ---------- */
+  window.addEventListener('error', function(e){
+    alert('Fehler: ' + e.message);
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    var r = e.reason;
+    alert('Fehler (Promise): ' + (r && r.message ? r.message : r));
+  });
+
   /* ---------- Basis-Setup ---------- */
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
@@ -427,13 +436,15 @@
   }
 
   document.getElementById('btnAllowCam').onclick = async () => {
-    await tryFullscreenLandscape();
     try {
+      await tryFullscreenLandscape();
       await startCamera();
       startCountdown();
     } catch (e) {
+      const msg = (e && e.message) ? e.message : String(e);
       document.getElementById('loadingText').textContent =
-        'Kamerazugriff nicht möglich. Bitte in den Browser-Einstellungen erlauben und nochmal versuchen.';
+        'Kamerazugriff nicht möglich: ' + msg;
+      alert('Fehler beim Start: ' + msg);
     }
   };
 
