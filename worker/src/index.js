@@ -255,12 +255,24 @@ export default {
         if (body.status !== undefined && !STATUS_VALUES.includes(body.status)) {
           return badRequest("Ungültiger Status.");
         }
+        if (
+          body.kundeInformiertAm !== undefined &&
+          body.kundeInformiertAm !== "" &&
+          !/^\d{4}-\d{2}-\d{2}/.test(String(body.kundeInformiertAm))
+        ) {
+          return badRequest("Ungültiges Datum.");
+        }
 
         const patch = {};
         if (body.status !== undefined) patch.status = body.status;
         if (body.erledigt !== undefined) patch.erledigt = String(body.erledigt).slice(0, 2000);
         if (body.endpreis !== undefined) patch.endpreis = String(body.endpreis).slice(0, 40);
         if (body.bemerkungen !== undefined) patch.bemerkungen = String(body.bemerkungen).slice(0, 2000);
+        // Wird gesetzt, wenn im Admin-Bereich der WhatsApp-"Rad ist fertig"-Button
+        // geklickt wird (siehe admin-werkstatt.html) – unabhängig vom Status.
+        if (body.kundeInformiertAm !== undefined) {
+          patch.kundeInformiertAm = String(body.kundeInformiertAm).slice(0, 10);
+        }
 
         const updated = await updateReparatur(env, id, patch);
         if (!updated) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);

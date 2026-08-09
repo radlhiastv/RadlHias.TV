@@ -209,7 +209,11 @@
   .btn-cancel { background: var(--cream); color: var(--text-dim); }
   .btn-ghost { background: transparent; border: 1px solid var(--card-border); color: var(--text-dim); }
   .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-whatsapp { background: #25D366; color: #fff; white-space: nowrap; }
+  .btn-whatsapp:hover:not(:disabled) { background: #1ebe57; }
   .btn[disabled] { opacity: 0.6; cursor: default; }
+  .wa-sent-at { color: var(--text-dim); font-size: 11.5px; margin-top: 5px; }
+  .wa-none { color: var(--text-dim); font-size: 12px; }
 
   .status-pill {
     font-size: 11.5px;
@@ -437,6 +441,7 @@
               <th>Status</th>
               <th>Richtpreis</th>
               <th>Endpreis</th>
+              <th>Abholung</th>
               <th></th>
             </tr>
             <tr class="filter-row-table">
@@ -454,14 +459,15 @@
               <th></th>
               <th></th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="liste-results">
-            <tr><td colspan="9" class="loading-state">Lade Reparaturen …</td></tr>
+            <tr><td colspan="10" class="loading-state">Lade Reparaturen …</td></tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="9" id="liste-summary"></td>
+              <td colspan="10" id="liste-summary"></td>
             </tr>
           </tfoot>
         </table>
@@ -681,7 +687,7 @@ async function loadReparaturen() {
     updateListeBadgeFromCache();
     renderList();
   } catch (err) {
-    resultsEl.innerHTML = '<tr><td colspan="9" class="empty-state">Reparaturen konnten nicht geladen werden.</td></tr>';
+    resultsEl.innerHTML = '<tr><td colspan="10" class="empty-state">Reparaturen konnten nicht geladen werden.</td></tr>';
   }
 }
 
@@ -718,6 +724,23 @@ function radBeschreibung(row) {
   return [row.fahrradTyp, row.hersteller, row.modell, row.farbe].filter(Boolean).join(" · ");
 }
 
+// Telefonnummer für wa.me aufbereiten: nur Ziffern, führende 0 -> AT-Vorwahl 43.
+function waPhoneDigits(phone) {
+  let digits = String(phone || "").replace(/[^\d+]/g, "").replace(/^\+/, "");
+  if (!digits) return "";
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  if (digits.startsWith("0")) digits = "43" + digits.slice(1);
+  return digits;
+}
+
+function waAbholLink(row) {
+  const digits = waPhoneDigits(row.telefon);
+  if (!digits) return null;
+  const rad = radBeschreibung(row) || "dein Fahrrad";
+  const text = `Hallo ${row.kundeName || ""}, dein Fahrrad (${rad}) ist fertig und kann bei RadlHias.TV abgeholt werden. Danke!`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
+}
+
 function renderList() {
   const resultsEl = document.getElementById("liste-results");
   const summaryEl = document.getElementById("liste-summary");
@@ -746,7 +769,7 @@ function renderList() {
   });
 
   if (!rows.length) {
-    resultsEl.innerHTML = '<tr><td colspan="9" class="empty-state">Keine Reparaturen für diese Filter gefunden.</td></tr>';
+    resultsEl.innerHTML = '<tr><td colspan="10" class="empty-state">Keine Reparaturen für diese Filter gefunden.</td></tr>';
   } else {
     resultsEl.innerHTML = rows.map(renderRow).join("");
     rows.forEach(wireRow);
@@ -788,10 +811,16 @@ function renderRow(row) {
       <td><span class="status-pill ${statusClass}">${escapeHtml(row.status)}</span></td>
       <td>${row.richtpreis ? escapeHtml(fmtPreis(row.richtpreis)) : "—"}</td>
       <td>${row.endpreis ? escapeHtml(fmtPreis(row.endpreis)) : "—"}</td>
+      <td>
+        ${waAbholLink(row)
+          ? `<button class="btn btn-whatsapp" data-action="wa-notify">📲 ${row.kundeInformiertAm ? "Erneut senden" : "Rad fertig melden"}</button>`
+          : `<span class="wa-none">kein Telefon</span>`}
+        ${row.kundeInformiertAm ? `<div class="wa-sent-at">gesendet: ${fmtDate(row.kundeInformiertAm)}</div>` : ""}
+      </td>
       <td><button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button></td>
     </tr>
     <tr class="edit-row" data-form="edit" data-id-edit="${escapeHtml(row.id)}">
-      <td colspan="9">
+      <td colspan="10">
         <div class="edit-fields">
           <p class="inline-error"></p>
           <div class="field-row">
@@ -829,6 +858,35 @@ function wireRow(row) {
   editRow.querySelectorAll('[data-action="cancel-edit"]').forEach(function(b) {
     b.addEventListener("click", function() { editRow.classList.remove("visible"); });
   });
+
+  const waBtn = mainRow.querySelector('[data-action="wa-notify"]');
+  if (waBtn) {
+    waBtn.addEventListener("click", async function() {
+      const link = waAbholLink(row);
+      if (!link) return;
+      window.open(link, "_blank", "noopener");
+
+      const originalText = waBtn.textContent;
+      waBtn.disabled = true;
+      waBtn.textContent = "Wird vermerkt …";
+      try {
+        const res = await api(`/admin/reparaturen/${encodeURIComponent(row.id)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kundeInformiertAm: todayIso() }),
+        });
+        if (res.status === 401) { showLogin(); return; }
+        if (res.ok) {
+          await loadReparaturen();
+          return;
+        }
+      } catch (err) {
+        // fällt durch zum Reset unten
+      }
+      waBtn.disabled = false;
+      waBtn.textContent = originalText;
+    });
+  }
 
   editRow.querySelector('[data-action="confirm-edit"]').addEventListener("click", async function() {
     const errEl = editRow.querySelector(".inline-error");
