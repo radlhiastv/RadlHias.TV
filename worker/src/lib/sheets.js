@@ -231,3 +231,56 @@ export async function updateReparatur(env, id, patch) {
 
   return updated;
 }
+
+// Liefert die numerische sheetId des Tabs (nötig für deleteDimension, das
+// Sheets API akzeptiert dafür keinen Tab-Namen).
+async function getSheetTabId(env) {
+  const sheetName = env.GOOGLE_SHEETS_SHEET_NAME || "Reparaturen";
+  const data = await sheetsFetch(env, "?fields=sheets(properties(sheetId,title))");
+  const sheet = (data.sheets || []).find((s) => s.properties.title === sheetName);
+  if (!sheet) throw new Error(`Sheet-Tab "${sheetName}" nicht gefunden.`);
+  return sheet.properties.sheetId;
+}
+
+/**
+ * Löscht einen Datensatz unwiderruflich (Zeile wird aus dem Sheet entfernt,
+ * nicht nur geleert). Gibt true zurück, wenn ein Datensatz gefunden und
+ * gelöscht wurde, sonst false.
+ */
+export async function deleteReparatur(env, id) {
+  const { headerRow, rows } = await readAll(env);
+  const idIdx = headerRow.indexOf("ID");
+
+  let rowIndex = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i][idIdx] === id) {
+      rowIndex = i;
+      break;
+    }
+  }
+  if (rowIndex === -1) return false;
+
+  const sheetId = await getSheetTabId(env);
+  // Sheet-Zeilen sind 1-basiert, +1 wegen Kopfzeile -> 0-basierter Index für die API.
+  const sheetRowNumber = rowIndex + 2;
+
+  await sheetsFetch(env, ":batchUpdate", {
+    method: "POST",
+    body: JSON.stringify({
+      requests: [
+        {
+          deleteDimension: {
+            range: {
+              sheetId,
+              dimension: "ROWS",
+              startIndex: sheetRowNumber - 1,
+              endIndex: sheetRowNumber,
+            },
+          },
+        },
+      ],
+    }),
+  });
+
+  return true;
+}

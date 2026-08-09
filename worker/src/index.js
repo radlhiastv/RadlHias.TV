@@ -11,7 +11,7 @@ import {
 import { createSessionCookie, clearSessionCookie, isAuthenticated } from "./lib/auth.js";
 import { createCalendarEvent } from "./lib/calendar.js";
 import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./lib/email.js";
-import { listReparaturen, appendReparatur, updateReparatur, STATUS_VALUES } from "./lib/sheets.js";
+import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, STATUS_VALUES } from "./lib/sheets.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -279,6 +279,24 @@ export default {
         if (!updated) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);
 
         return json({ ok: true, reparatur: updated }, { status: 200 }, cors);
+      }
+
+      if (reparaturMatch && request.method === "DELETE") {
+        const id = reparaturMatch[1];
+        const body = await request.json().catch(() => null);
+        if (!body || !body.password) {
+          return badRequest("Zum Löschen bitte Admin-Passwort eingeben.");
+        }
+        // Zusätzlich zur bestehenden Session-Auth (siehe oben) verlangt das
+        // endgültige Löschen erneut das Admin-Passwort als Bestätigung.
+        if (body.password !== env.ADMIN_PASSWORD) {
+          return json({ error: "Falsches Passwort." }, { status: 401 }, cors);
+        }
+
+        const deleted = await deleteReparatur(env, id);
+        if (!deleted) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);
+
+        return json({ ok: true }, { status: 200 }, cors);
       }
 
       return json({ error: "Not found" }, { status: 404 }, cors);

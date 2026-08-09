@@ -216,6 +216,25 @@
   .btn[disabled] { opacity: 0.6; cursor: default; }
   .wa-sent-at { color: var(--text-dim); font-size: 11.5px; margin-top: 5px; }
   .wa-none { color: var(--text-dim); font-size: 12px; }
+  .btn-delete { background: transparent; border: 1px solid #f0c4bd; color: var(--err); }
+  .btn-delete:hover { background: var(--err-bg); border-color: var(--err); }
+
+  /* ---------- Lösch-Bestätigung (Modal) ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(17,30,40,0.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; padding: 20px;
+  }
+  .modal-card {
+    background: var(--card-bg); border-radius: 14px; box-shadow: var(--shadow);
+    padding: 26px 26px 22px; max-width: 400px; width: 100%;
+  }
+  .modal-card h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase;
+    font-size: 19px; margin: 0 0 10px; color: var(--err);
+  }
+  .modal-card p { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+  .modal-card .field { margin-bottom: 6px; }
 
   .status-pill {
     font-size: 11.5px;
@@ -483,6 +502,22 @@
   </div>
 </div>
 
+<div id="delete-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <h3>Datensatz endgültig löschen?</h3>
+    <p id="delete-modal-desc"></p>
+    <div class="field">
+      <label>Admin-Passwort zur Bestätigung</label>
+      <input type="password" id="delete-modal-password" autocomplete="current-password">
+    </div>
+    <p class="inline-error" id="delete-modal-error"></p>
+    <div class="req-actions">
+      <button type="button" class="btn btn-cancel" id="delete-modal-cancel">Abbrechen</button>
+      <button type="button" class="btn btn-delete" id="delete-modal-confirm" style="background:var(--err); color:#fff; border:none;">Endgültig löschen</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Same-Origin-Route empfohlen (siehe worker/SETUP.md). Bei separater
 // Subdomain hier die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
@@ -652,6 +687,84 @@ function printAuftrag(row) {
   win.onload = function() { win.focus(); win.print(); };
   setTimeout(function() { try { win.focus(); win.print(); } catch (err) {} }, 300);
 }
+
+// ---------------------------------------------------------------------
+// Datensatz löschen (Bestätigung per Admin-Passwort)
+// ---------------------------------------------------------------------
+let deleteTargetRow = null;
+const deleteModal = document.getElementById("delete-modal");
+const deleteModalDesc = document.getElementById("delete-modal-desc");
+const deleteModalPassword = document.getElementById("delete-modal-password");
+const deleteModalError = document.getElementById("delete-modal-error");
+const deleteModalConfirm = document.getElementById("delete-modal-confirm");
+const deleteModalCancel = document.getElementById("delete-modal-cancel");
+
+function openDeleteModal(row) {
+  deleteTargetRow = row;
+  const rad = radBeschreibung(row);
+  deleteModalDesc.textContent =
+    `„${row.kundeName || "Datensatz"}"${rad ? " – " + rad : ""} wird unwiderruflich gelöscht, ` +
+    `auch aus der Google-Sheets-Tabelle. Das kann nicht rückgängig gemacht werden.`;
+  deleteModalPassword.value = "";
+  deleteModalError.textContent = "";
+  deleteModalConfirm.disabled = false;
+  deleteModalConfirm.textContent = "Endgültig löschen";
+  deleteModal.style.display = "flex";
+  deleteModalPassword.focus();
+}
+
+function closeDeleteModal() {
+  deleteModal.style.display = "none";
+  deleteTargetRow = null;
+}
+
+deleteModalCancel.addEventListener("click", closeDeleteModal);
+deleteModal.addEventListener("click", function(e) {
+  if (e.target === deleteModal) closeDeleteModal();
+});
+
+deleteModalConfirm.addEventListener("click", async function() {
+  if (!deleteTargetRow) return;
+  const pwd = deleteModalPassword.value;
+  if (!pwd) {
+    deleteModalError.textContent = "Bitte Admin-Passwort eingeben.";
+    return;
+  }
+  deleteModalError.textContent = "";
+  deleteModalConfirm.disabled = true;
+  deleteModalConfirm.textContent = "Wird gelöscht …";
+
+  try {
+    const res = await api(`/admin/reparaturen/${encodeURIComponent(deleteTargetRow.id)}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pwd }),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+
+    // 401 kann zwei Ursachen haben: Session abgelaufen (-> Login) oder
+    // falsches Admin-Passwort (-> Fehlermeldung im Modal, eingeloggt bleiben).
+    if (res.status === 401 && data.error !== "Falsches Passwort.") {
+      closeDeleteModal();
+      showLogin();
+      return;
+    }
+    if (!res.ok) {
+      deleteModalError.textContent = data.error || "Löschen fehlgeschlagen.";
+      deleteModalConfirm.disabled = false;
+      deleteModalConfirm.textContent = "Endgültig löschen";
+      return;
+    }
+
+    closeDeleteModal();
+    reparaturenCache = null;
+    await loadReparaturen();
+  } catch (err) {
+    deleteModalError.textContent = "Löschen fehlgeschlagen. Bitte erneut versuchen.";
+    deleteModalConfirm.disabled = false;
+    deleteModalConfirm.textContent = "Endgültig löschen";
+  }
+});
 
 // ---------------------------------------------------------------------
 // Auth
@@ -954,6 +1067,7 @@ function renderRow(row) {
       <td>
         <button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button>
         <button class="btn btn-ghost" data-action="print-auftrag" style="margin-top:6px;">🖨️ Auftrag</button>
+        <button class="btn btn-delete" data-action="delete-row" style="margin-top:6px;">🗑️ Löschen</button>
       </td>
     </tr>
     <tr class="edit-row" data-form="edit" data-id-edit="${escapeHtml(row.id)}">
@@ -998,6 +1112,10 @@ function wireRow(row) {
 
   mainRow.querySelectorAll('[data-action="print-auftrag"]').forEach(function(b) {
     b.addEventListener("click", function() { printAuftrag(row); });
+  });
+
+  mainRow.querySelectorAll('[data-action="delete-row"]').forEach(function(b) {
+    b.addEventListener("click", function() { openDeleteModal(row); });
   });
 
   const waBtn = mainRow.querySelector('[data-action="wa-notify"]');
