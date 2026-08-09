@@ -74,6 +74,28 @@
 
   .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 70px; }
 
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--cream2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .back-link:hover { color: var(--cream); }
+  .login-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .login-back-link:hover { color: var(--text); }
+
   /* ---------- Login ---------- */
   .login-wrap { max-width: 380px; margin: 80px auto; padding: 0 20px; }
   .login-card {
@@ -315,6 +337,7 @@
 <body>
 
 <div id="login-view" class="login-wrap">
+  <a href="bikeservice.html" class="login-back-link">&larr; Zurück zu Bikeservice</a>
   <div class="login-card">
     <h1>Admin-Login</h1>
     <p class="login-error" id="login-error"></p>
@@ -328,7 +351,10 @@
 <div id="app">
   <div class="topbar">
     <div class="topbar-title">RadlHias<span>.</span> Werkstatt</div>
-    <button class="logout-btn" id="logout-btn">Abmelden</button>
+    <div style="display:flex; align-items:center; gap:18px;">
+      <a href="bikeservice.html" class="back-link">&larr; Zurück zu Bikeservice</a>
+      <button class="logout-btn" id="logout-btn">Abmelden</button>
+    </div>
   </div>
 
   <div class="wrap">
