@@ -560,7 +560,14 @@ function buildAuftragHtml(row) {
   td { padding: 4px 0; font-size: 14px; vertical-align: top; }
   td.label { color: #5a7a8a; width: 170px; }
   .box { border: 1px solid #ddd6c8; border-radius: 6px; padding: 12px 14px; font-size: 14px; white-space: pre-wrap; }
-  .sign-row { display: flex; gap: 40px; margin-top: 70px; }
+  .thanks { font-size: 14px; line-height: 1.6; margin-bottom: 26px; }
+  .parties { display: flex; gap: 30px; }
+  .parties > div { flex: 1; }
+  .terms {
+    margin-top: 26px; font-size: 11.5px; line-height: 1.6; color: #5a7a8a;
+    border-top: 1px solid #ddd6c8; padding-top: 12px;
+  }
+  .sign-row { display: flex; gap: 40px; margin-top: 50px; }
   .sign { flex: 1; border-top: 1px solid #1c3448; padding-top: 6px; font-size: 12px; color: #5a7a8a; }
   @media print { body { padding: 0; } }
 </style>
@@ -568,14 +575,29 @@ function buildAuftragHtml(row) {
   <h1>RadlHias.TV – Werkstattauftrag</h1>
   <div class="sub">Angenommen am ${fmtDate(row.angenommenAm)}${idKurz ? ` · Auftrags-ID ${escapeHtml(idKurz)}` : ""}</div>
 
+  <p class="thanks">Vielen Dank für Ihren Auftrag und Ihr Vertrauen!<br>Wir kümmern uns mit Sorgfalt um Ihr Fahrrad.</p>
+
   <div class="section">
-    <h2>Kunde</h2>
-    <table>
-      ${zeile("Name", row.kundeName)}
-      ${zeile("Telefon", row.telefon)}
-      ${zeile("E-Mail", row.email)}
-      ${zeile("Adresse", row.adresse)}
-    </table>
+    <div class="parties">
+      <div>
+        <h2>Auftraggeber</h2>
+        <table>
+          ${zeile("Name", row.kundeName)}
+          ${zeile("Telefon", row.telefon)}
+          ${zeile("E-Mail", row.email)}
+          ${zeile("Adresse", row.adresse)}
+        </table>
+      </div>
+      <div>
+        <h2>Auftragnehmer</h2>
+        <table>
+          ${zeile("Name", "Mathias Blumreich – RadlHias.TV")}
+          ${zeile("Adresse", "Wildshuter Str. 11b, 5120 St. Pantaleon")}
+          ${zeile("Telefon", "+43 677 629 855 44")}
+          ${zeile("E-Mail", "radlhias.tv@gmail.com")}
+        </table>
+      </div>
+    </div>
   </div>
 
   <div class="section">
@@ -600,9 +622,17 @@ function buildAuftragHtml(row) {
     <table>${zeile("Richtpreis", row.richtpreis ? fmtPreis(row.richtpreis) : "")}</table>
   </div>
 
+  <p class="terms">
+    Mit Datum und Unterschrift erteilt der Auftraggeber diesen Werkstattauftrag verbindlich.
+    Die oben genannten Reparaturkosten wurden besprochen; die Reparatur wird im Rahmen dieser
+    Kosten ausgeführt. Wir erlauben uns, bis zu 10&nbsp;% des vereinbarten Preises für
+    unerwartete Mehraufwände zu verrechnen. Sollten die Kosten um mehr als 10&nbsp;% steigen,
+    melden wir uns vorab telefonisch.
+  </p>
+
   <div class="sign-row">
-    <div class="sign">Unterschrift Kunde</div>
-    <div class="sign">Unterschrift RadlHias.TV</div>
+    <div class="sign">Ort, Datum, Unterschrift Auftraggeber</div>
+    <div class="sign">Ort, Datum, Unterschrift RadlHias.TV</div>
   </div>
 </body></html>`;
 }
