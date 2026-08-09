@@ -1,10 +1,11 @@
 # RadlHias Werkstatt-Terminbuchung – Setup & Deployment
 
-Dieser Ordner enthält den Cloudflare Worker (API + D1-Datenbank), der die
-Buchungsseite (`/termin.html`) und das Admin-Panel (`/admin-termine.html`) im
-Hauptrepo bedient. Die folgenden Schritte sind **einmalig** nötig und
-brauchen deine eigenen Zugänge (Cloudflare, Google, Brevo) – das kann ich
-nicht für dich erledigen.
+Dieser Ordner enthält den Cloudflare Worker (API + D1-Datenbank + KV), der
+die Buchungsseite (`/termin.html`), die Admin-Panels (`/admin-termine.html`,
+`/admin-werkstatt.html`, `/admin-blog.html`) sowie den Blog
+(`/blog/*`, serverseitig gerendert, siehe Abschnitt 9) im Hauptrepo bedient.
+Die folgenden Schritte sind **einmalig** nötig und brauchen deine eigenen
+Zugänge (Cloudflare, Google, Brevo) – das kann ich nicht für dich erledigen.
 
 ## 1. Voraussetzungen
 
@@ -194,7 +195,61 @@ zusätzliches D1 nötig.
 
 5. `wrangler deploy`.
 
-## 9. Noch offen (aus dem Briefing, Punkt 11)
+## 9. Blog-Verwaltung (D1 + KV + serverseitiges Rendering)
+
+`admin-blog.html` (gleiches Admin-Passwort wie oben) ersetzt das frühere,
+unsichere Admin-Panel in `index.html` (kein Passwortschutz mehr, manueller
+`posts.json`-Download/-Upload, von Hand angelegte Dateien in `blog/`).
+Artikel liegen jetzt in D1, Titelbilder in Workers KV (kein R2, damit keine
+Zahlungsmethode auf dem Cloudflare-Account hinterlegt werden muss), und
+`/blog/index.html` sowie
+`/blog/<slug>.html` werden bei jedem Aufruf **serverseitig** vom Worker
+gerendert (siehe `src/lib/blogTemplate.js`) – inklusive Meta-Description,
+Open-Graph-Tags und `BlogPosting`-JSON-LD automatisch aus den Formularfeldern.
+Auch `/sitemap.xml` wird dynamisch erzeugt (`src/lib/sitemap.js`) und enthält
+neue Artikel automatisch.
+
+1. D1-Migrationen anwenden (legt die `posts`-Tabelle an und importiert die
+   8 bestehenden Artikel aus der alten `posts.json`/`blog/*.html`):
+
+   ```bash
+   wrangler d1 migrations apply radlhias-termine --remote
+   ```
+
+   (Falls Schritt 2 oben – D1-Datenbank anlegen – noch nicht gemacht wurde,
+   zuerst das erledigen. Die Migrationen `0002_blog_posts.sql` und
+   `0003_seed_posts.sql` laufen einfach mit, wenn du den Befehl aus Schritt 2
+   erneut ausführst.)
+
+2. KV-Namespace für Blog-Bilder anlegen:
+
+   ```bash
+   wrangler kv namespace create BLOG_IMAGES
+   ```
+
+   Die Ausgabe enthält eine `id` (z.B. `id = "abcd1234..."`). Diese in
+   `wrangler.toml` beim `[[kv_namespaces]]`-Eintrag anstelle von
+   `REPLACE_WITH_KV_NAMESPACE_ID` eintragen.
+
+3. Die beiden neuen Routes in `wrangler.toml` sind bereits eingetragen
+   (`radlhias.tv/blog/*` und `radlhias.tv/sitemap.xml`, zusätzlich zu
+   `radlhias.tv/api/*`). Setzt voraus, dass `radlhias.tv` weiterhin per
+   orangem Wölkchen durch Cloudflare läuft (siehe Haupt-README).
+
+4. `wrangler deploy`.
+
+Danach: `admin-blog.html` öffnen, einloggen (gleiches Passwort wie
+`admin-werkstatt.html`/`admin-termine.html`), Artikel schreiben, Bild per
+Drag & Drop hochladen (wird im Browser automatisch zu WebP verkleinert),
+veröffentlichen – der Artikel ist sofort unter `/blog/<slug>.html` live.
+
+**Hinweis Migration:** `worker/migrations/0003_seed_posts.sql` enthält die
+8 bisherigen Artikel 1:1 (Text, Bilder, Datum, SEO-Beschreibung) – die alten
+Dateien `posts.json` und `blog/*.html` wurden im Repo entfernt, da sie durch
+D1 ersetzt sind. Nichts geht verloren: der komplette Inhalt steckt in dieser
+Migration und in der Git-Historie.
+
+## 10. Noch offen (aus dem Briefing, Punkt 11)
 
 - [ ] Google Cloud Projekt + OAuth-Setup durchführen (Schritt 3)
 - [ ] Brevo-Account-Frage klären + API-Key hinterlegen (Schritt 4)
@@ -206,3 +261,5 @@ zusätzliches D1 nötig.
 - [ ] D1-`database_id` in `wrangler.toml` eintragen (Schritt 2)
 - [ ] Google Sheet für die Reparaturverwaltung anlegen + `GOOGLE_SHEETS_SPREADSHEET_ID`
       eintragen, Refresh-Token ggf. mit Sheets-Scope neu ausstellen (Schritt 8)
+- [ ] KV-Namespace für Blog-Bilder anlegen + `id` in `wrangler.toml` eintragen +
+      Migrationen ausführen + neue Routes deployen (Schritt 9)

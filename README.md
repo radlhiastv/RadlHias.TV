@@ -6,29 +6,38 @@ Persönliche Homepage für den YouTube-Kanal RadlHias.TV.
 
 ```
 /
-├── index.html        ← Die gesamte Website (eine einzige Datei)
-├── posts.json        ← Alle Blog-Artikel (wird vom Admin-Bereich erzeugt)
-├── images/           ← Deine Fotos für Blog-Artikel
-│   └── RadlHias_Logo.png
+├── index.html        ← Startseite
+├── admin-blog.html   ← Blog-Admin (Artikel schreiben/bearbeiten/löschen)
+├── blogimages/        ← Bilder der ursprünglich migrierten Artikel
+├── worker/            ← Cloudflare Worker: Termine, Werkstatt & Blog-Backend
 └── README.md
 ```
 
 ## So fügst du einen neuen Artikel hinzu
 
-1. Öffne deine Website und scrolle ganz nach unten zum Footer
-2. Klicke auf **"Admin"**
-3. Passwort eingeben: `radlhias2024` (im Code unter `ADMIN_PW` ändern)
-4. Artikel schreiben, Bild-Pfad eingeben (`images/mein-bild.jpg`)
-5. Auf **"Artikel speichern"** klicken
-6. Auf **"posts.json herunterladen"** klicken
-7. Auf GitHub: posts.json im Repo mit der neuen Version ersetzen (Drag & Drop)
+1. `admin-blog.html` öffnen (verlinkt z.B. von `admin-werkstatt.html`/Bookmark; bewusst nicht in der öffentlichen Navigation) und mit dem Admin-Passwort einloggen.
+2. Titel, Text, Bild (per Drag & Drop) und die restlichen Felder ausfüllen.
+3. Auf **"Artikel veröffentlichen"** klicken.
 
-## Bilder hochladen
+Das war's – der Artikel ist sofort live unter `/blog/<slug>.html`, taucht auf der
+Blog-Übersicht, im Startseiten-Teaser und in der `sitemap.xml` auf. Kein
+Download, kein GitHub, keine zweite Datei mehr nötig.
 
-1. Foto vorbereiten (JPG, max. 1–2 MB empfohlen)
-2. GitHub öffnen → Repo → `/images/` Ordner
-3. Foto per Drag & Drop hochladen
-4. Im Admin-Bereich als Pfad `images/dateiname.jpg` eingeben
+**Wie das technisch funktioniert:** Artikel liegen in einer D1-Datenbank
+(Cloudflare), nicht mehr in `posts.json` + einzelnen Dateien in `blog/`. Der
+Cloudflare Worker (`worker/`, derselbe, der auch Termine & Werkstatt bedient)
+rendert `/blog/index.html` und `/blog/<slug>.html` bei jedem Aufruf
+serverseitig aus der Datenbank – inklusive Meta-Description, Open-Graph-Tags
+und `BlogPosting`-JSON-LD, automatisch aus deinen Eingaben erzeugt. Details
+und einmaliges Setup: [`worker/SETUP.md`](worker/SETUP.md), Abschnitt
+„Blog-Verwaltung".
+
+## Bilder
+
+Im Admin-Panel (`admin-blog.html`) einfach das Titelbild per Drag & Drop
+ablegen oder auswählen – der Browser verkleinert und konvertiert es
+automatisch zu WebP (max. 1600 px Breite), bevor es hochgeladen wird. Kein
+manuelles Vorbereiten, kein Ordner, kein Pfad-Eintippen mehr nötig.
 
 ## Newsletter (Brevo)
 

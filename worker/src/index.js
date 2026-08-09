@@ -12,11 +12,22 @@ import { createSessionCookie, clearSessionCookie, isAuthenticated } from "./lib/
 import { createCalendarEvent } from "./lib/calendar.js";
 import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./lib/email.js";
 import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, STATUS_VALUES } from "./lib/sheets.js";
+import { listPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost, resolveImageUrl } from "./lib/blog.js";
+import { putBlogImage, getBlogImage, deleteBlogImage } from "./lib/blogImages.js";
+import { renderListingPage, renderArticlePage, render404Page } from "./lib/blogTemplate.js";
+import { renderSitemap } from "./lib/sitemap.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function badRequest(msg) {
   return json({ error: msg }, { status: 400 });
+}
+
+function html(body, init = {}) {
+  return new Response(body, {
+    ...init,
+    headers: { "Content-Type": "text/html; charset=utf-8", ...(init.headers || {}) },
+  });
 }
 
 async function requireAuth(request, env) {
@@ -34,6 +45,62 @@ export default {
     }
 
     try {
+      // ---------------------------------------------------------------
+      // Blog: serverseitig gerenderte Seiten (radlhias.tv/blog/* Route)
+      // ---------------------------------------------------------------
+      if (request.method === "GET" && (path === "/sitemap.xml")) {
+        const xml = await renderSitemap(env.DB, url.origin);
+        return new Response(xml, {
+          status: 200,
+          headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=300" },
+        });
+      }
+
+      if (request.method === "GET" && path.startsWith("/blog/")) {
+        if (path === "/blog/" || path === "/blog/index.html") {
+          const posts = await listPosts(env.DB, { publishedOnly: true });
+          return html(renderListingPage(posts, url.origin), { status: 200 });
+        }
+        const slugMatch = path.match(/^\/blog\/([^/]+)\.html$/);
+        if (slugMatch) {
+          const post = await getPostBySlug(env.DB, slugMatch[1], { publishedOnly: true });
+          if (!post) return html(render404Page(url.origin), { status: 404 });
+          return html(renderArticlePage(post, url.origin), { status: 200 });
+        }
+        return html(render404Page(url.origin), { status: 404 });
+      }
+
+      if (request.method === "GET" && path === "/blog") {
+        return Response.redirect(`${url.origin}/blog/index.html`, 301);
+      }
+
+      // ---------------------------------------------------------------
+      // Blog: öffentliche JSON-Liste (Startseiten-Teaser, index.html)
+      // ---------------------------------------------------------------
+      if (path === "/api/posts" && request.method === "GET") {
+        const limitParam = url.searchParams.get("limit");
+        const limit = limitParam ? Math.max(1, Math.min(50, parseInt(limitParam, 10) || 0)) : undefined;
+        const posts = await listPosts(env.DB, { publishedOnly: true, limit });
+        const withUrls = posts.map((p) => ({ ...p, image: resolveImageUrl(p) }));
+        return json({ posts: withUrls }, { status: 200 }, cors);
+      }
+
+      // ---------------------------------------------------------------
+      // Blog: Bild-Auslieferung aus KV (öffentlich, same-origin)
+      // ---------------------------------------------------------------
+      const imgMatch = path.match(/^\/api\/blog-images\/(.+)$/);
+      if (imgMatch && request.method === "GET") {
+        const img = await getBlogImage(env, imgMatch[1]);
+        if (!img) return new Response("Not found", { status: 404 });
+        return new Response(img.bytes, {
+          status: 200,
+          headers: {
+            "Content-Type": img.contentType,
+            "Cache-Control": "public, max-age=31536000, immutable",
+          },
+        });
+      }
+
       // ---------------------------------------------------------------
       // Öffentliche Endpunkte
       // ---------------------------------------------------------------
@@ -290,6 +357,98 @@ export default {
         if (!deleted) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);
 
         return json({ ok: true }, { status: 200 }, cors);
+      }
+
+      // ---------------------------------------------------------------
+      // Admin: Blog-Verwaltung
+      // ---------------------------------------------------------------
+      if (path === "/api/admin/posts" && request.method === "GET") {
+        const posts = await listPosts(env.DB, { publishedOnly: false });
+        return json({ posts: posts.map((p) => ({ ...p, image: resolveImageUrl(p) })) }, { status: 200 }, cors);
+      }
+
+      if (path === "/api/admin/posts" && request.method === "POST") {
+        const body = await request.json().catch(() => null);
+        if (!body) return badRequest("Ungültige Anfrage.");
+        const { title, content_raw } = body;
+        if (!title || !content_raw) {
+          return badRequest("Bitte Titel und Text ausfüllen.");
+        }
+        const post = await createPost(env.DB, {
+          title: String(title).slice(0, 200),
+          slug: body.slug ? String(body.slug).slice(0, 90) : undefined,
+          excerpt: body.excerpt ? String(body.excerpt).slice(0, 400) : "",
+          content_raw: String(content_raw).slice(0, 20000),
+          category: body.category ? String(body.category).slice(0, 40) : "Blog",
+          seo_desc: body.seo_desc ? String(body.seo_desc).slice(0, 200) : "",
+          image_key: body.image_key || null,
+          image_source: "kv",
+          image_alt: body.image_alt ? String(body.image_alt).slice(0, 200) : undefined,
+          published: body.published !== false,
+          date: body.date && /^\d{4}-\d{2}-\d{2}$/.test(body.date) ? body.date : undefined,
+        });
+        return json({ ok: true, post: { ...post, image: resolveImageUrl(post) } }, { status: 201 }, cors);
+      }
+
+      const postMatch = path.match(/^\/api\/admin\/posts\/([^/]+)$/);
+      if (postMatch && request.method === "PATCH") {
+        const id = postMatch[1];
+        const body = await request.json().catch(() => null);
+        if (!body) return badRequest("Ungültige Anfrage.");
+
+        const patch = {};
+        if (body.title !== undefined) patch.title = String(body.title).slice(0, 200);
+        if (body.slug !== undefined) patch.slug = String(body.slug).slice(0, 90);
+        if (body.excerpt !== undefined) patch.excerpt = String(body.excerpt).slice(0, 400);
+        if (body.content_raw !== undefined) patch.content_raw = String(body.content_raw).slice(0, 20000);
+        if (body.category !== undefined) patch.category = String(body.category).slice(0, 40);
+        if (body.seo_desc !== undefined) patch.seo_desc = String(body.seo_desc).slice(0, 200);
+        if (body.image_key !== undefined) {
+          patch.image_key = body.image_key || null;
+          patch.image_source = "kv";
+        }
+        if (body.image_alt !== undefined) patch.image_alt = String(body.image_alt).slice(0, 200);
+        if (body.published !== undefined) patch.published = !!body.published;
+        if (body.date !== undefined && /^\d{4}-\d{2}-\d{2}$/.test(body.date)) patch.date = body.date;
+
+        const updated = await updatePost(env.DB, id, patch);
+        if (!updated) return json({ error: "Artikel nicht gefunden." }, { status: 404 }, cors);
+        return json({ ok: true, post: { ...updated, image: resolveImageUrl(updated) } }, { status: 200 }, cors);
+      }
+
+      if (postMatch && request.method === "DELETE") {
+        const id = postMatch[1];
+        const existing = await getPostById(env.DB, id);
+        if (!existing) return json({ error: "Artikel nicht gefunden." }, { status: 404 }, cors);
+        await deletePost(env.DB, id);
+        if (existing.image_source === "kv" && existing.image_key) {
+          ctx.waitUntil(deleteBlogImage(env, existing.image_key).catch((err) => console.error("deleteBlogImage failed", err)));
+        }
+        return json({ ok: true }, { status: 200 }, cors);
+      }
+
+      if (path === "/api/admin/blog-uploads" && request.method === "POST") {
+        const contentType = request.headers.get("Content-Type") || "";
+        if (!contentType.startsWith("multipart/form-data")) {
+          return badRequest("Bitte als multipart/form-data hochladen.");
+        }
+        const form = await request.formData().catch(() => null);
+        const file = form && form.get("file");
+        if (!file || typeof file === "string") {
+          return badRequest("Keine Bilddatei gefunden.");
+        }
+        const slugHint = form.get("slugHint") ? String(form.get("slugHint")) : "bild";
+        try {
+          const bytes = await file.arrayBuffer();
+          const result = await putBlogImage(env, {
+            bytes,
+            contentType: file.type || "image/webp",
+            slugHint,
+          });
+          return json({ ok: true, ...result }, { status: 201 }, cors);
+        } catch (err) {
+          return badRequest(err.message || "Bild-Upload fehlgeschlagen.");
+        }
       }
 
       return json({ error: "Not found" }, { status: 404 }, cors);

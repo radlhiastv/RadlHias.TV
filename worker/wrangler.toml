@@ -14,6 +14,18 @@ database_name = "radlhias-termine"
 database_id = "ec574743-2b60-4318-af72-089479bb0b6a"
 
 # ---------------------------------------------------------------------------
+# KV-Namespace für Blog-Bilder (Admin-Panel-Upload, siehe src/lib/blogImages.js)
+# -- KV statt R2, weil R2 eine Zahlungsmethode auf dem Cloudflare-Account
+# voraussetzt (auch im Gratis-Tarif), KV nicht.
+# ---------------------------------------------------------------------------
+# Einmalig anlegen:
+#   wrangler kv namespace create BLOG_IMAGES
+# Die Ausgabe enthält eine id, die unten bei "id" eingetragen werden muss.
+[[kv_namespaces]]
+binding = "BLOG_IMAGES_KV"
+id = "97de6b66e1464183920f8a360fc1e82d"
+
+# ---------------------------------------------------------------------------
 # Nicht-geheime Variablen (öffentlich im Bundle sichtbar, KEINE Secrets!)
 # ---------------------------------------------------------------------------
 [vars]
@@ -55,5 +67,11 @@ GOOGLE_SHEETS_SHEET_NAME = "Tabellenblatt1"
 # eingerichtet ist -- siehe SETUP.md.
 # ---------------------------------------------------------------------------
 routes = [
-  { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" }
+  { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" },
+  # Blog: Worker rendert /blog/index.html + /blog/<slug>.html serverseitig
+  # (siehe src/lib/blogTemplate.js) statt der frueheren statischen Dateien.
+  { pattern = "radlhias.tv/blog/*", zone_name = "radlhias.tv" },
+  # sitemap.xml wird dynamisch aus D1 generiert (siehe src/lib/sitemap.js),
+  # damit neue Blogartikel automatisch auftauchen.
+  { pattern = "radlhias.tv/sitemap.xml", zone_name = "radlhias.tv" }
 ]

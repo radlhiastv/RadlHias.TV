@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Blog – RadlHias.TV</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1c3448;
+    --navy-dark: #111e28;
+    --orange: #c85a14;
+    --orange-light: #e06820;
+    --cream: #f5f1eb;
+    --cream2: #e8e2d8;
+    --cream3: #ddd6c8;
+    --text: #1c3448;
+    --text-dim: #5a7a8a;
+    --card-bg: #ffffff;
+    --card-border: #ddd6c8;
+    --shadow: 0 2px 20px rgba(28,52,72,0.10);
+    --ok: #2e7d4f;
+    --ok-bg: #e6f3ea;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+  a { color: var(--orange); }
+
+  .topbar {
+    background: linear-gradient(155deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--cream); padding: 16px 24px; display: flex; align-items: center;
+    justify-content: space-between; border-bottom: 3px solid var(--orange);
+  }
+  .topbar-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 20px; }
+  .topbar-title span { color: var(--orange-light); }
+  .logout-btn { background: transparent; border: 1px solid rgba(245,241,235,0.4); color: var(--cream2); padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; }
+  .logout-btn:hover { border-color: var(--cream); color: var(--cream); }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 28px 20px 70px; }
+  .wrap-wide { max-width: 1180px; margin: 0 auto; padding: 0 20px 70px; }
+
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--cream2); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-link:hover { color: var(--cream); }
+  .login-back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; color: var(--text-dim); text-decoration: none; font-size: 13.5px; font-weight: 600; }
+  .login-back-link:hover { color: var(--text); }
+
+  .login-wrap { max-width: 380px; margin: 80px auto; padding: 0 20px; }
+  .login-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: var(--shadow); padding: 32px 28px; text-align: center; }
+  .login-card h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 22px; margin: 0 0 20px; }
+  .login-card input { width: 100%; font-size: 15px; padding: 11px 13px; border: 1.5px solid var(--card-border); border-radius: 8px; margin-bottom: 14px; }
+  .login-card button { width: 100%; background: var(--orange); color: #fff; border: none; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 9px; cursor: pointer; }
+  .login-card button:hover { background: var(--orange-light); }
+  .login-error { color: var(--err); font-size: 13.5px; margin-bottom: 12px; min-height: 1em; }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+  .tab-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-dim); padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .tab-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .badge { background: var(--orange); color: #fff; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 10px; }
+
+  .form-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: var(--shadow); padding: 24px 26px; }
+  .form-card h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 19px; margin: 0 0 6px; }
+  .form-card .form-sub { color: var(--text-dim); font-size: 13px; margin-bottom: 18px; }
+  .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
+  .form-grid .field.full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: var(--text-dim); }
+  .field .hint { font-weight: 400; text-transform: none; letter-spacing: 0; display: block; margin-top: 2px; }
+  .field input, .field textarea, .field select {
+    width: 100%; font-family: 'Barlow', sans-serif; font-size: 14.5px; padding: 9px 11px;
+    border: 1.5px solid var(--card-border); border-radius: 7px; background: #fff;
+  }
+  .field textarea { min-height: 64px; resize: vertical; }
+  #f-content { min-height: 260px; font-size: 14px; line-height: 1.6; }
+  .char-count { text-align: right; font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+  .form-actions { margin-top: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .form-msg { font-size: 13.5px; min-height: 1em; }
+  .form-msg.ok { color: var(--ok); }
+  .form-msg.err { color: var(--err); }
+
+  .btn { border: none; border-radius: 7px; padding: 9px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+  .btn-primary { background: var(--orange); color: #fff; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-approve { background: var(--ok); color: #fff; }
+  .btn-approve:hover { background: #26643f; }
+  .btn-cancel { background: var(--cream); color: var(--text-dim); }
+  .btn-ghost { background: transparent; border: 1px solid var(--card-border); color: var(--text-dim); }
+  .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  .btn-delete { background: transparent; border: 1px solid #f0c4bd; color: var(--err); }
+  .btn-delete:hover { background: var(--err-bg); border-color: var(--err); }
+
+  /* ---------- Bild-Upload ---------- */
+  .dropzone {
+    border: 2px dashed var(--card-border); border-radius: 10px; padding: 18px;
+    text-align: center; cursor: pointer; color: var(--text-dim); font-size: 13.5px;
+    background: var(--cream);
+  }
+  .dropzone.drag { border-color: var(--orange); color: var(--orange); background: #fff3ea; }
+  .dropzone input { display: none; }
+  .image-preview-row { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+  .image-preview-row img { width: 130px; height: 73px; object-fit: cover; border-radius: 8px; border: 1px solid var(--card-border); }
+  .image-preview-meta { font-size: 12.5px; color: var(--text-dim); }
+  .image-remove { color: var(--err); font-size: 12.5px; cursor: pointer; text-decoration: underline; background: none; border: none; padding: 0; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(17,30,40,0.55); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
+  .modal-card { background: var(--card-bg); border-radius: 14px; box-shadow: var(--shadow); padding: 26px 26px 22px; max-width: 400px; width: 100%; }
+  .modal-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 19px; margin: 0 0 10px; color: var(--err); }
+  .modal-card p { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+  .req-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .inline-error { color: var(--err); font-size: 12.5px; margin-bottom: 8px; min-height: 1em; }
+
+  .empty-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+  .loading-state { text-align: center; color: var(--text-dim); padding: 40px 20px; font-size: 14.5px; }
+  .list-toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px; }
+
+  .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .post-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .post-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--cream2); }
+  .post-card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .post-card-cat { display: inline-block; align-self: flex-start; background: rgba(200,90,20,0.12); color: var(--orange); font-family: 'Barlow Condensed', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 9px; border-radius: 20px; }
+  .post-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; line-height: 1.25; }
+  .post-card-meta { font-size: 12px; color: var(--text-dim); }
+  .post-card-unpub { color: var(--err); font-weight: 700; }
+  .post-card-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
+
+  .edit-form { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--card-border); }
+  .edit-form.visible { display: block; }
+
+  #app { display: none; }
+
+  @media (max-width: 620px) { .form-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="login-view" class="login-wrap">
+  <a href="index.html" class="login-back-link">&larr; Zurück zur Startseite</a>
+  <div class="login-card">
+    <h1>Admin-Login</h1>
+    <p class="login-error" id="login-error"></p>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password" required>
+      <button type="submit" id="login-btn">Anmelden</button>
+    </form>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-title">RadlHias<span>.</span> Blog</div>
+    <div style="display:flex; align-items:center; gap:18px;">
+      <a href="index.html" class="back-link">&larr; Zurück zur Startseite</a>
+      <button class="logout-btn" id="logout-btn">Abmelden</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="neu">Neuer Artikel</button>
+      <button class="tab-btn" data-tab="liste">Alle Artikel <span class="badge" id="liste-badge" style="display:none;">0</span></button>
+    </div>
+
+    <!-- ===== Tab: Neuer Artikel ===== -->
+    <div id="neu-panel">
+      <div class="form-card">
+        <h2>Artikel veröffentlichen</h2>
+        <p class="form-sub">Wird sofort live gestellt – keine weiteren Schritte nötig.</p>
+        <p class="form-msg" id="neu-msg"></p>
+        <form id="neu-form">
+          <div class="form-grid">
+            <div class="field full">
+              <label>Titel</label>
+              <input type="text" id="f-title" required>
+            </div>
+            <div class="field">
+              <label>Slug (URL) <span class="hint">wird aus dem Titel vorgeschlagen, kann angepasst werden</span></label>
+              <input type="text" id="f-slug" pattern="[a-z0-9-]*">
+            </div>
+            <div class="field">
+              <label>Kategorie</label>
+              <select id="f-category">
+                <option>Erfahrung</option>
+                <option>Technik</option>
+                <option>Meinung</option>
+                <option>Kaufberatung</option>
+                <option>Wartung</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Datum</label>
+              <input type="date" id="f-date" required>
+            </div>
+            <div class="field">
+              <label>Veröffentlicht</label>
+              <select id="f-published">
+                <option value="1" selected>Ja – sofort sichtbar</option>
+                <option value="0">Nein – als Entwurf speichern</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>Kurzbeschreibung (Excerpt) <span class="hint">erscheint auf der Blog-Übersicht und als Teaser auf der Startseite</span></label>
+              <textarea id="f-excerpt" maxlength="400" required></textarea>
+            </div>
+            <div class="field full">
+              <label>Titelbild</label>
+              <div class="dropzone" id="dropzone">
+                📷 Bild hierher ziehen oder klicken zum Auswählen<br>
+                <span class="hint">Wird automatisch verkleinert &amp; als WebP optimiert.</span>
+                <input type="file" id="f-image" accept="image/png,image/jpeg,image/webp">
+              </div>
+              <div class="image-preview-row" id="image-preview-row" style="display:none;">
+                <img id="image-preview-img" alt="Vorschau">
+                <div>
+                  <div class="image-preview-meta" id="image-preview-meta"></div>
+                  <button type="button" class="image-remove" id="image-remove-btn">Entfernen</button>
+                </div>
+              </div>
+            </div>
+            <div class="field full">
+              <label>Artikeltext</label>
+              <textarea id="f-content" required placeholder="Leerzeile = neuer Absatz.
+## Zwischenüberschrift
+- Listenpunkt 1
+- Listenpunkt 2
+**fett**, *kursiv*, [Linktext](https://...)"></textarea>
+              <div class="char-count" id="content-count">0 Zeichen</div>
+            </div>
+            <div class="field full">
+              <label>SEO-Beschreibung <span class="hint">für Google & Co. – bleibt leer, wird automatisch aus dem Text erzeugt</span></label>
+              <input type="text" id="f-seo" maxlength="200">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="neu-submit-btn">Artikel veröffentlichen</button>
+            <a href="#" id="neu-preview-link" target="_blank" style="display:none; font-size:13.5px; font-weight:700;">🔗 Artikel ansehen</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Tab: Alle Artikel ===== -->
+    <div id="liste-panel" class="wrap-wide" style="display:none; padding-left:0; padding-right:0;">
+      <div class="list-toolbar">
+        <button type="button" class="btn btn-ghost" id="liste-refresh">Aktualisieren</button>
+      </div>
+      <div id="liste-results"><div class="loading-state">Lade Artikel …</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="delete-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <h3>Artikel endgültig löschen?</h3>
+    <p id="delete-modal-desc"></p>
+    <p class="inline-error" id="delete-modal-error"></p>
+    <div class="req-actions">
+      <button type="button" class="btn btn-cancel" id="delete-modal-cancel">Abbrechen</button>
+      <button type="button" class="btn btn-delete" id="delete-modal-confirm" style="background:var(--err); color:#fff; border:none;">Ja, endgültig löschen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Same-Origin-Route (siehe worker/SETUP.md). Bei separater Subdomain hier
+// die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
+const API_BASE_URL = "/api";
+const CATEGORIES = ["Erfahrung", "Technik", "Meinung", "Kaufberatung", "Wartung"];
+
+const loginView = document.getElementById("login-view");
+const app = document.getElementById("app");
+const loginForm = document.getElementById("login-form");
+const loginError = document.getElementById("login-error");
+const loginBtn = document.getElementById("login-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const tabBtns = document.querySelectorAll(".tab-btn");
+const neuPanel = document.getElementById("neu-panel");
+const listePanel = document.getElementById("liste-panel");
+const listeBadge = document.getElementById("liste-badge");
+
+function api(path, options) {
+  return fetch(API_BASE_URL + path, Object.assign({ credentials: "include" }, options || {}));
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function fmtDate(iso) {
+  if (!iso) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  return `${m[3]}.${m[2]}.${m[1]}`;
+}
+
+function slugify(input) {
+  return String(input || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/ß/g, "ss")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 90);
+}
+
+// ---------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------
+async function checkAuth() {
+  try {
+    const res = await api("/admin/me");
+    const data = await res.json();
+    return !!data.authenticated;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function showApp() {
+  loginView.style.display = "none";
+  app.style.display = "block";
+  document.getElementById("f-date").value = todayIso();
+  await loadPosts();
+}
+
+function showLogin() {
+  app.style.display = "none";
+  loginView.style.display = "block";
+}
+
+loginForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  loginError.textContent = "";
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Anmelden …";
+  try {
+    const res = await api("/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: document.getElementById("login-password").value }),
+    });
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      loginError.textContent = data.error || "Login fehlgeschlagen.";
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Anmelden";
+      return;
+    }
+    document.getElementById("login-password").value = "";
+    await showApp();
+  } catch (err) {
+    loginError.textContent = "Login fehlgeschlagen. Bitte erneut versuchen.";
+  }
+  loginBtn.disabled = false;
+  loginBtn.textContent = "Anmelden";
+});
+
+logoutBtn.addEventListener("click", async function() {
+  await api("/admin/logout", { method: "POST" });
+  showLogin();
+});
+
+// ---------------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------------
+tabBtns.forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    tabBtns.forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    neuPanel.style.display = tab === "neu" ? "block" : "none";
+    listePanel.style.display = tab === "liste" ? "block" : "none";
+    if (tab === "liste") loadPosts();
+  });
+});
+
+// ---------------------------------------------------------------------
+// Slug automatisch aus Titel ableiten (nur solange der Nutzer den Slug
+// nicht selbst angefasst hat)
+// ---------------------------------------------------------------------
+let slugTouched = false;
+document.getElementById("f-slug").addEventListener("input", function() { slugTouched = true; });
+document.getElementById("f-title").addEventListener("input", function() {
+  if (!slugTouched) document.getElementById("f-slug").value = slugify(this.value);
+});
+document.getElementById("f-content").addEventListener("input", function() {
+  document.getElementById("content-count").textContent = this.value.length + " Zeichen";
+});
+
+// ---------------------------------------------------------------------
+// Bild-Upload: Drag&Drop / Auswahl -> im Browser verkleinern & als WebP
+// kodieren (max. 1600px Breite, Qualität 0.82) -> als vorbereitete Datei
+// im Formular vorhalten, tatsächlicher Upload passiert erst beim Speichern.
+// ---------------------------------------------------------------------
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("f-image");
+const previewRow = document.getElementById("image-preview-row");
+const previewImg = document.getElementById("image-preview-img");
+const previewMeta = document.getElementById("image-preview-meta");
+let preparedImageBlob = null; // { blob, width, height }
+
+function resizeToWebp(file, maxWidth) {
+  return new Promise(function(resolve, reject) {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxWidth / img.width);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(function(blob) {
+        if (!blob) { reject(new Error("Bild konnte nicht verarbeitet werden.")); return; }
+        resolve({ blob, width: w, height: h });
+      }, "image/webp", 0.82);
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); reject(new Error("Bild konnte nicht gelesen werden.")); };
+    img.src = url;
+  });
+}
+
+async function handleImageFile(file) {
+  if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type)) {
+    alert("Bitte ein PNG-, JPEG- oder WebP-Bild auswählen.");
+    return;
+  }
+  try {
+    preparedImageBlob = await resizeToWebp(file, 1600);
+    const kb = Math.round(preparedImageBlob.blob.size / 1024);
+    previewImg.src = URL.createObjectURL(preparedImageBlob.blob);
+    previewMeta.textContent = `${preparedImageBlob.width}×${preparedImageBlob.height}px · ${kb} KB (WebP)`;
+    previewRow.style.display = "flex";
+  } catch (err) {
+    alert(err.message || "Bild konnte nicht verarbeitet werden.");
+  }
+}
+
+dropzone.addEventListener("click", function() { fileInput.click(); });
+fileInput.addEventListener("change", function() { if (this.files[0]) handleImageFile(this.files[0]); });
+["dragenter", "dragover"].forEach(function(evt) {
+  dropzone.addEventListener(evt, function(e) { e.preventDefault(); dropzone.classList.add("drag"); });
+});
+["dragleave", "drop"].forEach(function(evt) {
+  dropzone.addEventListener(evt, function(e) { e.preventDefault(); dropzone.classList.remove("drag"); });
+});
+dropzone.addEventListener("drop", function(e) {
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) handleImageFile(file);
+});
+document.getElementById("image-remove-btn").addEventListener("click", function() {
+  preparedImageBlob = null;
+  fileInput.value = "";
+  previewRow.style.display = "none";
+});
+
+async function uploadPreparedImage(slugHint) {
+  if (!preparedImageBlob) return null;
+  const form = new FormData();
+  form.append("file", preparedImageBlob.blob, "bild.webp");
+  form.append("slugHint", slugHint || "bild");
+  const res = await api("/admin/blog-uploads", { method: "POST", body: form });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok) throw new Error(data.error || "Bild-Upload fehlgeschlagen.");
+  return data.key;
+}
+
+// ---------------------------------------------------------------------
+// Tab: Neuer Artikel
+// ---------------------------------------------------------------------
+document.getElementById("neu-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const msgEl = document.getElementById("neu-msg");
+  msgEl.textContent = "";
+  msgEl.className = "form-msg";
+  const btn = document.getElementById("neu-submit-btn");
+  const previewLink = document.getElementById("neu-preview-link");
+  previewLink.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Wird veröffentlicht …";
+
+  try {
+    const title = document.getElementById("f-title").value.trim();
+    const slug = document.getElementById("f-slug").value.trim() || slugify(title);
+
+    let imageKey = null;
+    if (preparedImageBlob) {
+      btn.textContent = "Bild wird hochgeladen …";
+      imageKey = await uploadPreparedImage(slug);
+      btn.textContent = "Wird veröffentlicht …";
+    }
+
+    const payload = {
+      title,
+      slug,
+      category: document.getElementById("f-category").value,
+      date: document.getElementById("f-date").value,
+      published: document.getElementById("f-published").value === "1",
+      excerpt: document.getElementById("f-excerpt").value.trim(),
+      content_raw: document.getElementById("f-content").value.trim(),
+      seo_desc: document.getElementById("f-seo").value.trim(),
+      image_key: imageKey,
+      image_alt: title,
+    };
+
+    const res = await api("/admin/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      msgEl.textContent = data.error || "Speichern fehlgeschlagen.";
+      msgEl.classList.add("err");
+      btn.disabled = false;
+      btn.textContent = "Artikel veröffentlichen";
+      return;
+    }
+
+    document.getElementById("neu-form").reset();
+    document.getElementById("f-date").value = todayIso();
+    document.getElementById("content-count").textContent = "0 Zeichen";
+    slugTouched = false;
+    preparedImageBlob = null;
+    previewRow.style.display = "none";
+
+    msgEl.textContent = "Artikel veröffentlicht. ✓";
+    msgEl.classList.add("ok");
+    previewLink.href = `/blog/${data.post.slug}.html`;
+    previewLink.style.display = "inline-block";
+    postsCache = null;
+    updateListeBadgeFromCache();
+  } catch (err) {
+    msgEl.textContent = err.message || "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+    msgEl.classList.add("err");
+  }
+  btn.disabled = false;
+  btn.textContent = "Artikel veröffentlichen";
+});
+
+// ---------------------------------------------------------------------
+// Tab: Alle Artikel
+// ---------------------------------------------------------------------
+let postsCache = null;
+
+function updateListeBadgeFromCache() {
+  if (!postsCache) return;
+  listeBadge.style.display = "inline-block";
+  listeBadge.textContent = postsCache.length;
+}
+
+async function loadPosts() {
+  const resultsEl = document.getElementById("liste-results");
+  resultsEl.innerHTML = '<div class="loading-state">Lade Artikel …</div>';
+  try {
+    const res = await api("/admin/posts");
+    if (res.status === 401) { showLogin(); return; }
+    const data = await res.json();
+    postsCache = data.posts || [];
+    updateListeBadgeFromCache();
+    renderList();
+  } catch (err) {
+    resultsEl.innerHTML = '<div class="empty-state">Artikel konnten nicht geladen werden.</div>';
+  }
+}
+document.getElementById("liste-refresh").addEventListener("click", loadPosts);
+
+function renderList() {
+  const resultsEl = document.getElementById("liste-results");
+  if (!postsCache) return;
+  if (!postsCache.length) {
+    resultsEl.innerHTML = '<div class="empty-state">Noch keine Artikel vorhanden.</div>';
+    return;
+  }
+  resultsEl.innerHTML = `<div class="post-grid">${postsCache.map(renderCard).join("")}</div>`;
+  postsCache.forEach(wireCard);
+}
+
+function renderCard(post) {
+  const catOptions = CATEGORIES.map(function(c) {
+    return `<option value="${escapeHtml(c)}" ${c === post.category ? "selected" : ""}>${escapeHtml(c)}</option>`;
+  }).join("");
+  return `
+    <div class="post-card" data-id="${escapeHtml(post.id)}">
+      ${post.image ? `<img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.title)}">` : ""}
+      <div class="post-card-body">
+        <span class="post-card-cat">${escapeHtml(post.category)}</span>
+        <div class="post-card-title">${escapeHtml(post.title)}</div>
+        <div class="post-card-meta">${fmtDate(post.date)} · /blog/${escapeHtml(post.slug)}.html ${post.published ? "" : '<span class="post-card-unpub">· Entwurf</span>'}</div>
+        <div class="post-card-actions">
+          <a class="btn btn-ghost" href="/blog/${escapeHtml(post.slug)}.html" target="_blank">🔗 Ansehen</a>
+          <button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button>
+          <button class="btn btn-delete" data-action="delete-post">🗑️ Löschen</button>
+        </div>
+        <div class="edit-form" data-form="edit">
+          <p class="inline-error"></p>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Titel</label>
+            <input type="text" data-field="title" value="${escapeHtml(post.title)}">
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Kategorie</label>
+            <select data-field="category">${catOptions}</select>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Kurzbeschreibung</label>
+            <textarea data-field="excerpt">${escapeHtml(post.excerpt)}</textarea>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Artikeltext</label>
+            <textarea data-field="content_raw" style="min-height:160px;">${escapeHtml(post.content_raw)}</textarea>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Status</label>
+            <select data-field="published">
+              <option value="1" ${post.published ? "selected" : ""}>Veröffentlicht</option>
+              <option value="0" ${!post.published ? "selected" : ""}>Entwurf</option>
+            </select>
+          </div>
+          <div class="req-actions">
+            <button class="btn btn-approve" data-action="confirm-edit">Speichern</button>
+            <button class="btn btn-cancel" data-action="cancel-edit">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function wireCard(post) {
+  const card = document.querySelector(`.post-card[data-id="${CSS.escape(post.id)}"]`);
+  if (!card) return;
+  const editForm = card.querySelector('[data-form="edit"]');
+
+  card.querySelectorAll('[data-action="toggle-edit"]').forEach(function(b) {
+    b.addEventListener("click", function() { editForm.classList.toggle("visible"); });
+  });
+  card.querySelectorAll('[data-action="cancel-edit"]').forEach(function(b) {
+    b.addEventListener("click", function() { editForm.classList.remove("visible"); });
+  });
+  card.querySelectorAll('[data-action="delete-post"]').forEach(function(b) {
+    b.addEventListener("click", function() { openDeleteModal(post); });
+  });
+
+  editForm.querySelector('[data-action="confirm-edit"]').addEventListener("click", async function() {
+    const errEl = editForm.querySelector(".inline-error");
+    errEl.textContent = "";
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = "Wird gespeichert …";
+
+    const patch = {
+      title: editForm.querySelector('[data-field="title"]').value.trim(),
+      category: editForm.querySelector('[data-field="category"]').value,
+      excerpt: editForm.querySelector('[data-field="excerpt"]').value.trim(),
+      content_raw: editForm.querySelector('[data-field="content_raw"]').value.trim(),
+      published: editForm.querySelector('[data-field="published"]').value === "1",
+    };
+
+    try {
+      const res = await api(`/admin/posts/${encodeURIComponent(post.id)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json().catch(function(){ return {}; });
+      if (!res.ok) {
+        errEl.textContent = data.error || "Speichern fehlgeschlagen.";
+        btn.disabled = false;
+        btn.textContent = "Speichern";
+        return;
+      }
+      postsCache = null;
+      await loadPosts();
+    } catch (err) {
+      errEl.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
+      btn.disabled = false;
+      btn.textContent = "Speichern";
+    }
+  });
+}
+
+// ---------------------------------------------------------------------
+// Löschen (einfache Ja/Nein-Sicherheitsabfrage, wie im Werkstatt-Admin)
+// ---------------------------------------------------------------------
+let deleteTargetPost = null;
+const deleteModal = document.getElementById("delete-modal");
+const deleteModalDesc = document.getElementById("delete-modal-desc");
+const deleteModalError = document.getElementById("delete-modal-error");
+const deleteModalConfirm = document.getElementById("delete-modal-confirm");
+const deleteModalCancel = document.getElementById("delete-modal-cancel");
+
+function openDeleteModal(post) {
+  deleteTargetPost = post;
+  deleteModalDesc.textContent = `„${post.title}" wird unwiderruflich gelöscht. Das kann nicht rückgängig gemacht werden.`;
+  deleteModalError.textContent = "";
+  deleteModalConfirm.disabled = false;
+  deleteModalConfirm.textContent = "Ja, endgültig löschen";
+  deleteModal.style.display = "flex";
+  deleteModalConfirm.focus();
+}
+function closeDeleteModal() {
+  deleteModal.style.display = "none";
+  deleteTargetPost = null;
+}
+deleteModalCancel.addEventListener("click", closeDeleteModal);
+deleteModal.addEventListener("click", function(e) { if (e.target === deleteModal) closeDeleteModal(); });
+
+deleteModalConfirm.addEventListener("click", async function() {
+  if (!deleteTargetPost) return;
+  deleteModalError.textContent = "";
+  deleteModalConfirm.disabled = true;
+  deleteModalConfirm.textContent = "Wird gelöscht …";
+  try {
+    const res = await api(`/admin/posts/${encodeURIComponent(deleteTargetPost.id)}`, { method: "DELETE" });
+    if (res.status === 401) { closeDeleteModal(); showLogin(); return; }
+    if (!res.ok) {
+      const data = await res.json().catch(function(){ return {}; });
+      deleteModalError.textContent = data.error || "Löschen fehlgeschlagen.";
+      deleteModalConfirm.disabled = false;
+      deleteModalConfirm.textContent = "Ja, endgültig löschen";
+      return;
+    }
+    closeDeleteModal();
+    postsCache = null;
+    await loadPosts();
+  } catch (err) {
+    deleteModalError.textContent = "Löschen fehlgeschlagen. Bitte erneut versuchen.";
+    deleteModalConfirm.disabled = false;
+    deleteModalConfirm.textContent = "Ja, endgültig löschen";
+  }
+});
+
+// ---------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------
+(async function init() {
+  const authed = await checkAuth();
+  if (authed) { await showApp(); } else { showLogin(); }
+})();
+</script>
+</body>
+</html>

@@ -434,87 +434,20 @@
   </div>
 </footer>
 
-<!-- ===== ADMIN BUTTON (versteckt, Ctrl+Shift+A) ===== -->
-<button id="admin-toggle" onclick="toggleAdmin(event)">⚙️</button>
-
-<!-- ===== ADMIN PANEL (versteckt) ===== -->
-<div id="admin-panel" style="display:none; padding:24px 20px; background:var(--cream2); border-top:3px solid var(--orange); margin-top:0;">
-  <div style="max-width:700px; margin:0 auto;">
-    <h2 style="color:var(--navy); margin-bottom:20px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:1px;">📝 Admin Panel – Blog Verwaltung</h2>
-
-    <div style="background:white; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:var(--shadow);">
-      <h3 style="color:var(--navy); margin-bottom:15px;">Neuen Artikel erstellen</h3>
-
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Titel:</label>
-        <input type="text" id="admin-title" placeholder="Artikel-Titel" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
-      </div>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Slug (URL):</label>
-        <input type="text" id="admin-slug" placeholder="artikel-slug" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
-      </div>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Excerpt:</label>
-        <textarea id="admin-excerpt" placeholder="Kurze Beschreibung..." rows="3" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;"></textarea>
-      </div>
-      <div style="margin-bottom:12px;">
-        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Datum (YYYY-MM-DD):</label>
-        <input type="text" id="admin-date" placeholder="2026-01-15" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
-      </div>
-      <div style="margin-bottom:20px;">
-        <label style="display:block; font-weight:700; margin-bottom:4px; color:var(--navy);">Kategorie:</label>
-        <select id="admin-category" style="width:100%; padding:8px; border:1px solid var(--cream3); border-radius:4px; font-family:Arial;">
-          <option>Erfahrung</option>
-          <option>Technik</option>
-          <option>Meinung</option>
-          <option>Kaufberatung</option>
-          <option>Wartung</option>
-        </select>
-      </div>
-      <button onclick="createPost()" style="background:var(--blue); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">✅ Artikel hinzufügen</button>
-    </div>
-
-    <div style="background:white; padding:20px; border-radius:10px; box-shadow:var(--shadow);">
-      <h3 style="color:var(--navy); margin-bottom:15px;">Bestehende Artikel</h3>
-      <div id="admin-posts-list" style="max-height:400px; overflow-y:auto;">(wird geladen...)</div>
-      <p style="margin-top:12px; font-size:13px; color:var(--text-dim);">
-        Artikel löschen entfernt sie nur in dieser Ansicht. Lade die posts.json danach neu herunter und lade sie auf GitHub hoch.
-        Neu angelegte Artikel brauchen zusätzlich noch eine eigene Seite im <code>blog/</code>-Ordner.
-      </p>
-      <div style="margin-top:16px;">
-        <button onclick="downloadPostsJson()" style="background:var(--green); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:700;">📥 posts.json herunterladen</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ===== SCRIPTS ===== -->
 <script>
-// Admin-Toggle
-let adminVisible = false;
-function toggleAdmin(e) {
-  e.preventDefault();
-  adminVisible = !adminVisible;
-  document.getElementById('admin-panel').style.display = adminVisible ? 'block' : 'none';
-}
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
-    document.getElementById('admin-toggle').classList.toggle('visible');
-  }
-});
-
-// Blogartikel laden
+// Blogartikel laden (serverseitig aus D1 über den Worker, ersetzt die
+// frühere posts.json). Artikel werden über /admin-blog.html verwaltet.
 let postsData = [];
 function loadBlogTeasers() {
-  fetch('posts.json')
+  fetch('/api/posts?limit=3')
     .then(r => r.json())
     .then(data => {
       postsData = (data && data.posts) || [];
       renderBlogTeasers();
-      renderAdminPostsList();
     })
     .catch(err => {
-      console.error('Fehler beim Laden von posts.json:', err);
+      console.error('Fehler beim Laden der Blogartikel:', err);
       document.getElementById('blog-teaser-grid').innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-dim);">Keine Artikel verfügbar.</p>';
     });
 }
@@ -535,7 +468,7 @@ function renderBlogTeasers() {
     const card = document.createElement('a');
     card.className = 'blog-card reveal';
     card.style.transitionDelay = (idx * 90) + 'ms';
-    card.href = `blog/${post.slug}.html`;
+    card.href = `/blog/${post.slug}.html`;
     card.innerHTML = `
       <img src="${post.image || ''}" alt="${escapeHtml(post.title)}" width="800" height="450" loading="lazy">
       <div class="blog-card-body">
@@ -548,62 +481,6 @@ function renderBlogTeasers() {
     grid.appendChild(card);
   });
   observeReveals();
-}
-
-function renderAdminPostsList() {
-  const list = document.getElementById('admin-posts-list');
-  list.innerHTML = '';
-  postsData.forEach((post, idx) => {
-    const item = document.createElement('div');
-    item.style.padding = '10px';
-    item.style.borderBottom = '1px solid var(--cream2)';
-    item.innerHTML = `
-      <strong>${escapeHtml(post.title)}</strong>
-      <div style="font-size:13px; color:var(--text-dim); margin:4px 0;">${post.date} · ${post.category}</div>
-      <button onclick="deletePost(${idx})" style="background:var(--orange); color:white; padding:4px 12px; border:none; border-radius:4px; cursor:pointer; font-size:12px;">🗑 Löschen</button>
-    `;
-    list.appendChild(item);
-  });
-}
-
-function createPost() {
-  const title = document.getElementById('admin-title').value;
-  const slug = document.getElementById('admin-slug').value;
-  const excerpt = document.getElementById('admin-excerpt').value;
-  const date = document.getElementById('admin-date').value;
-  const category = document.getElementById('admin-category').value;
-
-  if (!title || !slug) { alert('Bitte Titel und Slug eingeben!'); return; }
-
-  postsData.unshift({ title, slug, excerpt, date, category, tag: category });
-  document.getElementById('admin-title').value = '';
-  document.getElementById('admin-slug').value = '';
-  document.getElementById('admin-excerpt').value = '';
-  document.getElementById('admin-date').value = '';
-
-  renderBlogTeasers();
-  renderAdminPostsList();
-  alert('✅ Artikel in der Liste ergänzt! Vergiss nicht: posts.json herunterladen, hochladen – und eine eigene Artikelseite im blog/-Ordner anlegen.');
-}
-
-function deletePost(idx) {
-  if (confirm('Artikel wirklich löschen?')) {
-    postsData.splice(idx, 1);
-    renderBlogTeasers();
-    renderAdminPostsList();
-  }
-}
-
-function downloadPostsJson() {
-  const data = JSON.stringify({ posts: postsData }, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'posts.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
 }
 
 function escapeHtml(text) {
