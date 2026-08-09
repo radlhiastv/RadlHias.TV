@@ -73,6 +73,8 @@
   .logout-btn:hover { border-color: var(--cream); color: var(--cream); }
 
   .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 70px; }
+  /* Volle Fensterbreite für die Reparaturen-Tabelle (kein max-width-Deckel wie .wrap) */
+  .wrap-wide { margin: 0 auto; padding: 0 20px 70px; }
 
   .back-link {
     display: inline-flex;
@@ -422,56 +424,56 @@
         </form>
       </div>
     </div>
+  </div>
 
-    <!-- ===== Tab: Alle Reparaturen ===== -->
-    <div id="liste-panel" style="display:none;">
-      <div class="list-toolbar">
-        <button type="button" class="btn btn-ghost" id="filter-reset">Filter zurücksetzen</button>
-        <button type="button" class="btn btn-ghost" id="liste-refresh">Aktualisieren</button>
-      </div>
-      <div class="table-scroll">
-        <table class="repair-table">
-          <thead>
-            <tr class="head-row">
-              <th>Angenommen</th>
-              <th>Kunde</th>
-              <th>Telefon</th>
-              <th>Fahrrad</th>
-              <th>Auftrag / Bemerkungen</th>
-              <th>Status</th>
-              <th>Richtpreis</th>
-              <th>Endpreis</th>
-              <th>Abholung</th>
-              <th></th>
-            </tr>
-            <tr class="filter-row-table">
-              <th>
-                <div class="date-filter-pair">
-                  <input type="date" id="filter-von" title="Angenommen von">
-                  <input type="date" id="filter-bis" title="Angenommen bis">
-                </div>
-              </th>
-              <th><input type="text" id="filter-kunde" placeholder="Name …"></th>
-              <th><input type="text" id="filter-telefon" placeholder="Telefon …"></th>
-              <th><input type="text" id="filter-fahrrad" placeholder="Typ, Hersteller, Modell …"></th>
-              <th><input type="text" id="filter-auftrag" placeholder="Auftrag, Bemerkungen …"></th>
-              <th><select id="filter-status"><option value="">Alle</option></select></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="liste-results">
-            <tr><td colspan="10" class="loading-state">Lade Reparaturen …</td></tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="10" id="liste-summary"></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+  <!-- ===== Tab: Alle Reparaturen (eigener, breiterer Container – nutzt die volle Fensterbreite) ===== -->
+  <div id="liste-panel" class="wrap-wide" style="display:none;">
+    <div class="list-toolbar">
+      <button type="button" class="btn btn-ghost" id="filter-reset">Filter zurücksetzen</button>
+      <button type="button" class="btn btn-ghost" id="liste-refresh">Aktualisieren</button>
+    </div>
+    <div class="table-scroll">
+      <table class="repair-table">
+        <thead>
+          <tr class="head-row">
+            <th>Angenommen</th>
+            <th>Kunde</th>
+            <th>Telefon</th>
+            <th>Fahrrad</th>
+            <th>Auftrag / Bemerkungen</th>
+            <th>Status</th>
+            <th>Richtpreis</th>
+            <th>Endpreis</th>
+            <th>Abholung</th>
+            <th></th>
+          </tr>
+          <tr class="filter-row-table">
+            <th>
+              <div class="date-filter-pair">
+                <input type="date" id="filter-von" title="Angenommen von">
+                <input type="date" id="filter-bis" title="Angenommen bis">
+              </div>
+            </th>
+            <th><input type="text" id="filter-kunde" placeholder="Name …"></th>
+            <th><input type="text" id="filter-telefon" placeholder="Telefon …"></th>
+            <th><input type="text" id="filter-fahrrad" placeholder="Typ, Hersteller, Modell …"></th>
+            <th><input type="text" id="filter-auftrag" placeholder="Auftrag, Bemerkungen …"></th>
+            <th><select id="filter-status"><option value="">Alle</option></select></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="liste-results">
+          <tr><td colspan="10" class="loading-state">Lade Reparaturen …</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="10" id="liste-summary"></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   </div>
 </div>
