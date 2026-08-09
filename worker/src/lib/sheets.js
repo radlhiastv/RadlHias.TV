@@ -148,6 +148,12 @@ export async function listReparaturen(env) {
  * Legt einen neuen Reparatur-Datensatz an ("Annahme").
  */
 export async function appendReparatur(env, data) {
+  // Tatsächliche Kopfzeile aus dem Sheet lesen (nicht die feste HEADERS-
+  // Konstante) – sonst landen Werte in falschen/unbeschrifteten Spalten,
+  // falls das Sheet noch nicht alle Spalten aus HEADERS hat (z.B. "Adresse"
+  // manuell noch nicht ergänzt). Gleiches Prinzip wie in updateReparatur.
+  const { headerRow } = await readAll(env);
+
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
 
@@ -178,7 +184,7 @@ export async function appendReparatur(env, data) {
     `/values/${encodeURIComponent(sheetRange(env, "A:S"))}:append?valueInputOption=USER_ENTERED`,
     {
       method: "POST",
-      body: JSON.stringify({ values: [objectToRow(HEADERS, record)] }),
+      body: JSON.stringify({ values: [objectToRow(headerRow, record)] }),
     }
   );
 
