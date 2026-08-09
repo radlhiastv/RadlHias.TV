@@ -25,6 +25,7 @@ const HEADERS = [
   "Kunde informiert am",
   "Erstellt am",
   "Zuletzt geändert am",
+  "Adresse",
 ];
 
 // Zeilen-Objekt (JS, camelCase) <-> Spaltenname im Sheet.
@@ -40,6 +41,7 @@ const FIELD_MAP = {
   kundeName: "Kunde Name",
   telefon: "Telefon",
   email: "Email",
+  adresse: "Adresse",
   auftrag: "Was soll gemacht werden",
   richtpreis: "Richtpreis",
   erledigt: "Was wurde gemacht",
@@ -123,7 +125,7 @@ function objectToRow(headerRow, obj) {
 async function readAll(env) {
   const data = await sheetsFetch(
     env,
-    `/values/${encodeURIComponent(sheetRange(env, "A:R"))}`
+    `/values/${encodeURIComponent(sheetRange(env, "A:S"))}`
   );
   const values = data.values || [];
   const headerRow = values.length ? values[0] : HEADERS;
@@ -161,6 +163,7 @@ export async function appendReparatur(env, data) {
     kundeName: data.kundeName || "",
     telefon: data.telefon || "",
     email: data.email || "",
+    adresse: data.adresse || "",
     auftrag: data.auftrag || "",
     richtpreis: data.richtpreis || "",
     erledigt: "",
@@ -172,7 +175,7 @@ export async function appendReparatur(env, data) {
 
   await sheetsFetch(
     env,
-    `/values/${encodeURIComponent(sheetRange(env, "A:R"))}:append?valueInputOption=USER_ENTERED`,
+    `/values/${encodeURIComponent(sheetRange(env, "A:S"))}:append?valueInputOption=USER_ENTERED`,
     {
       method: "POST",
       body: JSON.stringify({ values: [objectToRow(HEADERS, record)] }),
@@ -219,7 +222,7 @@ export async function updateReparatur(env, id, patch) {
   const sheetRowNumber = rowIndex + 2;
   await sheetsFetch(
     env,
-    `/values/${encodeURIComponent(sheetRange(env, `A${sheetRowNumber}:R${sheetRowNumber}`))}?valueInputOption=USER_ENTERED`,
+    `/values/${encodeURIComponent(sheetRange(env, `A${sheetRowNumber}:S${sheetRowNumber}`))}?valueInputOption=USER_ENTERED`,
     {
       method: "PUT",
       body: JSON.stringify({ values: [objectToRow(headerRow, updated)] }),

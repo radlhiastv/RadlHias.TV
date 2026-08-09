@@ -417,9 +417,14 @@
               <label>E-Mail-Adresse</label>
               <input type="email" id="f-email">
             </div>
+            <div class="field full">
+              <label>Adresse <span class="hint">optional – z.B. für Rechnung oder Abholung/Zustellung</span></label>
+              <input type="text" id="f-adresse" placeholder="Straße Nr., PLZ Ort">
+            </div>
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" id="neu-submit-btn">Rad annehmen</button>
+            <button type="button" class="btn btn-ghost" id="neu-print-btn" style="display:none;">🖨️ Werkstattauftrag drucken</button>
           </div>
         </form>
       </div>
@@ -531,6 +536,94 @@ function fmtPreis(val) {
 }
 
 // ---------------------------------------------------------------------
+// Werkstattauftrag drucken / als PDF speichern
+// ---------------------------------------------------------------------
+function buildAuftragHtml(row) {
+  const rad = [row.fahrradTyp, row.hersteller, row.modell, row.farbe].filter(Boolean).join(" · ");
+  const idKurz = row.id ? String(row.id).slice(0, 8) : "";
+  const zeile = function(label, value) {
+    return `<tr><td class="label">${escapeHtml(label)}</td><td>${value ? escapeHtml(value) : "—"}</td></tr>`;
+  };
+  return `<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<title>Werkstattauftrag – ${escapeHtml(row.kundeName || "")}</title>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; color: #1c3448; padding: 40px; max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 21px; border-bottom: 3px solid #c85a14; padding-bottom: 10px; margin: 0 0 4px; }
+  .sub { color: #5a7a8a; font-size: 12.5px; margin-bottom: 30px; }
+  .section { margin-bottom: 22px; }
+  .section h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #c85a14;
+    margin: 0 0 8px; border-bottom: 1px solid #ddd6c8; padding-bottom: 4px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 4px 0; font-size: 14px; vertical-align: top; }
+  td.label { color: #5a7a8a; width: 170px; }
+  .box { border: 1px solid #ddd6c8; border-radius: 6px; padding: 12px 14px; font-size: 14px; white-space: pre-wrap; }
+  .sign-row { display: flex; gap: 40px; margin-top: 70px; }
+  .sign { flex: 1; border-top: 1px solid #1c3448; padding-top: 6px; font-size: 12px; color: #5a7a8a; }
+  @media print { body { padding: 0; } }
+</style>
+</head><body>
+  <h1>RadlHias.TV – Werkstattauftrag</h1>
+  <div class="sub">Angenommen am ${fmtDate(row.angenommenAm)}${idKurz ? ` · Auftrags-ID ${escapeHtml(idKurz)}` : ""}</div>
+
+  <div class="section">
+    <h2>Kunde</h2>
+    <table>
+      ${zeile("Name", row.kundeName)}
+      ${zeile("Telefon", row.telefon)}
+      ${zeile("E-Mail", row.email)}
+      ${zeile("Adresse", row.adresse)}
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Fahrrad</h2>
+    <table>
+      ${zeile("Typ", row.fahrradTyp)}
+      ${zeile("Hersteller", row.hersteller)}
+      ${zeile("Modell", row.modell)}
+      ${zeile("Farbe", row.farbe)}
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Was soll gemacht werden?</h2>
+    <div class="box">${escapeHtml(row.auftrag || "—")}</div>
+  </div>
+
+  ${row.bemerkungen ? `<div class="section"><h2>Bemerkungen</h2><div class="box">${escapeHtml(row.bemerkungen)}</div></div>` : ""}
+
+  <div class="section">
+    <h2>Preis</h2>
+    <table>${zeile("Richtpreis", row.richtpreis ? fmtPreis(row.richtpreis) : "")}</table>
+  </div>
+
+  <div class="sign-row">
+    <div class="sign">Unterschrift Kunde</div>
+    <div class="sign">Unterschrift RadlHias.TV</div>
+  </div>
+</body></html>`;
+}
+
+function printAuftrag(row) {
+  if (!row) return;
+  const win = window.open("", "_blank");
+  if (!win) {
+    alert("Pop-up wurde blockiert. Bitte Pop-ups für diese Seite erlauben, um den Werkstattauftrag zu drucken.");
+    return;
+  }
+  win.document.open();
+  win.document.write(buildAuftragHtml(row));
+  win.document.close();
+  // document.write feuert onload nicht immer zuverlässig -> mit kleinem
+  // Timeout zusätzlich absichern.
+  win.onload = function() { win.focus(); win.print(); };
+  setTimeout(function() { try { win.focus(); win.print(); } catch (err) {} }, 300);
+}
+
+// ---------------------------------------------------------------------
 // Auth
 // ---------------------------------------------------------------------
 async function checkAuth() {
@@ -625,7 +718,11 @@ document.getElementById("neu-form").addEventListener("submit", async function(e)
     kundeName: document.getElementById("f-kundeName").value.trim(),
     telefon: document.getElementById("f-telefon").value.trim(),
     email: document.getElementById("f-email").value.trim(),
+    adresse: document.getElementById("f-adresse").value.trim(),
   };
+
+  const printBtn = document.getElementById("neu-print-btn");
+  printBtn.style.display = "none";
 
   try {
     const res = await api("/admin/reparaturen", {
@@ -648,6 +745,10 @@ document.getElementById("neu-form").addEventListener("submit", async function(e)
     msgEl.classList.add("ok");
     reparaturenCache = null; // beim nächsten Besuch der Liste neu laden
     updateListeBadgeFromCache();
+
+    // Werkstattauftrag für den gerade angelegten Datensatz druckbar machen.
+    printBtn.style.display = "inline-block";
+    printBtn.onclick = function() { printAuftrag(data.reparatur); };
   } catch (err) {
     msgEl.textContent = "Speichern fehlgeschlagen. Bitte erneut versuchen.";
     msgEl.classList.add("err");
@@ -803,6 +904,7 @@ function renderRow(row) {
       <td>
         <b>${escapeHtml(row.kundeName)}</b>
         ${row.email ? `<div style="color:var(--text-dim); font-size:12px;">${escapeHtml(row.email)}</div>` : ""}
+        ${row.adresse ? `<div style="color:var(--text-dim); font-size:12px;">${escapeHtml(row.adresse)}</div>` : ""}
       </td>
       <td>${escapeHtml(row.telefon || "—")}</td>
       <td class="col-fahrrad">${escapeHtml(radBeschreibung(row) || "—")}</td>
@@ -819,7 +921,10 @@ function renderRow(row) {
           : `<span class="wa-none">kein Telefon</span>`}
         ${row.kundeInformiertAm ? `<div class="wa-sent-at">gesendet: ${fmtDate(row.kundeInformiertAm)}</div>` : ""}
       </td>
-      <td><button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button></td>
+      <td>
+        <button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button>
+        <button class="btn btn-ghost" data-action="print-auftrag" style="margin-top:6px;">🖨️ Auftrag</button>
+      </td>
     </tr>
     <tr class="edit-row" data-form="edit" data-id-edit="${escapeHtml(row.id)}">
       <td colspan="10">
@@ -859,6 +964,10 @@ function wireRow(row) {
   });
   editRow.querySelectorAll('[data-action="cancel-edit"]').forEach(function(b) {
     b.addEventListener("click", function() { editRow.classList.remove("visible"); });
+  });
+
+  mainRow.querySelectorAll('[data-action="print-auftrag"]').forEach(function(b) {
+    b.addEventListener("click", function() { printAuftrag(row); });
   });
 
   const waBtn = mainRow.querySelector('[data-action="wa-notify"]');

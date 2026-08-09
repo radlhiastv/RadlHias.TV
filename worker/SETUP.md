@@ -150,8 +150,13 @@ zusätzliches D1 nötig.
    ID | Status | Angenommen am | Fahrrad Typ | Hersteller | Modell | Farbe |
    Bemerkungen | Kunde Name | Telefon | Email | Was soll gemacht werden |
    Richtpreis | Was wurde gemacht | Endpreis | Kunde informiert am |
-   Erstellt am | Zuletzt geändert am
+   Erstellt am | Zuletzt geändert am | Adresse
    ```
+
+   **Hinweis für ein bereits bestehendes Sheet:** Falls die Kopfzeile schon
+   aus der Zeit vor dem "Adresse"-Feld stammt, einfach eine neue Spalte mit
+   dem Header `Adresse` ergänzen (Position egal, muss nicht ans Ende – der
+   Code liest Spalten immer über den Kopfzeilen-Namen, nicht die Position).
 
 2. Das Sheet muss für **dasselbe Google-Konto** zugänglich sein, mit dem
    auch der Calendar-OAuth-Flow (Schritt 3) durchgeführt wird/wurde

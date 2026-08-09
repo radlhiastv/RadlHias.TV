@@ -239,6 +239,7 @@ export default {
           kundeName: String(kundeName).slice(0, 200),
           telefon: telefon ? String(telefon).slice(0, 60) : "",
           email: email ? String(email).slice(0, 200) : "",
+          adresse: body.adresse ? String(body.adresse).slice(0, 300) : "",
           auftrag: String(auftrag).slice(0, 2000),
           richtpreis: body.richtpreis != null ? String(body.richtpreis).slice(0, 40) : "",
         });
