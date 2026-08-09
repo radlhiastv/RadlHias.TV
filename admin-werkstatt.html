@@ -510,14 +510,10 @@
   <div class="modal-card">
     <h3>Datensatz endgültig löschen?</h3>
     <p id="delete-modal-desc"></p>
-    <div class="field">
-      <label>Admin-Passwort zur Bestätigung</label>
-      <input type="password" id="delete-modal-password" autocomplete="current-password">
-    </div>
     <p class="inline-error" id="delete-modal-error"></p>
     <div class="req-actions">
       <button type="button" class="btn btn-cancel" id="delete-modal-cancel">Abbrechen</button>
-      <button type="button" class="btn btn-delete" id="delete-modal-confirm" style="background:var(--err); color:#fff; border:none;">Endgültig löschen</button>
+      <button type="button" class="btn btn-delete" id="delete-modal-confirm" style="background:var(--err); color:#fff; border:none;">Ja, endgültig löschen</button>
     </div>
   </div>
 </div>
@@ -693,12 +689,11 @@ function printAuftrag(row) {
 }
 
 // ---------------------------------------------------------------------
-// Datensatz löschen (Bestätigung per Admin-Passwort)
+// Datensatz löschen (einfache Sicherheitsabfrage, kein Passwort)
 // ---------------------------------------------------------------------
 let deleteTargetRow = null;
 const deleteModal = document.getElementById("delete-modal");
 const deleteModalDesc = document.getElementById("delete-modal-desc");
-const deleteModalPassword = document.getElementById("delete-modal-password");
 const deleteModalError = document.getElementById("delete-modal-error");
 const deleteModalConfirm = document.getElementById("delete-modal-confirm");
 const deleteModalCancel = document.getElementById("delete-modal-cancel");
@@ -709,12 +704,11 @@ function openDeleteModal(row) {
   deleteModalDesc.textContent =
     `„${row.kundeName || "Datensatz"}"${rad ? " – " + rad : ""} wird unwiderruflich gelöscht, ` +
     `auch aus der Google-Sheets-Tabelle. Das kann nicht rückgängig gemacht werden.`;
-  deleteModalPassword.value = "";
   deleteModalError.textContent = "";
   deleteModalConfirm.disabled = false;
-  deleteModalConfirm.textContent = "Endgültig löschen";
+  deleteModalConfirm.textContent = "Ja, endgültig löschen";
   deleteModal.style.display = "flex";
-  deleteModalPassword.focus();
+  deleteModalConfirm.focus();
 }
 
 function closeDeleteModal() {
@@ -729,11 +723,6 @@ deleteModal.addEventListener("click", function(e) {
 
 deleteModalConfirm.addEventListener("click", async function() {
   if (!deleteTargetRow) return;
-  const pwd = deleteModalPassword.value;
-  if (!pwd) {
-    deleteModalError.textContent = "Bitte Admin-Passwort eingeben.";
-    return;
-  }
   deleteModalError.textContent = "";
   deleteModalConfirm.disabled = true;
   deleteModalConfirm.textContent = "Wird gelöscht …";
@@ -741,22 +730,17 @@ deleteModalConfirm.addEventListener("click", async function() {
   try {
     const res = await api(`/admin/reparaturen/${encodeURIComponent(deleteTargetRow.id)}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: pwd }),
     });
-    const data = await res.json().catch(function(){ return {}; });
-
-    // 401 kann zwei Ursachen haben: Session abgelaufen (-> Login) oder
-    // falsches Admin-Passwort (-> Fehlermeldung im Modal, eingeloggt bleiben).
-    if (res.status === 401 && data.error !== "Falsches Passwort.") {
+    if (res.status === 401) {
       closeDeleteModal();
       showLogin();
       return;
     }
     if (!res.ok) {
+      const data = await res.json().catch(function(){ return {}; });
       deleteModalError.textContent = data.error || "Löschen fehlgeschlagen.";
       deleteModalConfirm.disabled = false;
-      deleteModalConfirm.textContent = "Endgültig löschen";
+      deleteModalConfirm.textContent = "Ja, endgültig löschen";
       return;
     }
 
@@ -766,7 +750,7 @@ deleteModalConfirm.addEventListener("click", async function() {
   } catch (err) {
     deleteModalError.textContent = "Löschen fehlgeschlagen. Bitte erneut versuchen.";
     deleteModalConfirm.disabled = false;
-    deleteModalConfirm.textContent = "Endgültig löschen";
+    deleteModalConfirm.textContent = "Ja, endgültig löschen";
   }
 });
 

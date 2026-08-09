@@ -283,16 +283,9 @@ export default {
 
       if (reparaturMatch && request.method === "DELETE") {
         const id = reparaturMatch[1];
-        const body = await request.json().catch(() => null);
-        if (!body || !body.password) {
-          return badRequest("Zum Löschen bitte Admin-Passwort eingeben.");
-        }
-        // Zusätzlich zur bestehenden Session-Auth (siehe oben) verlangt das
-        // endgültige Löschen erneut das Admin-Passwort als Bestätigung.
-        if (body.password !== env.ADMIN_PASSWORD) {
-          return json({ error: "Falsches Passwort." }, { status: 401 }, cors);
-        }
-
+        // Löschen ist bereits durch die Admin-Session geschützt (siehe
+        // requireAuth-Check oben für alle /api/admin/*-Routen). Im Frontend
+        // gibt es zusätzlich eine Ja/Nein-Sicherheitsabfrage.
         const deleted = await deleteReparatur(env, id);
         if (!deleted) return json({ error: "Datensatz nicht gefunden." }, { status: 404 }, cors);
 
