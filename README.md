@@ -80,3 +80,14 @@ Backend (Cloudflare Worker + D1-Datenbank + Google-Calendar- + Brevo-Anbindung) 
 Schritt für Schritt beschrieben. Kunden stellen dort nur eine **Anfrage**; erst wenn Mathias sie
 im Admin-Panel mit fixer Uhrzeit freigibt, entsteht ein Termin im Google-Kalender und der Kunde
 bekommt eine Bestätigung.
+
+## Werkstatt-Reparaturverwaltung
+
+`admin-werkstatt.html` (über das dezente Zahnrad-Icon unten rechts auf `bikeservice.html`
+erreichbar, gleiches Passwort wie oben) ersetzt die manuelle Google-Sheets-Eintragung bei der
+Radannahme: Annahmeformular, eine frei filterbare Liste aller Reparaturen (Status, Suchtext,
+Datumsbereich) sowie das Nachtragen von erledigter Arbeit, Endpreis und Statuswechsel
+(Angenommen → Ware bestellt → In Bearbeitung → Kunde informiert/fertig). Alle Daten landen
+direkt in einem Google Sheet – dieselbe Datenquelle, die Mathias bisher schon manuell gepflegt
+hat. Backend-Endpunkte liegen im selben Worker wie die Terminverwaltung, Einrichtung siehe
+[`worker/SETUP.md`](worker/SETUP.md), Abschnitt „Google Sheets Anbindung".
