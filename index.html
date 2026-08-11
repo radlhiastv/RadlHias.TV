@@ -434,8 +434,18 @@
   </div>
 </footer>
 
+<!-- ===== ADMIN BUTTON (versteckt, Ctrl+Shift+A) – führt zu admin-blog.html ===== -->
+<a id="admin-toggle" href="admin-blog.html" title="Admin-Bereich">⚙️</a>
+
 <!-- ===== SCRIPTS ===== -->
 <script>
+// Admin-Button: standardmäßig unsichtbar, per Ctrl+Shift+A einblendbar.
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+    document.getElementById('admin-toggle').classList.toggle('visible');
+  }
+});
+
 // Blogartikel laden (serverseitig aus D1 über den Worker, ersetzt die
 // frühere posts.json). Artikel werden über /admin-blog.html verwaltet.
 let postsData = [];
