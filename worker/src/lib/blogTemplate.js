@@ -96,6 +96,11 @@ const FOOTER = `
   </div>
 </footer>`;
 
+// Auf den Blog-Seiten selbst (Übersicht + Artikel) ist der Admin-Zugang immer
+// sichtbar -- anders als auf der Startseite (dort nur per Ctrl+Shift+A, siehe
+// index.html), weil man am Handy keine Tastenkombination drücken kann.
+const ADMIN_TOGGLE = `<a id="admin-toggle" class="visible" href="/admin-blog.html" title="Admin-Bereich">⚙️</a>`;
+
 const SCROLL_RESTORE_SNIPPET = `<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>`;
 const YEAR_SNIPPET = `<script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>`;
 
@@ -135,6 +140,7 @@ ${NAV}
 ${bodyHtml}
 ${SOCIAL_BAR}
 ${FOOTER}
+${ADMIN_TOGGLE}
 ${YEAR_SNIPPET}
 </body>
 </html>`;
