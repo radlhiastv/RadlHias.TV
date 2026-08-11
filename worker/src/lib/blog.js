@@ -77,13 +77,15 @@ export async function createPost(db, data) {
   const slug = data.slug ? slugify(data.slug) : await uniqueSlug(db, data.title);
   const contentHtml = renderContentHtml(data.content_raw);
   const seoDesc = data.seo_desc || stripToPlainText(contentHtml, 160) || data.excerpt || "";
+  const sourcesHtml = renderContentHtml(data.sources_raw);
 
   await db
     .prepare(
       `INSERT INTO posts
         (id, slug, title, excerpt, content_raw, content_html, category, seo_desc,
-         image_key, image_source, image_alt, published, date, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         image_key, image_source, image_alt, published, date, created_at, updated_at,
+         sources_raw, sources_html)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       id,
@@ -100,7 +102,9 @@ export async function createPost(db, data) {
       data.published === false ? 0 : 1,
       data.date || now.slice(0, 10),
       now,
-      now
+      now,
+      data.sources_raw || "",
+      sourcesHtml
     )
     .run();
 
@@ -125,13 +129,15 @@ export async function updatePost(db, id, data) {
     data.seo_desc !== undefined && data.seo_desc !== ""
       ? data.seo_desc
       : existing.seo_desc || stripToPlainText(contentHtml, 160) || excerpt;
+  const sourcesRaw = data.sources_raw !== undefined ? data.sources_raw : existing.sources_raw || "";
+  const sourcesHtml = renderContentHtml(sourcesRaw);
 
   await db
     .prepare(
       `UPDATE posts SET
         slug = ?, title = ?, excerpt = ?, content_raw = ?, content_html = ?,
         category = ?, seo_desc = ?, image_key = ?, image_source = ?, image_alt = ?,
-        published = ?, date = ?, updated_at = ?
+        published = ?, date = ?, updated_at = ?, sources_raw = ?, sources_html = ?
        WHERE id = ?`
     )
     .bind(
@@ -148,6 +154,8 @@ export async function updatePost(db, id, data) {
       data.published !== undefined ? (data.published ? 1 : 0) : existing.published ? 1 : 0,
       data.date !== undefined ? data.date : existing.date,
       now,
+      sourcesRaw,
+      sourcesHtml,
       id
     )
     .run();
