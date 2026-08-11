@@ -231,6 +231,12 @@
               <div class="char-count" id="content-count">0 Zeichen</div>
             </div>
             <div class="field full">
+              <label>Quellenangaben <span class="hint">optional – worauf/auf wen beziehst du dich? Links oder Freitext, erscheint als eigener "Quellen"-Block am Ende des Artikels</span></label>
+              <textarea id="f-sources" maxlength="4000" placeholder="- [Studie XY](https://...)
+- Herstellerangabe ABC
+- Gespräch mit ..."></textarea>
+            </div>
+            <div class="field full">
               <label>SEO-Beschreibung <span class="hint">für Google & Co. – bleibt leer, wird automatisch aus dem Text erzeugt</span></label>
               <input type="text" id="f-seo" maxlength="200">
             </div>
@@ -512,6 +518,7 @@ document.getElementById("neu-form").addEventListener("submit", async function(e)
       published: document.getElementById("f-published").value === "1",
       excerpt: document.getElementById("f-excerpt").value.trim(),
       content_raw: document.getElementById("f-content").value.trim(),
+      sources_raw: document.getElementById("f-sources").value.trim(),
       seo_desc: document.getElementById("f-seo").value.trim(),
       image_key: imageKey,
       image_alt: title,
@@ -626,6 +633,10 @@ function renderCard(post) {
             <textarea data-field="content_raw" style="min-height:160px;">${escapeHtml(post.content_raw)}</textarea>
           </div>
           <div class="field" style="margin-bottom:8px;">
+            <label>Quellenangaben</label>
+            <textarea data-field="sources_raw">${escapeHtml(post.sources_raw || "")}</textarea>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
             <label>Status</label>
             <select data-field="published">
               <option value="1" ${post.published ? "selected" : ""}>Veröffentlicht</option>
@@ -669,6 +680,7 @@ function wireCard(post) {
       category: editForm.querySelector('[data-field="category"]').value,
       excerpt: editForm.querySelector('[data-field="excerpt"]').value.trim(),
       content_raw: editForm.querySelector('[data-field="content_raw"]').value.trim(),
+      sources_raw: editForm.querySelector('[data-field="sources_raw"]').value.trim(),
       published: editForm.querySelector('[data-field="published"]').value === "1",
     };
 

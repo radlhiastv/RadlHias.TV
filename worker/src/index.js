@@ -381,6 +381,7 @@ export default {
           content_raw: String(content_raw).slice(0, 20000),
           category: body.category ? String(body.category).slice(0, 40) : "Blog",
           seo_desc: body.seo_desc ? String(body.seo_desc).slice(0, 200) : "",
+          sources_raw: body.sources_raw ? String(body.sources_raw).slice(0, 4000) : "",
           image_key: body.image_key || null,
           image_source: "kv",
           image_alt: body.image_alt ? String(body.image_alt).slice(0, 200) : undefined,
@@ -403,6 +404,7 @@ export default {
         if (body.content_raw !== undefined) patch.content_raw = String(body.content_raw).slice(0, 20000);
         if (body.category !== undefined) patch.category = String(body.category).slice(0, 40);
         if (body.seo_desc !== undefined) patch.seo_desc = String(body.seo_desc).slice(0, 200);
+        if (body.sources_raw !== undefined) patch.sources_raw = String(body.sources_raw).slice(0, 4000);
         if (body.image_key !== undefined) {
           patch.image_key = body.image_key || null;
           patch.image_source = "kv";

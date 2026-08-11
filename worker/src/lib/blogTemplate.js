@@ -201,6 +201,12 @@ const ARTICLE_STYLE = `
   .article-body strong{color:#fff;}
   .article-body a{color:var(--orange2);text-decoration:none;}
   .article-body a:hover{text-decoration:underline;}
+  .article-sources{margin-top:36px;padding-top:24px;border-top:1px solid var(--border);}
+  .article-sources h2{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;
+    letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .article-sources .article-body{font-size:14px;color:var(--muted);}
+  .article-sources .article-body p{margin-bottom:10px;}
+  .article-sources .article-body a{color:var(--orange2);}
   .back-link{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;
     font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
     text-decoration:none;margin-top:48px;transition:color 0.2s;border-top:1px solid var(--border);
@@ -281,6 +287,12 @@ export function renderArticlePage(post, origin) {
   <div class="article-body">
 ${post.content_html}
   </div>
+  ${post.sources_html ? `<div class="article-sources">
+    <h2>Quellen</h2>
+    <div class="article-body">
+${post.sources_html}
+    </div>
+  </div>` : ""}
   <a href="/blog/index.html" class="back-link">← Zurück zum Blog</a>
 </div>`;
 
