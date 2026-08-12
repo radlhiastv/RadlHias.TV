@@ -576,6 +576,8 @@ function fmtPreis(val) {
 function buildAuftragHtml(row) {
   const rad = [row.fahrradTyp, row.hersteller, row.modell, row.farbe].filter(Boolean).join(" · ");
   const idKurz = row.id ? String(row.id).slice(0, 8) : "";
+  const statusUrl = row.id ? `${location.origin}/status/${encodeURIComponent(row.id)}.html` : "";
+  const qrSrc = statusUrl ? `${location.origin}/api/qrcode.svg?data=${encodeURIComponent(statusUrl)}` : "";
   const zeile = function(label, value) {
     return `<tr><td class="label">${escapeHtml(label)}</td><td>${value ? escapeHtml(value) : "—"}</td></tr>`;
   };
@@ -584,8 +586,12 @@ function buildAuftragHtml(row) {
 <title>Werkstattauftrag – ${escapeHtml(row.kundeName || "")}</title>
 <style>
   body { font-family: Arial, Helvetica, sans-serif; color: #1c3448; padding: 40px; max-width: 720px; margin: 0 auto; }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
   h1 { font-size: 21px; border-bottom: 3px solid #c85a14; padding-bottom: 10px; margin: 0 0 4px; }
   .sub { color: #5a7a8a; font-size: 12.5px; margin-bottom: 30px; }
+  .qr-box { text-align: center; flex-shrink: 0; }
+  .qr-box img { width: 92px; height: 92px; display: block; }
+  .qr-caption { font-size: 10px; color: #5a7a8a; margin-top: 4px; max-width: 105px; line-height: 1.3; }
   .section { margin-bottom: 22px; }
   .section h2 {
     font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #c85a14;
@@ -607,8 +613,16 @@ function buildAuftragHtml(row) {
   @media print { body { padding: 0; } }
 </style>
 </head><body>
-  <h1>RadlHias.TV – Werkstattauftrag</h1>
-  <div class="sub">Angenommen am ${fmtDate(row.angenommenAm)}${idKurz ? ` · Auftrags-ID ${escapeHtml(idKurz)}` : ""}</div>
+  <div class="header-row">
+    <div>
+      <h1>RadlHias.TV – Werkstattauftrag</h1>
+      <div class="sub">Angenommen am ${fmtDate(row.angenommenAm)}${idKurz ? ` · Auftrags-ID ${escapeHtml(idKurz)}` : ""}</div>
+    </div>
+    ${qrSrc ? `<div class="qr-box">
+      <img src="${escapeHtml(qrSrc)}" alt="QR-Code zum Status-Link" width="92" height="92">
+      <div class="qr-caption">Scannen für den aktuellen Status Ihres Fahrrads</div>
+    </div>` : ""}
+  </div>
 
   <p class="thanks">Vielen Dank für Ihren Auftrag und Ihr Vertrauen!<br>Wir kümmern uns mit Sorgfalt um Ihr Fahrrad.</p>
 

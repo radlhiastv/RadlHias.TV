@@ -11,10 +11,12 @@ import {
 import { createSessionCookie, clearSessionCookie, isAuthenticated } from "./lib/auth.js";
 import { createCalendarEvent } from "./lib/calendar.js";
 import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./lib/email.js";
-import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, STATUS_VALUES } from "./lib/sheets.js";
+import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, getReparaturById, STATUS_VALUES } from "./lib/sheets.js";
 import { listPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost, resolveImageUrl } from "./lib/blog.js";
 import { putBlogImage, getBlogImage, deleteBlogImage } from "./lib/blogImages.js";
 import { renderListingPage, renderArticlePage, render404Page } from "./lib/blogTemplate.js";
+import { renderStatusPage, renderStatusNotFoundPage } from "./lib/statusTemplate.js";
+import { qrCodeSvg } from "./lib/qrcode.js";
 import { renderSitemap } from "./lib/sitemap.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -72,6 +74,36 @@ export default {
 
       if (request.method === "GET" && path === "/blog") {
         return Response.redirect(`${url.origin}/blog/index.html`, 301);
+      }
+
+      // ---------------------------------------------------------------
+      // Werkstatt: öffentliche Status-Seite pro Auftrag (QR-Code auf dem
+      // gedruckten Werkstattauftrag, siehe admin-werkstatt.html). Kein
+      // Login -- die UUID im Link ist der Zugriffsschutz.
+      // ---------------------------------------------------------------
+      const statusMatch = path.match(/^\/status\/([^/]+)\.html$/);
+      if (statusMatch && request.method === "GET") {
+        const reparatur = await getReparaturById(env, statusMatch[1]);
+        if (!reparatur) return html(renderStatusNotFoundPage(url.origin), { status: 404 });
+        return html(renderStatusPage(reparatur, url.origin), {
+          status: 200,
+          headers: { "Cache-Control": "no-store" },
+        });
+      }
+
+      // ---------------------------------------------------------------
+      // QR-Code als SVG (für den Status-Link, siehe oben). Aus Missbrauchs-
+      // gründen nur für eigene Status-URLs -- kein offener QR-Generator.
+      // ---------------------------------------------------------------
+      if (path === "/api/qrcode.svg" && request.method === "GET") {
+        const data = url.searchParams.get("data") || "";
+        if (!data.startsWith(`${url.origin}/status/`) || data.length > 300) {
+          return badRequest("Ungültige QR-Code-Daten.");
+        }
+        return new Response(qrCodeSvg(data), {
+          status: 200,
+          headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=31536000, immutable" },
+        });
       }
 
       // ---------------------------------------------------------------

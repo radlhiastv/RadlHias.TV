@@ -145,6 +145,17 @@ export async function listReparaturen(env) {
 }
 
 /**
+ * Liefert einen einzelnen Datensatz anhand seiner ID (für die öffentliche
+ * Status-Seite, siehe statusTemplate.js) oder null, falls nicht gefunden.
+ */
+export async function getReparaturById(env, id) {
+  const { headerRow, rows } = await readAll(env);
+  const idIdx = headerRow.indexOf("ID");
+  const row = rows.find((r) => r[idIdx] === id);
+  return row ? rowToObject(headerRow, row) : null;
+}
+
+/**
  * Legt einen neuen Reparatur-Datensatz an ("Annahme").
  */
 export async function appendReparatur(env, data) {

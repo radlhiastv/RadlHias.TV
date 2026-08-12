@@ -3,6 +3,33 @@ main = "src/index.js"
 compatibility_date = "2024-11-01"
 
 # ---------------------------------------------------------------------------
+# Route (Same-Origin unter radlhias.tv/*, dann kein CORS/Cookie-SameSite-
+# Sondertheater nötig, weil das Frontend auf GitHub Pages hinter demselben
+# Cloudflare-Proxy läuft).
+#
+# WICHTIG: dieser Block muss hier oben stehen, VOR jeder [tabelle]/[[array]]-
+# Kopfzeile! Nach einer TOML-Tabellen-Kopfzeile wie [[d1_databases]] oder
+# [vars] gehören alle folgenden "key = value"-Zeilen zu DIESER Tabelle, bis
+# die naechste Kopfzeile kommt -- ein "routes = [...]" weiter unten landet
+# also als (wirkungsloses) Feld dieser Tabelle statt als echte Cloudflare-
+# Route-Konfiguration. Genau das ist hier lange unbemerkt passiert; die
+# tatsaechlich aktiven Routes fuer /api/*, /blog/* und /sitemap.xml wurden
+# separat im Cloudflare-Dashboard gesetzt.
+# ---------------------------------------------------------------------------
+routes = [
+  { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" },
+  # Blog: Worker rendert /blog/index.html + /blog/<slug>.html serverseitig
+  # (siehe src/lib/blogTemplate.js) statt der frueheren statischen Dateien.
+  { pattern = "radlhias.tv/blog/*", zone_name = "radlhias.tv" },
+  # sitemap.xml wird dynamisch aus D1 generiert (siehe src/lib/sitemap.js),
+  # damit neue Blogartikel automatisch auftauchen.
+  { pattern = "radlhias.tv/sitemap.xml", zone_name = "radlhias.tv" },
+  # Werkstatt: öffentliche Status-Seite pro Auftrag, per QR-Code auf dem
+  # Werkstattauftrag erreichbar (siehe src/lib/statusTemplate.js).
+  { pattern = "radlhias.tv/status/*", zone_name = "radlhias.tv" }
+]
+
+# ---------------------------------------------------------------------------
 # D1-Datenbank
 # ---------------------------------------------------------------------------
 # Datenbank einmalig anlegen:
@@ -59,19 +86,3 @@ GOOGLE_SHEETS_SHEET_NAME = "Tabellenblatt1"
 #   wrangler secret put GOOGLE_REFRESH_TOKEN
 #   wrangler secret put BREVO_API_KEY
 # Details siehe SETUP.md
-
-# ---------------------------------------------------------------------------
-# Route (empfohlen: Same-Origin unter radlhias.tv/api/*, dann kein CORS/Cookie-
-# SameSite-Sondertheater nötig, weil das Frontend auf GitHub Pages hinter
-# demselben Cloudflare-Proxy läuft). Auskommentiert bis DNS/Proxy dafür
-# eingerichtet ist -- siehe SETUP.md.
-# ---------------------------------------------------------------------------
-routes = [
-  { pattern = "radlhias.tv/api/*", zone_name = "radlhias.tv" },
-  # Blog: Worker rendert /blog/index.html + /blog/<slug>.html serverseitig
-  # (siehe src/lib/blogTemplate.js) statt der frueheren statischen Dateien.
-  { pattern = "radlhias.tv/blog/*", zone_name = "radlhias.tv" },
-  # sitemap.xml wird dynamisch aus D1 generiert (siehe src/lib/sitemap.js),
-  # damit neue Blogartikel automatisch auftauchen.
-  { pattern = "radlhias.tv/sitemap.xml", zone_name = "radlhias.tv" }
-]

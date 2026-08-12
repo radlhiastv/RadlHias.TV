@@ -5,7 +5,7 @@
 
 import { resolveImageUrl } from "./blog.js";
 
-function escapeHtml(str) {
+export function escapeHtml(str) {
   return String(str == null ? "" : str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -106,7 +106,7 @@ const FOOTER = `
 const SCROLL_RESTORE_SNIPPET = `<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.addEventListener('pageshow',function(e){if(e.persisted&&!location.hash)window.scrollTo(0,0);});</script>`;
 const YEAR_SNIPPET = `<script>(function(){var y=new Date().getFullYear()-1999;document.querySelectorAll(".js-years").forEach(function(el){el.textContent=y;});})();</script>`;
 
-function shell({ title, description, canonical, ogImage, robots, jsonLd, extraStyle, bodyHtml }) {
+export function shell({ title, description, canonical, ogImage, robots, jsonLd, extraStyle, bodyHtml }) {
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -222,7 +222,7 @@ const ARTICLE_STYLE = `
   @media(max-width:600px){.article{padding:90px 20px 60px;}}
 `;
 
-function formatDateDe(iso) {
+export function formatDateDe(iso) {
   if (!iso) return "";
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
   if (!m) return iso;
