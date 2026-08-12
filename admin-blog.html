@@ -184,11 +184,11 @@
             <div class="field">
               <label>Kategorie</label>
               <select id="f-category">
-                <option>Erfahrung</option>
                 <option>Technik</option>
+                <option>Erfahrung</option>
+                <option>Material</option>
+                <option>Geschichte</option>
                 <option>Meinung</option>
-                <option>Kaufberatung</option>
-                <option>Wartung</option>
               </select>
             </div>
             <div class="field">
@@ -275,7 +275,7 @@
 // Same-Origin-Route (siehe worker/SETUP.md). Bei separater Subdomain hier
 // die volle Worker-URL eintragen, z.B. "https://api.radlhias.tv".
 const API_BASE_URL = "/api";
-const CATEGORIES = ["Erfahrung", "Technik", "Meinung", "Kaufberatung", "Wartung"];
+const CATEGORIES = ["Technik", "Erfahrung", "Material", "Geschichte", "Meinung"];
 
 const loginView = document.getElementById("login-view");
 const app = document.getElementById("app");
@@ -599,7 +599,16 @@ function renderList() {
 }
 
 function renderCard(post) {
-  const catOptions = CATEGORIES.map(function(c) {
+  // Falls ein Beitrag noch eine alte/inzwischen entfernte Kategorie traegt
+  // (z.B. aus der Zeit vor einer Umbenennung), wird sie hier als zusaetzliche
+  // Option angehaengt und vorausgewaehlt -- sonst wuerde der Select beim
+  // Rendern kommentarlos auf die erste Option in CATEGORIES springen und
+  // beim naechsten Speichern (auch wenn nur Titel o.ae. geaendert wurde)
+  // die Kategorie des Beitrags stillschweigend ueberschreiben.
+  const knownCats = CATEGORIES.includes(post.category)
+    ? CATEGORIES
+    : [post.category, ...CATEGORIES];
+  const catOptions = knownCats.map(function(c) {
     return `<option value="${escapeHtml(c)}" ${c === post.category ? "selected" : ""}>${escapeHtml(c)}</option>`;
   }).join("");
   return `
