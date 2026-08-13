@@ -179,6 +179,45 @@ const LISTING_STYLE = `
   .blog-card-excerpt { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; flex: 1; }
   .blog-card-date { font-size: 12px; color: var(--text-dim); }
   .empty-state { text-align: center; color: var(--text-dim); padding: 40px 20px; grid-column: 1 / -1; }
+
+  .blog-toolbar {
+    max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .blog-filter-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+  .blog-filter-btn {
+    display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase; color: var(--navy); text-decoration: none;
+    background: white; border: 1px solid var(--cream2); padding: 7px 16px; border-radius: 20px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .blog-filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .blog-filter-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
+  .blog-count { max-width: 1100px; margin: 14px auto 0; padding: 0 20px; font-size: 13px; color: var(--text-dim); }
+  .blog-perpage-form { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); }
+  .blog-perpage-form select {
+    font-family: 'Barlow', sans-serif; font-size: 13px; color: var(--text); background: white;
+    border: 1px solid var(--cream2); border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  }
+  .blog-perpage-form noscript button {
+    font-family: 'Barlow', sans-serif; font-size: 13px; border: 1px solid var(--cream2); background: white;
+    border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-left: 4px;
+  }
+  .blog-pagination {
+    max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; display: flex; flex-wrap: wrap;
+    justify-content: center; align-items: center; gap: 6px;
+  }
+  .page-btn {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 36px;
+    padding: 0 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--navy); text-decoration: none; background: white; border: 1px solid var(--cream2);
+    border-radius: 8px; transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  a.page-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .page-btn-active { background: var(--orange); border-color: var(--orange); color: white; }
+  .page-btn-disabled { color: var(--text-dim); opacity: 0.5; cursor: default; }
+  .page-ellipsis { color: var(--text-dim); padding: 0 4px; }
+  @media (max-width: 640px) { .blog-toolbar { justify-content: center; text-align: center; } }
 `;
 
 const ARTICLE_STYLE = `
@@ -230,7 +269,79 @@ export function formatDateDe(iso) {
   return `${parseInt(m[3], 10)}. ${monate[parseInt(m[2], 10) - 1]} ${m[1]}`;
 }
 
-export function renderListingPage(posts, origin) {
+// Erlaubte Werte für "Einträge pro Seite" -- sowohl vom Select im Frontend
+// als auch von index.js (Validierung des ?perPage= Query-Parameters) genutzt.
+export const BLOG_PER_PAGE_OPTIONS = [6, 9, 12, 18, 24];
+export const BLOG_DEFAULT_PER_PAGE = 9;
+
+function buildBlogUrl({ page, perPage, category }) {
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  if (perPage && perPage !== BLOG_DEFAULT_PER_PAGE) params.set("perPage", String(perPage));
+  if (page && page > 1) params.set("page", String(page));
+  const qs = params.toString();
+  return `/blog/index.html${qs ? `?${qs}` : ""}`;
+}
+
+function renderToolbar(categories, category, perPage) {
+  const filterLinks = [
+    `<a class="blog-filter-btn${category ? "" : " active"}" href="${escapeHtml(buildBlogUrl({ page: 1, perPage, category: "" }))}">Alle</a>`,
+    ...categories.map(
+      (c) =>
+        `<a class="blog-filter-btn${c === category ? " active" : ""}" href="${escapeHtml(buildBlogUrl({ page: 1, perPage, category: c }))}">${escapeHtml(c)}</a>`
+    ),
+  ].join("");
+
+  const perPageOptions = BLOG_PER_PAGE_OPTIONS.map(
+    (n) => `<option value="${n}" ${n === perPage ? "selected" : ""}>${n}</option>`
+  ).join("");
+
+  return `
+<div class="blog-toolbar">
+  <div class="blog-filter-bar">${filterLinks}</div>
+  <form class="blog-perpage-form" method="get" action="/blog/index.html">
+    ${category ? `<input type="hidden" name="category" value="${escapeHtml(category)}">` : ""}
+    <label for="blog-perpage">Einträge pro Seite</label>
+    <select id="blog-perpage" name="perPage" onchange="this.form.submit()">${perPageOptions}</select>
+    <noscript><button type="submit">Anzeigen</button></noscript>
+  </form>
+</div>`;
+}
+
+function renderPagination(page, totalPages, perPage, category) {
+  if (totalPages <= 1) return "";
+
+  const link = (p, label, cls = "") =>
+    `<a class="page-btn${cls}" href="${escapeHtml(buildBlogUrl({ page: p, perPage, category }))}">${label}</a>`;
+
+  const parts = [
+    page > 1 ? link(page - 1, "‹ Zurück") : `<span class="page-btn page-btn-disabled">‹ Zurück</span>`,
+  ];
+
+  const shownPages = new Set([1, totalPages, page - 1, page, page + 1]);
+  let prevShown = 0;
+  for (let p = 1; p <= totalPages; p++) {
+    if (!shownPages.has(p)) continue;
+    if (prevShown && p - prevShown > 1) parts.push(`<span class="page-ellipsis">…</span>`);
+    parts.push(p === page ? `<span class="page-btn page-btn-active">${p}</span>` : link(p, String(p)));
+    prevShown = p;
+  }
+
+  parts.push(page < totalPages ? link(page + 1, "Weiter ›") : `<span class="page-btn page-btn-disabled">Weiter ›</span>`);
+
+  return `<nav class="blog-pagination" aria-label="Seiten">${parts.join("")}</nav>`;
+}
+
+export function renderListingPage(posts, origin, opts = {}) {
+  const {
+    page = 1,
+    perPage = BLOG_DEFAULT_PER_PAGE,
+    total = posts.length,
+    totalPages = 1,
+    category = "",
+    categories = [],
+  } = opts;
+
   const cards = posts.length
     ? posts
         .map((post) => {
@@ -246,20 +357,32 @@ export function renderListingPage(posts, origin) {
     </a>`;
         })
         .join("\n")
-    : `<p class="empty-state">Aktuell sind keine Artikel verfügbar.</p>`;
+    : `<p class="empty-state">${
+        category ? `Keine Artikel in der Kategorie „${escapeHtml(category)}“.` : "Aktuell sind keine Artikel verfügbar."
+      }</p>`;
+
+  const countLabel = total === 1 ? "1 Artikel" : `${total} Artikel`;
 
   const bodyHtml = `
 <div class="page-header">
   <h1>Blog</h1>
   <p>Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.</p>
 </div>
-<div class="blog-grid">${cards}</div>`;
+${renderToolbar(categories, category, perPage)}
+<div class="blog-count">${countLabel}${category ? ` in „${escapeHtml(category)}“` : ""}</div>
+<div class="blog-grid">${cards}</div>
+${renderPagination(page, totalPages, perPage, category)}`;
+
+  const description = category
+    ? `Blogartikel von RadlHias.TV in der Kategorie ${category} – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.`
+    : "Alle Blogartikel von RadlHias.TV – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.";
 
   return shell({
-    title: "Blog – RadlHias.TV",
-    description: "Alle Blogartikel von RadlHias.TV – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.",
-    canonical: `${origin}/blog/`,
+    title: category ? `${category} – Blog – RadlHias.TV` : "Blog – RadlHias.TV",
+    description,
+    canonical: `${origin}${buildBlogUrl({ page, perPage, category })}`,
     ogImage: "",
+    robots: page > 1 || category ? "noindex, follow" : undefined,
     jsonLd: null,
     extraStyle: LISTING_STYLE,
     bodyHtml,
