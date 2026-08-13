@@ -5,13 +5,15 @@
 // fett/kursiv/Links), ohne dass der Autor im Admin-Panel HTML schreiben muss.
 //
 // Regeln (Block-Ebene, getrennt durch Leerzeilen):
-//   "# Text"          -> <h1>Text</h1>
 //   "## Text"        -> <h2>Text</h2>
 //   "### Text"        -> <h3>Text</h3>
 //   Block, in dem JEDE Zeile mit "- " beginnt -> <ul><li>...</li></ul>
 //   alles andere      -> <p>...</p>, einzelne Zeilenumbrüche werden zu <br>
 //
-// Wichtig für die Darstellung: h1/h2/h3 bekommen im Artikel-Template feste,
+// Bewusst KEINE H1 im Artikeltext: das Titelfeld liefert bereits das <h1>
+// der Seite, pro Seite soll es nur eine Haupt-Überschrift geben.
+//
+// Wichtig für die Darstellung: h2/h3 bekommen im Artikel-Template feste,
 // vordefinierte CSS-Regeln (Schriftart/-größe/Farbe). Es gibt keinen Weg,
 // darüber im Editor abweichende Styles zu setzen -- jede Überschriftenebene
 // sieht auf jeder Seite immer identisch aus.
@@ -56,10 +58,6 @@ export function renderContentHtml(raw) {
       const h2 = trimmed.match(/^##\s+(.+)$/);
       if (h2 && !trimmed.includes("\n")) {
         return `<h2>${renderInline(escapeHtml(h2[1]))}</h2>`;
-      }
-      const h1 = trimmed.match(/^#\s+(.+)$/);
-      if (h1 && !trimmed.includes("\n")) {
-        return `<h1>${renderInline(escapeHtml(h1[1]))}</h1>`;
       }
 
       const lines = trimmed.split("\n");

@@ -199,9 +199,6 @@ const ARTICLE_STYLE = `
     max-height:420px;object-fit:cover;}
   .article-body{font-size:16px;line-height:1.8;color:var(--text);}
   .article-body p{margin-bottom:20px;}
-  .article-body h1{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;
-    text-transform:uppercase;color:#fff;line-height:1.05;margin:44px 0 18px;
-    border-bottom:2px solid var(--orange);padding-bottom:10px;}
   .article-body h2{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;
     text-transform:uppercase;color:#fff;margin:36px 0 14px;}
   .article-body h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;
