@@ -9,6 +9,14 @@
 //   "### Text"        -> <h3>Text</h3>
 //   Block, in dem JEDE Zeile mit "- " beginnt -> <ul><li>...</li></ul>
 //   alles andere      -> <p>...</p>, einzelne Zeilenumbrüche werden zu <br>
+//
+// Bewusst KEINE H1 im Artikeltext: das Titelfeld liefert bereits das <h1>
+// der Seite, pro Seite soll es nur eine Haupt-Überschrift geben.
+//
+// Wichtig für die Darstellung: h2/h3 bekommen im Artikel-Template feste,
+// vordefinierte CSS-Regeln (Schriftart/-größe/Farbe). Es gibt keinen Weg,
+// darüber im Editor abweichende Styles zu setzen -- jede Überschriftenebene
+// sieht auf jeder Seite immer identisch aus.
 // Inline: **fett**, *kursiv*, [Text](https://url)
 //
 // Wichtig: Eingaben werden zuerst HTML-escaped, danach werden nur die oben
@@ -43,13 +51,13 @@ export function renderContentHtml(raw) {
       const trimmed = block.trim();
       if (!trimmed) return "";
 
-      const h2 = trimmed.match(/^##\s+(.+)$/);
-      if (h2 && !trimmed.includes("\n")) {
-        return `<h2>${renderInline(escapeHtml(h2[1]))}</h2>`;
-      }
       const h3 = trimmed.match(/^###\s+(.+)$/);
       if (h3 && !trimmed.includes("\n")) {
         return `<h3>${renderInline(escapeHtml(h3[1]))}</h3>`;
+      }
+      const h2 = trimmed.match(/^##\s+(.+)$/);
+      if (h2 && !trimmed.includes("\n")) {
+        return `<h2>${renderInline(escapeHtml(h2[1]))}</h2>`;
       }
 
       const lines = trimmed.split("\n");
