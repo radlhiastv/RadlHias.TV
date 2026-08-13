@@ -49,13 +49,46 @@ export function resolveImageUrl(post) {
   return `/api/blog-images/${post.image_key}`;
 }
 
-export async function listPosts(db, { publishedOnly = false, limit } = {}) {
-  const where = publishedOnly ? "WHERE published = 1" : "";
-  const limitSql = limit ? `LIMIT ${Number(limit)}` : "";
+function buildPostsWhere({ publishedOnly, category }) {
+  const conditions = [];
+  const params = [];
+  if (publishedOnly) conditions.push("published = 1");
+  if (category) {
+    conditions.push("category = ?");
+    params.push(category);
+  }
+  return { where: conditions.length ? `WHERE ${conditions.join(" AND ")}` : "", params };
+}
+
+export async function listPosts(db, { publishedOnly = false, limit, offset = 0, category } = {}) {
+  const { where, params } = buildPostsWhere({ publishedOnly, category });
+  const limitSql = limit ? `LIMIT ${Number(limit)} OFFSET ${Number(offset) || 0}` : "";
   const { results } = await db
     .prepare(`SELECT * FROM posts ${where} ORDER BY date DESC, created_at DESC ${limitSql}`)
+    .bind(...params)
     .all();
   return results.map(rowToPost);
+}
+
+// Anzahl Artikel (für die Paginierung der Blog-Übersicht), respektiert
+// dieselben Filter wie listPosts (veröffentlicht/Kategorie).
+export async function countPosts(db, { publishedOnly = false, category } = {}) {
+  const { where, params } = buildPostsWhere({ publishedOnly, category });
+  const row = await db
+    .prepare(`SELECT COUNT(*) AS c FROM posts ${where}`)
+    .bind(...params)
+    .first();
+  return row ? Number(row.c) : 0;
+}
+
+// Alle in der DB vorkommenden Kategorien (für die Filterleiste der Blog-
+// Übersicht) -- nur Kategorien, die tatsächlich einen Artikel haben.
+export async function listCategories(db, { publishedOnly = false } = {}) {
+  const where = publishedOnly ? "WHERE published = 1" : "";
+  const { results } = await db
+    .prepare(`SELECT DISTINCT category FROM posts ${where} ORDER BY category ASC`)
+    .all();
+  return results.map((r) => r.category).filter(Boolean);
 }
 
 export async function getPostBySlug(db, slug, { publishedOnly = false } = {}) {

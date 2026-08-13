@@ -12,9 +12,9 @@ import { createSessionCookie, clearSessionCookie, isAuthenticated } from "./lib/
 import { createCalendarEvent } from "./lib/calendar.js";
 import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./lib/email.js";
 import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, getReparaturById, STATUS_VALUES } from "./lib/sheets.js";
-import { listPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost, resolveImageUrl } from "./lib/blog.js";
+import { listPosts, countPosts, listCategories, getPostBySlug, getPostById, createPost, updatePost, deletePost, resolveImageUrl } from "./lib/blog.js";
 import { putBlogImage, getBlogImage, deleteBlogImage } from "./lib/blogImages.js";
-import { renderListingPage, renderArticlePage, render404Page } from "./lib/blogTemplate.js";
+import { renderListingPage, renderArticlePage, render404Page, BLOG_PER_PAGE_OPTIONS, BLOG_DEFAULT_PER_PAGE } from "./lib/blogTemplate.js";
 import { renderStatusPage, renderStatusNotFoundPage } from "./lib/statusTemplate.js";
 import { qrCodeSvg } from "./lib/qrcode.js";
 import { renderSitemap } from "./lib/sitemap.js";
@@ -60,8 +60,31 @@ export default {
 
       if (request.method === "GET" && path.startsWith("/blog/")) {
         if (path === "/blog/" || path === "/blog/index.html") {
-          const posts = await listPosts(env.DB, { publishedOnly: true });
-          return html(renderListingPage(posts, url.origin), { status: 200 });
+          const categories = await listCategories(env.DB, { publishedOnly: true });
+          const categoryParam = url.searchParams.get("category") || "";
+          const category = categories.includes(categoryParam) ? categoryParam : "";
+
+          let perPage = parseInt(url.searchParams.get("perPage"), 10);
+          if (!BLOG_PER_PAGE_OPTIONS.includes(perPage)) perPage = BLOG_DEFAULT_PER_PAGE;
+
+          const total = await countPosts(env.DB, { publishedOnly: true, category: category || undefined });
+          const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+          let page = parseInt(url.searchParams.get("page"), 10);
+          if (!Number.isInteger(page) || page < 1) page = 1;
+          if (page > totalPages) page = totalPages;
+
+          const posts = await listPosts(env.DB, {
+            publishedOnly: true,
+            limit: perPage,
+            offset: (page - 1) * perPage,
+            category: category || undefined,
+          });
+
+          return html(
+            renderListingPage(posts, url.origin, { page, perPage, total, totalPages, category, categories }),
+            { status: 200 }
+          );
         }
         const slugMatch = path.match(/^\/blog\/([^/]+)\.html$/);
         if (slugMatch) {
