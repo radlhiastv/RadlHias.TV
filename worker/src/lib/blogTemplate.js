@@ -182,27 +182,18 @@ const LISTING_STYLE = `
 
   .blog-toolbar {
     max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap;
-    align-items: center; justify-content: space-between; gap: 16px;
+    align-items: center; justify-content: center; gap: 16px 28px;
   }
-  .blog-filter-bar { display: flex; flex-wrap: wrap; gap: 8px; }
-  .blog-filter-btn {
-    display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700;
-    letter-spacing: 0.5px; text-transform: uppercase; color: var(--navy); text-decoration: none;
-    background: white; border: 1px solid var(--cream2); padding: 7px 16px; border-radius: 20px;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-  }
-  .blog-filter-btn:hover { border-color: var(--orange); color: var(--orange); }
-  .blog-filter-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
-  .blog-count { max-width: 1100px; margin: 14px auto 0; padding: 0 20px; font-size: 13px; color: var(--text-dim); }
-  .blog-perpage-form { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); }
-  .blog-perpage-form select {
+  .blog-toolbar-field { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); }
+  .blog-toolbar-field select {
     font-family: 'Barlow', sans-serif; font-size: 13px; color: var(--text); background: white;
     border: 1px solid var(--cream2); border-radius: 8px; padding: 6px 10px; cursor: pointer;
   }
-  .blog-perpage-form noscript button {
+  .blog-toolbar noscript button {
     font-family: 'Barlow', sans-serif; font-size: 13px; border: 1px solid var(--cream2); background: white;
     border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-left: 4px;
   }
+  .blog-count { max-width: 1100px; margin: 14px auto 0; padding: 0 20px; font-size: 13px; color: var(--text-dim); text-align: center; }
   .blog-pagination {
     max-width: 1100px; margin: 0 auto 60px; padding: 0 20px; display: flex; flex-wrap: wrap;
     justify-content: center; align-items: center; gap: 6px;
@@ -284,11 +275,10 @@ function buildBlogUrl({ page, perPage, category }) {
 }
 
 function renderToolbar(categories, category, perPage) {
-  const filterLinks = [
-    `<a class="blog-filter-btn${category ? "" : " active"}" href="${escapeHtml(buildBlogUrl({ page: 1, perPage, category: "" }))}">Alle</a>`,
+  const categoryOptions = [
+    `<option value="" ${category ? "" : "selected"}>Alle</option>`,
     ...categories.map(
-      (c) =>
-        `<a class="blog-filter-btn${c === category ? " active" : ""}" href="${escapeHtml(buildBlogUrl({ page: 1, perPage, category: c }))}">${escapeHtml(c)}</a>`
+      (c) => `<option value="${escapeHtml(c)}" ${c === category ? "selected" : ""}>${escapeHtml(c)}</option>`
     ),
   ].join("");
 
@@ -296,13 +286,20 @@ function renderToolbar(categories, category, perPage) {
     (n) => `<option value="${n}" ${n === perPage ? "selected" : ""}>${n}</option>`
   ).join("");
 
+  // Beide Auswahlfelder in einem Formular, damit ein Wechsel bei einem
+  // Feld den jeweils anderen Wert mit übermittelt (und die Seite auf 1
+  // zurückgesetzt wird, weil "page" hier bewusst fehlt).
   return `
 <div class="blog-toolbar">
-  <div class="blog-filter-bar">${filterLinks}</div>
-  <form class="blog-perpage-form" method="get" action="/blog/index.html">
-    ${category ? `<input type="hidden" name="category" value="${escapeHtml(category)}">` : ""}
-    <label for="blog-perpage">Einträge pro Seite</label>
-    <select id="blog-perpage" name="perPage" onchange="this.form.submit()">${perPageOptions}</select>
+  <form class="blog-toolbar-form" method="get" action="/blog/index.html" style="display:contents;">
+    <div class="blog-toolbar-field">
+      <label for="blog-category">Kategorie</label>
+      <select id="blog-category" name="category" onchange="this.form.submit()">${categoryOptions}</select>
+    </div>
+    <div class="blog-toolbar-field">
+      <label for="blog-perpage">Einträge pro Seite</label>
+      <select id="blog-perpage" name="perPage" onchange="this.form.submit()">${perPageOptions}</select>
+    </div>
     <noscript><button type="submit">Anzeigen</button></noscript>
   </form>
 </div>`;
