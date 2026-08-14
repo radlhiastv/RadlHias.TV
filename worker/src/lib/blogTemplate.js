@@ -363,7 +363,7 @@ export function renderListingPage(posts, origin, opts = {}) {
   const bodyHtml = `
 <div class="page-header">
   <h1>Blog</h1>
-  <p>Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.</p>
+  <p>Willkommen auf meinem Fahrrad Blog! Als Mechaniker aus meiner Fahrradwerkstatt in St. Pantaleon schreibe ich hier ehrlich über Technik, Trends und Alltag in der Fahrrad Branche – ohne Marketing-Floskeln, dafür mit echter Werkstatt-Erfahrung.</p>
 </div>
 ${renderToolbar(categories, category, perPage)}
 <div class="blog-count">${countLabel}${category ? ` in „${escapeHtml(category)}“` : ""}</div>
@@ -371,8 +371,8 @@ ${renderToolbar(categories, category, perPage)}
 ${renderPagination(page, totalPages, perPage, category)}`;
 
   const description = category
-    ? `Blogartikel von RadlHias.TV in der Kategorie ${category} – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.`
-    : "Alle Blogartikel von RadlHias.TV – Tipps, Tests und ehrliche Erfahrungen rund ums Fahrrad.";
+    ? `Blogartikel von RadlHias.TV in der Kategorie ${category} – ehrliche Tipps aus der Fahrradwerkstatt und der Fahrrad Branche.`
+    : "Willkommen auf dem RadlHias.TV Fahrrad Blog – ehrliche Tipps aus der Fahrradwerkstatt und der Fahrrad Branche, direkt aus St. Pantaleon.";
 
   return shell({
     title: category ? `${category} – Blog – RadlHias.TV` : "Blog – RadlHias.TV",
