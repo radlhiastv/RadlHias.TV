@@ -12,6 +12,7 @@ const STEP_LABELS = {
   "Ware bestellt": "Ersatzteile bestellt",
   "In Bearbeitung": "In Bearbeitung",
   "Kunde informiert/fertig": "Abholbereit",
+  "Abgeholt": "Abgeholt",
 };
 
 const STATUS_STYLE = `
@@ -69,7 +70,8 @@ function fmtPreis(v) {
 export function renderStatusPage(reparatur, origin) {
   const canonical = `${origin}/status/${reparatur.id}.html`;
   const stepIndex = Math.max(0, STATUS_VALUES.indexOf(reparatur.status));
-  const isFertig = reparatur.status === "Kunde informiert/fertig";
+  const isAbgeholt = reparatur.status === "Abgeholt";
+  const isFertig = reparatur.status === "Kunde informiert/fertig" || isAbgeholt;
   const rad = [reparatur.fahrradTyp, reparatur.hersteller, reparatur.modell, reparatur.farbe]
     .filter(Boolean)
     .join(" · ");
@@ -104,7 +106,9 @@ export function renderStatusPage(reparatur, origin) {
     ${reparatur.auftrag ? `<div class="status-box"><h3>Auftrag</h3>${escapeHtml(reparatur.auftrag)}</div>` : ""}
     ${isFertig && reparatur.erledigt ? `<div class="status-box"><h3>Was wurde gemacht</h3>${escapeHtml(reparatur.erledigt)}</div>` : ""}
 
-    ${isFertig
+    ${isAbgeholt
+      ? `<div class="status-box" style="background:rgba(42,106,58,0.08); color:var(--green); font-weight:600;">Dein Fahrrad wurde abgeholt. Danke für dein Vertrauen! 🎉</div>`
+      : isFertig
       ? `<div class="status-box" style="background:rgba(42,106,58,0.08); color:var(--green); font-weight:600;">Dein Fahrrad ist fertig und kann bei uns abgeholt werden. 🎉</div>`
       : ""}
 

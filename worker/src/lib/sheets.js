@@ -56,6 +56,7 @@ export const STATUS_VALUES = [
   "Ware bestellt",
   "In Bearbeitung",
   "Kunde informiert/fertig",
+  "Abgeholt",
 ];
 
 function sheetRange(env, a1) {
