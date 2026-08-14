@@ -232,6 +232,7 @@
     <h1>Admin-Login</h1>
     <p class="login-error" id="login-error"></p>
     <form id="login-form">
+      <input type="text" id="login-username" placeholder="Benutzername" autocomplete="username" required>
       <input type="password" id="login-password" placeholder="Passwort" autocomplete="current-password" required>
       <button type="submit" id="login-btn">Anmelden</button>
     </form>
@@ -330,7 +331,10 @@ loginForm.addEventListener("submit", async function(e) {
     const res = await api("/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: document.getElementById("login-password").value }),
+      body: JSON.stringify({
+        username: document.getElementById("login-username").value,
+        password: document.getElementById("login-password").value,
+      }),
     });
     const data = await res.json().catch(function(){ return {}; });
     if (!res.ok) {

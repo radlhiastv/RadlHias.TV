@@ -214,10 +214,15 @@ export default {
       // ---------------------------------------------------------------
       if (path === "/api/admin/login" && request.method === "POST") {
         const body = await request.json().catch(() => null);
-        if (!body || !body.password) return badRequest("Passwort fehlt.");
+        if (!body || !body.username || !body.password) {
+          return badRequest("Benutzername und Passwort erforderlich.");
+        }
 
-        if (body.password !== env.ADMIN_PASSWORD) {
-          return json({ error: "Falsches Passwort." }, { status: 401 }, cors);
+        // Bewusst eine gemeinsame Fehlermeldung für falschen Benutzernamen
+        // UND falsches Passwort -- verrät einem Angreifer sonst, welcher der
+        // beiden Werte schon stimmt.
+        if (body.username !== env.ADMIN_USERNAME || body.password !== env.ADMIN_PASSWORD) {
+          return json({ error: "Benutzername oder Passwort falsch." }, { status: 401 }, cors);
         }
 
         const cookie = await createSessionCookie(env);

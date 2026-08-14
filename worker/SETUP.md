@@ -90,12 +90,15 @@ die finalen Texte lieferst, ersetze ich sie 1:1.
 ## 5. Admin-Login
 
 ```bash
+wrangler secret put ADMIN_USERNAME
 wrangler secret put ADMIN_PASSWORD
 wrangler secret put SESSION_SECRET   # langer zufälliger String, z.B. `openssl rand -hex 32`
 ```
 
-`ADMIN_PASSWORD` ist das Login-Passwort fürs Admin-Panel. `SESSION_SECRET`
-signiert das Session-Cookie (HttpOnly) und sollte niemandem bekannt sein.
+`ADMIN_USERNAME` + `ADMIN_PASSWORD` sind Benutzername und Passwort fürs
+Admin-Panel (alle drei Bereiche: Werkstatt, Termine, Blog) -- beide müssen
+stimmen, sonst schlägt der Login fehl. `SESSION_SECRET` signiert das
+Session-Cookie (HttpOnly) und sollte niemandem bekannt sein.
 
 ## 6. Worker deployen
 
@@ -257,7 +260,7 @@ Migration und in der Git-Historie.
 - [ ] Reparaturart-Dropdown final befüllen – aktuell in `termin.html` eine
       generische Liste (Wartung/Service, Bremsen, Schaltung, Reifen/Schlauch,
       E-Bike-Check, Sonstiges). Liste liegt im `<select id="repair-type">`.
-- [ ] `ADMIN_PASSWORD` und `SESSION_SECRET` setzen (Schritt 5)
+- [ ] `ADMIN_USERNAME`, `ADMIN_PASSWORD` und `SESSION_SECRET` setzen (Schritt 5)
 - [ ] D1-`database_id` in `wrangler.toml` eintragen (Schritt 2)
 - [ ] Google Sheet für die Reparaturverwaltung anlegen + `GOOGLE_SHEETS_SPREADSHEET_ID`
       eintragen, Refresh-Token ggf. mit Sheets-Scope neu ausstellen (Schritt 8)
