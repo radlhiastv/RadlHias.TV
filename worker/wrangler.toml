@@ -67,6 +67,11 @@ ADMIN_PANEL_URL = "https://radlhias.tv/admin-termine.html"
 # technisch nicht zwingend nötig, schadet aber nicht als Fallback / für lokale Tests)
 ALLOWED_ORIGIN = "https://radlhias.tv"
 
+# Facebook-Cross-Posting (Blog -> Unternehmensseite), siehe SETUP.md Abschnitt
+# "Facebook-Seite". Die Page-ID ist unkritisch und darf hier stehen, das
+# Access-Token dagegen ist ein Secret (wrangler secret put FB_PAGE_ACCESS_TOKEN).
+FB_PAGE_ID = "REPLACE_WITH_FACEBOOK_PAGE_ID"
+
 # ---------------------------------------------------------------------------
 # Werkstatt-Reparaturverwaltung (Google Sheets) – siehe SETUP.md Abschnitt
 # "Google Sheets Anbindung". Nutzt dieselben GOOGLE_CLIENT_ID/SECRET/

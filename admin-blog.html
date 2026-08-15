@@ -267,6 +267,7 @@
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" id="neu-submit-btn">Artikel veröffentlichen</button>
             <a href="#" id="neu-preview-link" target="_blank" style="display:none; font-size:13.5px; font-weight:700;">🔗 Artikel ansehen</a>
+            <button type="button" class="btn btn-ghost" id="neu-fb-btn" style="display:none;">📘 Auf Facebook posten</button>
           </div>
         </form>
       </div>
@@ -290,6 +291,26 @@
     <div class="req-actions">
       <button type="button" class="btn btn-cancel" id="delete-modal-cancel">Abbrechen</button>
       <button type="button" class="btn btn-delete" id="delete-modal-confirm" style="background:var(--err); color:#fff; border:none;">Ja, endgültig löschen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Postet den Artikel direkt auf die Facebook-Unternehmensseite (Graph API,
+     siehe worker/src/lib/facebook.js). Text ist vor dem Posten editierbar,
+     weil das ein oeffentlicher, sofort sichtbarer Post auf der echten Seite
+     ist -- kein stiller Automatismus. -->
+<div id="fb-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <h3 style="color:var(--navy);">Auf Facebook posten</h3>
+    <p>Wird sofort auf eurer Facebook-Unternehmensseite veröffentlicht. Text vorher bei Bedarf anpassen.</p>
+    <div class="field" style="margin-bottom:12px;">
+      <textarea id="fb-modal-text" style="width:100%; min-height:130px; font-family:inherit; font-size:14px; padding:10px 12px; border:1.5px solid var(--card-border); border-radius:8px; resize:vertical;"></textarea>
+    </div>
+    <p class="inline-error" id="fb-modal-error"></p>
+    <p class="form-msg ok" id="fb-modal-success" style="display:none;"></p>
+    <div class="req-actions">
+      <button type="button" class="btn btn-cancel" id="fb-modal-cancel">Abbrechen</button>
+      <button type="button" class="btn" id="fb-modal-confirm" style="background:#1877f2; color:#fff; border:none;">📘 Jetzt posten</button>
     </div>
   </div>
 </div>
@@ -644,7 +665,9 @@ document.getElementById("neu-form").addEventListener("submit", async function(e)
   msgEl.className = "form-msg";
   const btn = document.getElementById("neu-submit-btn");
   const previewLink = document.getElementById("neu-preview-link");
+  const fbBtn = document.getElementById("neu-fb-btn");
   previewLink.style.display = "none";
+  fbBtn.style.display = "none";
   btn.disabled = true;
   btn.textContent = "Wird veröffentlicht …";
 
@@ -699,6 +722,10 @@ document.getElementById("neu-form").addEventListener("submit", async function(e)
     msgEl.classList.add("ok");
     previewLink.href = `/blog/${data.post.slug}.html`;
     previewLink.style.display = "inline-block";
+    if (data.post.published) {
+      fbBtn.style.display = "inline-block";
+      fbBtn.onclick = function() { openFbModal(data.post); };
+    }
     postsCache = null;
     updateListeBadgeFromCache();
   } catch (err) {
@@ -770,6 +797,7 @@ function renderCard(post) {
         <div class="post-card-actions">
           <a class="btn btn-ghost" href="/blog/${escapeHtml(post.slug)}.html" target="_blank">🔗 Ansehen</a>
           <button class="btn btn-ghost" data-action="toggle-edit">Bearbeiten</button>
+          ${post.published ? '<button class="btn btn-ghost" data-action="share-facebook">📘 Facebook</button>' : ""}
           <button class="btn btn-delete" data-action="delete-post">🗑️ Löschen</button>
         </div>
         <div class="edit-form" data-form="edit">
@@ -833,6 +861,9 @@ function wireCard(post) {
   });
   card.querySelectorAll('[data-action="delete-post"]').forEach(function(b) {
     b.addEventListener("click", function() { openDeleteModal(post); });
+  });
+  card.querySelectorAll('[data-action="share-facebook"]').forEach(function(b) {
+    b.addEventListener("click", function() { openFbModal(post); });
   });
 
   editForm.querySelector('[data-action="confirm-edit"]').addEventListener("click", async function() {
@@ -923,6 +954,72 @@ deleteModalConfirm.addEventListener("click", async function() {
     deleteModalError.textContent = "Löschen fehlgeschlagen. Bitte erneut versuchen.";
     deleteModalConfirm.disabled = false;
     deleteModalConfirm.textContent = "Ja, endgültig löschen";
+  }
+});
+
+// ---------------------------------------------------------------------
+// Facebook-Post (Graph API über die Unternehmensseite, siehe
+// worker/src/lib/facebook.js). Nur für bereits veröffentlichte Artikel
+// möglich, weil Facebook den Link live erreichen können muss.
+// ---------------------------------------------------------------------
+let fbTargetPostId = null;
+const fbModal = document.getElementById("fb-modal");
+const fbModalText = document.getElementById("fb-modal-text");
+const fbModalError = document.getElementById("fb-modal-error");
+const fbModalSuccess = document.getElementById("fb-modal-success");
+const fbModalConfirm = document.getElementById("fb-modal-confirm");
+const fbModalCancel = document.getElementById("fb-modal-cancel");
+
+function defaultFbMessage(post) {
+  return `${post.title}\n\n${post.excerpt || ""}`.trim();
+}
+
+function openFbModal(post) {
+  fbTargetPostId = post.id;
+  fbModalText.value = defaultFbMessage(post);
+  fbModalError.textContent = "";
+  fbModalSuccess.style.display = "none";
+  fbModalConfirm.style.display = "inline-block";
+  fbModalConfirm.disabled = false;
+  fbModalConfirm.textContent = "📘 Jetzt posten";
+  fbModalCancel.textContent = "Abbrechen";
+  fbModal.style.display = "flex";
+  fbModalText.focus();
+}
+function closeFbModal() {
+  fbModal.style.display = "none";
+  fbTargetPostId = null;
+}
+fbModalCancel.addEventListener("click", closeFbModal);
+fbModal.addEventListener("click", function(e) { if (e.target === fbModal) closeFbModal(); });
+
+fbModalConfirm.addEventListener("click", async function() {
+  if (!fbTargetPostId) return;
+  fbModalError.textContent = "";
+  fbModalConfirm.disabled = true;
+  fbModalConfirm.textContent = "Wird gepostet …";
+  try {
+    const res = await api(`/admin/posts/${encodeURIComponent(fbTargetPostId)}/share-facebook`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: fbModalText.value.trim() }),
+    });
+    if (res.status === 401) { closeFbModal(); showLogin(); return; }
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) {
+      fbModalError.textContent = data.error || "Posten fehlgeschlagen.";
+      fbModalConfirm.disabled = false;
+      fbModalConfirm.textContent = "📘 Jetzt posten";
+      return;
+    }
+    fbModalSuccess.textContent = "Erfolgreich auf Facebook gepostet. ✓";
+    fbModalSuccess.style.display = "block";
+    fbModalConfirm.style.display = "none";
+    fbModalCancel.textContent = "Schließen";
+  } catch (err) {
+    fbModalError.textContent = "Posten fehlgeschlagen. Bitte erneut versuchen.";
+    fbModalConfirm.disabled = false;
+    fbModalConfirm.textContent = "📘 Jetzt posten";
   }
 });
 
