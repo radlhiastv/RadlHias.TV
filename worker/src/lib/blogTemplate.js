@@ -249,6 +249,14 @@ const ARTICLE_STYLE = `
     text-decoration:none;margin-top:48px;transition:color 0.2s;border-top:1px solid var(--border);
     padding-top:32px;width:100%;}
   .back-link:hover{color:var(--orange2);}
+  .article-share{display:flex;align-items:center;gap:14px;margin-top:36px;}
+  .article-share-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+  .article-share-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;
+    border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);
+    transition:background 0.2s,color 0.2s,border-color 0.2s;}
+  .article-share-btn svg{width:17px;height:17px;fill:currentColor;}
+  .article-share-btn:hover{background:#1877f2;border-color:#1877f2;color:#fff;}
   @media(max-width:600px){.article{padding:90px 20px 60px;}}
 `;
 
@@ -420,6 +428,16 @@ ${post.content_html}
 ${post.sources_html}
     </div>
   </div>` : ""}
+  <div class="article-share">
+    <span class="article-share-label">Teilen:</span>
+    <a class="article-share-btn"
+       href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonical)}"
+       target="_blank" rel="noopener noreferrer" aria-label="Auf Facebook teilen">
+      <svg viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg">
+        <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
+      </svg>
+    </a>
+  </div>
   <a href="/blog/index.html" class="back-link">← Zurück zum Blog</a>
 </div>`;
 

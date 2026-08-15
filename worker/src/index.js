@@ -14,6 +14,7 @@ import { sendAdminNotification, sendApprovalEmail, sendRejectionEmail } from "./
 import { listReparaturen, appendReparatur, updateReparatur, deleteReparatur, getReparaturById, STATUS_VALUES } from "./lib/sheets.js";
 import { listPosts, countPosts, listCategories, getPostBySlug, getPostById, createPost, updatePost, deletePost, resolveImageUrl } from "./lib/blog.js";
 import { putBlogImage, getBlogImage, deleteBlogImage } from "./lib/blogImages.js";
+import { postToFacebookPage } from "./lib/facebook.js";
 import { renderListingPage, renderArticlePage, render404Page, BLOG_PER_PAGE_OPTIONS, BLOG_DEFAULT_PER_PAGE } from "./lib/blogTemplate.js";
 import { renderStatusPage, renderStatusNotFoundPage } from "./lib/statusTemplate.js";
 import { qrCodeSvg } from "./lib/qrcode.js";
@@ -487,6 +488,29 @@ export default {
           ctx.waitUntil(deleteBlogImage(env, existing.image_key).catch((err) => console.error("deleteBlogImage failed", err)));
         }
         return json({ ok: true }, { status: 200 }, cors);
+      }
+
+      const shareFbMatch = path.match(/^\/api\/admin\/posts\/([^/]+)\/share-facebook$/);
+      if (shareFbMatch && request.method === "POST") {
+        const id = shareFbMatch[1];
+        const post = await getPostById(env.DB, id);
+        if (!post) return json({ error: "Artikel nicht gefunden." }, { status: 404 }, cors);
+        if (!post.published) {
+          return badRequest("Nur veröffentlichte Artikel können auf Facebook geteilt werden.");
+        }
+
+        const body = await request.json().catch(() => ({}));
+        const link = `${url.origin}/blog/${post.slug}.html`;
+        const message = body.message
+          ? String(body.message).slice(0, 8000)
+          : `${post.title}\n\n${post.excerpt || ""}`.trim();
+
+        try {
+          const result = await postToFacebookPage(env, { message, link });
+          return json({ ok: true, ...result }, { status: 200 }, cors);
+        } catch (err) {
+          return json({ error: err.message || "Facebook-Post fehlgeschlagen." }, { status: 502 }, cors);
+        }
       }
 
       if (path === "/api/admin/blog-uploads" && request.method === "POST") {

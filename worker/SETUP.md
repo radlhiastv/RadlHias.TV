@@ -252,7 +252,46 @@ Dateien `posts.json` und `blog/*.html` wurden im Repo entfernt, da sie durch
 D1 ersetzt sind. Nichts geht verloren: der komplette Inhalt steckt in dieser
 Migration und in der Git-Historie.
 
-## 10. Noch offen (aus dem Briefing, Punkt 11)
+## 10. Facebook-Seite (Blog-Cross-Posting)
+
+`admin-blog.html` hat pro veröffentlichtem Artikel einen "📘 Facebook"-Button
+(sowohl direkt nach dem Veröffentlichen als auch später in der Artikelliste),
+der den Artikel per Facebook Graph API direkt auf eurer Unternehmensseite
+postet (Titel + Kurzbeschreibung + Link, vor dem Absenden editierbar). Das ist
+etwas anderes als der reine "Teilen"-Button auf der Artikelseite selbst
+(sharer.php) – der Admin-Button postet gezielt und garantiert auf die Page,
+nicht auf ein beliebiges, gerade eingeloggtes Profil.
+
+Dafür braucht es einmalig:
+
+1. Eine App im [Meta for Developers](https://developers.facebook.com/apps)
+   Portal anlegen (Typ "Business").
+2. Eure Facebook-Seite mit der App verknüpfen (App-Dashboard → Facebook-Login
+   for Business / Seiten-Zugriff, oder einfach dich selbst als Admin der
+   App + der Seite eintragen).
+3. Ein langlebiges **Page Access Token** erzeugen – am einfachsten über den
+   [Graph API Explorer](https://developers.facebook.com/tools/explorer/):
+   - Oben rechts eure App auswählen, "Get Token" → "Get User Access Token"
+     mit dem Recht `pages_manage_posts` (und `pages_read_engagement`).
+   - Mit dem User-Token den Endpunkt `GET /me/accounts` aufrufen – die
+     Antwort enthält pro verwalteter Seite ein eigenes, bereits langlebiges
+     `access_token`. Das ist der Wert, der als `FB_PAGE_ACCESS_TOKEN` genutzt
+     wird (läuft praktisch nicht ab, solange die App nicht deautorisiert wird).
+   - Die `id` aus derselben Antwort ist eure `FB_PAGE_ID`.
+4. Secrets/Var setzen:
+
+```bash
+wrangler secret put FB_PAGE_ACCESS_TOKEN
+```
+
+Und `FB_PAGE_ID` in `wrangler.toml` beim `[vars]`-Eintrag anstelle von
+`REPLACE_WITH_FACEBOOK_PAGE_ID` eintragen.
+
+Kein App-Review bei Meta nötig, solange nur du selbst (als Admin von App und
+Seite) postest – Review wird erst Pflicht, sobald fremde Nutzer über die App
+posten sollen.
+
+## 11. Noch offen (aus dem Briefing, Punkt 11)
 
 - [ ] Google Cloud Projekt + OAuth-Setup durchführen (Schritt 3)
 - [ ] Brevo-Account-Frage klären + API-Key hinterlegen (Schritt 4)
@@ -266,3 +305,5 @@ Migration und in der Git-Historie.
       eintragen, Refresh-Token ggf. mit Sheets-Scope neu ausstellen (Schritt 8)
 - [ ] KV-Namespace für Blog-Bilder anlegen + `id` in `wrangler.toml` eintragen +
       Migrationen ausführen + neue Routes deployen (Schritt 9)
+- [ ] Facebook-Seite mit App verknüpfen, Page Access Token holen + `FB_PAGE_ID`
+      in `wrangler.toml` + `FB_PAGE_ACCESS_TOKEN` als Secret setzen (Schritt 10)
