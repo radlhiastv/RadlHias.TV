@@ -1,12 +1,12 @@
-# Reel-Timing - manuelles Wort-Timing per Timeline+Eingabe
+# Yepp-Timer - manuelles Wort-Timing per Timeline+Eingabe
 
-Artefakt-URL: `https://claude.ai/code/artifact/7f6d3ff6-ba26-4377-bc35-737b0d2101cc`
+Artefakt-URL: `https://claude.ai/code/artifact/af1ef8b2-c5aa-4bbc-9a45-754288601ce3`
 
 ## Warum
 
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
-dem Mund spürbar hinterherhinken oder vorauseilen. Reel-Timing umgeht das Problem
+dem Mund spürbar hinterherhinken oder vorauseilen. Der Yepp-Timer umgeht das Problem
 komplett: Mathias zieht den Playhead auf einer echten Timeline (wie in einem
 Videoschnitt-Programm) exakt zur Stelle, drückt "Wort setzen" und tippt das dort
 gesprochene Wort in ein Eingabefeld - die App speichert dabei `video.currentTime`
@@ -74,7 +74,7 @@ gerendert wird - sonst fehlen Wörter im Video komplett.
 ## Falls sich das Tool ändern soll
 
 Die Quelldatei liegt versioniert im Repo unter
-`.claude/skills/radlhias_yepp_subtitle/tools/reel_timing.html` - dort ändern,
+`.claude/skills/radlhias_yepp_subtitle/tools/yepp_timer.html` - dort ändern,
 danach veröffentlichen und die Änderung mitcommitten, damit Repo und Artefakt
 nicht auseinanderlaufen.
 
@@ -90,7 +90,10 @@ geführt haben:
   dem Code entfernt wurde, blieb `db` deklariert - deshalb erschien weiterhin die
   Blase "Sign in to see this artifact's data". Korrekt ist eine vollständige
   Neudeklaration, aktuell `capabilities: {"downloads": true}`.
-- **Der geteilte Link ist auf eine Version gepinnt.** Wer nicht eingeloggt über
-  den Share-Link öffnet, sieht so lange die gepinnte Version, bis der Pin über das
-  Share-Menü auf die neue Version gesetzt wird. Neue Publishes erreichen ihn sonst
-  nicht - das sieht nach Browser-Cache aus, ist aber keiner.
+- **Ein geteilter Link ist auf eine Version gepinnt.** Wer nicht eingeloggt über
+  einen Share-Link öffnet, sieht so lange die gepinnte Version, bis der Pin über
+  das Share-Menü auf die neue Version gesetzt wird. Neue Publishes erreichen ihn
+  sonst nicht - das sieht nach Browser-Cache aus, ist aber keiner. Genau deshalb
+  ist der Yepp-Timer bewusst **privat** und nicht per Link geteilt: eingeloggt
+  bekommt Mathias immer die aktuellste Version. Also nicht öffentlich teilen,
+  wenn es nicht wirklich nötig ist.
