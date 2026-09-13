@@ -1,4 +1,19 @@
-<title>Yepp-Timer</title>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yepp-Timer – RadlHias.TV</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Wort-Zeitstempel für RadlHias-Reels setzen.">
+<meta name="theme-color" content="#14212F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Yepp-Timer">
+<link rel="manifest" href="yepp-timer.webmanifest">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="RadlHias_Logo_500x500.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -107,6 +122,10 @@ textarea{min-height:110px; resize:vertical; line-height:1.55;}
 .field{display:flex; flex-direction:column; gap:7px;}
 #setup .panel{padding:16px; display:flex; flex-direction:column; gap:16px;}
 .startrow{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;}
+#installHint{
+  margin:0; color:var(--cream-dim); font-size:.86rem; line-height:1.6;
+  border-left:2px solid var(--orange); padding-left:12px;
+}
 #wordCountHint{color:var(--cream-dim); font-size:.88rem;}
 #startBtn{font-size:1.05rem; padding:11px 22px;}
 
@@ -277,6 +296,9 @@ details.ref .reftext{
 }
 </style>
 
+</head>
+<body>
+
 <div id="rotate">
   <div class="icon">📱</div>
   <h2>Bitte Gerät drehen</h2>
@@ -310,6 +332,8 @@ details.ref .reftext{
         <button class="primary" id="startBtn" disabled>Los geht's →</button>
       </div>
     </div>
+
+    <p id="installHint" hidden>Tipp: über das Browser-Menü <strong>„Zum Startbildschirm hinzufügen"</strong> installieren — dann startet der Yepp-Timer ohne jede Browserleiste direkt im Querformat.</p>
   </div>
 </section>
 
@@ -421,6 +445,7 @@ details.ref .reftext{
      stellen wir die Versuche ein, damit kein toter Schalter bleibt.
      ========================================================== */
   var fsBlocked = false;
+  var fsUserExited = false;   // bewusst verlassen -> nicht ungefragt zurueckspringen
 
   function fsAvailable(){
     if(fsBlocked) return false;
@@ -442,7 +467,8 @@ details.ref .reftext{
       }
     }catch(e){}
   }
-  function enterFullscreen(){
+  function enterFullscreen(force){
+    if(force) fsUserExited = false;
     if(fsActive() || fsBlocked) return;
     var el = document.documentElement;
     var req = el.requestFullscreen || el.webkitRequestFullscreen ||
@@ -461,17 +487,23 @@ details.ref .reftext{
   function syncFsBtn(){
     fsBtn.hidden = !fsAvailable() || fsActive() || !isLandscape();
   }
-  fsBtn.addEventListener('click', enterFullscreen);
-  document.addEventListener('fullscreenchange', syncFsBtn);
-  document.addEventListener('webkitfullscreenchange', syncFsBtn);
+  fsBtn.addEventListener('click', function(){ enterFullscreen(true); });
+  function onFsChange(){
+    // Verlaesst der Nutzer das Vollbild selbst, nicht bei jeder Beruehrung
+    // wieder hineinspringen - er kommt ueber den Schalter zurueck.
+    if(!fsActive()) fsUserExited = true;
+    syncFsBtn();
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
 
   // Jede Berührung im Querformat ist eine gültige Geste - nutzen.
   document.addEventListener('pointerdown', function(){
-    if(isLandscape()) enterFullscreen();
+    if(isLandscape() && !fsUserExited) enterFullscreen();
   }, {passive:true, capture:true});
 
   function onOrientation(){
-    if(isLandscape()) enterFullscreen();
+    if(isLandscape() && !fsUserExited) enterFullscreen();
     syncFsBtn();
     buildTicks(); buildMarkerTicks(); updateReadout();
   }
@@ -915,43 +947,21 @@ details.ref .reftext{
   downloadBtn.addEventListener('click', function(){
     if(markers.length === 0) return;
     var text = payloadText();
-
-    var done = function(){
-      markExported('Heruntergeladen ✓');
+    try{
+      var blob = new Blob([text], {type:'application/json'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = fileName();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      markExported('Heruntergeladen \u2713');
       fallbackNote.hidden = true;
       fallbackJson.hidden = true;
-    };
-
-    var useCapability = function(){
-      if(!window.claude || !window.claude.use) return Promise.resolve(false);
-      return window.claude.use('downloads').then(function(dl){
-        if(!dl) return false;
-        return dl.save({filename: fileName(), data: text}).then(function(){ return true; });
-      }).catch(function(){ return false; });
-    };
-
-    useCapability().then(function(ok){
-      if(ok){ done(); return; }
-      // Ersatzweg: Blob-Download. Wird er vom Rahmen blockiert,
-      // bleibt der Kopiertext als verlässlicher Weg.
-      var saved = false;
-      try{
-        var blob = new Blob([text], {type:'application/json'});
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url; a.download = fileName();
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
-        saved = true;
-      }catch(e){}
-      if(saved){
-        markExported('Download gestartet');
-      } else {
-        showManualFallback('Der Download wurde hier blockiert.');
-      }
-    });
+    }catch(e){
+      showManualFallback('Der Download hat nicht geklappt.');
+    }
   });
 
   copyBtn.addEventListener('click', function(){
@@ -978,7 +988,19 @@ details.ref .reftext{
     }
   });
 
+  // Installationshinweis nur im normalen Browser-Tab zeigen,
+  // nicht wenn der Yepp-Timer bereits als App laeuft.
+  (function(){
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) ||
+                     (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+                     window.navigator.standalone === true;
+    if(!standalone) $('installHint').hidden = false;
+  })();
+
   renderProgress();
   renderMarkerList();
 })();
 </script>
+
+</body>
+</html>

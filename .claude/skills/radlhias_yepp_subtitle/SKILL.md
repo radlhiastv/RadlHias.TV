@@ -22,15 +22,14 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    dem Chat-Upload-Limit: Google Drive freigeben lassen und per Composio-Verbindung
    (googledrive) holen, siehe `references/video_transfer.md`.
 2. **Wort-Timing besorgen - bevorzugt per Yepp-Timer (exakt, kein Schätzen):**
-   - Mathias auf das **Yepp-Timer**-Artefakt verweisen (URL:
-     `https://claude.ai/code/artifact/af1ef8b2-c5aa-4bbc-9a45-754288601ce3`, per
-     `Artifact`-Tool mit `action:"read"` bei Bedarf abrufen und mit `url:` am
-     selben Link aktualisieren - niemals neu publizieren, sonst entsteht ein
-     zweiter Link). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
-     Upload) + optional den reinen gesprochenen Text (nur Gedächtnisstütze/
-     Fortschrittszähler). Er zieht den Playhead auf einer Timeline (Querformat
-     erzwungen) exakt zur Stelle, drückt "Wort setzen" und tippt das gehörte Wort
-     in ein Eingabefeld (siehe `references/yepp_timer.md`).
+   - Mathias auf den **Yepp-Timer** verweisen:
+     **https://radlhias.tv/yepp-timer.html** (Quelldatei im Repo: `yepp-timer.html`
+     im Wurzelverzeichnis - kein Claude-Artefakt mehr, siehe
+     `references/yepp_timer.md` für die Gründe). Er lädt dort sein Rohvideo
+     (bleibt lokal im Browser, kein Upload) + optional den reinen gesprochenen
+     Text (nur Gedächtnisstütze/Fortschrittszähler). Er zieht den Playhead auf
+     einer Timeline (Querformat erzwungen) exakt zur Stelle, drückt "Wort setzen"
+     und tippt das gehörte Wort in ein Eingabefeld.
    - **Das Tool speichert nichts serverseitig.** Mathias exportiert am Ende
      `timing.json` (Download oder Zwischenablage) und hängt die Datei bzw. den
      Text direkt im Chat an. Diese JSON kann `make_reel.py` direkt als zweites

@@ -1,26 +1,47 @@
 # Yepp-Timer - manuelles Wort-Timing per Timeline+Eingabe
 
-Artefakt-URL: `https://claude.ai/code/artifact/af1ef8b2-c5aa-4bbc-9a45-754288601ce3`
+**URL: https://radlhias.tv/yepp-timer.html**
+Quelldatei im Repo: `yepp-timer.html` (Wurzelverzeichnis), dazu
+`yepp-timer.webmanifest`. Ausgeliefert über GitHub Pages - nach dem Merge in
+`main` ist die Änderung live.
 
 ## Warum
 
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
-dem Mund spürbar hinterherhinken oder vorauseilen. Der Yepp-Timer umgeht das Problem
-komplett: Mathias zieht den Playhead auf einer echten Timeline (wie in einem
-Videoschnitt-Programm) exakt zur Stelle, drückt "Wort setzen" und tippt das dort
-gesprochene Wort in ein Eingabefeld - die App speichert dabei `video.currentTime`
-als Zeitpunkt für genau dieses Wort. Das ist die präziseste Quelle überhaupt, weil
-kein Algorithmus mehr raten muss.
+dem Mund spürbar hinterherhinken oder vorauseilen. Der Yepp-Timer umgeht das
+Problem komplett: Mathias zieht den Playhead auf einer echten Timeline (wie in
+einem Videoschnitt-Programm) exakt zur Stelle, drückt "Wort setzen" und tippt das
+dort gesprochene Wort in ein Eingabefeld - die App speichert dabei
+`video.currentTime` als Zeitpunkt für genau dieses Wort. Das ist die präziseste
+Quelle überhaupt, weil kein Algorithmus mehr raten muss.
 
-Das Tool ist auf Querformat gesperrt (im Hochformat erscheint ein "Gerät drehen"-
-Hinweis) - die Timeline braucht die Breite.
+## Warum auf radlhias.tv und nicht als Claude-Artefakt
+
+Das Werkzeug lief zuerst als Artefakt. Das hat drei Probleme erzeugt, die sich von
+innen nicht lösen ließen, weil ein Artefakt in einem fremden Rahmen läuft:
+
+- **Die Kopfzeile von claude.ai** ("Content is user-generated and unverified",
+  "Share", "Sign in") liegt außerhalb der Seite und lässt sich nicht entfernen.
+- **Vollbild ist im Artefakt-Rahmen nicht freigegeben**, also verschwindet die
+  Kopfzeile auch nicht per Fullscreen-API. Das liegt nicht am Browser - auf
+  eigener Domain funktioniert es einwandfrei.
+- **Ein geteilter Artefakt-Link ist auf eine Version gepinnt**, neue
+  Veröffentlichungen erreichten die nicht eingeloggte Ansicht deshalb nie. Das
+  sah nach Browser-Cache aus, war aber keiner.
+
+Auf eigener Domain fallen alle drei weg. Zusätzlich funktionieren dort echter
+Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wechseln.
 
 ## Ablauf für Mathias
 
-1. Artefakt-Link öffnen, Handy quer halten. Das Tool geht beim ersten Antippen in
-   den Vollbildmodus (Browserleiste und Artefakt-Kopfzeile verschwinden). Klappt
-   das nicht automatisch, erscheint unten rechts ein "⛶ Vollbild"-Schalter.
+1. https://radlhias.tv/yepp-timer.html öffnen, Handy quer halten. Beim ersten
+   Antippen geht das Werkzeug in den Vollbildmodus; unten rechts liegt zusätzlich
+   ein "⛶ Vollbild"-Schalter. Verlässt er das Vollbild bewusst, springt es nicht
+   ungefragt zurück.
+   Noch sauberer: über das Browser-Menü "Zum Startbildschirm hinzufügen"
+   installieren - dann startet der Yepp-Timer ohne jede Browserleiste direkt im
+   Querformat (Web-App-Manifest mit `display: fullscreen`).
 2. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
 3. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze,
    Fortschrittszähler und Tipp-Vorschläge - kann auch leer bleiben).
@@ -39,18 +60,20 @@ Hinweis) - die Timeline braucht die Breite.
 8. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
    Worttext nachträglich; ✕ löscht einen einzelnen Marker; "Alles zurücksetzen"
    löscht alle (mit Rückfrage).
-9. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage", falls der
-   Download im Browser blockiert wird) und Datei bzw. Text im Chat an Claude
-   anhängen.
+9. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
+   bzw. Text im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
 chronologisch vorherigen Eintrags - meist ein Zeichen für einen Navigations- oder
 Tippfehler. Kurz gegenprüfen und ggf. löschen/neu setzen.
 
+Im Hochformat ist das Werkzeug gesperrt ("Gerät drehen") - die Timeline braucht
+die Breite.
+
 ## Datenformat
 
-Das Tool speichert **nichts** serverseitig - es hat keine Datenbank und fragt
-deshalb auch nie nach einem Login. Der Export sieht so aus:
+Das Werkzeug speichert **nichts** serverseitig - es hat keine Datenbank, kein
+Konto und keinen Login. Der Export sieht so aus:
 
 ```json
 {
@@ -71,29 +94,9 @@ Anzeige-Blöcke.
 Falls `complete` false ist: mit Mathias klären, ob er fertig tippen soll, bevor
 gerendert wird - sonst fehlen Wörter im Video komplett.
 
-## Falls sich das Tool ändern soll
+## Falls sich das Werkzeug ändern soll
 
-Die Quelldatei liegt versioniert im Repo unter
-`.claude/skills/radlhias_yepp_subtitle/tools/yepp_timer.html` - dort ändern,
-danach veröffentlichen und die Änderung mitcommitten, damit Repo und Artefakt
-nicht auseinanderlaufen.
-
-Das Artefakt über das `Artifact`-Tool mit `url: "<Artefakt-URL>"` **aktualisieren**,
-nicht neu publizieren - sonst entsteht ein zweiter Link und Mathias' Lesezeichen
-bricht.
-
-Zwei Fallstricke, die schon zu "das Tool zeigt einen alten Stand"-Meldungen
-geführt haben:
-
-- **Capabilities werden mitgeschleppt.** Lässt man `capabilities` beim Redeploy
-  weg, bleibt die gespeicherte Deklaration bestehen. Als der `db`-Speicherweg aus
-  dem Code entfernt wurde, blieb `db` deklariert - deshalb erschien weiterhin die
-  Blase "Sign in to see this artifact's data". Korrekt ist eine vollständige
-  Neudeklaration, aktuell `capabilities: {"downloads": true}`.
-- **Ein geteilter Link ist auf eine Version gepinnt.** Wer nicht eingeloggt über
-  einen Share-Link öffnet, sieht so lange die gepinnte Version, bis der Pin über
-  das Share-Menü auf die neue Version gesetzt wird. Neue Publishes erreichen ihn
-  sonst nicht - das sieht nach Browser-Cache aus, ist aber keiner. Genau deshalb
-  ist der Yepp-Timer bewusst **privat** und nicht per Link geteilt: eingeloggt
-  bekommt Mathias immer die aktuellste Version. Also nicht öffentlich teilen,
-  wenn es nicht wirklich nötig ist.
+`yepp-timer.html` im Wurzelverzeichnis ändern, committen, mergen - fertig. Die
+Seite trägt `noindex, nofollow` und ist nirgends verlinkt, taucht also nicht in
+der Suche auf. Sie ist eine einzelne, in sich geschlossene Datei ohne Abhängigkeit
+außer den Google-Fonts.
