@@ -3,8 +3,8 @@
 RadlHias Reel-Vorlage
 ======================
 Nimmt ein Rohvideo + entweder (a) eine SRT-Datei (z.B. aus VN exportiert, Text
-vorher korrigiert) oder (b) eine timing.json aus dem Wort-Taktgeber-Tool (siehe
-references/wort_taktgeber.md) und erzeugt automatisch das fertige Reel im
+vorher korrigiert) oder (b) eine timing.json aus dem Timestamp-Tool (siehe
+references/timestamp.md) und erzeugt automatisch das fertige Reel im
 RadlHias-Stil:
 - Wort-fuer-Wort-Untertitel, aktuelles Wort wird groesser/orange (Karaoke-Puls)
 - Navy/Orange/Creme-Farbschema, Doppelkontur-Look, Schatten, Filmkorn, -2.5 Grad Neigung
@@ -18,7 +18,7 @@ Voraussetzungen im selben Ordner:
     logo_watermark.png   (500x500 o.ae. RadlHias-Logo, transparent, wird automatisch skaliert)
 
 Workflow für Mathias (empfohlen - exaktes Timing, kein Schaetzen aus der Tonspur):
-    1. Wort-Taktgeber-Artefakt oeffnen, Rohvideo + reinen Text (ohne Zeitstempel)
+    1. Timestamp-Artefakt oeffnen, Rohvideo + reinen Text (ohne Zeitstempel)
        laden, im Sprechtempo durchtippen, "Fuer Claude speichern" druecken.
     2. Claude liest die getappten Zeitstempel (timing.json) zurueck und ruft
        python3 make_reel.py mein_video.mp4 timing.json reel_fertig.mp4 auf.
@@ -308,7 +308,7 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
 # 2b. WORT-TIMING AUS DEM WORT-TAKTGEBER-TOOL (manuell getappte Zeitstempel)
 # ---------------------------------------------------------------------------
 def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
-    """Liest die vom Wort-Taktgeber-Tool exportierten Tap-Zeitstempel ein
+    """Liest die vom Timestamp-Tool exportierten Tap-Zeitstempel ein
     (JSON: {"words": [{"w": "...", "t": 1.23}, ...]}). Das ist die
     zuverlaessigste Quelle fuer Wort-Timing ueberhaupt - kein Schaetzen aus
     der Tonspur noetig, weil Mathias selbst im Sprechtempo mitgetippt hat.
@@ -504,7 +504,7 @@ def main(video_path, srt_path, out_path):
         capture_output=True, text=True).stdout.strip())
 
     if srt_path.lower().endswith(".json"):
-        print("Getappte Wort-Zeitstempel einlesen (Wort-Taktgeber)...")
+        print("Getappte Wort-Zeitstempel einlesen (Timestamp)...")
         word_blocks = parse_word_timings_json(srt_path)
     else:
         print("SRT einlesen...")

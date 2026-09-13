@@ -1,6 +1,6 @@
 ---
 name: radlhias_yepp_subtitle
-description: Baut aus einem RadlHias-Reel-Rohvideo + Wort-Zeitstempeln (bevorzugt aus dem Wort-Taktgeber-Tool, wo Mathias die Zeitstempel im Sprechtempo selbst eintippt; alternativ einer korrigierten SRT-Untertiteldatei, z.B. aus der VN-App) ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-für-Wort-Karaoke-Untertitel (aktuelles Wort wird größer/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5° Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. IMMER verwenden, wenn Mathias ein Video + Untertiteltext/SRT/Taktgeber-Zeitstempel für ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwähnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen. Auch verwenden, wenn er nur ein Rohvideo mit gesprochenem Text schickt und ein fertiges Reel will (dann zuerst auf das Wort-Taktgeber-Tool verweisen, oder ersatzweise die Tonspur transkribieren/SRT draus bauen).
+description: Baut aus einem RadlHias-Reel-Rohvideo + Wort-Zeitstempeln (bevorzugt aus dem Timestamp-Tool, wo Mathias die Zeitstempel im Sprechtempo selbst eintippt; alternativ einer korrigierten SRT-Untertiteldatei, z.B. aus der VN-App) ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-für-Wort-Karaoke-Untertitel (aktuelles Wort wird größer/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5° Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. IMMER verwenden, wenn Mathias ein Video + Untertiteltext/SRT/Timestamp-Zeitstempel für ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwähnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen. Auch verwenden, wenn er nur ein Rohvideo mit gesprochenem Text schickt und ein fertiges Reel will (dann zuerst auf das Timestamp-Tool verweisen, oder ersatzweise die Tonspur transkribieren/SRT draus bauen).
 ---
 
 # RadlHias Yepp-Untertitel
@@ -21,8 +21,8 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
 1. **Video prüfen**: liegt eine Videodatei vor? Falls nicht, nachfragen. Videos über
    dem Chat-Upload-Limit: Google Drive freigeben lassen und per Composio-Verbindung
    (googledrive) holen, siehe `references/video_transfer.md`.
-2. **Wort-Timing besorgen - bevorzugt per Wort-Taktgeber (exakt, kein Schätzen):**
-   - Mathias auf das **Wort-Taktgeber**-Artefakt verweisen (URL:
+2. **Wort-Timing besorgen - bevorzugt per Timestamp (exakt, kein Schätzen):**
+   - Mathias auf das **Timestamp**-Artefakt verweisen (URL:
      `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`, per
      `Artifact`-Tool mit `action:"read"` bei Bedarf neu abrufen/aktualisieren statt
      neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
@@ -60,9 +60,9 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    `present_files` zeigen. Bei über 30MB vor dem Versand komprimieren (siehe
    `references/manual_assembly.md`).
 
-## Fallback ohne Wort-Taktgeber: SRT + Audio-Energie-Schätzung
+## Fallback ohne Timestamp: SRT + Audio-Energie-Schätzung
 
-Nur verwenden, wenn Mathias das Wort-Taktgeber-Tool nicht nutzen kann/will. Liegt
+Nur verwenden, wenn Mathias das Timestamp-Tool nicht nutzen kann/will. Liegt
 nur Fließtext vor (eingesprochen/eingetippt, keine SRT)? Erst die Tonspur mit
 `ffmpeg -i video.mp4 -vn -ar 16000 -ac 1 audio.wav` extrahieren, dann grobe
 Sprechabschnitte per `ffmpeg ... silencedetect` oder anhand der Zeilenumbrüche in
@@ -116,7 +116,7 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 
 ## Bekannte Grenzen (nur relevant für den SRT-Fallback-Pfad)
 
-Mit dem Wort-Taktgeber entfallen diese Einschränkungen komplett, da dort echte
+Mit dem Timestamp entfallen diese Einschränkungen komplett, da dort echte
 von Mathias getappte Zeitstempel verwendet werden statt einer Schätzung.
 
 - Wort-Timing basiert auf Audio-Energie-Analyse (echte Mikropausen per ffmpeg

@@ -1,4 +1,4 @@
-# Wort-Taktgeber - manuelles Wort-Timing per Tippen
+# Timestamp - manuelles Wort-Timing per Tippen
 
 Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`
 
@@ -6,7 +6,7 @@ Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2
 
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
-dem Mund spürbar hinterherhinken oder vorauseilen. Der Wort-Taktgeber umgeht das
+dem Mund spürbar hinterherhinken oder vorauseilen. Der Timestamp umgeht das
 Problem komplett: Mathias spielt sein Video ab und tippt bei jedem Wort selbst mit
 (Leertaste oder Button) - die App speichert dabei `video.currentTime` als
 Startzeitpunkt des jeweils aktuellen Worts. Das ist die praezise Quelle ueberhaupt,
