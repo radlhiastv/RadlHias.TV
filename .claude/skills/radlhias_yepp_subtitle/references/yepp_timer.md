@@ -64,16 +64,28 @@ Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wech
    Tempo-Regler (0,1x Zeitlupe bis 2x Vorspulen) navigieren. Die Bildrate für den
    Einzelbild-Schritt misst die App aus dem laufenden Video, statt 24 fps
    anzunehmen.
-8. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
+8. **Zoom für genaues Setzen:** Mit zwei Fingern auf der Timeline auseinander-
+   ziehen zoomt hinein, zusammenschieben wieder heraus; die Stelle zwischen den
+   Fingern bleibt dabei stehen. Alternativ die Knöpfe −/+ über der Timeline
+   (Ankerpunkt ist dann der Playhead), am Rechner auch das Mausrad.
+   "Ganzes Video" setzt zurück. Die Anzeige daneben nennt den sichtbaren
+   Bereich, orange Randstreifen zeigen, dass links bzw. rechts noch Video
+   weitergeht.
+   Warum das nötig ist: Bei 40 Sekunden auf 900 Pixeln entspricht ein Pixel
+   rund 45 Millisekunden. Bei 8-fachem Zoom sind es unter 6 - erst damit lässt
+   sich ein Wortanfang sauber treffen. Die Zeitmarken werden beim Hineinzoomen
+   automatisch feiner (bis hinunter zu Zwanzigstelsekunden), und beim Abspielen
+   wandert das Fenster mit dem Playhead mit.
+9. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
    eingefroren und ein Eingabefeld öffnet sich.
-9. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
+10. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
    optionalen Fließtext bietet das Feld per Autocomplete an). Der Marker erscheint
    als grüner Strich auf der Timeline und unten in der chronologischen Liste. War
    das Video vorher am Laufen, läuft es nach dem Bestätigen weiter.
-10. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
+11. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
    Worttext nachträglich; ✕ löscht einen einzelnen Marker; "Alles zurücksetzen"
    löscht alle (mit Rückfrage).
-11. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
+12. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
    bzw. Text im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des

@@ -7,7 +7,7 @@
    2. Nebeneffekt, der hier wirklich nuetzlich ist: das Werkzeug laeuft danach
       auch ohne Netz. Das Video liegt ohnehin lokal auf dem Geraet. */
 
-const CACHE = 'yepp-timer-v2';
+const CACHE = 'yepp-timer-v3';
 const SHELL = [
   './',
   './index.html',
