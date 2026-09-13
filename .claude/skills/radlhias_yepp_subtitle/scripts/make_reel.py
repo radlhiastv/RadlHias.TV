@@ -126,37 +126,42 @@ def local_minimum_near(times, rms_s, target_t, seg_start, seg_end, search_radius
                 best = (score, seg_t[i])
     return best[1] if best else None
 
-def find_speech_subchunks(times, rms_s, start, end, noise_db=-24, min_silence=0.12, edge_pad=0.03):
-    """Findet echte Mikro-Sprechpausen INNERHALB eines SRT-Blocks (per Audio-Energie,
-    Schwelle relativ zum Block-eigenen Pegel-Peak - funktioniert also auch bei leiseren
-    Aufnahmen). Ein SRT-Block ist oft ein ganzer Satz (mehrere Sekunden); ohne diese
-    Unterteilung schaetzt words_for_block Wort-Grenzen rein proportional zur Wortlaenge
-    ueber den GANZEN Block, was bei laengeren Bloecken zu spuerbarer Drift zwischen
-    Untertitel-Tempo und tatsaechlichem Mund/Sprechtempo fuehrt. Mit den echten
-    Mikropausen als zusaetzliche Anker bleibt die Verschiebung auf wenige Woerter
-    zwischen zwei echten Pausen begrenzt statt sich ueber den ganzen Satz aufzusummieren.
-    """
-    mask = (times >= start) & (times <= end)
-    t, r = times[mask], rms_s[mask]
-    if len(r) < 5:
-        return [(start, end)]
-    peak = np.percentile(r, 95) + 1e-9
-    thresh = peak * (10 ** (noise_db / 20))
-    is_silence = r < thresh
-    silences, i, n = [], 0, len(t)
-    while i < n:
-        if is_silence[i]:
-            j = i
-            while j < n and is_silence[j]:
-                j += 1
-            dur = t[j - 1] - t[i] if j > i else 0
-            if dur >= min_silence:
-                silences.append((t[i], t[j - 1]))
-            i = j
+def detect_silences(audio_path, noise_db=-24, min_dur=0.12):
+    """Ruft ffmpegs eigene silencedetect-Analyse EINMAL auf die ganze Tonspur auf und
+    liefert alle (start,end)-Stille-Intervalle. Das ist deutlich zuverlaessiger als ein
+    selbstgebauter RMS-Schwellenwert: eine Schwelle relativ zum Pegel-Peak versagt naemlich,
+    sobald der Grundrauschpegel der Aufnahme fast so hoch liegt wie die Schwelle selbst
+    (bei -24dB Peak-relativ z.B. kein einziges Frame mehr darunter) - ffmpegs Implementierung
+    ist dagegen abgehangen und in der Praxis getestet."""
+    out = subprocess.run(
+        ["ffmpeg", "-i", audio_path, "-af", f"silencedetect=noise={noise_db}dB:d={min_dur}",
+         "-f", "null", "-"],
+        capture_output=True, text=True).stderr
+    starts = [float(x) for x in re.findall(r"silence_start:\s*([\-0-9.]+)", out)]
+    ends = [float(x) for x in re.findall(r"silence_end:\s*([\-0-9.]+)", out)]
+    return list(zip(starts, ends[:len(starts)]))
+
+def find_speech_subchunks(silences, start, end, min_dur=0.15, edge_pad=0.03, merge_gap=0.05):
+    """Schneidet die global erkannten Stille-Intervalle auf einen SRT-Block zu und liefert
+    die dazwischenliegenden echten Sprechabschnitte. Ein SRT-Block ist oft ein ganzer Satz
+    (mehrere Sekunden); ohne diese Unterteilung schaetzt words_for_block Wort-Grenzen rein
+    proportional zur Wortlaenge ueber den GANZEN Block, was bei laengeren Bloecken zu
+    spuerbarer Drift zwischen Untertitel-Tempo und tatsaechlichem Mund/Sprechtempo fuehrt.
+    Mit den echten Mikropausen als zusaetzliche Anker bleibt die Verschiebung auf wenige
+    Woerter zwischen zwei echten Pausen begrenzt statt sich ueber den ganzen Satz
+    aufzusummieren. Sehr kurze/schwache Stille-Kandidaten (<min_dur) werden ignoriert,
+    dicht aufeinanderfolgende (<merge_gap Abstand) verschmolzen."""
+    local = [(max(s, start), min(e, end)) for s, e in silences if e > start and s < end]
+    local = [(s, e) for s, e in local if e - s >= min_dur]
+    local.sort()
+    merged = []
+    for s, e in local:
+        if merged and s - merged[-1][1] < merge_gap:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], e))
         else:
-            i += 1
+            merged.append((s, e))
     subchunks, cur = [], start
-    for s0, s1 in silences:
+    for s0, s1 in merged:
         if s0 > cur + edge_pad:
             subchunks.append((cur, s0))
         cur = max(cur, s1)
@@ -164,50 +169,14 @@ def find_speech_subchunks(times, rms_s, start, end, noise_db=-24, min_silence=0.
         subchunks.append((cur, end))
     return subchunks if subchunks else [(start, end)]
 
-def _proportional_bounds(words, subchunks, start, end):
-    """Verteilt Woerter gewichtet nach Zeichenlaenge ueber die gegebenen (echten)
-    Sprechabschnitte hinweg (Pausen dazwischen werden uebersprungen)."""
-    weights = [len(w) + 2 for w in words]
-    total_w = sum(weights)
-    total_dur = sum(e - s for s, e in subchunks) or (end - start)
-    cum, cum_bounds = 0, [0.0]
-    for wt in weights:
-        cum += wt
-        cum_bounds.append(total_dur * (cum / total_w))
-
-    def speech_to_real(tt):
-        acc = 0.0
-        for cs, ce in subchunks:
-            d = ce - cs
-            if acc + d >= tt or (cs, ce) == subchunks[-1]:
-                return cs + (tt - acc)
-            acc += d
-        return subchunks[-1][1]
-
-    bounds = [speech_to_real(b) for b in cum_bounds]
-    bounds[0], bounds[-1] = start, end
-    for i in range(1, len(bounds)):
-        if bounds[i] <= bounds[i - 1]:
-            bounds[i] = bounds[i - 1] + 0.05
-    return bounds
-
-def words_for_block(times, rms_s, start, end, text):
-    words = [clean_word(w) for w in text.split()]
+def _single_span_words(words, times, rms_s, start, end):
+    """Verteilt Woerter proportional zur Zeichenlaenge ueber EINE zusammenhaengende
+    Zeitspanne, verfeinert per lokaler Energie-Minima-Suche. Das ist der Kern-Algorithmus
+    fuer eine Zeitspanne OHNE bekannte interne Pausen (kurzer Block, oder ein einzelner
+    Sprechabschnitt innerhalb eines groesseren Blocks)."""
     n = len(words)
-    if n == 0:
-        return []
     if n == 1:
         return [(words[0], start, end)]
-
-    subchunks = find_speech_subchunks(times, rms_s, start, end)
-    if len(subchunks) > 1:
-        # Bevorzugter Pfad: echte Mikropausen im Block gefunden -> Woerter darauf
-        # verteilen statt ueber den ganzen (womoeglich mehrsekuendigen) Block zu raten.
-        bounds = _proportional_bounds(words, subchunks, start, end)
-        return [(words[i], bounds[i], bounds[i + 1]) for i in range(n)]
-
-    # Fallback: keine internen Pausen gefunden (kurzer oder durchgehend gesprochener
-    # Block) -> wie bisher rein proportional + lokale Energie-Minima-Suche.
     weights = [len(w) + 2 for w in words]
     total_w = sum(weights)
     t, prop_bounds = start, []
@@ -228,7 +197,57 @@ def words_for_block(times, rms_s, start, end, text):
     bounds[-1] = end
     return [(words[i], bounds[i], bounds[i + 1]) for i in range(n)]
 
-def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR):
+def words_for_block(times, rms_s, silences, start, end, text):
+    words = [clean_word(w) for w in text.split()]
+    n = len(words)
+    if n == 0:
+        return []
+    if n == 1:
+        return [(words[0], start, end)]
+
+    subchunks = find_speech_subchunks(silences, start, end)
+    if len(subchunks) <= 1:
+        # Fallback: keine internen Pausen gefunden (kurzer oder durchgehend
+        # gesprochener Block) -> wie bisher ueber den GANZEN Block schaetzen.
+        return _single_span_words(words, times, rms_s, start, end)
+
+    # Bevorzugter Pfad: echte Mikropausen im Block gefunden. WICHTIG: die Woerter
+    # werden zuerst den einzelnen Sprechabschnitten zugeteilt (kumulatives Gewicht
+    # ~ kumulative Sprechdauer) und DANN innerhalb jedes Abschnitts fuer sich
+    # aufgeteilt - nur so bleiben die echten Pausen zwischen den Woertern als
+    # Luecke erhalten. Eine einzige durchgehende Zeitachse ueber alle Abschnitte
+    # hinweg (wie im ersten Anlauf) kann eine Pause zwischen zwei Woertern
+    # grundsaetzlich nicht abbilden, weil das End-des-einen-/Start-des-naechsten-
+    # Wortes im Datenmodell derselbe Zeitpunkt ist.
+    weights = [len(w) + 2 for w in words]
+    total_w = sum(weights)
+    total_dur = sum(e - s for s, e in subchunks)
+    cum, cum_targets = 0, []
+    for wt in weights:
+        cum += wt
+        cum_targets.append(total_dur * (cum / total_w))
+    sub_cum_end, running = [], 0.0
+    for cs, ce in subchunks:
+        running += ce - cs
+        sub_cum_end.append(running)
+    assign, ci = [], 0
+    for tgt in cum_targets:
+        while ci < len(subchunks) - 1 and tgt > sub_cum_end[ci] + 1e-9:
+            ci += 1
+        assign.append(ci)
+
+    result = []
+    for ci_target, (cs, ce) in enumerate(subchunks):
+        idxs = [i for i, a in enumerate(assign) if a == ci_target]
+        if not idxs:
+            continue
+        chunk_words = [words[i] for i in idxs]
+        result.extend(_single_span_words(chunk_words, times, rms_s, cs, ce))
+    return result
+
+def _enforce_min_duration_run(seg_words, min_dur):
+    """Wie enforce_min_duration, aber fuer einen garantiert LUECKENLOSEN Wort-Lauf
+    (Wort i endet exakt dort, wo Wort i+1 beginnt)."""
     if len(seg_words) <= 1:
         return seg_words
     start, end = seg_words[0][1], seg_words[-1][2]
@@ -255,6 +274,27 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR):
     if bounds[-2] >= bounds[-1]:
         bounds[-2] = bounds[-1] - 0.05
     return [(seg_words[i][0], bounds[i], bounds[i + 1]) for i in range(n)]
+
+def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
+    """Zieht zu kurze Wort-Anzeigedauern auseinander - aber NUR innerhalb eines
+    zusammenhaengenden Laufs ohne echte Pause. Ein Block kann (dank Mikropausen-
+    Erkennung) aus mehreren durch echte Sprechpausen getrennten Wort-Laeufen
+    bestehen; wuerde man die ganze Liste am Stueck bearbeiten, wie urspruenglich,
+    wuerden diese Pausen faelschlich mit-eingeebnet."""
+    if len(seg_words) <= 1:
+        return seg_words
+    runs, cur = [], [seg_words[0]]
+    for prev, w in zip(seg_words, seg_words[1:]):
+        if w[1] - prev[2] > gap_eps:
+            runs.append(cur)
+            cur = [w]
+        else:
+            cur.append(w)
+    runs.append(cur)
+    out = []
+    for run in runs:
+        out.extend(_enforce_min_duration_run(run, min_dur))
+    return out
 
 # ---------------------------------------------------------------------------
 # 3. DICHTE BLOECKE AUTOMATISCH AUFTEILEN (max. MAX_WORDS_PER_BLOCK Woerter)
@@ -427,11 +467,12 @@ def main(video_path, srt_path, out_path):
     print("SRT einlesen...")
     srt_blocks = parse_srt(srt_path)
     times, rms_s = load_rms(audio_path)
+    silences = detect_silences(audio_path)
 
     print("Wort-Timing pro Block ermitteln (Audio-Energie-Analyse)...")
     word_blocks = []
     for start, end, text in srt_blocks:
-        wb = words_for_block(times, rms_s, start, end, text)
+        wb = words_for_block(times, rms_s, silences, start, end, text)
         wb = enforce_min_duration(wb)
         if wb:
             word_blocks.append(wb)
