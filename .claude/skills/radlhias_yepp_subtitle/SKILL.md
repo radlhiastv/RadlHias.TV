@@ -23,7 +23,7 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    (googledrive) holen, siehe `references/video_transfer.md`.
 2. **Wort-Timing besorgen - bevorzugt per Reel-Timing (exakt, kein Schätzen):**
    - Mathias auf das **Reel-Timing**-Artefakt verweisen (URL:
-     `https://claude.ai/code/artifact/404dbfa9-aa8d-4f87-a5fa-cf2be602f4ca`, per
+     `https://claude.ai/code/artifact/19831802-3754-4d69-a43e-ebff873f255b`, per
      `Artifact`-Tool mit `action:"read"` bei Bedarf neu abrufen/aktualisieren statt
      neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
      Upload) + optional den reinen gesprochenen Text (nur Gedächtnisstütze/
