@@ -1,4 +1,4 @@
-# Timestamp - manuelles Wort-Timing per Tippen
+# Timestamp - manuelles Wort-Timing per Marke+Zuordnung
 
 Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`
 
@@ -6,11 +6,11 @@ Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2
 
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
-dem Mund spürbar hinterherhinken oder vorauseilen. Der Timestamp umgeht das
-Problem komplett: Mathias spielt sein Video ab und tippt bei jedem Wort selbst mit
-(Leertaste oder Button) - die App speichert dabei `video.currentTime` als
-Startzeitpunkt des jeweils aktuellen Worts. Das ist die praezise Quelle ueberhaupt,
-weil kein Algorithmus mehr raten muss.
+dem Mund spürbar hinterherhinken oder vorauseilen. Timestamp umgeht das Problem
+komplett: Mathias navigiert im Video exakt zur Stelle, setzt dort eine Marke und
+tippt dann im angezeigten Text an, welches Wort dort gesprochen wird - die App
+speichert dabei `video.currentTime` als Zeitpunkt fuer genau dieses Wort. Das ist
+die praezise Quelle ueberhaupt, weil kein Algorithmus mehr raten muss.
 
 ## Ablauf für Mathias
 
@@ -18,13 +18,24 @@ weil kein Algorithmus mehr raten muss.
 2. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
 3. Den gesprochenen Text als reinen Fließtext einfügen (keine Zeitstempel nötig).
 4. "Los geht's" - Video startet automatisch.
-5. Bei jedem Wort, das gerade gesprochen wird, Leertaste drücken (oder auf den
-   großen Button tippen). Bei Bedarf Tempo auf 0,5x/0,75x drosseln, mit den
-   ◀2s/2s▶-Buttons zurück-/vorspulen, oder in der Liste unten auf ein bereits
-   getapptes Wort klicken, um ab dort neu zu tappen (z.B. nach einem Verhaspler).
-   Die Reaktionszeit-Korrektur (Standard 0,15s) gleicht die menschliche
-   Verzögerung zwischen Hören und Tippen automatisch aus.
-6. Wenn `Progress` bei "X / X" steht: "Für Claude speichern" drücken.
+5. Zur gewünschten Stelle navigieren: großer Zeit-Anzeiger + Scrub-Leiste, Sprung-
+   Buttons (±0,1s/±1s/±5s), Frame-Schritt (◂Frame / Frame▸, ~1/24s), Tempo-Regler
+   für Zeitlupe (0,1x-0,75x) oder Vorspulen (1,5x/2x) durch stille Passagen.
+6. **Marke setzen** drücken (oder Taste `M`) - Zeitpunkt wird eingefroren, bei
+   Bedarf noch mit ±0,02s/±0,1s nachjustieren.
+7. Im Text unten auf das Wort tippen, das an dieser Marke gesprochen wird - die
+   Marke wird diesem Wort zugeordnet (grün markiert, mit Zeit-Badge) und die
+   Video-Zeit bleibt für die nächste Marke stehen.
+8. Ein bereits zugeordnetes Wort antippen (ohne aktive Marke) springt im Video an
+   diese Stelle zurück - praktisch zum Nachprüfen. Mit aktiver Marke erneut
+   antippen überschreibt die alte Zuordnung. "Alles zurücksetzen" löscht alle
+   Zuordnungen (mit Rückfrage).
+9. Wenn der Fortschrittsbalken bei "X / X" steht: "Für Claude speichern" drücken.
+
+Ein rot umrandetes Wort in der Liste bedeutet: seine Zeit liegt vor der des
+vorherigen zugeordneten Worts - meist ein Zeichen, dass aus Versehen die falsche
+Wiederholung eines häufigen Worts (z.B. "und", "die") angetippt wurde. Kurz
+gegenprüfen und ggf. korrigieren.
 
 ## Ergebnis auslesen (für Claude)
 

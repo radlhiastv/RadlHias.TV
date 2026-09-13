@@ -26,8 +26,10 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
      `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`, per
      `Artifact`-Tool mit `action:"read"` bei Bedarf neu abrufen/aktualisieren statt
      neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
-     Upload) + den reinen gesprochenen Text (ganz ohne Zeitstempel) und tippt im
-     Sprechtempo mit, bis "Für Claude speichern" grün wird.
+     Upload) + den reinen gesprochenen Text (ganz ohne Zeitstempel). Er navigiert
+     dann per Scrub-Leiste/Sprung-Buttons/Zeitlupe exakt zur Stelle, setzt eine
+     Marke und tippt im Text das dort gesprochene Wort an (siehe
+     `references/timestamp.md`), bis "Für Claude speichern" grün wird.
    - Danach die getappten Zeitstempel auslesen: `Artifact` mit `action:"read_db"`,
      `db_op:"get"`, `collection:"timing"`, `doc_id:"current"` auf der obigen URL.
      Das Ergebnis als JSON-Datei (z.B. `timing.json`) lokal speichern - dieses
