@@ -23,8 +23,8 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    (googledrive) holen, siehe `references/video_transfer.md`.
 2. **Wort-Timing besorgen - bevorzugt per Yepp-Timer (exakt, kein Schätzen):**
    - Mathias auf den **Yepp-Timer** verweisen:
-     **https://radlhias.tv/yepp-timer.html** (Quelldatei im Repo: `yepp-timer.html`
-     im Wurzelverzeichnis - kein Claude-Artefakt mehr, siehe
+     **https://radlhias.tv/yepp-timer/** (Quelldateien im Repo: Ordner
+     `yepp-timer/` - kein Claude-Artefakt mehr, siehe
      `references/yepp_timer.md` für die Gründe). Er lädt dort sein Rohvideo
      (bleibt lokal im Browser, kein Upload) + optional den reinen gesprochenen
      Text (nur Gedächtnisstütze/Fortschrittszähler). Er zieht den Playhead auf

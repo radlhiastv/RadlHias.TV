@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yepp-Timer – RadlHias.TV</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Wort-Zeitstempel für RadlHias-Reels setzen.">
+<meta name="theme-color" content="#14212F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Yepp-Timer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Yepp-Timer - Schnittraum-Optik: durchgehend dunkel, weil das
+   Werkzeug neben dem Videobild steht. Bewusst einthemig, damit
+   es in jeder Host-Umgebung identisch aussieht.
+   ============================================================ */
+:root{
+  --navy:      #14212F;   /* Grundfläche */
+  --navy-2:    #1C2E42;   /* Panel */
+  --navy-3:    #253B54;   /* Eingabefelder, Timeline-Bett */
+  --line:      rgba(241,233,218,.15);
+  --line-2:    rgba(241,233,218,.30);
+  --cream:     #F1E9DA;   /* Text */
+  --cream-dim: #A3B0BE;   /* Nebentext */
+  --orange:    #E8873B;   /* Akzent: Playhead, Primäraktion */
+  --orange-2:  #C96A22;
+  --green:     #5FB37A;   /* gesetzte Wörter */
+  --red:       #E5705E;   /* Warnung, Löschen */
+  --ink:       #12100D;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+html{height:100%;}
+body{
+  height:100%;
+  margin:0;
+  background:var(--navy);
+  color:var(--cream);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:14px;
+  -webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
+}
+
+h1,h2,h3,.label,button,.pill,.eyebrow{
+  font-family:'Barlow Condensed','Inter',system-ui,sans-serif;
+}
+
+/* ---------- Grundbausteine ---------- */
+.panel{background:var(--navy-2); border:1px solid var(--line); border-radius:12px;}
+.stack{display:flex; flex-direction:column;}
+.row{display:flex; align-items:center;}
+
+.label{
+  text-transform:uppercase; letter-spacing:.09em; font-size:.8rem;
+  font-weight:600; color:var(--cream-dim);
+}
+.eyebrow{
+  text-transform:uppercase; letter-spacing:.16em; font-size:.72rem;
+  font-weight:600; color:var(--orange);
+}
+
+button{
+  font-weight:600; letter-spacing:.02em; font-size:.98rem;
+  border:1px solid var(--line-2); border-radius:9px;
+  padding:9px 14px; cursor:pointer;
+  background:var(--navy-3); color:var(--cream);
+  touch-action:manipulation;
+}
+button:hover:not(:disabled){border-color:var(--cream-dim);}
+button:disabled{opacity:.35; cursor:not-allowed;}
+button.primary{background:var(--orange); color:var(--ink); border-color:transparent;}
+button.primary:hover:not(:disabled){background:#F19B55;}
+button.ghost{background:transparent;}
+button.small{padding:6px 10px; font-size:.86rem;}
+button.active{background:var(--orange); color:var(--ink); border-color:transparent;}
+:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+
+input[type=text], textarea, input[type=file]{
+  width:100%; font-family:'Inter',sans-serif; font-size:.95rem;
+  color:var(--cream); background:var(--navy-3);
+  border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+}
+input[type=file]{padding:8px 10px;}
+input[type=file]::file-selector-button{
+  font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:.92rem;
+  background:var(--navy-2); color:var(--cream);
+  border:1px solid var(--line-2); border-radius:7px; padding:6px 12px;
+  margin-right:10px; cursor:pointer;
+}
+textarea{min-height:110px; resize:vertical; line-height:1.55;}
+::placeholder{color:#6E7D8C;}
+
+.num{font-variant-numeric:tabular-nums;}
+[hidden]{display:none!important;}
+
+/* ============================================================
+   1 - Startbildschirm
+   ============================================================ */
+#setup{
+  height:100%; overflow-y:auto;
+  padding:24px 20px 32px;
+  display:flex; flex-direction:column; align-items:center;
+}
+#setup .inner{width:100%; max-width:620px; display:flex; flex-direction:column; gap:18px;}
+#setup h1{
+  font-size:clamp(1.7rem,5vw,2.3rem); font-weight:700; margin:4px 0 0;
+  text-transform:uppercase; letter-spacing:.02em; text-wrap:balance;
+}
+#setup .sub{color:var(--cream-dim); margin:0; line-height:1.6; max-width:60ch;}
+.field{display:flex; flex-direction:column; gap:7px;}
+#setup .panel{padding:16px; display:flex; flex-direction:column; gap:16px;}
+.startrow{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;}
+#installHint{
+  margin:0; color:var(--cream-dim); font-size:.86rem; line-height:1.6;
+  border-left:2px solid var(--orange); padding-left:12px;
+}
+#wordCountHint{color:var(--cream-dim); font-size:.88rem;}
+#startBtn{font-size:1.05rem; padding:11px 22px;}
+
+/* ============================================================
+   2 - Arbeitsbildschirm
+   ============================================================ */
+#work{height:100%; padding:10px; display:flex; flex-direction:column; gap:10px;}
+.grid{
+  flex:1; min-height:0;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px;
+}
+.col{display:flex; flex-direction:column; gap:10px; min-height:0;}
+
+/* --- Videospalte --- */
+.videobox{padding:8px; display:flex; flex-direction:column; gap:8px; min-height:0;}
+video{
+  width:100%; flex:1; min-height:0; border-radius:8px;
+  background:#000; display:block; object-fit:contain;
+}
+.clock{display:flex; justify-content:space-between; align-items:baseline; padding:0 2px;}
+#timeRead{font-size:clamp(1.3rem,3.6vw,1.8rem); font-weight:700; color:var(--orange); letter-spacing:.01em;}
+#durRead{color:var(--cream-dim); font-size:.86rem;}
+.transport{display:flex; gap:5px; justify-content:center; flex-wrap:wrap;}
+.transport button{min-width:3.1em; padding:7px 9px;}
+#playPause{min-width:4.4em;}
+.speedrow{display:flex; gap:5px; justify-content:center; flex-wrap:wrap;}
+
+/* --- Timeline --- */
+.timeline{
+  position:relative; height:68px; border-radius:8px;
+  background:var(--navy-3); border:1px solid var(--line);
+  touch-action:none; cursor:ew-resize; overflow:hidden; user-select:none;
+}
+.tl-tick{position:absolute; top:0; bottom:0; width:1px; background:var(--line-2); z-index:1;}
+.tl-ticklabel{
+  position:absolute; bottom:3px; transform:translateX(3px); z-index:1;
+  font-size:.66rem; color:var(--cream-dim); font-variant-numeric:tabular-nums;
+  pointer-events:none;
+}
+.tl-marker{
+  position:absolute; top:0; width:2px; height:58%; background:var(--green);
+  pointer-events:none; z-index:2;
+}
+.tl-playhead{
+  position:absolute; top:0; bottom:0; width:2px; background:var(--orange);
+  pointer-events:none; z-index:3;
+}
+.tl-playhead::before{
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:13px; height:13px; border-radius:0 0 3px 3px; background:var(--orange);
+}
+
+/* --- Wort setzen --- */
+.setword{
+  width:100%; padding-block:15px; font-size:1.12rem; border-radius:11px;
+  background:var(--orange); color:var(--ink); border:none;
+  text-transform:uppercase; letter-spacing:.05em; font-weight:700;
+}
+.setword:hover{background:#F19B55;}
+.kbdhint{
+  font-family:ui-monospace,monospace; font-size:.72em; font-weight:500;
+  background:rgba(18,16,13,.16); border-radius:4px; padding:1px 5px; margin-left:6px;
+}
+@media (pointer:coarse){ .kbdhint{display:none;} }
+
+.wordentry{
+  display:flex; gap:7px; align-items:center;
+  background:var(--navy-3); border:1px solid var(--orange);
+  border-radius:11px; padding:8px 9px;
+}
+.wordentry .at{color:var(--orange); font-weight:700; font-size:.9rem; white-space:nowrap;}
+.wordentry input[type=text]{flex:1; min-width:0; background:var(--navy-2);}
+
+.entrybox{padding:11px; display:flex; flex-direction:column; gap:10px;}
+.progressrow{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+#progressLabel{color:var(--cream-dim); font-size:.88rem;}
+
+/* --- Wortliste --- */
+.listbox{padding:11px; display:flex; flex-direction:column; gap:9px; min-height:0; flex:1;}
+.listhead{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+.markerlist{
+  flex:1; min-height:64px; overflow-y:auto;
+  border:1px solid var(--line); border-radius:9px; background:var(--navy-3);
+}
+.mrow{
+  display:grid; grid-template-columns:2.4em 4.6em 1fr auto auto; gap:8px; align-items:center;
+  padding:5px 9px; border-bottom:1px solid var(--line); font-size:.88rem;
+}
+.mrow:last-child{border-bottom:none;}
+.mrow .idx{color:#6E7D8C; font-variant-numeric:tabular-nums; font-size:.8rem;}
+.mrow .t{font-variant-numeric:tabular-nums; color:var(--cream-dim); cursor:pointer;}
+.mrow .w{cursor:pointer; font-weight:500; overflow-wrap:anywhere;}
+.mrow .t:hover, .mrow .w:hover{color:var(--orange);}
+.mrow .iconbtn{
+  background:none; border:none; padding:2px 5px; font-size:.95rem;
+  color:var(--cream-dim); cursor:pointer;
+}
+.mrow .iconbtn:hover{color:var(--orange);}
+.mrow .iconbtn.del:hover{color:var(--red);}
+.mrow.warn{box-shadow:inset 0 0 0 2px var(--red); border-radius:6px;}
+.mrow.editing{box-shadow:inset 0 0 0 2px var(--orange); border-radius:6px;}
+.listempty{padding:14px 10px; color:#6E7D8C; font-size:.88rem;}
+
+.pill{
+  display:inline-flex; align-items:center; gap:5px;
+  text-transform:uppercase; letter-spacing:.07em;
+  font-size:.75rem; font-weight:700; padding:4px 10px; border-radius:99px;
+  background:var(--navy-3); color:var(--cream-dim); white-space:nowrap;
+}
+.pill.ok{background:rgba(95,179,122,.18); color:var(--green);}
+.pill.warn{background:rgba(232,135,59,.18); color:var(--orange);}
+
+.exportrow{display:flex; justify-content:space-between; align-items:center; gap:9px; flex-wrap:wrap;}
+#fallbackNote{margin:0; color:var(--orange); font-size:.84rem; line-height:1.5;}
+#fallbackJson{
+  min-height:70px; font-family:ui-monospace,'SF Mono',monospace; font-size:.74rem; line-height:1.45;
+}
+
+details.ref{padding:0 11px;}
+details.ref summary{
+  cursor:pointer; padding:9px 0; list-style:none;
+  font-family:'Barlow Condensed',sans-serif; text-transform:uppercase;
+  letter-spacing:.08em; font-size:.8rem; color:var(--cream-dim); font-weight:600;
+}
+details.ref summary::-webkit-details-marker{display:none;}
+details.ref summary::before{content:'▸ '; color:var(--orange);}
+details.ref[open] summary::before{content:'▾ ';}
+details.ref .reftext{
+  font-size:.9rem; line-height:1.65; color:var(--cream-dim);
+  max-height:15vh; overflow-y:auto; padding-bottom:11px;
+}
+
+/* ---------- Vollbild-Schalter ---------- */
+#fsBtn{
+  position:fixed; right:10px; bottom:10px; z-index:40;
+  padding:8px 12px; font-size:.86rem; border-radius:99px;
+  background:rgba(20,33,47,.92); border:1px solid var(--line-2);
+  backdrop-filter:blur(6px);
+}
+
+/* ---------- Hochformat-Sperre ---------- */
+#rotate{
+  display:none; position:fixed; inset:0; z-index:60;
+  background:var(--navy); color:var(--cream);
+  flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; text-align:center; padding:28px;
+}
+#rotate .icon{font-size:3.6rem; animation:tilt 1.8s ease-in-out infinite;}
+@keyframes tilt{0%,55%,100%{transform:rotate(0deg);} 80%{transform:rotate(90deg);}}
+@media (prefers-reduced-motion:reduce){ #rotate .icon{animation:none;} }
+#rotate h2{margin:0; font-size:1.5rem; text-transform:uppercase; letter-spacing:.03em;}
+#rotate p{margin:0; max-width:32ch; color:var(--cream-dim); line-height:1.6;}
+@media (orientation:portrait) and (max-width:900px){
+  #app{display:none;}
+  #fsBtn{display:none!important;}
+  #rotate{display:flex;}
+}
+
+/* ---------- Schmale/niedrige Querformate: einspaltig ---------- */
+@media (max-width:700px){
+  .grid{grid-template-columns:1fr; overflow-y:auto;}
+  video{flex:none; max-height:34vh;}
+}
+@media (orientation:landscape) and (max-height:420px){
+  .transport button, .speedrow button{padding:5px 8px; font-size:.8rem;}
+  .timeline{height:54px;}
+  .setword{padding-block:11px; font-size:1rem;}
+}
+</style>
+
+</head>
+<body>
+
+<div id="rotate">
+  <div class="icon">📱</div>
+  <h2>Bitte Gerät drehen</h2>
+  <p>Die Timeline braucht die Breite des Querformats. Im Hochformat bleibt der Yepp-Timer gesperrt.</p>
+</div>
+
+<div id="app" style="height:100%;">
+
+<!-- ==================== 1 · START ==================== -->
+<section id="setup">
+  <div class="inner">
+    <div class="stack" style="gap:2px;">
+      <span class="eyebrow">RadlHias · Reel-Untertitel</span>
+      <h1>Yepp-Timer</h1>
+    </div>
+    <p class="sub">Playhead auf der Timeline zur Stelle ziehen, <strong>Wort setzen</strong> drücken, Wort eintippen. Aus deiner eigenen Navigation entstehen echte Zeitstempel — kein Schätzen aus der Tonspur.</p>
+
+    <div class="panel">
+      <div class="field">
+        <label class="label" for="videoFile">1 · Rohvideo</label>
+        <input type="file" id="videoFile" accept="video/*">
+        <span style="color:var(--cream-dim); font-size:.84rem;">Bleibt lokal auf deinem Gerät. Nichts wird hochgeladen.</span>
+      </div>
+      <div class="field">
+        <label class="label" for="transcript">2 · Gesprochener Text <span style="text-transform:none; letter-spacing:0; font-weight:400;">(optional)</span></label>
+        <textarea id="transcript" placeholder="Sattelstützen, die in den Rahmen reinrutschen, die sind ja mal richtig nervig. Jetzt habe ich einen kleinen Tipp für dich …"></textarea>
+        <span style="color:var(--cream-dim); font-size:.84rem;">Dient als Gedächtnisstütze, Fortschrittszähler und Tipp-Vorschlag.</span>
+      </div>
+      <div class="startrow">
+        <span id="wordCountHint">Kein Text hinterlegt</span>
+        <button class="primary" id="startBtn" disabled>Los geht's →</button>
+      </div>
+    </div>
+
+    <p id="installHint" hidden>Die Adressleiste stört? Im Chrome-Menü (⋮) auf <strong>„App installieren"</strong> bzw. <strong>„Zum Startbildschirm hinzufügen"</strong> tippen. Danach startet der Yepp-Timer wie eine eigene App: ohne Browserleiste, direkt im Querformat, und auch ohne Netz.</p>
+  </div>
+</section>
+
+<!-- ==================== 2 · ARBEIT ==================== -->
+<section id="work" hidden>
+  <div class="grid">
+
+    <!-- linke Spalte: Video + Transport -->
+    <div class="col">
+      <div class="panel videobox" style="flex:1;">
+        <video id="player" playsinline></video>
+        <div class="clock">
+          <span id="timeRead" class="num">0:00.000</span>
+          <span id="durRead" class="num">/ 0:00</span>
+        </div>
+        <div class="transport">
+          <button class="small" data-jump="-1">−1s</button>
+          <button class="small" data-jump="-0.1">−0,1s</button>
+          <button class="small" id="frameBack" title="ein Einzelbild zurück">◂F</button>
+          <button class="small" id="playPause">Pause</button>
+          <button class="small" id="frameFwd" title="ein Einzelbild vor">F▸</button>
+          <button class="small" data-jump="0.1">+0,1s</button>
+          <button class="small" data-jump="1">+1s</button>
+        </div>
+        <div class="speedrow" role="group" aria-label="Abspieltempo">
+          <button class="small" data-speed="0.1">0,1×</button>
+          <button class="small" data-speed="0.25">0,25×</button>
+          <button class="small" data-speed="0.5">0,5×</button>
+          <button class="small active" data-speed="1">1×</button>
+          <button class="small" data-speed="2">2×</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- rechte Spalte: Timeline, Eingabe, Liste -->
+    <div class="col">
+      <div class="panel entrybox">
+        <div class="timeline" id="timeline" role="slider" aria-label="Timeline"
+             aria-valuemin="0" aria-valuenow="0" tabindex="0"></div>
+        <button class="setword" id="setWordBtn">Wort setzen<span class="kbdhint">W</span></button>
+        <div class="wordentry" id="wordEntry" hidden>
+          <span class="at num" id="wordEntryTime">0:00.000</span>
+          <input type="text" id="wordInput" placeholder="gesprochenes Wort…" autocomplete="off"
+                 autocapitalize="none" spellcheck="false" list="wordSuggestions">
+          <datalist id="wordSuggestions"></datalist>
+          <button class="small primary" id="confirmWordBtn">OK</button>
+          <button class="small ghost" id="cancelWordBtn" aria-label="Abbrechen">✕</button>
+        </div>
+        <div class="progressrow">
+          <span id="progressLabel">0 Wörter erfasst</span>
+          <button class="small ghost" id="resetAllBtn">Alles zurücksetzen</button>
+        </div>
+      </div>
+
+      <details class="panel ref" id="refDetails">
+        <summary>Text zur Orientierung</summary>
+        <div class="reftext" id="refText"></div>
+      </details>
+
+      <div class="panel listbox">
+        <div class="listhead">
+          <span class="label">Erfasste Wörter</span>
+          <span id="savePill" class="pill">Noch nicht exportiert</span>
+        </div>
+        <div class="markerlist" id="markerlist"></div>
+        <div class="exportrow">
+          <button class="small ghost" id="copyBtn">In Zwischenablage</button>
+          <button class="primary" id="downloadBtn">timing.json herunterladen</button>
+        </div>
+        <p id="fallbackNote" hidden></p>
+        <textarea id="fallbackJson" hidden readonly></textarea>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<button id="fsBtn" hidden>⛶ Vollbild</button>
+
+<script>
+(function(){
+  "use strict";
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  var setupEl = $('setup'), workEl = $('work');
+  var videoFile = $('videoFile'), transcriptEl = $('transcript');
+  var wordCountHint = $('wordCountHint'), startBtn = $('startBtn');
+  var player = $('player'), timeRead = $('timeRead'), durRead = $('durRead');
+  var playPause = $('playPause'), frameBack = $('frameBack'), frameFwd = $('frameFwd');
+  var timeline = $('timeline');
+  var setWordBtn = $('setWordBtn'), wordEntry = $('wordEntry');
+  var wordEntryTime = $('wordEntryTime'), wordInput = $('wordInput');
+  var wordSuggestions = $('wordSuggestions');
+  var confirmWordBtn = $('confirmWordBtn'), cancelWordBtn = $('cancelWordBtn');
+  var progressLabel = $('progressLabel'), resetAllBtn = $('resetAllBtn');
+  var refDetails = $('refDetails'), refText = $('refText');
+  var markerlist = $('markerlist'), savePill = $('savePill');
+  var downloadBtn = $('downloadBtn'), copyBtn = $('copyBtn');
+  var fallbackNote = $('fallbackNote'), fallbackJson = $('fallbackJson');
+  var fsBtn = $('fsBtn');
+
+  /* ==========================================================
+     Vollbild + Querformat
+
+     Zwei Fallstricke, an denen die erste Fassung gescheitert ist:
+
+     1. Android Chrome erteilt requestFullscreen() nur aus einem echten
+        click-Ereignis. Aus pointerdown heraus wird es abgelehnt - genau
+        das hat die erste Fassung versucht.
+     2. Eine einzelne Ablehnung heisst nicht, dass Vollbild unmoeglich ist,
+        sondern nur, dass diese eine Geste nicht gereicht hat. Die erste
+        Fassung hat daraufhin dauerhaft aufgegeben und den Schalter
+        versteckt - danach gab es gar keinen Weg mehr ins Vollbild.
+
+     Verlaesslich ist deshalb der Schalter unten rechts: ein echter
+     Klick auf einen Knopf. Zusaetzlich wird es bei jedem Klick
+     irgendwo auf der Seite mitversucht.
+     ========================================================== */
+
+  function isStandalone(){
+    if(!window.matchMedia) return window.navigator.standalone === true;
+    return window.matchMedia('(display-mode: fullscreen)').matches ||
+           window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+  }
+  function fsSupported(){
+    var el = document.documentElement;
+    return !!(el.requestFullscreen || el.webkitRequestFullscreen ||
+              el.mozRequestFullScreen || el.msRequestFullscreen);
+  }
+  function fsActive(){
+    return !!(document.fullscreenElement || document.webkitFullscreenElement ||
+              document.mozFullScreenElement || document.msFullscreenElement);
+  }
+  function isLandscape(){
+    return window.matchMedia('(orientation: landscape)').matches;
+  }
+  function lockLandscape(){
+    try{
+      if(screen.orientation && screen.orientation.lock){
+        var p = screen.orientation.lock('landscape');
+        if(p && p.catch) p.catch(function(){});
+      }
+    }catch(e){}
+  }
+
+  var fsUserExited = false;   // bewusst verlassen -> nicht ungefragt zurueck
+
+  function enterFullscreen(){
+    if(fsActive() || !fsSupported()) return;
+    var el = document.documentElement;
+    var req = el.requestFullscreen || el.webkitRequestFullscreen ||
+              el.mozRequestFullScreen || el.msRequestFullscreen;
+    try{
+      var p = req.call(el, {navigationUI:'hide'});
+      if(p && p.then){
+        p.then(function(){ lockLandscape(); syncFsBtn(); },
+               function(){ syncFsBtn(); });   // abgelehnt: Schalter bleibt
+      } else {
+        lockLandscape(); syncFsBtn();
+      }
+    }catch(e){ syncFsBtn(); }
+  }
+
+  function syncFsBtn(){
+    // Der Schalter verschwindet nur, wenn er nichts mehr zu tun haette:
+    // im Vollbild, als installierte App, im Hochformat (dort greift die
+    // Drehsperre) oder wenn der Browser gar kein Vollbild kennt.
+    fsBtn.hidden = fsActive() || isStandalone() || !isLandscape() || !fsSupported();
+  }
+
+  fsBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    fsUserExited = false;
+    enterFullscreen();
+  });
+
+  function onFsChange(){
+    if(!fsActive()) fsUserExited = true;
+    syncFsBtn();
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+
+  // Jeder echte Klick ist eine gueltige Geste - mitnutzen, solange der
+  // Nutzer das Vollbild nicht selbst verlassen hat.
+  document.addEventListener('click', function(){
+    if(isLandscape() && !fsUserExited && !isStandalone()) enterFullscreen();
+  }, true);
+
+  function onOrientation(){
+    syncFsBtn();
+    buildTicks(); buildMarkerTicks(); updateReadout();
+  }
+  window.addEventListener('orientationchange', function(){ setTimeout(onOrientation, 120); });
+  window.addEventListener('resize', onOrientation);
+  syncFsBtn();
+
+  /* ==========================================================
+     Zustand
+     ========================================================== */
+  var transcriptWords = [];   // nur für Vorschläge und Fortschritt
+  var markers = [];           // {w, t} in Eingabereihenfolge
+  var videoName = '';
+  var objectUrl = null;
+  var pendingT = null;        // eingefrorener Zeitpunkt bei offener Eingabe
+  var editingIdx = null;      // Index in markers, wenn ein Wort bearbeitet wird
+  var resumeAfterEntry = false;
+  var exported = false;
+  var rafId = null;
+  var frameDur = 1/30;        // wird aus dem Video gemessen, sobald möglich
+
+  function tokenize(text){
+    return text.split(/\s+/).map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+  function fmt(t, withMs){
+    t = Math.max(0, t || 0);
+    if(!isFinite(t)) t = 0;
+    var m = Math.floor(t/60), s = Math.floor(t%60);
+    var base = m + ':' + String(s).padStart(2,'0');
+    if(withMs === false) return base;
+    return base + '.' + String(Math.round((t - Math.floor(t))*1000)).padStart(3,'0');
+  }
+  function duration(){
+    var d = player.duration;
+    return (isFinite(d) && d > 0) ? d : 0;
+  }
+
+  /* ==========================================================
+     Startbildschirm
+     ========================================================== */
+  transcriptEl.addEventListener('input', function(){
+    var n = tokenize(transcriptEl.value).length;
+    wordCountHint.textContent = n > 0
+      ? n + ' Wort' + (n === 1 ? '' : 'e') + ' erkannt'
+      : 'Kein Text hinterlegt';
+  });
+  videoFile.addEventListener('change', function(){
+    startBtn.disabled = !videoFile.files[0];
+  });
+
+  startBtn.addEventListener('click', function(){
+    var file = videoFile.files[0];
+    if(!file) return;
+
+    fsUserExited = false;
+    enterFullscreen();
+    transcriptWords = tokenize(transcriptEl.value);
+    videoName = file.name;
+
+    if(objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(file);
+    player.src = objectUrl;
+
+    setupEl.hidden = true;
+    workEl.hidden = false;
+
+    if(transcriptWords.length){
+      refText.textContent = transcriptEl.value.trim();
+      var uniq = [];
+      var seen = Object.create(null);
+      transcriptWords.forEach(function(w){
+        var clean = w.replace(/[^0-9A-Za-zÄÖÜäöüßẞ-]/g, '');
+        if(clean && !seen[clean]){ seen[clean] = true; uniq.push(clean); }
+      });
+      wordSuggestions.innerHTML = '';
+      uniq.forEach(function(w){
+        var opt = document.createElement('option');
+        opt.value = w;
+        wordSuggestions.appendChild(opt);
+      });
+    } else {
+      refDetails.hidden = true;
+    }
+
+    renderProgress();
+    renderMarkerList();
+    buildTicks();
+    syncFsBtn();
+    player.play().catch(function(){});
+  });
+
+  /* ==========================================================
+     Timeline
+     ========================================================== */
+  var playhead = document.createElement('div');
+  playhead.className = 'tl-playhead';
+  timeline.appendChild(playhead);
+
+  function buildTicks(){
+    var old = timeline.querySelectorAll('.tl-tick, .tl-ticklabel');
+    for(var i=0;i<old.length;i++) old[i].remove();
+    var dur = duration();
+    if(!dur) return;
+    var steps = [0.5,1,2,5,10,15,30,60,120,300];
+    var step = steps[steps.length-1];
+    for(var s=0;s<steps.length;s++){
+      if(dur/steps[s] <= 12){ step = steps[s]; break; }
+    }
+    for(var t=0; t<=dur+1e-6; t+=step){
+      var x = (t/dur*100);
+      var tick = document.createElement('div');
+      tick.className = 'tl-tick';
+      tick.style.left = x + '%';
+      timeline.appendChild(tick);
+      var lbl = document.createElement('span');
+      lbl.className = 'tl-ticklabel';
+      lbl.style.left = x + '%';
+      lbl.textContent = fmt(t, false);
+      timeline.appendChild(lbl);
+    }
+  }
+
+  function buildMarkerTicks(){
+    var old = timeline.querySelectorAll('.tl-marker');
+    for(var i=0;i<old.length;i++) old[i].remove();
+    var dur = duration();
+    if(!dur) return;
+    markers.forEach(function(m){
+      var tick = document.createElement('div');
+      tick.className = 'tl-marker';
+      tick.style.left = (m.t/dur*100) + '%';
+      timeline.appendChild(tick);
+    });
+  }
+
+  function updateReadout(){
+    var dur = duration();
+    timeRead.textContent = fmt(player.currentTime, true);
+    playhead.style.left = dur ? (player.currentTime/dur*100) + '%' : '0%';
+    timeline.setAttribute('aria-valuenow', (player.currentTime || 0).toFixed(2));
+    timeline.setAttribute('aria-valuetext', fmt(player.currentTime, true));
+  }
+
+  player.addEventListener('loadedmetadata', function(){
+    durRead.textContent = '/ ' + fmt(duration(), false);
+    timeline.setAttribute('aria-valuemax', duration().toFixed(2));
+    buildTicks(); buildMarkerTicks(); updateReadout();
+  });
+  player.addEventListener('timeupdate', updateReadout);
+  player.addEventListener('seeked', updateReadout);
+  player.addEventListener('play', function(){
+    playPause.textContent = 'Pause';
+    cancelAnimationFrame(rafId);
+    rafLoop();
+    measureFrameRate();
+  });
+  player.addEventListener('pause', function(){
+    playPause.textContent = 'Play';
+    cancelAnimationFrame(rafId);
+    updateReadout();
+  });
+  function rafLoop(){
+    if(player.paused) return;
+    updateReadout();
+    rafId = requestAnimationFrame(rafLoop);
+  }
+
+  // Echte Bildrate messen, damit der Einzelbild-Schritt stimmt
+  // (Handyvideos laufen mit 24, 25, 30 oder 60 fps).
+  var fpsDone = false;
+  function measureFrameRate(){
+    if(fpsDone || !player.requestVideoFrameCallback) return;
+    fpsDone = true;
+    var samples = [], last = null;
+    function step(now, meta){
+      if(last !== null){
+        var d = meta.mediaTime - last;
+        if(d > 0.004 && d < 0.25) samples.push(d);
+      }
+      last = meta.mediaTime;
+      if(samples.length < 16){
+        player.requestVideoFrameCallback(step);
+      } else {
+        samples.sort(function(a,b){ return a-b; });
+        var med = samples[samples.length >> 1];
+        if(med > 0) frameDur = med;
+      }
+    }
+    player.requestVideoFrameCallback(step);
+  }
+
+  // Ziehen / Antippen auf der Timeline
+  function timeFromEvent(e){
+    var rect = timeline.getBoundingClientRect();
+    if(!rect.width) return player.currentTime;
+    var frac = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    return frac * duration();
+  }
+  function seekTo(t){
+    var dur = duration();
+    if(!dur) return;
+    player.currentTime = Math.min(dur, Math.max(0, t));
+    updateReadout();
+  }
+  var dragging = false;
+  timeline.addEventListener('pointerdown', function(e){
+    if(!duration()) return;
+    dragging = true;
+    player.pause();
+    try{ timeline.setPointerCapture(e.pointerId); }catch(err){}
+    seekTo(timeFromEvent(e));
+    e.preventDefault();
+  });
+  timeline.addEventListener('pointermove', function(e){
+    if(dragging) seekTo(timeFromEvent(e));
+  });
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    try{ timeline.releasePointerCapture(e.pointerId); }catch(err){}
+  }
+  timeline.addEventListener('pointerup', endDrag);
+  timeline.addEventListener('pointercancel', endDrag);
+  timeline.addEventListener('keydown', function(e){
+    var d = e.shiftKey ? 1 : 0.1;
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); player.pause(); seekTo(player.currentTime - d); }
+    if(e.key === 'ArrowRight'){ e.preventDefault(); player.pause(); seekTo(player.currentTime + d); }
+  });
+
+  /* ==========================================================
+     Transport
+     ========================================================== */
+  playPause.addEventListener('click', function(){
+    if(player.paused) player.play().catch(function(){}); else player.pause();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-jump]'), function(btn){
+    btn.addEventListener('click', function(){
+      seekTo(player.currentTime + parseFloat(btn.dataset.jump));
+    });
+  });
+  frameBack.addEventListener('click', function(){
+    player.pause(); seekTo(player.currentTime - frameDur);
+  });
+  frameFwd.addEventListener('click', function(){
+    player.pause(); seekTo(player.currentTime + frameDur);
+  });
+  var speedBtns = document.querySelectorAll('.speedrow [data-speed]');
+  Array.prototype.forEach.call(speedBtns, function(btn){
+    btn.addEventListener('click', function(){
+      player.playbackRate = parseFloat(btn.dataset.speed);
+      Array.prototype.forEach.call(speedBtns, function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  /* ==========================================================
+     Wort setzen / bearbeiten
+     ========================================================== */
+  function openWordInput(idx){
+    resumeAfterEntry = !player.paused;
+    player.pause();
+    if(typeof idx === 'number'){
+      editingIdx = idx;
+      pendingT = markers[idx].t;
+      wordInput.value = markers[idx].w;
+    } else {
+      editingIdx = null;
+      pendingT = Math.round(player.currentTime * 1000) / 1000;
+      wordInput.value = '';
+    }
+    wordEntryTime.textContent = fmt(pendingT, true);
+    wordEntry.hidden = false;
+    setWordBtn.hidden = true;
+    renderMarkerList();
+    wordInput.focus();
+    wordInput.select();
+  }
+  function closeWordInput(){
+    wordEntry.hidden = true;
+    setWordBtn.hidden = false;
+    pendingT = null;
+    editingIdx = null;
+    renderMarkerList();
+    if(resumeAfterEntry){
+      resumeAfterEntry = false;
+      player.play().catch(function(){});
+    }
+  }
+  function confirmWord(){
+    var w = wordInput.value.trim();
+    if(!w || pendingT === null) return;
+    if(editingIdx !== null && markers[editingIdx]){
+      markers[editingIdx].w = w;
+    } else {
+      markers.push({w:w, t:pendingT});
+      exported = false;
+    }
+    closeWordInput();
+    renderProgress(); renderMarkerList(); buildMarkerTicks();
+  }
+  setWordBtn.addEventListener('click', function(){ openWordInput(); });
+  confirmWordBtn.addEventListener('click', confirmWord);
+  cancelWordBtn.addEventListener('click', closeWordInput);
+  wordInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); confirmWord(); }
+    if(e.key === 'Escape'){ e.preventDefault(); closeWordInput(); }
+  });
+
+  window.addEventListener('keydown', function(e){
+    if(workEl.hidden) return;
+    var el = document.activeElement;
+    var inField = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA');
+    if(inField) return;
+    if(e.code === 'Space'){
+      // Leertaste darf nicht zusätzlich einen fokussierten Knopf auslösen
+      if(el && el.tagName === 'BUTTON') el.blur();
+      e.preventDefault();
+      if(player.paused) player.play().catch(function(){}); else player.pause();
+    }
+    if((e.key === 'w' || e.key === 'W') && wordEntry.hidden){
+      e.preventDefault();
+      openWordInput();
+    }
+  });
+
+  resetAllBtn.addEventListener('click', function(){
+    if(markers.length === 0) return;
+    if(!confirm('Wirklich alle ' + markers.length + ' erfassten Wörter löschen?')) return;
+    markers = [];
+    exported = false;
+    closeWordInput();
+    renderProgress(); renderMarkerList(); buildMarkerTicks();
+  });
+
+  /* ==========================================================
+     Anzeige
+     ========================================================== */
+  function renderProgress(){
+    progressLabel.textContent = transcriptWords.length
+      ? markers.length + ' / ' + transcriptWords.length + ' Wörter erfasst'
+      : markers.length + ' Wort' + (markers.length === 1 ? '' : 'er') + ' erfasst';
+    if(!exported){
+      savePill.textContent = 'Noch nicht exportiert';
+      savePill.className = 'pill';
+    }
+    var has = markers.length > 0;
+    downloadBtn.disabled = !has;
+    copyBtn.disabled = !has;
+  }
+
+  function renderMarkerList(){
+    markerlist.innerHTML = '';
+    if(markers.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'listempty';
+      empty.textContent = 'Noch keine Wörter erfasst.';
+      markerlist.appendChild(empty);
+      return;
+    }
+    var sorted = markers.map(function(m, i){
+      return {w:m.w, t:m.t, origIdx:i};
+    }).sort(function(a,b){ return a.t - b.t; });
+
+    sorted.forEach(function(m, n){
+      var row = document.createElement('div');
+      row.className = 'mrow';
+      if(n > 0 && m.t < sorted[n-1].t) row.classList.add('warn');
+      if(editingIdx === m.origIdx) row.classList.add('editing');
+
+      var idx = document.createElement('span');
+      idx.className = 'idx'; idx.textContent = '#' + (n+1);
+
+      var t = document.createElement('span');
+      t.className = 't num'; t.textContent = m.t.toFixed(2) + 's';
+      t.title = 'Im Video dorthin springen';
+      t.addEventListener('click', function(){ player.pause(); seekTo(m.t); });
+
+      var w = document.createElement('span');
+      w.className = 'w'; w.textContent = m.w;
+      w.title = 'Im Video dorthin springen';
+      w.addEventListener('click', function(){ player.pause(); seekTo(m.t); });
+
+      var edit = document.createElement('button');
+      edit.className = 'iconbtn'; edit.textContent = '✎';
+      edit.title = 'Wort ändern'; edit.setAttribute('aria-label', 'Wort ändern');
+      edit.addEventListener('click', function(){ seekTo(m.t); openWordInput(m.origIdx); });
+
+      var del = document.createElement('button');
+      del.className = 'iconbtn del'; del.textContent = '✕';
+      del.title = 'Löschen'; del.setAttribute('aria-label', 'Wort löschen');
+      del.addEventListener('click', function(){
+        markers = markers.filter(function(_, i){ return i !== m.origIdx; });
+        exported = false;
+        if(editingIdx !== null) closeWordInput();
+        renderProgress(); renderMarkerList(); buildMarkerTicks();
+      });
+
+      row.appendChild(idx); row.appendChild(t); row.appendChild(w);
+      row.appendChild(edit); row.appendChild(del);
+      markerlist.appendChild(row);
+    });
+  }
+
+  /* ==========================================================
+     Export
+     ========================================================== */
+  function buildPayload(){
+    var sorted = markers.slice().sort(function(a,b){ return a.t - b.t; });
+    return {
+      videoName: videoName,
+      totalWords: transcriptWords.length || sorted.length,
+      words: sorted.map(function(m){ return {w:m.w, t:m.t}; }),
+      complete: transcriptWords.length ? markers.length >= transcriptWords.length : true,
+      savedAt: new Date().toISOString()
+    };
+  }
+  function payloadText(){
+    return JSON.stringify(buildPayload(), null, 2);
+  }
+  function fileName(){
+    return (videoName || 'timing').replace(/\.[^.]+$/, '') + '_timing.json';
+  }
+  function markExported(text){
+    exported = true;
+    savePill.textContent = text;
+    savePill.className = 'pill ok';
+  }
+  function showManualFallback(reason){
+    exported = false;
+    fallbackNote.hidden = false;
+    fallbackNote.textContent = reason + ' Markiere den Text unten, kopiere ihn und schick ihn im Chat an Claude.';
+    fallbackJson.hidden = false;
+    fallbackJson.value = payloadText();
+    fallbackJson.focus();
+    fallbackJson.select();
+    savePill.textContent = 'Manuell kopieren';
+    savePill.className = 'pill warn';
+  }
+
+  downloadBtn.addEventListener('click', function(){
+    if(markers.length === 0) return;
+    var text = payloadText();
+    try{
+      var blob = new Blob([text], {type:'application/json'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = fileName();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      markExported('Heruntergeladen \u2713');
+      fallbackNote.hidden = true;
+      fallbackJson.hidden = true;
+    }catch(e){
+      showManualFallback('Der Download hat nicht geklappt.');
+    }
+  });
+
+  copyBtn.addEventListener('click', function(){
+    if(markers.length === 0) return;
+    var text = payloadText();
+    var ok = function(){
+      markExported('Kopiert ✓');
+      fallbackNote.hidden = true;
+      fallbackJson.hidden = true;
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(ok).catch(function(){
+        showManualFallback('Die Zwischenablage ist hier gesperrt.');
+      });
+    } else {
+      showManualFallback('Die Zwischenablage ist hier nicht verfügbar.');
+    }
+  });
+
+  window.addEventListener('beforeunload', function(e){
+    if(markers.length > 0 && !exported){
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  // Installationshinweis nur im normalen Browser-Tab zeigen,
+  // nicht wenn der Yepp-Timer bereits als App laeuft.
+  if(!isStandalone()) $('installHint').hidden = false;
+
+  // Service Worker: Voraussetzung dafuer, dass Android den Yepp-Timer als
+  // echte App installiert (und damit ohne Adressleiste startet).
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js', {scope: './'}).catch(function(){});
+    });
+  }
+
+  renderProgress();
+  renderMarkerList();
+})();
+</script>
+
+</body>
+</html>

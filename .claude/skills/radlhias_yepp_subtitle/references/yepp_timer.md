@@ -1,9 +1,10 @@
 # Yepp-Timer - manuelles Wort-Timing per Timeline+Eingabe
 
-**URL: https://radlhias.tv/yepp-timer.html**
-Quelldatei im Repo: `yepp-timer.html` (Wurzelverzeichnis), dazu
-`yepp-timer.webmanifest`. Ausgeliefert über GitHub Pages - nach dem Merge in
-`main` ist die Änderung live.
+**URL: https://radlhias.tv/yepp-timer/**
+Quelldateien im Repo: Ordner `yepp-timer/` (`index.html`, `sw.js`,
+`manifest.webmanifest`, Icons). `yepp-timer.html` im Wurzelverzeichnis ist nur
+noch eine Weiterleitung für alte Lesezeichen. Ausgeliefert über GitHub Pages -
+nach dem Merge in `main` ist die Änderung live.
 
 ## Warum
 
@@ -35,32 +36,38 @@ Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wech
 
 ## Ablauf für Mathias
 
-1. https://radlhias.tv/yepp-timer.html öffnen, Handy quer halten. Beim ersten
-   Antippen geht das Werkzeug in den Vollbildmodus; unten rechts liegt zusätzlich
-   ein "⛶ Vollbild"-Schalter. Verlässt er das Vollbild bewusst, springt es nicht
-   ungefragt zurück.
-   Noch sauberer: über das Browser-Menü "Zum Startbildschirm hinzufügen"
-   installieren - dann startet der Yepp-Timer ohne jede Browserleiste direkt im
-   Querformat (Web-App-Manifest mit `display: fullscreen`).
-2. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
-3. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze,
+1. **Empfohlen: einmalig als App installieren.** https://radlhias.tv/yepp-timer/
+   öffnen, im Chrome-Menü (⋮) "App installieren" bzw. "Zum Startbildschirm
+   hinzufügen". Danach startet der Yepp-Timer ohne Adressleiste, direkt im
+   Querformat und auch ohne Netz. Dafür liefert der Ordner alles mit, was
+   Android verlangt: Manifest mit `display: fullscreen`, Icons in 192 und 512
+   px (plus maskable) und einen Service Worker mit fetch-Handler. Fehlt eines
+   davon, legt Android nur eine Verknüpfung an, die einen normalen Browser-Tab
+   mitsamt Adressleiste öffnet.
+2. Im Browser-Tab: Handy quer halten, dann den "⛶ Vollbild"-Schalter unten
+   rechts antippen. Vollbild lässt sich auf Android Chrome **nur aus einem
+   echten Klick** heraus anfordern - ein Antippen irgendwo auf der Seite wird
+   ebenfalls genutzt, aber der Schalter ist der verlässliche Weg. Verlässt er
+   das Vollbild bewusst, springt es nicht ungefragt zurück.
+3. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
+4. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze,
    Fortschrittszähler und Tipp-Vorschläge - kann auch leer bleiben).
-4. "Los geht's" - Video startet automatisch.
-5. Playhead auf der Timeline durch Ziehen/Antippen zur gewünschten Stelle bewegen,
+5. "Los geht's" - Video startet automatisch.
+6. Playhead auf der Timeline durch Ziehen/Antippen zur gewünschten Stelle bewegen,
    oder per Sprung-Buttons (±0,1s/±1s), Einzelbild-Schritt (◂F/F▸) und
    Tempo-Regler (0,1x Zeitlupe bis 2x Vorspulen) navigieren. Die Bildrate für den
    Einzelbild-Schritt misst die App aus dem laufenden Video, statt 24 fps
    anzunehmen.
-6. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
+7. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
    eingefroren und ein Eingabefeld öffnet sich.
-7. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
+8. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
    optionalen Fließtext bietet das Feld per Autocomplete an). Der Marker erscheint
    als grüner Strich auf der Timeline und unten in der chronologischen Liste. War
    das Video vorher am Laufen, läuft es nach dem Bestätigen weiter.
-8. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
+9. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
    Worttext nachträglich; ✕ löscht einen einzelnen Marker; "Alles zurücksetzen"
    löscht alle (mit Rückfrage).
-9. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
+10. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
    bzw. Text im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
@@ -96,7 +103,17 @@ gerendert wird - sonst fehlen Wörter im Video komplett.
 
 ## Falls sich das Werkzeug ändern soll
 
-`yepp-timer.html` im Wurzelverzeichnis ändern, committen, mergen - fertig. Die
-Seite trägt `noindex, nofollow` und ist nirgends verlinkt, taucht also nicht in
-der Suche auf. Sie ist eine einzelne, in sich geschlossene Datei ohne Abhängigkeit
-außer den Google-Fonts.
+`yepp-timer/index.html` ändern, committen, mergen - fertig. Die Seite trägt
+`noindex, nofollow` und ist nirgends verlinkt, taucht also nicht in der Suche
+auf. Sie ist eine in sich geschlossene Datei ohne Abhängigkeit außer den
+Google-Fonts.
+
+Zwei Dinge nicht kaputtmachen:
+
+- **Der Service Worker muss bleiben** (`yepp-timer/sw.js`, registriert am Ende
+  von `index.html`). Ohne ihn verweigert Android die Installation als App, und
+  damit ist der vollbildige Start weg. Bei grösseren Änderungen die Zahl in
+  `const CACHE = 'yepp-timer-v1'` erhöhen, damit alte Stände sicher verfallen.
+- **Alles bleibt im Ordner `yepp-timer/`.** Der Service-Worker-Scope ist an
+  diesen Pfad gebunden; im Wurzelverzeichnis würde er die gesamte Website
+  abfangen.
