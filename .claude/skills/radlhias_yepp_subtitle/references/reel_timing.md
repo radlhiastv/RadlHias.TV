@@ -1,6 +1,6 @@
 # Reel-Timing - manuelles Wort-Timing per Timeline+Eingabe
 
-Artefakt-URL: `https://claude.ai/code/artifact/19831802-3754-4d69-a43e-ebff873f255b`
+Artefakt-URL: `https://claude.ai/code/artifact/7f6d3ff6-ba26-4377-bc35-737b0d2101cc`
 
 ## Warum
 
