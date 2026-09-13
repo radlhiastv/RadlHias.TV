@@ -44,30 +44,36 @@ Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wech
    px (plus maskable) und einen Service Worker mit fetch-Handler. Fehlt eines
    davon, legt Android nur eine Verknüpfung an, die einen normalen Browser-Tab
    mitsamt Adressleiste öffnet.
-2. Im Browser-Tab: Handy quer halten, dann den "⛶ Vollbild"-Schalter unten
-   rechts antippen. Vollbild lässt sich auf Android Chrome **nur aus einem
-   echten Klick** heraus anfordern - ein Antippen irgendwo auf der Seite wird
-   ebenfalls genutzt, aber der Schalter ist der verlässliche Weg. Verlässt er
-   das Vollbild bewusst, springt es nicht ungefragt zurück.
+2. Im Browser-Tab: Handy quer halten, dann den "⛶ Vollbild"-Schalter
+   antippen (auf dem Startbildschirm unten rechts, im Arbeitsbildschirm in der
+   Transportzeile). Vollbild lässt sich auf Android Chrome **nur aus einem
+   echten Klick** heraus anfordern. Der Datei-Dialog verlässt das Vollbild
+   zwangsläufig - das wird nicht als Wunsch gewertet, der nächste Tipp stellt
+   es wieder her. Verlässt Mathias das Vollbild dagegen selbst, springt es
+   nicht ungefragt zurück.
 3. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
 4. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze,
    Fortschrittszähler und Tipp-Vorschläge - kann auch leer bleiben).
 5. "Los geht's" - Video startet automatisch.
-6. Playhead auf der Timeline durch Ziehen/Antippen zur gewünschten Stelle bewegen,
+6. Aufbau wie im Schnittprogramm: oben das Videobild mit der Bedienung
+   daneben, unten die Timeline über die gesamte Breite - je breiter, desto
+   genauer lässt sich der Playhead setzen. Ein Tipp aufs Videobild startet und
+   stoppt ebenfalls.
+7. Playhead auf der Timeline durch Ziehen/Antippen zur gewünschten Stelle bewegen,
    oder per Sprung-Buttons (±0,1s/±1s), Einzelbild-Schritt (◂F/F▸) und
    Tempo-Regler (0,1x Zeitlupe bis 2x Vorspulen) navigieren. Die Bildrate für den
    Einzelbild-Schritt misst die App aus dem laufenden Video, statt 24 fps
    anzunehmen.
-7. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
+8. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
    eingefroren und ein Eingabefeld öffnet sich.
-8. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
+9. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
    optionalen Fließtext bietet das Feld per Autocomplete an). Der Marker erscheint
    als grüner Strich auf der Timeline und unten in der chronologischen Liste. War
    das Video vorher am Laufen, läuft es nach dem Bestätigen weiter.
-9. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
+10. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
    Worttext nachträglich; ✕ löscht einen einzelnen Marker; "Alles zurücksetzen"
    löscht alle (mit Rückfrage).
-10. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
+11. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
    bzw. Text im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
