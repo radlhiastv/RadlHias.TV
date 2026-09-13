@@ -1,4 +1,4 @@
-# Timestamp - manuelles Wort-Timing per Marke+Zuordnung
+# Timestamp - manuelles Wort-Timing per Timeline+Eingabe
 
 Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`
 
@@ -7,35 +7,39 @@ Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
 dem Mund spürbar hinterherhinken oder vorauseilen. Timestamp umgeht das Problem
-komplett: Mathias navigiert im Video exakt zur Stelle, setzt dort eine Marke und
-tippt dann im angezeigten Text an, welches Wort dort gesprochen wird - die App
-speichert dabei `video.currentTime` als Zeitpunkt fuer genau dieses Wort. Das ist
-die praezise Quelle ueberhaupt, weil kein Algorithmus mehr raten muss.
+komplett: Mathias zieht den Playhead auf einer echten Timeline (wie in einem
+Videoschnitt-Programm) exakt zur Stelle, drückt "Wort setzen" und tippt das dort
+gesprochene Wort in ein Eingabefeld - die App speichert dabei `video.currentTime`
+als Zeitpunkt für genau dieses Wort. Das ist die präzise Quelle überhaupt, weil
+kein Algorithmus mehr raten muss.
+
+Das Tool ist auf Querformat gesperrt (im Hochformat erscheint ein "Gerät drehen"-
+Hinweis) - die Timeline braucht die Breite.
 
 ## Ablauf für Mathias
 
-1. Artefakt-Link öffnen.
+1. Artefakt-Link öffnen, Handy quer halten.
 2. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
-3. Den gesprochenen Text als reinen Fließtext einfügen (keine Zeitstempel nötig).
+3. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze
+   und Fortschrittszähler - kann auch leer bleiben, dann tippt man frei).
 4. "Los geht's" - Video startet automatisch.
-5. Zur gewünschten Stelle navigieren: großer Zeit-Anzeiger + Scrub-Leiste, Sprung-
-   Buttons (±0,1s/±1s/±5s), Frame-Schritt (◂Frame / Frame▸, ~1/24s), Tempo-Regler
-   für Zeitlupe (0,1x-0,75x) oder Vorspulen (1,5x/2x) durch stille Passagen.
-6. **Marke setzen** drücken (oder Taste `M`) - Zeitpunkt wird eingefroren, bei
-   Bedarf noch mit ±0,02s/±0,1s nachjustieren.
-7. Im Text unten auf das Wort tippen, das an dieser Marke gesprochen wird - die
-   Marke wird diesem Wort zugeordnet (grün markiert, mit Zeit-Badge) und die
-   Video-Zeit bleibt für die nächste Marke stehen.
-8. Ein bereits zugeordnetes Wort antippen (ohne aktive Marke) springt im Video an
-   diese Stelle zurück - praktisch zum Nachprüfen. Mit aktiver Marke erneut
-   antippen überschreibt die alte Zuordnung. "Alles zurücksetzen" löscht alle
-   Zuordnungen (mit Rückfrage).
-9. Wenn der Fortschrittsbalken bei "X / X" steht: "Für Claude speichern" drücken.
+5. Playhead auf der Timeline durch Ziehen/Antippen zur gewünschten Stelle bewegen,
+   oder per Sprung-Buttons (±0,1s/±1s), Frame-Schritt (◂F/F▸, ~1/24s) und
+   Tempo-Regler (0,1x Zeitlupe bis 2x Vorspulen) navigieren.
+6. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
+   eingefroren und ein Eingabefeld öffnet sich.
+7. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (oder das Feld
+   hinterlegte Text-Vorschläge aus dem optionalen Fließtext per Autocomplete
+   anbieten lassen). Der Marker erscheint als grüner Strich auf der Timeline und
+   unten in der chronologischen Liste.
+8. In der Liste auf Zeit oder Wort klicken springt im Video dorthin (zum
+   Nachprüfen); ✕ löscht einen einzelnen Marker; "Alles zurücksetzen" löscht alle
+   (mit Rückfrage).
+9. Wenn genug Wörter erfasst sind: "Für Claude speichern" drücken.
 
-Ein rot umrandetes Wort in der Liste bedeutet: seine Zeit liegt vor der des
-vorherigen zugeordneten Worts - meist ein Zeichen, dass aus Versehen die falsche
-Wiederholung eines häufigen Worts (z.B. "und", "die") angetippt wurde. Kurz
-gegenprüfen und ggf. korrigieren.
+Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
+chronologisch vorherigen Eintrags - meist ein Zeichen für einen Navigations- oder
+Tippfehler. Kurz gegenprüfen und ggf. löschen/neu setzen.
 
 ## Ergebnis auslesen (für Claude)
 
