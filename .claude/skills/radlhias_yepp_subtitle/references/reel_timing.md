@@ -14,7 +14,14 @@ als Zeitpunkt für genau dieses Wort. Das ist die präzise Quelle überhaupt, we
 kein Algorithmus mehr raten muss.
 
 Das Tool ist auf Querformat gesperrt (im Hochformat erscheint ein "Gerät drehen"-
-Hinweis) - die Timeline braucht die Breite.
+Hinweis) - die Timeline braucht die Breite. Es versucht beim Drehen automatisch in
+den Vollbildmodus zu wechseln (und beim Zurückdrehen wieder raus) - das klappt aber
+nur innerhalb einer echten Nutzer-Geste (Tap), nicht garantiert auf jedem Gerät/
+Browser.
+
+Das Tool speichert NICHTS serverseitig (keine `db`-Capability, daher auch kein
+"Sign in"-Hinweis von claude.ai) - Mathias lädt sein Ergebnis als Datei herunter
+und hängt sie selbst im Chat an.
 
 ## Ablauf für Mathias
 
@@ -35,18 +42,16 @@ Hinweis) - die Timeline braucht die Breite.
 8. In der Liste auf Zeit oder Wort klicken springt im Video dorthin (zum
    Nachprüfen); ✕ löscht einen einzelnen Marker; "Alles zurücksetzen" löscht alle
    (mit Rückfrage).
-9. Wenn genug Wörter erfasst sind: entweder "Für Claude speichern" drücken (Claude
-   liest die Zeitstempel selbst per `read_db` ab, siehe unten), oder
-   "timing.json herunterladen" drücken und die heruntergeladene Datei direkt im
-   Chat an Claude anhängen - beide Wege liefern dasselbe Format.
+9. Wenn genug Wörter erfasst sind: "timing.json herunterladen" drücken und die
+   heruntergeladene Datei direkt im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
 chronologisch vorherigen Eintrags - meist ein Zeichen für einen Navigations- oder
 Tippfehler. Kurz gegenprüfen und ggf. löschen/neu setzen.
 
-## Ergebnis auslesen (für Claude)
+## Ergebnis-Format (für Claude)
 
-Die App speichert unter `collection: "timing"`, `doc_id: "current"` ein Dokument:
+Die heruntergeladene `<videoname>_timing.json` sieht so aus:
 
 ```json
 {
@@ -58,16 +63,10 @@ Die App speichert unter `collection: "timing"`, `doc_id: "current"` ein Dokument
 }
 ```
 
-Auslesen per `Artifact`-Tool:
-```
-action: "read_db", url: "<Artefakt-URL>", db_op: "get",
-collection: "timing", doc_id: "current"
-```
-
-Das Ergebnis als JSON-Datei (z.B. `timing.json`) lokal speichern und direkt an
-`make_reel.py` als zweites Argument übergeben (siehe `parse_word_timings_json` in
-`scripts/make_reel.py`) - kein SRT-Umweg nötig. Jedes Wort dauert bis zum nächsten
-Tap; Pausen über 0,5s zwischen zwei Taps trennen automatisch zwei Anzeige-Blöcke.
+Direkt an `make_reel.py` als zweites Argument übergeben (siehe
+`parse_word_timings_json` in `scripts/make_reel.py`) - kein SRT-Umweg nötig. Jedes
+Wort dauert bis zum nächsten Marker; Pausen über 0,5s zwischen zwei Markern trennen
+automatisch zwei Anzeige-Blöcke.
 
 Falls `complete` false ist: mit Mathias klären, ob er fertig tippen soll, bevor
 gerendert wird - sonst fehlen Wörter im Video komplett.

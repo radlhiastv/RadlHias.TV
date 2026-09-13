@@ -28,17 +28,14 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
      neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
      Upload) + optional den reinen gesprochenen Text (nur Gedächtnisstütze/
      Fortschrittszähler). Er zieht den Playhead auf einer Timeline (Querformat
-     erzwungen) exakt zur Stelle, drückt "Wort setzen" und tippt das gehörte Wort
-     in ein Eingabefeld (siehe `references/reel_timing.md`), bis "Für Claude
-     speichern" grün wird.
-   - Danach die getappten Zeitstempel auslesen: `Artifact` mit `action:"read_db"`,
-     `db_op:"get"`, `collection:"timing"`, `doc_id:"current"` auf der obigen URL.
-     Das Ergebnis als JSON-Datei (z.B. `timing.json`) lokal speichern - dieses
-     JSON kann `make_reel.py` direkt als zweites Argument (statt einer SRT)
-     entgegennehmen.
-   - Kurz gegenchecken: `complete: true` im Dokument? Falls nicht, fehlen noch
-     Wörter - mit Mathias klären, ob er fertig tippen soll oder ob der Rest
-     bewusst ausgelassen wurde.
+     erzwungen, wechselt automatisch in den Vollbildmodus) exakt zur Stelle,
+     drückt "Wort setzen" und tippt das gehörte Wort in ein Eingabefeld (siehe
+     `references/reel_timing.md`), bis "timing.json herunterladen" die Datei
+     speichert - die hängt er direkt hier im Chat an.
+   - Die angehängte `timing.json` kann `make_reel.py` direkt als zweites
+     Argument (statt einer SRT) entgegennehmen. Kurz gegenchecken: `complete:
+     true` im JSON? Falls nicht, fehlen noch Wörter - mit Mathias klären, ob er
+     fertig tippen soll oder ob der Rest bewusst ausgelassen wurde.
    - **Nur falls Mathias das Tool nicht nutzen will/kann** (Fallback, siehe unten):
      SRT-Datei wie gehabt.
 3. **Rechtschreibfehler korrigieren**: den (von Mathias getippten oder per VN
