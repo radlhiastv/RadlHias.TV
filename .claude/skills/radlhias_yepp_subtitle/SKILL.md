@@ -23,20 +23,19 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    (googledrive) holen, siehe `references/video_transfer.md`.
 2. **Wort-Timing besorgen - bevorzugt per Reel-Timing (exakt, kein Schätzen):**
    - Mathias auf das **Reel-Timing**-Artefakt verweisen (URL:
-     `https://claude.ai/code/artifact/404dbfa9-aa8d-4f87-a5fa-cf2be602f4ca`, per
-     `Artifact`-Tool mit `action:"read"` bei Bedarf neu abrufen/aktualisieren statt
-     neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
+     `https://claude.ai/code/artifact/7f6d3ff6-ba26-4377-bc35-737b0d2101cc`, per
+     `Artifact`-Tool mit `action:"read"` bei Bedarf abrufen und mit `url:` am
+     selben Link aktualisieren - niemals neu publizieren, sonst entsteht ein
+     zweiter Link). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
      Upload) + optional den reinen gesprochenen Text (nur Gedächtnisstütze/
      Fortschrittszähler). Er zieht den Playhead auf einer Timeline (Querformat
      erzwungen) exakt zur Stelle, drückt "Wort setzen" und tippt das gehörte Wort
-     in ein Eingabefeld (siehe `references/reel_timing.md`), bis "Für Claude
-     speichern" grün wird.
-   - Danach die getappten Zeitstempel auslesen: `Artifact` mit `action:"read_db"`,
-     `db_op:"get"`, `collection:"timing"`, `doc_id:"current"` auf der obigen URL.
-     Das Ergebnis als JSON-Datei (z.B. `timing.json`) lokal speichern - dieses
-     JSON kann `make_reel.py` direkt als zweites Argument (statt einer SRT)
-     entgegennehmen.
-   - Kurz gegenchecken: `complete: true` im Dokument? Falls nicht, fehlen noch
+     in ein Eingabefeld (siehe `references/reel_timing.md`).
+   - **Das Tool speichert nichts serverseitig.** Mathias exportiert am Ende
+     `timing.json` (Download oder Zwischenablage) und hängt die Datei bzw. den
+     Text direkt im Chat an. Diese JSON kann `make_reel.py` direkt als zweites
+     Argument (statt einer SRT) entgegennehmen.
+   - Kurz gegenchecken: `complete: true` im JSON? Falls nicht, fehlen noch
      Wörter - mit Mathias klären, ob er fertig tippen soll oder ob der Rest
      bewusst ausgelassen wurde.
    - **Nur falls Mathias das Tool nicht nutzen will/kann** (Fallback, siehe unten):
