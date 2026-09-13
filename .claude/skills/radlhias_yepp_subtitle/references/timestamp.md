@@ -35,7 +35,10 @@ Hinweis) - die Timeline braucht die Breite.
 8. In der Liste auf Zeit oder Wort klicken springt im Video dorthin (zum
    Nachprüfen); ✕ löscht einen einzelnen Marker; "Alles zurücksetzen" löscht alle
    (mit Rückfrage).
-9. Wenn genug Wörter erfasst sind: "Für Claude speichern" drücken.
+9. Wenn genug Wörter erfasst sind: entweder "Für Claude speichern" drücken (Claude
+   liest die Zeitstempel selbst per `read_db` ab, siehe unten), oder
+   "timing.json herunterladen" drücken und die heruntergeladene Datei direkt im
+   Chat an Claude anhängen - beide Wege liefern dasselbe Format.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
 chronologisch vorherigen Eintrags - meist ein Zeichen für einen Navigations- oder
