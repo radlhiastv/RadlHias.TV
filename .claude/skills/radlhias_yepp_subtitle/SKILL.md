@@ -1,6 +1,6 @@
 ---
 name: radlhias_yepp_subtitle
-description: Baut aus einem RadlHias-Reel-Rohvideo + Wort-Zeitstempeln (bevorzugt aus dem Reel-Timing-Tool, wo Mathias die Zeitstempel im Sprechtempo selbst eintippt; alternativ einer korrigierten SRT-Untertiteldatei, z.B. aus der VN-App) ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-für-Wort-Karaoke-Untertitel (aktuelles Wort wird größer/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5° Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. IMMER verwenden, wenn Mathias ein Video + Untertiteltext/SRT/Reel-Timing-Zeitstempel für ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwähnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen. Auch verwenden, wenn er nur ein Rohvideo mit gesprochenem Text schickt und ein fertiges Reel will (dann zuerst auf das Reel-Timing-Tool verweisen, oder ersatzweise die Tonspur transkribieren/SRT draus bauen).
+description: Baut aus einem RadlHias-Reel-Rohvideo + Wort-Zeitstempeln (bevorzugt aus dem Yepp-Timer, wo Mathias die Zeitstempel im Sprechtempo selbst eintippt; alternativ einer korrigierten SRT-Untertiteldatei, z.B. aus der VN-App) ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-für-Wort-Karaoke-Untertitel (aktuelles Wort wird größer/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5° Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. IMMER verwenden, wenn Mathias ein Video + Untertiteltext/SRT/Yepp-Timer-Zeitstempel für ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwähnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen. Auch verwenden, wenn er nur ein Rohvideo mit gesprochenem Text schickt und ein fertiges Reel will (dann zuerst auf den Yepp-Timer verweisen, oder ersatzweise die Tonspur transkribieren/SRT draus bauen).
 ---
 
 # RadlHias Yepp-Untertitel
@@ -21,22 +21,21 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
 1. **Video prüfen**: liegt eine Videodatei vor? Falls nicht, nachfragen. Videos über
    dem Chat-Upload-Limit: Google Drive freigeben lassen und per Composio-Verbindung
    (googledrive) holen, siehe `references/video_transfer.md`.
-2. **Wort-Timing besorgen - bevorzugt per Reel-Timing (exakt, kein Schätzen):**
-   - Mathias auf das **Reel-Timing**-Artefakt verweisen (URL:
-     `https://claude.ai/code/artifact/404dbfa9-aa8d-4f87-a5fa-cf2be602f4ca`, per
-     `Artifact`-Tool mit `action:"read"` bei Bedarf neu abrufen/aktualisieren statt
-     neu zu bauen). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
+2. **Wort-Timing besorgen - bevorzugt per Yepp-Timer (exakt, kein Schätzen):**
+   - Mathias auf das **Yepp-Timer**-Artefakt verweisen (URL:
+     `https://claude.ai/code/artifact/af1ef8b2-c5aa-4bbc-9a45-754288601ce3`, per
+     `Artifact`-Tool mit `action:"read"` bei Bedarf abrufen und mit `url:` am
+     selben Link aktualisieren - niemals neu publizieren, sonst entsteht ein
+     zweiter Link). Er lädt dort sein Rohvideo (bleibt lokal im Browser, kein
      Upload) + optional den reinen gesprochenen Text (nur Gedächtnisstütze/
      Fortschrittszähler). Er zieht den Playhead auf einer Timeline (Querformat
      erzwungen) exakt zur Stelle, drückt "Wort setzen" und tippt das gehörte Wort
-     in ein Eingabefeld (siehe `references/reel_timing.md`), bis "Für Claude
-     speichern" grün wird.
-   - Danach die getappten Zeitstempel auslesen: `Artifact` mit `action:"read_db"`,
-     `db_op:"get"`, `collection:"timing"`, `doc_id:"current"` auf der obigen URL.
-     Das Ergebnis als JSON-Datei (z.B. `timing.json`) lokal speichern - dieses
-     JSON kann `make_reel.py` direkt als zweites Argument (statt einer SRT)
-     entgegennehmen.
-   - Kurz gegenchecken: `complete: true` im Dokument? Falls nicht, fehlen noch
+     in ein Eingabefeld (siehe `references/yepp_timer.md`).
+   - **Das Tool speichert nichts serverseitig.** Mathias exportiert am Ende
+     `timing.json` (Download oder Zwischenablage) und hängt die Datei bzw. den
+     Text direkt im Chat an. Diese JSON kann `make_reel.py` direkt als zweites
+     Argument (statt einer SRT) entgegennehmen.
+   - Kurz gegenchecken: `complete: true` im JSON? Falls nicht, fehlen noch
      Wörter - mit Mathias klären, ob er fertig tippen soll oder ob der Rest
      bewusst ausgelassen wurde.
    - **Nur falls Mathias das Tool nicht nutzen will/kann** (Fallback, siehe unten):
@@ -63,9 +62,9 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    `present_files` zeigen. Bei über 30MB vor dem Versand komprimieren (siehe
    `references/manual_assembly.md`).
 
-## Fallback ohne Reel-Timing: SRT + Audio-Energie-Schätzung
+## Fallback ohne Yepp-Timer: SRT + Audio-Energie-Schätzung
 
-Nur verwenden, wenn Mathias das Reel-Timing-Tool nicht nutzen kann/will. Liegt
+Nur verwenden, wenn Mathias den Yepp-Timer nicht nutzen kann/will. Liegt
 nur Fließtext vor (eingesprochen/eingetippt, keine SRT)? Erst die Tonspur mit
 `ffmpeg -i video.mp4 -vn -ar 16000 -ac 1 audio.wav` extrahieren, dann grobe
 Sprechabschnitte per `ffmpeg ... silencedetect` oder anhand der Zeilenumbrüche in
@@ -119,7 +118,7 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 
 ## Bekannte Grenzen (nur relevant für den SRT-Fallback-Pfad)
 
-Mit dem Reel-Timing entfallen diese Einschränkungen komplett, da dort echte
+Mit dem Yepp-Timer entfallen diese Einschränkungen komplett, da dort echte
 von Mathias getappte Zeitstempel verwendet werden statt einer Schätzung.
 
 - Wort-Timing basiert auf Audio-Energie-Analyse (echte Mikropausen per ffmpeg
