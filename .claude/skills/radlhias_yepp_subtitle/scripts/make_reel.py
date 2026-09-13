@@ -2,20 +2,28 @@
 """
 RadlHias Reel-Vorlage
 ======================
-Nimmt ein Rohvideo + eine SRT-Datei (z.B. aus VN exportiert, Text vorher korrigiert)
-und erzeugt automatisch das fertige Reel im RadlHias-Stil:
+Nimmt ein Rohvideo + entweder (a) eine SRT-Datei (z.B. aus VN exportiert, Text
+vorher korrigiert) oder (b) eine timing.json aus dem Reel-Timing-Tool (siehe
+references/reel_timing.md) und erzeugt automatisch das fertige Reel im
+RadlHias-Stil:
 - Wort-fuer-Wort-Untertitel, aktuelles Wort wird groesser/orange (Karaoke-Puls)
 - Navy/Orange/Creme-Farbschema, Doppelkontur-Look, Schatten, Filmkorn, -2.5 Grad Neigung
 - Logo-Wasserzeichen oben, Fade-to-Black am Ende
 
 Verwendung:
-    python3 make_reel.py <video.mp4> <untertitel.srt> <output.mp4>
+    python3 make_reel.py <video.mp4> <untertitel.srt|timing.json> <output.mp4>
 
 Voraussetzungen im selben Ordner:
     BarlowCondensed-Bold.ttf
     logo_watermark.png   (500x500 o.ae. RadlHias-Logo, transparent, wird automatisch skaliert)
 
-Workflow für Mathias:
+Workflow für Mathias (empfohlen - exaktes Timing, kein Schaetzen aus der Tonspur):
+    1. Reel-Timing-Artefakt oeffnen, Rohvideo + reinen Text (ohne Zeitstempel)
+       laden, im Sprechtempo durchtippen, "Fuer Claude speichern" druecken.
+    2. Claude liest die getappten Zeitstempel (timing.json) zurueck und ruft
+       python3 make_reel.py mein_video.mp4 timing.json reel_fertig.mp4 auf.
+
+Alternativ-Workflow (Text-Timing aus Audio-Energie-Analyse geschaetzt):
     1. In VN: Auto-Untertitel erzeugen (lokaler Modus, kostenlos), Text korrigieren, als SRT exportieren.
     2. SRT-Datei + Originalvideo hierher kopieren (oder mir schicken).
     3. python3 make_reel.py mein_video.mp4 meine_untertitel.srt reel_fertig.mp4
@@ -126,11 +134,55 @@ def local_minimum_near(times, rms_s, target_t, seg_start, seg_end, search_radius
                 best = (score, seg_t[i])
     return best[1] if best else None
 
-def words_for_block(times, rms_s, start, end, text):
-    words = [clean_word(w) for w in text.split()]
+def detect_silences(audio_path, noise_db=-24, min_dur=0.12):
+    """Ruft ffmpegs eigene silencedetect-Analyse EINMAL auf die ganze Tonspur auf und
+    liefert alle (start,end)-Stille-Intervalle. Das ist deutlich zuverlaessiger als ein
+    selbstgebauter RMS-Schwellenwert: eine Schwelle relativ zum Pegel-Peak versagt naemlich,
+    sobald der Grundrauschpegel der Aufnahme fast so hoch liegt wie die Schwelle selbst
+    (bei -24dB Peak-relativ z.B. kein einziges Frame mehr darunter) - ffmpegs Implementierung
+    ist dagegen abgehangen und in der Praxis getestet."""
+    out = subprocess.run(
+        ["ffmpeg", "-i", audio_path, "-af", f"silencedetect=noise={noise_db}dB:d={min_dur}",
+         "-f", "null", "-"],
+        capture_output=True, text=True).stderr
+    starts = [float(x) for x in re.findall(r"silence_start:\s*([\-0-9.]+)", out)]
+    ends = [float(x) for x in re.findall(r"silence_end:\s*([\-0-9.]+)", out)]
+    return list(zip(starts, ends[:len(starts)]))
+
+def find_speech_subchunks(silences, start, end, min_dur=0.15, edge_pad=0.03, merge_gap=0.05):
+    """Schneidet die global erkannten Stille-Intervalle auf einen SRT-Block zu und liefert
+    die dazwischenliegenden echten Sprechabschnitte. Ein SRT-Block ist oft ein ganzer Satz
+    (mehrere Sekunden); ohne diese Unterteilung schaetzt words_for_block Wort-Grenzen rein
+    proportional zur Wortlaenge ueber den GANZEN Block, was bei laengeren Bloecken zu
+    spuerbarer Drift zwischen Untertitel-Tempo und tatsaechlichem Mund/Sprechtempo fuehrt.
+    Mit den echten Mikropausen als zusaetzliche Anker bleibt die Verschiebung auf wenige
+    Woerter zwischen zwei echten Pausen begrenzt statt sich ueber den ganzen Satz
+    aufzusummieren. Sehr kurze/schwache Stille-Kandidaten (<min_dur) werden ignoriert,
+    dicht aufeinanderfolgende (<merge_gap Abstand) verschmolzen."""
+    local = [(max(s, start), min(e, end)) for s, e in silences if e > start and s < end]
+    local = [(s, e) for s, e in local if e - s >= min_dur]
+    local.sort()
+    merged = []
+    for s, e in local:
+        if merged and s - merged[-1][1] < merge_gap:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], e))
+        else:
+            merged.append((s, e))
+    subchunks, cur = [], start
+    for s0, s1 in merged:
+        if s0 > cur + edge_pad:
+            subchunks.append((cur, s0))
+        cur = max(cur, s1)
+    if cur < end - edge_pad:
+        subchunks.append((cur, end))
+    return subchunks if subchunks else [(start, end)]
+
+def _single_span_words(words, times, rms_s, start, end):
+    """Verteilt Woerter proportional zur Zeichenlaenge ueber EINE zusammenhaengende
+    Zeitspanne, verfeinert per lokaler Energie-Minima-Suche. Das ist der Kern-Algorithmus
+    fuer eine Zeitspanne OHNE bekannte interne Pausen (kurzer Block, oder ein einzelner
+    Sprechabschnitt innerhalb eines groesseren Blocks)."""
     n = len(words)
-    if n == 0:
-        return []
     if n == 1:
         return [(words[0], start, end)]
     weights = [len(w) + 2 for w in words]
@@ -153,7 +205,57 @@ def words_for_block(times, rms_s, start, end, text):
     bounds[-1] = end
     return [(words[i], bounds[i], bounds[i + 1]) for i in range(n)]
 
-def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR):
+def words_for_block(times, rms_s, silences, start, end, text):
+    words = [clean_word(w) for w in text.split()]
+    n = len(words)
+    if n == 0:
+        return []
+    if n == 1:
+        return [(words[0], start, end)]
+
+    subchunks = find_speech_subchunks(silences, start, end)
+    if len(subchunks) <= 1:
+        # Fallback: keine internen Pausen gefunden (kurzer oder durchgehend
+        # gesprochener Block) -> wie bisher ueber den GANZEN Block schaetzen.
+        return _single_span_words(words, times, rms_s, start, end)
+
+    # Bevorzugter Pfad: echte Mikropausen im Block gefunden. WICHTIG: die Woerter
+    # werden zuerst den einzelnen Sprechabschnitten zugeteilt (kumulatives Gewicht
+    # ~ kumulative Sprechdauer) und DANN innerhalb jedes Abschnitts fuer sich
+    # aufgeteilt - nur so bleiben die echten Pausen zwischen den Woertern als
+    # Luecke erhalten. Eine einzige durchgehende Zeitachse ueber alle Abschnitte
+    # hinweg (wie im ersten Anlauf) kann eine Pause zwischen zwei Woertern
+    # grundsaetzlich nicht abbilden, weil das End-des-einen-/Start-des-naechsten-
+    # Wortes im Datenmodell derselbe Zeitpunkt ist.
+    weights = [len(w) + 2 for w in words]
+    total_w = sum(weights)
+    total_dur = sum(e - s for s, e in subchunks)
+    cum, cum_targets = 0, []
+    for wt in weights:
+        cum += wt
+        cum_targets.append(total_dur * (cum / total_w))
+    sub_cum_end, running = [], 0.0
+    for cs, ce in subchunks:
+        running += ce - cs
+        sub_cum_end.append(running)
+    assign, ci = [], 0
+    for tgt in cum_targets:
+        while ci < len(subchunks) - 1 and tgt > sub_cum_end[ci] + 1e-9:
+            ci += 1
+        assign.append(ci)
+
+    result = []
+    for ci_target, (cs, ce) in enumerate(subchunks):
+        idxs = [i for i, a in enumerate(assign) if a == ci_target]
+        if not idxs:
+            continue
+        chunk_words = [words[i] for i in idxs]
+        result.extend(_single_span_words(chunk_words, times, rms_s, cs, ce))
+    return result
+
+def _enforce_min_duration_run(seg_words, min_dur):
+    """Wie enforce_min_duration, aber fuer einen garantiert LUECKENLOSEN Wort-Lauf
+    (Wort i endet exakt dort, wo Wort i+1 beginnt)."""
     if len(seg_words) <= 1:
         return seg_words
     start, end = seg_words[0][1], seg_words[-1][2]
@@ -180,6 +282,58 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR):
     if bounds[-2] >= bounds[-1]:
         bounds[-2] = bounds[-1] - 0.05
     return [(seg_words[i][0], bounds[i], bounds[i + 1]) for i in range(n)]
+
+def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
+    """Zieht zu kurze Wort-Anzeigedauern auseinander - aber NUR innerhalb eines
+    zusammenhaengenden Laufs ohne echte Pause. Ein Block kann (dank Mikropausen-
+    Erkennung) aus mehreren durch echte Sprechpausen getrennten Wort-Laeufen
+    bestehen; wuerde man die ganze Liste am Stueck bearbeiten, wie urspruenglich,
+    wuerden diese Pausen faelschlich mit-eingeebnet."""
+    if len(seg_words) <= 1:
+        return seg_words
+    runs, cur = [], [seg_words[0]]
+    for prev, w in zip(seg_words, seg_words[1:]):
+        if w[1] - prev[2] > gap_eps:
+            runs.append(cur)
+            cur = [w]
+        else:
+            cur.append(w)
+    runs.append(cur)
+    out = []
+    for run in runs:
+        out.extend(_enforce_min_duration_run(run, min_dur))
+    return out
+
+# ---------------------------------------------------------------------------
+# 2b. WORT-TIMING AUS DEM WORT-TAKTGEBER-TOOL (manuell getappte Zeitstempel)
+# ---------------------------------------------------------------------------
+def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
+    """Liest die vom Reel-Timing-Tool exportierten Tap-Zeitstempel ein
+    (JSON: {"words": [{"w": "...", "t": 1.23}, ...]}). Das ist die
+    zuverlaessigste Quelle fuer Wort-Timing ueberhaupt - kein Schaetzen aus
+    der Tonspur noetig, weil Mathias selbst im Sprechtempo mitgetippt hat.
+    Jedes Wort dauert bis zum naechsten Tap; das letzte Wort bekommt
+    `tail_dur` Sekunden. Eine Luecke > gap_break zwischen zwei Taps trennt
+    zwei Anzeige-Bloecke (z.B. eine echte Sprechpause, die er beim Tappen
+    ausgelassen hat)."""
+    import json
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    taps = sorted(data["words"], key=lambda w: w["t"])
+    n = len(taps)
+    starts = [t["t"] for t in taps]
+    ends = starts[1:] + [starts[-1] + tail_dur]
+    words_wbounds = [(clean_word(taps[i]["w"]), starts[i], ends[i]) for i in range(n)]
+
+    blocks, cur = [], []
+    for wb in words_wbounds:
+        if cur and (wb[1] - cur[-1][2] > gap_break or len(cur) >= MAX_WORDS_PER_BLOCK):
+            blocks.append(enforce_min_duration(cur))
+            cur = []
+        cur.append(wb)
+    if cur:
+        blocks.append(enforce_min_duration(cur))
+    return blocks
 
 # ---------------------------------------------------------------------------
 # 3. DICHTE BLOECKE AUTOMATISCH AUFTEILEN (max. MAX_WORDS_PER_BLOCK Woerter)
@@ -349,20 +503,25 @@ def main(video_path, srt_path, out_path):
          "-of", "default=noprint_wrappers=1:nokey=1", video_path],
         capture_output=True, text=True).stdout.strip())
 
-    print("SRT einlesen...")
-    srt_blocks = parse_srt(srt_path)
-    times, rms_s = load_rms(audio_path)
+    if srt_path.lower().endswith(".json"):
+        print("Getappte Wort-Zeitstempel einlesen (Reel-Timing)...")
+        word_blocks = parse_word_timings_json(srt_path)
+    else:
+        print("SRT einlesen...")
+        srt_blocks = parse_srt(srt_path)
+        times, rms_s = load_rms(audio_path)
+        silences = detect_silences(audio_path)
 
-    print("Wort-Timing pro Block ermitteln (Audio-Energie-Analyse)...")
-    word_blocks = []
-    for start, end, text in srt_blocks:
-        wb = words_for_block(times, rms_s, start, end, text)
-        wb = enforce_min_duration(wb)
-        if wb:
-            word_blocks.append(wb)
+        print("Wort-Timing pro Block ermitteln (Audio-Energie-Analyse)...")
+        word_blocks = []
+        for start, end, text in srt_blocks:
+            wb = words_for_block(times, rms_s, silences, start, end, text)
+            wb = enforce_min_duration(wb)
+            if wb:
+                word_blocks.append(wb)
 
-    print("Dichte Bloecke aufteilen (max. %d Woerter)..." % MAX_WORDS_PER_BLOCK)
-    word_blocks = split_dense_blocks(word_blocks)
+        print("Dichte Bloecke aufteilen (max. %d Woerter)..." % MAX_WORDS_PER_BLOCK)
+        word_blocks = split_dense_blocks(word_blocks)
 
     print("Layout berechnen...")
     layouts = [layout_block(b) for b in word_blocks]
@@ -407,6 +566,6 @@ def main(video_path, srt_path, out_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print("Verwendung: python3 make_reel.py <video.mp4> <untertitel.srt> <output.mp4>")
+        print("Verwendung: python3 make_reel.py <video.mp4> <untertitel.srt|timing.json> <output.mp4>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2], sys.argv[3])
