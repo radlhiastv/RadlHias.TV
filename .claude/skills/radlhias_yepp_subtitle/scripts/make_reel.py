@@ -2,20 +2,28 @@
 """
 RadlHias Reel-Vorlage
 ======================
-Nimmt ein Rohvideo + eine SRT-Datei (z.B. aus VN exportiert, Text vorher korrigiert)
-und erzeugt automatisch das fertige Reel im RadlHias-Stil:
+Nimmt ein Rohvideo + entweder (a) eine SRT-Datei (z.B. aus VN exportiert, Text
+vorher korrigiert) oder (b) eine timing.json aus dem Wort-Taktgeber-Tool (siehe
+references/wort_taktgeber.md) und erzeugt automatisch das fertige Reel im
+RadlHias-Stil:
 - Wort-fuer-Wort-Untertitel, aktuelles Wort wird groesser/orange (Karaoke-Puls)
 - Navy/Orange/Creme-Farbschema, Doppelkontur-Look, Schatten, Filmkorn, -2.5 Grad Neigung
 - Logo-Wasserzeichen oben, Fade-to-Black am Ende
 
 Verwendung:
-    python3 make_reel.py <video.mp4> <untertitel.srt> <output.mp4>
+    python3 make_reel.py <video.mp4> <untertitel.srt|timing.json> <output.mp4>
 
 Voraussetzungen im selben Ordner:
     BarlowCondensed-Bold.ttf
     logo_watermark.png   (500x500 o.ae. RadlHias-Logo, transparent, wird automatisch skaliert)
 
-Workflow für Mathias:
+Workflow für Mathias (empfohlen - exaktes Timing, kein Schaetzen aus der Tonspur):
+    1. Wort-Taktgeber-Artefakt oeffnen, Rohvideo + reinen Text (ohne Zeitstempel)
+       laden, im Sprechtempo durchtippen, "Fuer Claude speichern" druecken.
+    2. Claude liest die getappten Zeitstempel (timing.json) zurueck und ruft
+       python3 make_reel.py mein_video.mp4 timing.json reel_fertig.mp4 auf.
+
+Alternativ-Workflow (Text-Timing aus Audio-Energie-Analyse geschaetzt):
     1. In VN: Auto-Untertitel erzeugen (lokaler Modus, kostenlos), Text korrigieren, als SRT exportieren.
     2. SRT-Datei + Originalvideo hierher kopieren (oder mir schicken).
     3. python3 make_reel.py mein_video.mp4 meine_untertitel.srt reel_fertig.mp4
@@ -297,6 +305,37 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
     return out
 
 # ---------------------------------------------------------------------------
+# 2b. WORT-TIMING AUS DEM WORT-TAKTGEBER-TOOL (manuell getappte Zeitstempel)
+# ---------------------------------------------------------------------------
+def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
+    """Liest die vom Wort-Taktgeber-Tool exportierten Tap-Zeitstempel ein
+    (JSON: {"words": [{"w": "...", "t": 1.23}, ...]}). Das ist die
+    zuverlaessigste Quelle fuer Wort-Timing ueberhaupt - kein Schaetzen aus
+    der Tonspur noetig, weil Mathias selbst im Sprechtempo mitgetippt hat.
+    Jedes Wort dauert bis zum naechsten Tap; das letzte Wort bekommt
+    `tail_dur` Sekunden. Eine Luecke > gap_break zwischen zwei Taps trennt
+    zwei Anzeige-Bloecke (z.B. eine echte Sprechpause, die er beim Tappen
+    ausgelassen hat)."""
+    import json
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    taps = sorted(data["words"], key=lambda w: w["t"])
+    n = len(taps)
+    starts = [t["t"] for t in taps]
+    ends = starts[1:] + [starts[-1] + tail_dur]
+    words_wbounds = [(clean_word(taps[i]["w"]), starts[i], ends[i]) for i in range(n)]
+
+    blocks, cur = [], []
+    for wb in words_wbounds:
+        if cur and (wb[1] - cur[-1][2] > gap_break or len(cur) >= MAX_WORDS_PER_BLOCK):
+            blocks.append(enforce_min_duration(cur))
+            cur = []
+        cur.append(wb)
+    if cur:
+        blocks.append(enforce_min_duration(cur))
+    return blocks
+
+# ---------------------------------------------------------------------------
 # 3. DICHTE BLOECKE AUTOMATISCH AUFTEILEN (max. MAX_WORDS_PER_BLOCK Woerter)
 # ---------------------------------------------------------------------------
 def split_dense_blocks(word_blocks):
@@ -464,21 +503,25 @@ def main(video_path, srt_path, out_path):
          "-of", "default=noprint_wrappers=1:nokey=1", video_path],
         capture_output=True, text=True).stdout.strip())
 
-    print("SRT einlesen...")
-    srt_blocks = parse_srt(srt_path)
-    times, rms_s = load_rms(audio_path)
-    silences = detect_silences(audio_path)
+    if srt_path.lower().endswith(".json"):
+        print("Getappte Wort-Zeitstempel einlesen (Wort-Taktgeber)...")
+        word_blocks = parse_word_timings_json(srt_path)
+    else:
+        print("SRT einlesen...")
+        srt_blocks = parse_srt(srt_path)
+        times, rms_s = load_rms(audio_path)
+        silences = detect_silences(audio_path)
 
-    print("Wort-Timing pro Block ermitteln (Audio-Energie-Analyse)...")
-    word_blocks = []
-    for start, end, text in srt_blocks:
-        wb = words_for_block(times, rms_s, silences, start, end, text)
-        wb = enforce_min_duration(wb)
-        if wb:
-            word_blocks.append(wb)
+        print("Wort-Timing pro Block ermitteln (Audio-Energie-Analyse)...")
+        word_blocks = []
+        for start, end, text in srt_blocks:
+            wb = words_for_block(times, rms_s, silences, start, end, text)
+            wb = enforce_min_duration(wb)
+            if wb:
+                word_blocks.append(wb)
 
-    print("Dichte Bloecke aufteilen (max. %d Woerter)..." % MAX_WORDS_PER_BLOCK)
-    word_blocks = split_dense_blocks(word_blocks)
+        print("Dichte Bloecke aufteilen (max. %d Woerter)..." % MAX_WORDS_PER_BLOCK)
+        word_blocks = split_dense_blocks(word_blocks)
 
     print("Layout berechnen...")
     layouts = [layout_block(b) for b in word_blocks]
@@ -523,6 +566,6 @@ def main(video_path, srt_path, out_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print("Verwendung: python3 make_reel.py <video.mp4> <untertitel.srt> <output.mp4>")
+        print("Verwendung: python3 make_reel.py <video.mp4> <untertitel.srt|timing.json> <output.mp4>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2], sys.argv[3])
