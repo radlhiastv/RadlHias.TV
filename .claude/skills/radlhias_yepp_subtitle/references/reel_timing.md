@@ -1,12 +1,12 @@
-# Timestamp - manuelles Wort-Timing per Timeline+Eingabe
+# Reel-Timing - manuelles Wort-Timing per Timeline+Eingabe
 
-Artefakt-URL: `https://claude.ai/code/artifact/96e658b9-4e1d-4ec6-8df8-4b977e7f2509`
+Artefakt-URL: `https://claude.ai/code/artifact/404dbfa9-aa8d-4f87-a5fa-cf2be602f4ca`
 
 ## Warum
 
 Wort-Timing aus der Tonspur zu schätzen (Audio-Energie-Analyse, Mikropausen) bleibt
 immer eine Annäherung - bei schnellem oder undeutlichem Sprechen kann die Anzeige
-dem Mund spürbar hinterherhinken oder vorauseilen. Timestamp umgeht das Problem
+dem Mund spürbar hinterherhinken oder vorauseilen. Reel-Timing umgeht das Problem
 komplett: Mathias zieht den Playhead auf einer echten Timeline (wie in einem
 Videoschnitt-Programm) exakt zur Stelle, drückt "Wort setzen" und tippt das dort
 gesprochene Wort in ein Eingabefeld - die App speichert dabei `video.currentTime`
