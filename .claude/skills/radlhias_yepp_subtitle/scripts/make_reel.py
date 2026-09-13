@@ -126,6 +126,71 @@ def local_minimum_near(times, rms_s, target_t, seg_start, seg_end, search_radius
                 best = (score, seg_t[i])
     return best[1] if best else None
 
+def find_speech_subchunks(times, rms_s, start, end, noise_db=-24, min_silence=0.12, edge_pad=0.03):
+    """Findet echte Mikro-Sprechpausen INNERHALB eines SRT-Blocks (per Audio-Energie,
+    Schwelle relativ zum Block-eigenen Pegel-Peak - funktioniert also auch bei leiseren
+    Aufnahmen). Ein SRT-Block ist oft ein ganzer Satz (mehrere Sekunden); ohne diese
+    Unterteilung schaetzt words_for_block Wort-Grenzen rein proportional zur Wortlaenge
+    ueber den GANZEN Block, was bei laengeren Bloecken zu spuerbarer Drift zwischen
+    Untertitel-Tempo und tatsaechlichem Mund/Sprechtempo fuehrt. Mit den echten
+    Mikropausen als zusaetzliche Anker bleibt die Verschiebung auf wenige Woerter
+    zwischen zwei echten Pausen begrenzt statt sich ueber den ganzen Satz aufzusummieren.
+    """
+    mask = (times >= start) & (times <= end)
+    t, r = times[mask], rms_s[mask]
+    if len(r) < 5:
+        return [(start, end)]
+    peak = np.percentile(r, 95) + 1e-9
+    thresh = peak * (10 ** (noise_db / 20))
+    is_silence = r < thresh
+    silences, i, n = [], 0, len(t)
+    while i < n:
+        if is_silence[i]:
+            j = i
+            while j < n and is_silence[j]:
+                j += 1
+            dur = t[j - 1] - t[i] if j > i else 0
+            if dur >= min_silence:
+                silences.append((t[i], t[j - 1]))
+            i = j
+        else:
+            i += 1
+    subchunks, cur = [], start
+    for s0, s1 in silences:
+        if s0 > cur + edge_pad:
+            subchunks.append((cur, s0))
+        cur = max(cur, s1)
+    if cur < end - edge_pad:
+        subchunks.append((cur, end))
+    return subchunks if subchunks else [(start, end)]
+
+def _proportional_bounds(words, subchunks, start, end):
+    """Verteilt Woerter gewichtet nach Zeichenlaenge ueber die gegebenen (echten)
+    Sprechabschnitte hinweg (Pausen dazwischen werden uebersprungen)."""
+    weights = [len(w) + 2 for w in words]
+    total_w = sum(weights)
+    total_dur = sum(e - s for s, e in subchunks) or (end - start)
+    cum, cum_bounds = 0, [0.0]
+    for wt in weights:
+        cum += wt
+        cum_bounds.append(total_dur * (cum / total_w))
+
+    def speech_to_real(tt):
+        acc = 0.0
+        for cs, ce in subchunks:
+            d = ce - cs
+            if acc + d >= tt or (cs, ce) == subchunks[-1]:
+                return cs + (tt - acc)
+            acc += d
+        return subchunks[-1][1]
+
+    bounds = [speech_to_real(b) for b in cum_bounds]
+    bounds[0], bounds[-1] = start, end
+    for i in range(1, len(bounds)):
+        if bounds[i] <= bounds[i - 1]:
+            bounds[i] = bounds[i - 1] + 0.05
+    return bounds
+
 def words_for_block(times, rms_s, start, end, text):
     words = [clean_word(w) for w in text.split()]
     n = len(words)
@@ -133,6 +198,16 @@ def words_for_block(times, rms_s, start, end, text):
         return []
     if n == 1:
         return [(words[0], start, end)]
+
+    subchunks = find_speech_subchunks(times, rms_s, start, end)
+    if len(subchunks) > 1:
+        # Bevorzugter Pfad: echte Mikropausen im Block gefunden -> Woerter darauf
+        # verteilen statt ueber den ganzen (womoeglich mehrsekuendigen) Block zu raten.
+        bounds = _proportional_bounds(words, subchunks, start, end)
+        return [(words[i], bounds[i], bounds[i + 1]) for i in range(n)]
+
+    # Fallback: keine internen Pausen gefunden (kurzer oder durchgehend gesprochener
+    # Block) -> wie bisher rein proportional + lokale Energie-Minima-Suche.
     weights = [len(w) + 2 for w in words]
     total_w = sum(weights)
     t, prop_bounds = start, []
