@@ -52,8 +52,9 @@ Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wech
    es wieder her. Verlässt Mathias das Vollbild dagegen selbst, springt es
    nicht ungefragt zurück.
 3. Rohvideo laden (Datei-Auswahl - bleibt lokal im Browser, wird nicht hochgeladen).
-4. Optional: gesprochenen Text als reinen Fließtext einfügen (nur Gedächtnisstütze,
-   Fortschrittszähler und Tipp-Vorschläge - kann auch leer bleiben).
+4. **Gesprochenen Text einfügen.** Damit arbeitet das Werkzeug im Ankermodus
+   (siehe unten) - das ist der schnelle Weg. Lässt er das Feld leer, bleibt es
+   beim freien Modus, in dem er jedes Wort einzeln setzt und eintippt.
 5. "Los geht's" - Video startet automatisch.
 6. Aufbau wie im Schnittprogramm: oben das Videobild mit der Bedienung
    daneben, unten die Timeline über die gesamte Breite - je breiter, desto
@@ -76,16 +77,33 @@ Datei-Download und die Installation als App. **Nicht** zurück zum Artefakt wech
    sich ein Wortanfang sauber treffen. Die Zeitmarken werden beim Hineinzoomen
    automatisch feiner (bis hinunter zu Zwanzigstelsekunden), und beim Abspielen
    wandert das Fenster mit dem Playhead mit.
-9. **Wort setzen** drücken (oder Taste `W`) - Video pausiert, Zeitpunkt wird
-   eingefroren und ein Eingabefeld öffnet sich.
-10. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
+9. **Ankermodus (Text hinterlegt).** Das Werkzeug setzt die Marken selbst und
+   Mathias schiebt sie nur noch zurecht - an seinem Material 27 statt 109
+   Handgriffe:
+   - Eine Marke auf der Timeline anfassen und an die richtige Stelle ziehen.
+     Das Videobild folgt beim Ziehen mit, er sieht also, was dort gesprochen
+     wird. Loslassen bestätigt sie; ein bloßes Antippen bestätigt eine Marke,
+     die ohnehin schon passt.
+   - **Blass = vom Werkzeug geraten, grün = von Mathias bestätigt**, orange =
+     gerade ausgewählt. So sieht er auf einen Blick, was noch Vermutung ist.
+   - **Folgende Marken ziehen mit** (abschaltbar): Beim Verschieben wandern alle
+     noch nicht bestätigten Marken bis zur nächsten bestätigten - oder bis zum
+     Videoende - proportional mit. Weil die Vorbelegung meist gleichmäßig
+     danebenliegt, korrigiert ein Handgriff so gleich die ganze folgende
+     Passage. Bestätigte Marken bewegen sich nie wieder und wirken wie eine
+     Klammer.
+   - ◂ ▸ springt von Marke zu Marke, "Rest bestätigen" übernimmt alle
+     verbliebenen, "Alles zurücksetzen" stellt die Vorbelegung wieder her.
+10. **Freier Modus (kein Text).** Wie gehabt: **Wort setzen** drücken (oder Taste
+   `W`) - Video pausiert, Zeitpunkt wird eingefroren, Eingabefeld öffnet sich.
+11. Das gehörte Wort eintippen, mit Enter oder "OK" bestätigen (Vorschläge aus dem
    optionalen Fließtext bietet das Feld per Autocomplete an). Der Marker erscheint
    als grüner Strich auf der Timeline und unten in der chronologischen Liste. War
    das Video vorher am Laufen, läuft es nach dem Bestätigen weiter.
-11. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
+12. In der Liste auf Zeit oder Wort klicken springt im Video dorthin; ✎ ändert den
    Worttext nachträglich; ✕ löscht einen einzelnen Marker; "Alles zurücksetzen"
    löscht alle (mit Rückfrage).
-12. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
+13. Zum Schluss **timing.json herunterladen** (oder "In Zwischenablage") und Datei
    bzw. Text im Chat an Claude anhängen.
 
 Ein rot umrandeter Eintrag in der Liste bedeutet: seine Zeit liegt vor der des
@@ -95,29 +113,65 @@ Tippfehler. Kurz gegenprüfen und ggf. löschen/neu setzen.
 Im Hochformat ist das Werkzeug gesperrt ("Gerät drehen") - die Timeline braucht
 die Breite.
 
+## Wie die Anker gewählt und vorbelegt werden
+
+**Welche Wörter Anker werden:** Satzzeichen verraten, wo Mathias beim Sprechen
+absetzt. An seinem Text gemessen ergibt das eine Stütze alle 2,6 Sekunden;
+Lücken über 2,5 Sekunden werden aufgefüllt. Abkürzungen wie `bzw.` sind
+ausgenommen, sonst entstünde mitten im Satz ein Anker.
+
+**Wo sie anfangs liegen:** gleichmäßig, aber über die reine Sprechzeit - erkannte
+Atempausen werden übersprungen, längere Wörter bekommen mehr Zeit als kurze.
+
+**Warum nicht genauer?** Gemessen an `20260911_173558.mp4`: Der Abstand zwischen
+Grundrauschen und Sprache beträgt bei Mathias' Außenaufnahmen nur 2,3:1 (bei
+Studioton wären es 20:1). Die Tonanalyse findet deshalb nur die ~8 groben
+Atempausen, keine Wortgrenzen - der längste zusammenhängende Abschnitt ist
+12,3 Sekunden lang. Für eine feine Vorbelegung reicht das nicht. Gegenüber stur
+linearer Verteilung bringt das Überspringen der Pausen im Mittel 0,5 Sekunden.
+**Die Vorbelegung bleibt also ungenau - deshalb ist das Mitziehen keine
+Zusatzfunktion, sondern der Kern der Bedienung.**
+
+Schlägt das Dekodieren der Tonspur fehl (sehr große Datei, fehlender Codec),
+bleibt es stillschweigend bei der linearen Vorbelegung.
+
 ## Datenformat
 
 Das Werkzeug speichert **nichts** serverseitig - es hat keine Datenbank, kein
-Konto und keinen Login. Der Export sieht so aus:
+Konto und keinen Login. Zwei Formate, die `make_reel.py` beide liest:
+
+**Ankermodus** (aktuell) - die vollständige Wortfolge plus die Stützstellen:
 
 ```json
 {
   "videoName": "20260911_173558.mp4",
+  "duration": 43.42,
+  "words": ["Sattelstützen,", "die", "in", "..."],
+  "anchors": [{"i": 0, "t": 0.0, "fixed": true},
+              {"i": 5, "t": 2.1, "fixed": true}, ...],
   "totalWords": 109,
-  "words": [{"w": "Sattelstützen,", "t": 0.83}, ...],
   "complete": true,
-  "savedAt": "2026-09-13T07:30:00.000Z"
+  "savedAt": "2026-09-14T07:30:00.000Z"
 }
 ```
 
-Diese JSON lokal als z.B. `timing.json` ablegen und direkt an `make_reel.py` als
-zweites Argument übergeben (siehe `parse_word_timings_json` in
-`scripts/make_reel.py`) - kein SRT-Umweg nötig. Jedes Wort dauert bis zum nächsten
-Zeitstempel; Pausen über 0,5s zwischen zwei Zeitstempeln trennen automatisch zwei
-Anzeige-Blöcke.
+Die Zeit jedes Wortes zwischen zwei Ankern rechnet `interpolate_from_anchors`
+in `scripts/make_reel.py` aus - proportional zur Zeichenlänge, damit
+"Carbon-Montagepaste" länger steht als "n".
 
-Falls `complete` false ist: mit Mathias klären, ob er fertig tippen soll, bevor
-gerendert wird - sonst fehlen Wörter im Video komplett.
+**Freier Modus** (auch ältere Dateien) - ein Zeitstempel je Wort:
+
+```json
+{"words": [{"w": "Sattelstützen,", "t": 0.83}, ...], "totalWords": 109}
+```
+
+Die Datei lokal als z.B. `timing.json` ablegen und direkt an `make_reel.py` als
+zweites Argument übergeben - kein SRT-Umweg nötig. Jedes Wort dauert bis zum
+nächsten; Pausen über 0,5s trennen automatisch zwei Anzeige-Blöcke.
+
+Falls `complete` false ist: mit Mathias klären, ob er die restlichen Marken noch
+durchgehen will. Anders als früher fehlen dann keine Wörter - unbestätigte Marken
+stehen einfach auf der Vorbelegung und können danebenliegen.
 
 ## Falls sich das Werkzeug ändern soll
 

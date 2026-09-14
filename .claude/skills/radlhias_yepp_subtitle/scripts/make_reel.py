@@ -307,20 +307,103 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
 # ---------------------------------------------------------------------------
 # 2b. WORT-TIMING AUS DEM WORT-TAKTGEBER-TOOL (manuell getappte Zeitstempel)
 # ---------------------------------------------------------------------------
+def interpolate_from_anchors(words, anchors, duration=None):
+    """Rechnet aus Stuetzstellen (Ankern) die Zeit JEDES Wortes aus.
+
+    Der Yepp-Timer laesst Mathias nicht mehr jedes einzelne Wort setzen,
+    sondern nur noch rund ein Viertel davon - die Woerter dazwischen fallen
+    hier an. Gemessen an seinem Material spricht er gleichmaessig genug,
+    dass eine Verteilung nach Zeichenlaenge innerhalb eines Ankerabstands
+    von ~2 Sekunden traegt (laengere Woerter dauern laenger als kurze).
+
+    `anchors`: [{"i": <Wortindex>, "t": <Sekunde>}, ...]
+    Rueckgabe: Liste der Startzeiten, eine je Wort."""
+    n = len(words)
+    if n == 0:
+        return []
+    weights = [max(1, len(clean_word(w))) for w in words]
+    # kumulierte Gewichtung vor Wort i - damit laesst sich zwischen zwei
+    # Ankern proportional statt stur gleichmaessig verteilen
+    cum = [0.0] * (n + 1)
+    for i, g in enumerate(weights):
+        cum[i + 1] = cum[i] + g
+
+    anchors = sorted(anchors, key=lambda a: a["i"])
+    anchors = [a for a in anchors if 0 <= a["i"] < n]
+    if not anchors:
+        raise ValueError("Timing-Datei enthaelt keine brauchbaren Anker")
+
+    times = [None] * n
+    for a in anchors:
+        times[a["i"]] = float(a["t"])
+
+    def fill(i0, t0, i1, t1):
+        """Woerter zwischen zwei Ankern proportional zur Zeichenlaenge."""
+        span = cum[i1] - cum[i0]
+        if span <= 0:
+            return
+        for i in range(i0 + 1, i1):
+            times[i] = t0 + (t1 - t0) * (cum[i] - cum[i0]) / span
+
+    for a, b in zip(anchors, anchors[1:]):
+        fill(a["i"], float(a["t"]), b["i"], float(b["t"]))
+
+    # Vor dem ersten und nach dem letzten Anker mit dem Tempo des
+    # angrenzenden Abschnitts weiterrechnen.
+    first, last = anchors[0], anchors[-1]
+    if len(anchors) >= 2:
+        rate_head = (float(anchors[1]["t"]) - float(first["t"])) / max(
+            1e-6, cum[anchors[1]["i"]] - cum[first["i"]])
+        rate_tail = (float(last["t"]) - float(anchors[-2]["t"])) / max(
+            1e-6, cum[last["i"]] - cum[anchors[-2]["i"]])
+    else:
+        rate_head = rate_tail = 0.25 / max(1, sum(weights) / n)
+
+    for i in range(first["i"] - 1, -1, -1):
+        times[i] = max(0.0, float(first["t"]) - (cum[first["i"]] - cum[i]) * rate_head)
+    for i in range(last["i"] + 1, n):
+        times[i] = float(last["t"]) + (cum[i] - cum[last["i"]]) * rate_tail
+    if duration:
+        times = [min(float(duration), t) for t in times]
+
+    # Monotonie sichern - eine Rundung darf die Reihenfolge nicht drehen
+    for i in range(1, n):
+        if times[i] < times[i - 1]:
+            times[i] = times[i - 1]
+    return times
+
+
 def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
-    """Liest die vom Reel-Timing-Tool exportierten Tap-Zeitstempel ein
-    (JSON: {"words": [{"w": "...", "t": 1.23}, ...]}). Das ist die
-    zuverlaessigste Quelle fuer Wort-Timing ueberhaupt - kein Schaetzen aus
-    der Tonspur noetig, weil Mathias selbst im Sprechtempo mitgetippt hat.
-    Jedes Wort dauert bis zum naechsten Tap; das letzte Wort bekommt
-    `tail_dur` Sekunden. Eine Luecke > gap_break zwischen zwei Taps trennt
-    zwei Anzeige-Bloecke (z.B. eine echte Sprechpause, die er beim Tappen
-    ausgelassen hat)."""
+    """Liest die vom Yepp-Timer exportierten Zeitstempel ein.
+
+    Zwei Formate, am Inhalt von "words" unterschieden:
+
+    * **Anker** (aktuell): {"words": ["Wort", ...],
+      "anchors": [{"i": 0, "t": 0.83}, ...]} - Mathias setzt nur
+      Stuetzstellen, die Woerter dazwischen rechnet
+      `interpolate_from_anchors` aus.
+    * **Ein Stempel je Wort** (aelter): {"words": [{"w": "...", "t": 1.23}]}
+
+    Jedes Wort dauert bis zum naechsten; das letzte bekommt `tail_dur`
+    Sekunden. Eine Luecke > gap_break trennt zwei Anzeige-Bloecke (eine
+    echte Sprechpause)."""
     import json
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
-    taps = sorted(data["words"], key=lambda w: w["t"])
+
+    raw = data.get("words") or []
+    if raw and isinstance(raw[0], str):
+        # Ankerformat
+        words = raw
+        times = interpolate_from_anchors(words, data.get("anchors") or [],
+                                         data.get("duration"))
+        taps = [{"w": w, "t": t} for w, t in zip(words, times)]
+    else:
+        taps = sorted(raw, key=lambda w: w["t"])
+
     n = len(taps)
+    if n == 0:
+        raise ValueError("Timing-Datei enthaelt keine Woerter")
     starts = [t["t"] for t in taps]
     ends = starts[1:] + [starts[-1] + tail_dur]
     words_wbounds = [(clean_word(taps[i]["w"]), starts[i], ends[i]) for i in range(n)]

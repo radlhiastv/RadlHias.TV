@@ -26,14 +26,18 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
      **https://radlhias.tv/yepp-timer/** (Quelldateien im Repo: Ordner
      `yepp-timer/` - kein Claude-Artefakt mehr, siehe
      `references/yepp_timer.md` für die Gründe). Er lädt dort sein Rohvideo
-     (bleibt lokal im Browser, kein Upload) + optional den reinen gesprochenen
-     Text (nur Gedächtnisstütze/Fortschrittszähler). Er zieht den Playhead auf
-     einer Timeline (Querformat erzwungen) exakt zur Stelle, drückt "Wort setzen"
-     und tippt das gehörte Wort in ein Eingabefeld.
+     (bleibt lokal im Browser, kein Upload) und fügt den gesprochenen Text ein.
+     Auf einer Timeline (Querformat erzwungen, mit Pinch-Zoom) schiebt er die
+     vorbelegten Marken an die richtige Stelle.
+   - **Text mitgeben lassen!** Mit hinterlegtem Text arbeitet der Yepp-Timer im
+     Ankermodus: Er setzt rund ein Viertel der Wörter als Stützstellen selbst
+     und Mathias schiebt sie nur zurecht (an seinem Material 27 statt 109
+     Handgriffe). Ohne Text muss er jedes Wort einzeln setzen und eintippen.
    - **Das Tool speichert nichts serverseitig.** Mathias exportiert am Ende
      `timing.json` (Download oder Zwischenablage) und hängt die Datei bzw. den
      Text direkt im Chat an. Diese JSON kann `make_reel.py` direkt als zweites
-     Argument (statt einer SRT) entgegennehmen.
+     Argument (statt einer SRT) entgegennehmen - beide Formate (Anker und ein
+     Stempel je Wort) werden erkannt.
    - Kurz gegenchecken: `complete: true` im JSON? Falls nicht, fehlen noch
      Wörter - mit Mathias klären, ob er fertig tippen soll oder ob der Rest
      bewusst ausgelassen wurde.
