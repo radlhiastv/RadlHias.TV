@@ -196,10 +196,29 @@ video{
   font-size:.66rem; color:var(--cream-dim); font-variant-numeric:tabular-nums;
   pointer-events:none;
 }
+/* Blass = vom Werkzeug geraten, kraeftig = von Mathias bestaetigt.
+   So sieht er auf einen Blick, was noch Vermutung ist. */
 .tl-marker{
-  position:absolute; top:0; width:2px; height:58%; background:var(--green);
-  pointer-events:none; z-index:2;
+  position:absolute; top:0; width:2px; height:52%;
+  background:var(--green); pointer-events:none; z-index:2;
 }
+.tl-marker.geraten{background:#7C8CA0; opacity:.85;}
+.tl-marker.fixiert{background:var(--green); width:3px;}
+.tl-marker.gewaehlt{
+  background:var(--orange); width:4px; height:64%; z-index:5;
+  box-shadow:0 0 0 1px rgba(20,33,47,.6);
+}
+.tl-marker.gewaehlt::before{
+  content:''; position:absolute; top:-2px; left:50%; transform:translateX(-50%);
+  width:16px; height:16px; border-radius:50%; background:var(--orange);
+}
+.tl-markerlabel{
+  position:absolute; top:52%; transform:translateX(-50%); z-index:2;
+  font-size:.62rem; color:#7C8CA0; pointer-events:none; white-space:nowrap;
+  max-width:6.5em; overflow:hidden; text-overflow:ellipsis;
+}
+.tl-markerlabel.fixiert{color:var(--green);}
+.tl-markerlabel.gewaehlt{color:var(--orange); font-weight:700; z-index:5;}
 .tl-playhead{
   position:absolute; top:0; bottom:0; width:2px; background:var(--orange);
   pointer-events:none; z-index:3;
@@ -231,20 +250,36 @@ video{
 .wordentry input[type=text]{flex:1; min-width:0; background:var(--navy-2);}
 
 .entrybox{padding:11px; display:flex; flex-direction:column; gap:10px;}
-.progressrow{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+.progressrow{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
+.markernav{display:flex; align-items:center; gap:8px;}
+.markernav button{min-width:2.6em; padding:6px 10px; font-size:1rem; line-height:1;}
+.marksel{
+  flex:1; min-width:0; text-align:center; font-weight:600; color:var(--orange);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:.95rem;
+}
+.ripplerow{
+  display:flex; align-items:center; gap:8px; cursor:pointer;
+  color:var(--cream-dim); font-size:.84rem;
+}
+.ripplerow input{width:16px; height:16px; accent-color:var(--orange); cursor:pointer;}
+.mrow.geraten .w, .mrow.geraten .t{color:#7C8CA0;}
+.mrow.gewaehlt{background:rgba(232,135,59,.12);}
+.mrow.gewaehlt .w{color:var(--orange); font-weight:600;}
 #progressLabel{color:var(--cream-dim); font-size:.88rem;}
 
 /* --- Wortliste --- */
 .listbox{padding:11px; display:flex; flex-direction:column; gap:9px; min-height:0; flex:1;}
 .listhead{display:flex; justify-content:space-between; align-items:center; gap:10px;}
 .markerlist{
-  flex:1; min-height:44px; overflow-y:auto;
+  flex:1; min-height:36px; overflow-y:auto;
   border:1px solid var(--line); border-radius:9px; background:var(--navy-3);
 }
 .mrow{
   display:grid; grid-template-columns:2.4em 4.6em 1fr auto auto; gap:8px; align-items:center;
-  padding:5px 9px; border-bottom:1px solid var(--line); font-size:.88rem;
+  padding:4px 9px; border-bottom:1px solid var(--line); font-size:.86rem;
 }
+/* Im Ankermodus gibt es nur einen Knopf je Zeile. */
+.markerlist.anker .mrow{grid-template-columns:1.6em 4.6em 1fr auto;}
 .mrow:last-child{border-bottom:none;}
 .mrow .idx{color:#6E7D8C; font-variant-numeric:tabular-nums; font-size:.8rem;}
 .mrow .t{font-variant-numeric:tabular-nums; color:var(--cream-dim); cursor:pointer;}
@@ -417,10 +452,22 @@ details.ref .reftext{
           <button class="small primary" id="confirmWordBtn">OK</button>
           <button class="small ghost" id="cancelWordBtn" aria-label="Abbrechen">✕</button>
         </div>
+        <div class="markernav" id="markerNav" hidden>
+          <button class="small" id="prevMarkerBtn" aria-label="vorige Marke">◂</button>
+          <span class="marksel" id="markerSel">—</span>
+          <button class="small" id="nextMarkerBtn" aria-label="nächste Marke">▸</button>
+        </div>
         <div class="progressrow">
           <span id="progressLabel">0 Wörter erfasst</span>
-          <button class="small ghost" id="resetAllBtn">Alles zurücksetzen</button>
+          <div class="row" style="gap:6px;">
+            <button class="small ghost" id="confirmRestBtn" hidden>Rest bestätigen</button>
+            <button class="small ghost" id="resetAllBtn">Alles zurücksetzen</button>
+          </div>
         </div>
+        <label class="ripplerow" id="rippleRow" hidden>
+          <input type="checkbox" id="rippleChk" checked>
+          <span>Folgende Marken mitziehen</span>
+        </label>
       </div>
 
       <details class="panel ref" id="refDetails">
@@ -430,14 +477,14 @@ details.ref .reftext{
 
       <div class="panel listbox">
         <div class="listhead">
-          <span class="label">Erfasste Wörter</span>
+          <span class="label" id="listTitle">Erfasste Wörter</span>
           <span id="savePill" class="pill">Noch nicht exportiert</span>
         </div>
-        <div class="markerlist" id="markerlist"></div>
         <div class="exportrow">
           <button class="small ghost" id="copyBtn">In Zwischenablage</button>
           <button class="primary" id="downloadBtn">timing.json herunterladen</button>
         </div>
+        <div class="markerlist" id="markerlist"></div>
         <p id="fallbackNote" hidden></p>
         <textarea id="fallbackJson" hidden readonly></textarea>
       </div>
@@ -488,8 +535,11 @@ details.ref .reftext{
   var wordSuggestions = $('wordSuggestions');
   var confirmWordBtn = $('confirmWordBtn'), cancelWordBtn = $('cancelWordBtn');
   var progressLabel = $('progressLabel'), resetAllBtn = $('resetAllBtn');
+  var confirmRestBtn = $('confirmRestBtn'), rippleRow = $('rippleRow'), rippleChk = $('rippleChk');
+  var markerNav = $('markerNav'), markerSel = $('markerSel');
+  var prevMarkerBtn = $('prevMarkerBtn'), nextMarkerBtn = $('nextMarkerBtn');
   var refDetails = $('refDetails'), refText = $('refText');
-  var markerlist = $('markerlist'), savePill = $('savePill');
+  var markerlist = $('markerlist'), savePill = $('savePill'), listTitle = $('listTitle');
   var downloadBtn = $('downloadBtn'), copyBtn = $('copyBtn');
   var fallbackNote = $('fallbackNote'), fallbackJson = $('fallbackJson');
   var fsBtn = $('fsBtn');
@@ -619,8 +669,37 @@ details.ref .reftext{
   /* ==========================================================
      Zustand
      ========================================================== */
+  /* ==========================================================
+     Zwei Betriebsarten
+
+     ANKERMODUS (Text hinterlegt): Das Werkzeug zerlegt den Text,
+     waehlt Stuetzstellen und legt sie vor. Mathias schiebt sie nur
+     noch zurecht - gemessen an seinem Material rund 27 statt 109
+     Handgriffe. Die Woerter dazwischen rechnet make_reel.py aus.
+
+     FREIER MODUS (kein Text): wie zuvor - Wort setzen und eintippen.
+
+     Beide fuellen dieselbe Liste `markers`:
+       {w, t, i, fixed}   i = Wortindex im Text (null im freien Modus)
+                          fixed = von Mathias bestaetigt
+     ========================================================== */
+  var ANKER_MAX_ABSTAND = 2.5;   // groessere Luecke wird aufgefuellt
+  var MIN_ABSTAND = 0.05;        // Mindestabstand zweier Anker
+  var GREIF_RADIUS = 18;         // Pixel, in denen ein Marker anspricht
+
+  // Punkt am Ende heisst nicht immer Satzende.
+  var ABKUERZUNGEN = ['bzw.','z.b.','ca.','usw.','ggf.','bspw.','evtl.','nr.',
+                      'u.a.','d.h.','inkl.','max.','min.','dr.','str.','abb.',
+                      'etc.','vgl.','ca','bzgl.','ggfs.'];
+
+  var ankerModus = false;
+  var textWords = [];         // alle Woerter des hinterlegten Textes
+  var sprechSegmente = [];    // [[start, ende], ...] aus der Tonspur
+  var selIdx = null;          // ausgewaehlter Marker
+  var rippleAn = true;
+
   var transcriptWords = [];   // nur für Vorschläge und Fortschritt
-  var markers = [];           // {w, t} in Eingabereihenfolge
+  var markers = [];           // {w, t, i, fixed}
   var videoName = '';
   var objectUrl = null;
   var pendingT = null;        // eingefrorener Zeitpunkt bei offener Eingabe
@@ -632,6 +711,194 @@ details.ref .reftext{
 
   function tokenize(text){
     return text.split(/\s+/).map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+
+  /* ---------- Welche Woerter werden Anker? ----------
+     Satzzeichen verraten, wo Mathias beim Sprechen absetzt - genau dort
+     bringt eine Stuetzstelle am meisten. An seinem Text gemessen ergibt
+     das eine Stuetzstelle alle 2,6 Sekunden; wo die Luecke groesser
+     wird, fuellt die zweite Schleife auf. */
+  function istSatzGrenze(w){
+    if(ABKUERZUNGEN.indexOf(w.toLowerCase()) >= 0) return false;
+    return /[,.:;!?…]$/.test(w);
+  }
+  function waehleAnker(woerter, dauer){
+    var n = woerter.length;
+    if(!n) return [];
+    var idx = {0: true};
+    woerter.forEach(function(w, i){
+      if(istSatzGrenze(w) && i+1 < n) idx[i+1] = true;
+    });
+    var basis = Object.keys(idx).map(Number).sort(function(a,b){ return a-b; });
+
+    var proWort = (dauer || n * 0.4) / n;
+    var voll = basis.slice();
+    for(var k=0; k<basis.length; k++){
+      var a = basis[k];
+      var b = (k+1 < basis.length) ? basis[k+1] : n;
+      var extra = Math.floor(((b-a) * proWort) / ANKER_MAX_ABSTAND);
+      for(var j=1; j<=extra; j++){
+        var pos = a + Math.round((b-a) * j / (extra+1));
+        if(pos > a && pos < b) voll.push(pos);
+      }
+    }
+    voll.sort(function(a,b){ return a-b; });
+    return voll.filter(function(v, i){ return i === 0 || v !== voll[i-1]; });
+  }
+
+  /* ---------- Wo liegen die Anker anfangs? ----------
+     Gleichmaessig, aber ueber die reine SPRECHZEIT - erkannte Atempausen
+     werden uebersprungen. Gegenueber stur linear bringt das an Mathias'
+     Material im Mittel eine halbe Sekunde. Laengere Woerter bekommen
+     mehr Zeit als kurze (Gewichtung nach Zeichenlaenge). */
+  function vorbelegen(){
+    var dur = duration();
+    if(!dur || !markers.length) return;
+    var segs = sprechSegmente.length ? sprechSegmente : [[0, dur]];
+    var sprechzeit = segs.reduce(function(s, seg){ return s + (seg[1]-seg[0]); }, 0);
+    if(sprechzeit <= 0){ segs = [[0, dur]]; sprechzeit = dur; }
+
+    function zeitBeiAnteil(f){
+      var ziel = Math.max(0, Math.min(1, f)) * sprechzeit, akk = 0;
+      for(var i=0;i<segs.length;i++){
+        var laenge = segs[i][1] - segs[i][0];
+        if(akk + laenge >= ziel) return segs[i][0] + (ziel - akk);
+        akk += laenge;
+      }
+      return segs[segs.length-1][1];
+    }
+
+    var gew = textWords.map(function(w){
+      return Math.max(1, w.replace(/[^0-9A-Za-zÄÖÜäöüßẞ-]/g, '').length);
+    });
+    var summe = gew.reduce(function(a,b){ return a+b; }, 0) || 1;
+    var kum = [0];
+    for(var i=0;i<gew.length;i++) kum.push(kum[i] + gew[i]);
+
+    markers.forEach(function(m){
+      if(m.fixed || m.i === null) return;
+      m.t = Math.round(zeitBeiAnteil(kum[m.i] / summe) * 1000) / 1000;
+    });
+    sortiereAnker();
+  }
+
+  /* ---------- Atempausen aus der Tonspur ----------
+     Nur grob: Mathias filmt draussen, der Abstand zwischen Grundrauschen
+     und Sprache betraegt bei seinem Material nur gut das Doppelte. Fuer
+     eine feine Worterkennung reicht das nicht - fuer die paar echten
+     Atempausen schon. Schlaegt das Dekodieren fehl (grosse Datei, fehlender
+     Codec), bleibt es bei der linearen Vorbelegung. */
+  function analysiereTonspur(file){
+    if(!window.AudioContext && !window.webkitAudioContext) return;
+    file.arrayBuffer().then(function(buf){
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      return ctx.decodeAudioData(buf);
+    }).then(function(audio){
+      var sr = audio.sampleRate, ch = audio.getChannelData(0);
+      var W = Math.round(sr * 0.02), n = Math.floor(ch.length / W);
+      var rms = new Float32Array(n);
+      for(var i=0;i<n;i++){
+        var s = 0;
+        for(var j=0;j<W;j++){ var v = ch[i*W+j]; s += v*v; }
+        rms[i] = Math.sqrt(s/W);
+      }
+      var sortiert = Array.prototype.slice.call(rms).sort(function(a,b){ return a-b; });
+      var schwelle = sortiert[Math.floor(sortiert.length*0.9)] * 0.12;
+      var segs = [], start = null, stille = 0;
+      var minStille = Math.round(0.25 / 0.02);
+      for(var k=0;k<n;k++){
+        if(rms[k] > schwelle){
+          if(start === null) start = k;
+          stille = 0;
+        } else if(start !== null){
+          stille++;
+          if(stille >= minStille){
+            segs.push([start*0.02, (k-stille)*0.02]);
+            start = null; stille = 0;
+          }
+        }
+      }
+      if(start !== null) segs.push([start*0.02, n*0.02]);
+      segs = segs.filter(function(s){ return s[1]-s[0] > 0.12; });
+      if(segs.length >= 2){
+        sprechSegmente = segs;
+        vorbelegen();
+        redrawTimeline(); renderMarkerList(); renderProgress();
+      }
+    }).catch(function(){ /* bleibt bei linearer Vorbelegung */ });
+  }
+
+  /* ---------- Marker verschieben, Nachfolger mitziehen ----------
+     Beim Verschieben wandern alle noch NICHT fixierten Marker bis zum
+     naechsten fixierten (oder bis zum Videoende) proportional mit. Bei
+     kleinen Korrekturen wirkt das fast wie ein starrer Versatz, kann aber
+     nicht ueber das Videoende hinausschieben. Was Mathias bereits
+     bestaetigt hat, bewegt sich nie wieder - ein fixierter Marker wirkt
+     wie eine Klammer. */
+  function verschiebeMarker(k, neueZeit){
+    var dur = duration();
+    if(!dur || !markers[k]) return;
+    var m = markers[k];
+
+    // Grenze links: der Vorgaenger. Rechts: der naechste FIXIERTE.
+    var minT = (k > 0) ? markers[k-1].t + MIN_ABSTAND : 0;
+    var grenzIdx = -1;
+    for(var j=k+1; j<markers.length; j++){ if(markers[j].fixed){ grenzIdx = j; break; } }
+    var grenzT = (grenzIdx >= 0) ? markers[grenzIdx].t : dur;
+    var reserve = (grenzIdx >= 0 ? (grenzIdx - k) : 1) * MIN_ABSTAND;
+    var maxT = Math.max(minT, grenzT - reserve);
+
+    var altT = m.t;
+    m.t = Math.min(maxT, Math.max(minT, neueZeit));
+
+    if(rippleAn){
+      var ende = (grenzIdx >= 0) ? grenzIdx : markers.length;
+      var alteSpanne = grenzT - altT;
+      if(alteSpanne > 0.001){
+        var f = (grenzT - m.t) / alteSpanne;
+        for(var q=k+1; q<ende; q++){
+          if(markers[q].fixed) continue;
+          markers[q].t = grenzT - (grenzT - markers[q].t) * f;
+        }
+      }
+    }
+    erzwingeReihenfolge(k);
+  }
+
+  // Nach einer Verschiebung darf kein Marker den Nachbarn ueberholen.
+  function erzwingeReihenfolge(ab){
+    var dur = duration() || 0;
+    for(var i=Math.max(1, ab); i<markers.length; i++){
+      if(markers[i].t < markers[i-1].t + MIN_ABSTAND){
+        markers[i].t = Math.min(dur, markers[i-1].t + MIN_ABSTAND);
+      }
+    }
+    for(var j=markers.length-2; j>=0; j--){
+      if(markers[j].t > markers[j+1].t - MIN_ABSTAND){
+        markers[j].t = Math.max(0, markers[j+1].t - MIN_ABSTAND);
+      }
+    }
+  }
+
+  // Welcher Marker liegt nahe genug an dieser Bildschirmposition?
+  function markerBeiX(clientX){
+    var rect = timeline.getBoundingClientRect();
+    if(!rect.width || !markers.length) return -1;
+    var beste = -1, besteDist = GREIF_RADIUS;
+    for(var i=0;i<markers.length;i++){
+      var f = fracFromTime(markers[i].t);
+      if(f < -0.02 || f > 1.02) continue;
+      var d = Math.abs(rect.left + f*rect.width - clientX);
+      if(d <= besteDist){ besteDist = d; beste = i; }
+    }
+    return beste;
+  }
+
+  function sortiereAnker(){
+    markers.sort(function(a,b){
+      if(a.i !== null && b.i !== null) return a.i - b.i;
+      return a.t - b.t;
+    });
   }
   function fmt(t, withMs){
     t = Math.max(0, t || 0);
@@ -675,6 +942,16 @@ details.ref .reftext{
     setupEl.hidden = true;
     workEl.hidden = false;
 
+    // Liegt Text vor, wird im Ankermodus gearbeitet.
+    ankerModus = transcriptWords.length > 0;
+    textWords = transcriptWords.slice();
+    markers = [];
+    selIdx = null;
+    sprechSegmente = [];
+    if(ankerModus){
+      analysiereTonspur(file);          // laeuft nebenher, verfeinert spaeter
+    }
+
     if(transcriptWords.length){
       refText.textContent = transcriptEl.value.trim();
       var uniq = [];
@@ -699,6 +976,18 @@ details.ref .reftext{
     syncFsBtn();
     startPlayback();
   });
+
+  // Anker koennen erst gesetzt werden, wenn die Videolaenge bekannt ist.
+  function ankerAufsetzen(){
+    if(!ankerModus || markers.length || !duration()) return;
+    var idx = waehleAnker(textWords, duration());
+    markers = idx.map(function(i){
+      return { w: textWords[i], t: 0, i: i, fixed: false };
+    });
+    vorbelegen();
+    selIdx = markers.length ? 0 : null;
+    renderProgress(); renderMarkerList(); redrawTimeline(); updateMarkerNav();
+  }
 
   /* ==========================================================
      Timeline
@@ -823,16 +1112,33 @@ details.ref .reftext{
   }
 
   function buildMarkerTicks(){
-    var old = timeline.querySelectorAll('.tl-marker');
+    var old = timeline.querySelectorAll('.tl-marker, .tl-markerlabel');
     for(var i=0;i<old.length;i++) old[i].remove();
     if(!duration()) return;
-    markers.forEach(function(m){
+    // Beschriftung nur, wenn genug Platz ist - sonst verdecken sich die
+    // Woerter gegenseitig.
+    var breite = timeline.getBoundingClientRect().width || 0;
+    var sichtbar = markers.filter(function(m){
+      var f = fracFromTime(m.t); return f >= 0 && f <= 1;
+    });
+    var beschriften = sichtbar.length > 0 && (breite / sichtbar.length) >= 46;
+
+    markers.forEach(function(m, idx){
       var f = fracFromTime(m.t);
-      if(f < 0 || f > 1) return;          // ausserhalb des Fensters
+      if(f < 0 || f > 1) return;
       var tick = document.createElement('div');
-      tick.className = 'tl-marker';
+      tick.className = 'tl-marker' + (m.fixed ? ' fixiert' : ' geraten') +
+                       (idx === selIdx ? ' gewaehlt' : '');
       tick.style.left = (f*100) + '%';
       timeline.appendChild(tick);
+      if(beschriften && m.i !== null){
+        var lbl = document.createElement('span');
+        lbl.className = 'tl-markerlabel' + (m.fixed ? ' fixiert' : '') +
+                        (idx === selIdx ? ' gewaehlt' : '');
+        lbl.style.left = (f*100) + '%';
+        lbl.textContent = m.w;
+        timeline.appendChild(lbl);
+      }
     });
   }
 
@@ -852,6 +1158,7 @@ details.ref .reftext{
     }
     durRead.textContent = '/ ' + fmt(duration(), false);
     timeline.setAttribute('aria-valuemax', duration().toFixed(2));
+    ankerAufsetzen();
     resetZoom();
   });
   player.addEventListener('timeupdate', updateReadout);
@@ -920,6 +1227,8 @@ details.ref .reftext{
   var pointerCount = 0;
   var dragging = false;
   var pinch = null;         // {dist, zoom, ankerZeit}
+  var ziehtMarker = -1;     // Index des gerade gezogenen Markers
+  var bewegt = false;
 
   function pointerXs(){
     var xs = [];
@@ -946,10 +1255,23 @@ details.ref .reftext{
     e.preventDefault();
 
     if(pointerCount === 1){
-      dragging = true;
-      player.pause();
-      seekTo(timeFromFrac(fracFromClientX(e.clientX)));
+      // Liegt ein Marker unter dem Finger, wird ER gezogen - sonst der
+      // Playhead gesetzt. So bleibt beides mit einem Finger bedienbar.
+      var k = markerBeiX(e.clientX);
+      if(k >= 0){
+        ziehtMarker = k;
+        selIdx = k;
+        bewegt = false;
+        player.pause();
+        seekTo(markers[k].t);
+        renderMarkerList(); redrawTimeline();
+      } else {
+        dragging = true;
+        player.pause();
+        seekTo(timeFromFrac(fracFromClientX(e.clientX)));
+      }
     } else if(pointerCount === 2){
+      ziehtMarker = -1;
       beginPinch();
     }
   });
@@ -963,6 +1285,13 @@ details.ref .reftext{
       var dist = Math.max(1, Math.abs(xs[0] - xs[1]));
       var mid = (xs[0] + xs[1]) / 2;
       setZoom(pinch.zoom * (dist / pinch.dist), pinch.ankerZeit, fracFromClientX(mid));
+    } else if(ziehtMarker >= 0){
+      bewegt = true;
+      verschiebeMarker(ziehtMarker, timeFromFrac(fracFromClientX(e.clientX)));
+      // Das Videobild folgt mit, damit Mathias sieht, was an dieser
+      // Stelle gesprochen wird.
+      seekTo(markers[ziehtMarker].t);
+      redrawTimeline(); renderMarkerList();
     } else if(dragging){
       seekTo(timeFromFrac(fracFromClientX(e.clientX)));
     }
@@ -977,7 +1306,17 @@ details.ref .reftext{
     if(pointerCount < 2) pinch = null;
     // Nach dem Loslassen eines Pinch-Fingers nicht versehentlich den
     // Playhead mit dem verbliebenen Finger verreissen.
-    if(pointerCount === 0) dragging = false;
+    if(pointerCount === 0){
+      dragging = false;
+      if(ziehtMarker >= 0){
+        // Loslassen bestaetigt den Marker - auch ein reines Antippen,
+        // wenn er ohnehin schon richtig sitzt.
+        markers[ziehtMarker].fixed = true;
+        exported = false;
+        ziehtMarker = -1;
+        renderProgress(); renderMarkerList(); redrawTimeline(); updateMarkerNav();
+      }
+    }
   }
   timeline.addEventListener('pointerup', endPointer);
   timeline.addEventListener('pointercancel', endPointer);
@@ -985,6 +1324,7 @@ details.ref .reftext{
   // alles enden - sonst verschiebt jede weitere Beruehrung die Zeit.
   timeline.addEventListener('lostpointercapture', function(){
     pointers = {}; pointerCount = 0; dragging = false; pinch = null;
+    ziehtMarker = -1;
   });
 
   // Am Rechner: Mausrad zoomt, Pfeiltasten setzen den Playhead.
@@ -1119,20 +1459,39 @@ details.ref .reftext{
 
   resetAllBtn.addEventListener('click', function(){
     if(markers.length === 0) return;
-    if(!confirm('Wirklich alle ' + markers.length + ' erfassten Wörter löschen?')) return;
-    markers = [];
+    if(ankerModus){
+      if(!confirm('Alle ' + markers.length + ' Marken auf die Vorbelegung zurücksetzen?')) return;
+      markers.forEach(function(m){ m.fixed = false; });
+      vorbelegen();
+      selIdx = 0;
+    } else {
+      if(!confirm('Wirklich alle ' + markers.length + ' erfassten Wörter löschen?')) return;
+      markers = [];
+    }
     exported = false;
     closeWordInput();
-    renderProgress(); renderMarkerList(); buildMarkerTicks();
+    renderProgress(); renderMarkerList(); redrawTimeline(); updateMarkerNav();
   });
 
   /* ==========================================================
      Anzeige
      ========================================================== */
   function renderProgress(){
-    progressLabel.textContent = transcriptWords.length
-      ? markers.length + ' / ' + transcriptWords.length + ' Wörter erfasst'
-      : markers.length + ' Wort' + (markers.length === 1 ? '' : 'er') + ' erfasst';
+    if(ankerModus){
+      var fix = markers.filter(function(m){ return m.fixed; }).length;
+      progressLabel.textContent = fix + ' / ' + markers.length + ' Marken bestätigt'
+        + ' · ' + textWords.length + ' Wörter';
+      confirmRestBtn.hidden = false;
+      confirmRestBtn.disabled = fix >= markers.length;
+    } else {
+      progressLabel.textContent = transcriptWords.length
+        ? markers.length + ' / ' + transcriptWords.length + ' Wörter erfasst'
+        : markers.length + ' Wort' + (markers.length === 1 ? '' : 'er') + ' erfasst';
+      confirmRestBtn.hidden = true;
+    }
+    setWordBtn.hidden = ankerModus || !wordEntry.hidden;
+    rippleRow.hidden = !ankerModus || !markers.length;
+    listTitle.textContent = ankerModus ? 'Marken' : 'Erfasste Wörter';
     if(!exported){
       savePill.textContent = 'Noch nicht exportiert';
       savePill.className = 'pill';
@@ -1144,15 +1503,18 @@ details.ref .reftext{
 
   function renderMarkerList(){
     markerlist.innerHTML = '';
+    markerlist.classList.toggle('anker', ankerModus);
     if(markers.length === 0){
       var empty = document.createElement('div');
       empty.className = 'listempty';
-      empty.textContent = 'Noch keine Wörter erfasst.';
+      empty.textContent = ankerModus
+        ? 'Marken werden gesetzt, sobald das Video geladen ist.'
+        : 'Noch keine Wörter erfasst.';
       markerlist.appendChild(empty);
       return;
     }
     var sorted = markers.map(function(m, i){
-      return {w:m.w, t:m.t, origIdx:i};
+      return {w:m.w, t:m.t, i:m.i, fixed:m.fixed, origIdx:i};
     }).sort(function(a,b){ return a.t - b.t; });
 
     sorted.forEach(function(m, n){
@@ -1160,48 +1522,115 @@ details.ref .reftext{
       row.className = 'mrow';
       if(n > 0 && m.t < sorted[n-1].t) row.classList.add('warn');
       if(editingIdx === m.origIdx) row.classList.add('editing');
+      if(m.origIdx === selIdx) row.classList.add('gewaehlt');
+      if(ankerModus && !m.fixed) row.classList.add('geraten');
 
       var idx = document.createElement('span');
-      idx.className = 'idx'; idx.textContent = '#' + (n+1);
+      idx.className = 'idx';
+      idx.textContent = ankerModus ? (m.fixed ? '✓' : '·') : ('#' + (n+1));
+      idx.title = ankerModus ? (m.fixed ? 'bestätigt' : 'noch geraten') : '';
 
-      var t = document.createElement('span');
-      t.className = 't num'; t.textContent = m.t.toFixed(2) + 's';
-      t.title = 'Im Video dorthin springen';
-      t.addEventListener('click', function(){ player.pause(); seekTo(m.t); });
+      var tt = document.createElement('span');
+      tt.className = 't num'; tt.textContent = m.t.toFixed(2) + 's';
+      tt.title = 'Im Video dorthin springen';
+      tt.addEventListener('click', function(){ waehleMarker(m.origIdx); });
 
       var w = document.createElement('span');
       w.className = 'w'; w.textContent = m.w;
       w.title = 'Im Video dorthin springen';
-      w.addEventListener('click', function(){ player.pause(); seekTo(m.t); });
+      w.addEventListener('click', function(){ waehleMarker(m.origIdx); });
 
-      var edit = document.createElement('button');
-      edit.className = 'iconbtn'; edit.textContent = '✎';
-      edit.title = 'Wort ändern'; edit.setAttribute('aria-label', 'Wort ändern');
-      edit.addEventListener('click', function(){ seekTo(m.t); openWordInput(m.origIdx); });
+      row.appendChild(idx); row.appendChild(tt); row.appendChild(w);
 
-      var del = document.createElement('button');
-      del.className = 'iconbtn del'; del.textContent = '✕';
-      del.title = 'Löschen'; del.setAttribute('aria-label', 'Wort löschen');
-      del.addEventListener('click', function(){
-        markers = markers.filter(function(_, i){ return i !== m.origIdx; });
-        exported = false;
-        if(editingIdx !== null) closeWordInput();
-        renderProgress(); renderMarkerList(); buildMarkerTicks();
-      });
+      if(ankerModus){
+        // Im Ankermodus gibt es keine freien Woerter zum Loeschen - die
+        // Wortfolge steht fest. Stattdessen laesst sich eine Bestaetigung
+        // zuruecknehmen, wenn Mathias sie doch nochmal ansehen will.
+        var undo = document.createElement('button');
+        undo.className = 'iconbtn';
+        undo.textContent = m.fixed ? '↺' : '✓';
+        undo.title = m.fixed ? 'Bestätigung zurücknehmen' : 'hier bestätigen';
+        undo.addEventListener('click', function(){
+          markers[m.origIdx].fixed = !markers[m.origIdx].fixed;
+          exported = false;
+          renderProgress(); renderMarkerList(); redrawTimeline();
+        });
+        row.appendChild(undo);
+      } else {
+        var edit = document.createElement('button');
+        edit.className = 'iconbtn'; edit.textContent = '✎';
+        edit.title = 'Wort ändern'; edit.setAttribute('aria-label', 'Wort ändern');
+        edit.addEventListener('click', function(){ seekTo(m.t); openWordInput(m.origIdx); });
 
-      row.appendChild(idx); row.appendChild(t); row.appendChild(w);
-      row.appendChild(edit); row.appendChild(del);
+        var del = document.createElement('button');
+        del.className = 'iconbtn del'; del.textContent = '✕';
+        del.title = 'Löschen'; del.setAttribute('aria-label', 'Wort löschen');
+        del.addEventListener('click', function(){
+          markers = markers.filter(function(_, i){ return i !== m.origIdx; });
+          exported = false;
+          if(editingIdx !== null) closeWordInput();
+          renderProgress(); renderMarkerList(); buildMarkerTicks();
+        });
+        row.appendChild(edit); row.appendChild(del);
+      }
       markerlist.appendChild(row);
     });
   }
 
-  /* ==========================================================
-     Export
-     ========================================================== */
+  function waehleMarker(k){
+    if(!markers[k]) return;
+    selIdx = k;
+    player.pause();
+    seekTo(markers[k].t);
+    renderMarkerList(); redrawTimeline(); updateMarkerNav();
+  }
+
+  function updateMarkerNav(){
+    markerNav.hidden = !ankerModus || !markers.length;
+    rippleRow.hidden = !ankerModus || !markers.length;
+    if(markerNav.hidden) return;
+    var m = (selIdx !== null) ? markers[selIdx] : null;
+    markerSel.textContent = m
+      ? (selIdx+1) + '/' + markers.length + '  ' + m.w + (m.fixed ? '  ✓' : '')
+      : '—';
+    prevMarkerBtn.disabled = (selIdx === null || selIdx <= 0);
+    nextMarkerBtn.disabled = (selIdx === null || selIdx >= markers.length-1);
+  }
+
+  prevMarkerBtn.addEventListener('click', function(){
+    if(selIdx !== null && selIdx > 0) waehleMarker(selIdx-1);
+  });
+  nextMarkerBtn.addEventListener('click', function(){
+    if(selIdx !== null && selIdx < markers.length-1) waehleMarker(selIdx+1);
+  });
+  rippleChk.addEventListener('change', function(){ rippleAn = rippleChk.checked; });
+  confirmRestBtn.addEventListener('click', function(){
+    markers.forEach(function(m){ m.fixed = true; });
+    exported = false;
+    renderProgress(); renderMarkerList(); redrawTimeline(); updateMarkerNav();
+  });
+
   function buildPayload(){
     var sorted = markers.slice().sort(function(a,b){ return a.t - b.t; });
+    if(ankerModus){
+      // Ankerformat: die vollstaendige Wortfolge plus die Stuetzstellen.
+      // make_reel.py rechnet die Woerter dazwischen aus.
+      return {
+        videoName: videoName,
+        duration: Math.round((duration() || 0) * 1000) / 1000,
+        words: textWords,
+        anchors: sorted.filter(function(m){ return m.i !== null; })
+                       .map(function(m){
+                         return { i: m.i, t: Math.round(m.t*1000)/1000, fixed: !!m.fixed };
+                       }),
+        totalWords: textWords.length,
+        complete: markers.every(function(m){ return m.fixed; }),
+        savedAt: new Date().toISOString()
+      };
+    }
     return {
       videoName: videoName,
+      duration: Math.round((duration() || 0) * 1000) / 1000,
       totalWords: transcriptWords.length || sorted.length,
       words: sorted.map(function(m){ return {w:m.w, t:m.t}; }),
       complete: transcriptWords.length ? markers.length >= transcriptWords.length : true,
