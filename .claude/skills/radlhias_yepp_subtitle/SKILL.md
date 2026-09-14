@@ -1,18 +1,22 @@
 ---
 name: radlhias_yepp_subtitle
-description: Baut aus einem RadlHias-Reel-Rohvideo + Wort-Zeitstempeln (bevorzugt aus dem Yepp-Timer, wo Mathias die Zeitstempel im Sprechtempo selbst eintippt; alternativ einer korrigierten SRT-Untertiteldatei, z.B. aus der VN-App) ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-für-Wort-Karaoke-Untertitel (aktuelles Wort wird größer/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5° Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. IMMER verwenden, wenn Mathias ein Video + Untertiteltext/SRT/Yepp-Timer-Zeitstempel für ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwähnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen. Auch verwenden, wenn er nur ein Rohvideo mit gesprochenem Text schickt und ein fertiges Reel will (dann zuerst auf den Yepp-Timer verweisen, oder ersatzweise die Tonspur transkribieren/SRT draus bauen).
+description: Baut aus einem RadlHias-Reel-Rohvideo + dem gesprochenen Text ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-fuer-Wort-Karaoke-Untertitel (aktuelles Wort wird groesser/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5 Grad Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. Das Wort-Timing entsteht per Forced Alignment aus Text + Tonspur (scripts/align_text.py) - lokal, ohne externen Dienst und ohne Handarbeit. IMMER verwenden, wenn Mathias ein Rohvideo + gesprochenen Text (oder SRT oder Yepp-Timer-Zeitstempel) fuer ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwaehnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen.
 ---
 
 # RadlHias Yepp-Untertitel
 
 Erzeugt automatisch RadlHias-Reels im etablierten Karaoke-Untertitel-Stil aus einem
-Rohvideo + einer Untertiteldatei (SRT). Das Skript übernimmt Timing-Feinarbeit,
-Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Text liefern.
+Rohvideo + dem gesprochenen Text. **Mathias muss nur filmen und den Text liefern** -
+Wort-Timing, Text-Aufteilung und das komplette visuelle Styling laufen automatisch.
+
+Das Wort-Timing entsteht per Forced Alignment aus Text und Tonspur
+(`scripts/align_text.py`, siehe `references/forced_alignment.md`): lokal, ohne
+externen Dienst, ohne Konto, ohne Handarbeit. Das ist der Standardweg.
 
 ## Wann dieser Skill greift
 
-- Mathias schickt ein Rohvideo (Selfie-Video, RadlHias-Tipp) + einen Untertiteltext
-  oder eine .srt-Datei
+- Mathias schickt ein Rohvideo (Selfie-Video, RadlHias-Tipp) + den gesprochenen
+  Text (oder eine .srt-Datei)
 - Er erwähnt "Yepp", "Reel", "Untertitel wie gewohnt/wie immer/wie beim letzten Mal"
 - Er fragt nach einem neuen RadlHias-Reel im bekannten Stil
 
@@ -21,33 +25,30 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
 1. **Video prüfen**: liegt eine Videodatei vor? Falls nicht, nachfragen. Videos über
    dem Chat-Upload-Limit: Google Drive freigeben lassen und per Composio-Verbindung
    (googledrive) holen, siehe `references/video_transfer.md`.
-2. **Wort-Timing besorgen - bevorzugt per Yepp-Timer (exakt, kein Schätzen):**
-   - Mathias auf den **Yepp-Timer** verweisen:
-     **https://radlhias.tv/yepp-timer/** (Quelldateien im Repo: Ordner
-     `yepp-timer/` - kein Claude-Artefakt mehr, siehe
-     `references/yepp_timer.md` für die Gründe). Er lädt dort sein Rohvideo
-     (bleibt lokal im Browser, kein Upload) und fügt den gesprochenen Text ein.
-     Auf einer Timeline (Querformat erzwungen, mit Pinch-Zoom) schiebt er die
-     vorbelegten Marken an die richtige Stelle.
-   - **Text mitgeben lassen!** Mit hinterlegtem Text arbeitet der Yepp-Timer im
-     Ankermodus: Er setzt rund ein Viertel der Wörter als Stützstellen selbst
-     und Mathias schiebt sie nur zurecht (an seinem Material 27 statt 109
-     Handgriffe). Ohne Text muss er jedes Wort einzeln setzen und eintippen.
-   - **Das Tool speichert nichts serverseitig.** Mathias exportiert am Ende
-     `timing.json` (Download oder Zwischenablage) und hängt die Datei bzw. den
-     Text direkt im Chat an. Diese JSON kann `make_reel.py` direkt als zweites
-     Argument (statt einer SRT) entgegennehmen - beide Formate (Anker und ein
-     Stempel je Wort) werden erkannt.
-   - Kurz gegenchecken: `complete: true` im JSON? Falls nicht, fehlen noch
-     Wörter - mit Mathias klären, ob er fertig tippen soll oder ob der Rest
-     bewusst ausgelassen wurde.
-   - **Nur falls Mathias das Tool nicht nutzen will/kann** (Fallback, siehe unten):
-     SRT-Datei wie gehabt.
-3. **Rechtschreibfehler korrigieren**: den (von Mathias getippten oder per VN
-   transkribierten) Text kurz auf offensichtliche Fehler prüfen (z.B. Fachbegriffe
-   wie "Sattelrohr", "Päckchen") und mit Mathias abklären, bevor das finale Video
-   gerendert wird.
-4. **Skript ausführen**:
+2. **Gesprochenen Text besorgen.** Mathias schickt ihn normalerweise mit. Falls
+   nicht: danach fragen - er ist die Grundlage des gesamten Verfahrens. Eine SRT
+   tut es auch (Text daraus extrahieren).
+3. **Rechtschreibfehler korrigieren - VOR dem Alignment.** Automatische
+   Transkripte enthalten regelmaessig Fehler, die sonst im fertigen Reel stehen
+   (bei 20260911_173558.mp4 z.B. "doing" statt "die", "dass" statt "das").
+   Offensichtliches selbst korrigieren, Unklares mit Mathias abklaeren. Ein
+   uebersehener Fehler kostet einen kompletten Renderlauf von ~5 Minuten.
+4. **Wort-Timing per Forced Alignment erzeugen** - der Standardweg, siehe
+   `references/forced_alignment.md`:
+   ```bash
+   apt-get update -qq && apt-get install -y -qq espeak ffmpeg
+   pip install --break-system-packages numpy librosa av Pillow
+   python3 scripts/align_text.py <video.mp4> <text.txt> timing.json
+   ```
+   Text und Tonspur sind beide bekannt - es muss also nichts erraten, sondern
+   nur zugeordnet werden. Laeuft lokal, braucht keinen Dienst, kein Konto und
+   keine Zahlungsdaten (das ist Mathias ausdruecklich wichtig). Dauert unter
+   einer Minute.
+   **Nicht versuchen:** Whisper und andere Modelle - huggingface.co und
+   openaipublic.azureedge.net sind vom Egress-Proxy geblockt (403).
+   **Nicht verwenden:** das ffmpeg unter `/opt/pw-browsers/` - zu minimal
+   gebaut, kein AAC/H.264.
+5. **Reel rendern**:
    ```bash
    python3 scripts/make_reel.py <video.mp4> <timing.json ODER untertitel.srt> <output.mp4>
    ```
@@ -59,15 +60,26 @@ Text-Aufteilung und das komplette visuelle Styling - Mathias muss nur Video + Te
    Sandbox-Tool läuft es im Hintergrund trotzdem oft zuende - Fortschritt in
    `<output-ordner>/_reel_tmp/frames/` prüfen und den letzten Zusammensetz-Schritt
    notfalls manuell mit ffmpeg nachholen (siehe `references/manual_assembly.md`).
-5. **Stichprobe prüfen**: 2-3 Frames aus dem Ergebnis exportieren und ansehen
+6. **Stichprobe prüfen**: 2-3 Frames aus dem Ergebnis exportieren und ansehen
    (Timing, Textüberladung, Logo-Position), bevor an Mathias übergeben wird.
-6. **Ausgeben**: fertige Datei nach `/mnt/user-data/outputs/` kopieren und mit
+7. **Ausgeben**: fertige Datei nach `/mnt/user-data/outputs/` kopieren und mit
    `present_files` zeigen. Bei über 30MB vor dem Versand komprimieren (siehe
    `references/manual_assembly.md`).
 
-## Fallback ohne Yepp-Timer: SRT + Audio-Energie-Schätzung
+## Die anderen Wege (nur noch Ausnahmefälle)
 
-Nur verwenden, wenn Mathias den Yepp-Timer nicht nutzen kann/will. Liegt
+**Yepp-Timer** (https://radlhias.tv/yepp-timer/): Seit dem Forced Alignment
+**Korrekturwerkzeug, nicht mehr Haupteingabe.** Sinnvoll, wenn das Alignment an
+einzelnen Stellen danebenliegt - Mathias kann die Marken dort von Hand
+verschieben (siehe `references/yepp_timer.md`). Ihn nicht mehr unaufgefordert
+als ersten Weg vorschlagen; das ist unnötige Handarbeit.
+
+**Externe Transkriptionsdienste** (Gladia, Deepgram über Composio): **Nicht
+vorschlagen.** Mathias will ausdrücklich keinen Dienst, bei dem er ein Abo
+abschließen oder Zahlungsdaten angeben muss. Das Forced Alignment ist ohnehin
+der bessere Weg, weil der Text bereits bekannt ist.
+
+**SRT + Audio-Energie-Schätzung**: Nur wenn kein Text zu bekommen ist. Liegt
 nur Fließtext vor (eingesprochen/eingetippt, keine SRT)? Erst die Tonspur mit
 `ffmpeg -i video.mp4 -vn -ar 16000 -ac 1 audio.wav` extrahieren, dann grobe
 Sprechabschnitte per `ffmpeg ... silencedetect` oder anhand der Zeilenumbrüche in
@@ -121,8 +133,8 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 
 ## Bekannte Grenzen (nur relevant für den SRT-Fallback-Pfad)
 
-Mit dem Yepp-Timer entfallen diese Einschränkungen komplett, da dort echte
-von Mathias getappte Zeitstempel verwendet werden statt einer Schätzung.
+Mit dem Forced Alignment entfallen diese Einschränkungen weitgehend, da Text
+und Tonspur dort direkt aufeinander abgebildet werden statt zu schätzen.
 
 - Wort-Timing basiert auf Audio-Energie-Analyse (echte Mikropausen per ffmpeg
   `silencedetect`, Wörter werden innerhalb jedes gefundenen Sprechabschnitts
@@ -133,3 +145,17 @@ von Mathias getappte Zeitstempel verwendet werden statt einer Schätzung.
 - Sehr kurze isolierte Wörter (z.B. "Jap.") können in der Tonspur nur Sekundenbruch-
   teile einnehmen - dann den Anzeigezeitraum im Skript-Aufruf manuell in die
   umgebende Stille hinein erweitern (siehe Beispiel im Skript-Kommentar).
+
+## Material und Ton
+
+Mathias filmt draußen. Gemessen an `20260911_173558.mp4`: Der Abstand zwischen
+Grundrauschen und Sprache beträgt nur **2,3:1** (bei Studioton wären es 20:1),
+das Sprechtempo liegt bei **2,5 Wörtern pro Sekunde** (150 pro Minute).
+
+Das ist der Grund, warum jede rein energiebasierte Schätzung hier grob bleibt -
+und warum Forced Alignment mit bekanntem Text die richtige Antwort ist.
+
+Nebenbei: Auf hellem Hintergrund (Bäume, Himmel) sind die Untertitel gut
+lesbar, auf seinem dunklen T-Shirt verschwindet der Navy-Text fast. Falls
+Mathias das anspricht - Kontur kräftiger oder Textfarbe auf dunklem Grund
+aufhellen, Werte stehen im `STYLE PRESET` von `make_reel.py`.
