@@ -175,8 +175,19 @@ python3 scripts/make_cover.py <motiv.jpg> <cover.jpg> "GRIFFE|LOCKER?" "DER HAAR
   verschwindet es sonst.
 
 **Motive:** Mathias' eigene Fotos liegen in `blogimages/` und `Fotos/` im
-Repo-Wurzelverzeichnis (Werkbank, Werkstatt, Portraits). Die sind echtes
-Marken-Material und meist die bessere Wahl.
+Repo-Wurzelverzeichnis. Echtes Marken-Material, meist die bessere Wahl.
+Bewaehrt:
+
+- `Fahrradteile_auf_Werkbank_2048.webp` (Versatz 0.55) - Teile und ein Lenker,
+  sachlicher Tipp-Look
+- `bikeservice-werkbank-banner.webp` - Werkzeug-Flatlay auf dunklem Grund, sehr
+  ruhig, beste Typo-Wirkung
+- `kein_geld_mehr_2048.webp` - leerer Geldbeutel, staerkste Grid-Wirkung, passt
+  zu Spar-Themen
+
+**Bei mehreren Entwuerfen** die Varianten immer als Grid-Kacheln nebeneinander
+montieren und so zeigen - einzeln sieht jedes Cover gut aus, erst im
+Nebeneinander entscheidet sich, welches im Profil wirklich zieht.
 
 **Bildgenerierung per OpenArt ist nur halb nutzbar:** Generieren klappt, aber
 `cdn.openart.ai` ist vom Egress-Proxy gesperrt (403) - die fertige Datei laesst
