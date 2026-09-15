@@ -21,10 +21,12 @@ innerhalb von GRID_OBEN..GRID_UNTEN.
 
 AUFRUF
 ------
-    python3 make_cover.py <motiv.jpg> <cover.jpg> "ZEILE EINS|AKZENTWORT" "UNTERZEILE" [versatz]
+    python3 make_cover.py <motiv.jpg> <cover.jpg> "ZEILE EINS|AKZENTWORT" "UNTERZEILE" [versatz] [unten|oben]
 
 Das Wort nach dem senkrechten Strich wird orange gesetzt. `versatz` (-1 bis 1)
-verschiebt den Bildausschnitt, falls das Motiv nicht mittig sitzt.
+verschiebt den Bildausschnitt, falls das Motiv nicht mittig sitzt. Das letzte
+Argument setzt den Textblock nach oben, wenn das Motiv unten im Bild liegt
+(dann wandert auch das Logo nach unten).
 """
 import math
 import os
@@ -62,6 +64,7 @@ LOGO_Y = 330                        # innerhalb des Grid-Ausschnitts
 ABDUNKLUNG = 0.78                   # Verlauf von unten - traegt die Headline
 KOPF_ABDUNKLUNG = 0.5               # Verlauf von oben - gibt dem Logo Halt
 KOPF_BIS = 700                      # bis wohin der obere Verlauf reicht
+LOGO_Y_UNTEN = 1420                 # Logo-Position, wenn der Text oben steht
 
 
 def motiv_einpassen(pfad, versatz=0.0):
@@ -83,6 +86,23 @@ def motiv_einpassen(pfad, versatz=0.0):
         oben = max(0, min(oben, h - neu_h))
         bild = bild.crop((0, oben, b, oben + neu_h))
     return bild.resize((W, H), Image.LANCZOS).convert("RGBA")
+
+
+def abdunkeln_oben(bild, bis_y, staerke=ABDUNKLUNG):
+    """Spiegelbild von `abdunkeln` fuer Entwuerfe mit Text im oberen Drittel.
+
+    Sinnvoll, wenn das Wesentliche des Motivs unten liegt und vom Text sonst
+    verdeckt wuerde."""
+    maske = Image.new("L", (1, H), 0)
+    px = maske.load()
+    for y in range(H):
+        oben = staerke * min((bis_y - y) / max(bis_y, 1) * 1.9, 1.0) if y < bis_y else 0
+        unten = 0.35 * (y - (H - 420)) / 420 if y > H - 420 else 0
+        px[0, y] = int(255 * min(max(oben, unten, 0), 1.0))
+    maske = maske.resize((W, H))
+    dunkel = Image.new("RGBA", (W, H), (0x0A, 0x14, 0x1E, 255))
+    dunkel.putalpha(maske)
+    return Image.alpha_composite(bild, dunkel)
 
 
 def abdunkeln(bild, ab_y, staerke=ABDUNKLUNG):
@@ -147,8 +167,9 @@ def headline_layer(text, akzent):
         ds.text((x + SCHATTEN[0], y + SCHATTEN[1]), " ".join(zeile), font=font,
                 fill=(0, 0, 0, SCHATTEN_ALPHA), stroke_width=KONTUR,
                 stroke_fill=(0, 0, 0, SCHATTEN_ALPHA))
+        akzent_woerter = set(akzent.upper().split()) if akzent else set()
         for wort in zeile:
-            farbe = ORANGE if akzent and wort.upper() == akzent.upper() else CREAM
+            farbe = ORANGE if wort.upper() in akzent_woerter else CREAM
             d.text((x, y), wort, font=font, fill=farbe,
                    stroke_width=KONTUR, stroke_fill=DARK)
             x += font.getlength(wort + " ")
@@ -185,7 +206,7 @@ def filmkorn(bild, staerke=GRAIN_STRENGTH):
     return Image.fromarray(arr).convert("RGBA")
 
 
-def main(motiv, ziel, headline, unterzeile, versatz="0"):
+def main(motiv, ziel, headline, unterzeile, versatz="0", pos="unten"):
     akzent = None
     if "|" in headline:
         headline, akzent = [t.strip() for t in headline.split("|", 1)]
@@ -195,10 +216,16 @@ def main(motiv, ziel, headline, unterzeile, versatz="0"):
     kopf, size = headline_layer(headline.upper(), akzent.upper() if akzent else None)
     balken = balken_layer(unterzeile.upper())
 
-    # Textblock so setzen, dass er im Grid-Ausschnitt sitzt und unten Luft bleibt
+    # Textblock so setzen, dass er im Grid-Ausschnitt sitzt
     block_h = kopf.height + balken.height
-    oben = GRID_UNTEN - 120 - block_h
-    bild = abdunkeln(bild, max(oben - 260, GRID_OBEN))
+    if pos == "oben":
+        oben = GRID_OBEN + 120
+        bild = abdunkeln_oben(bild, oben + block_h + 200)
+        logo_y = LOGO_Y_UNTEN
+    else:
+        oben = GRID_UNTEN - 120 - block_h
+        bild = abdunkeln(bild, max(oben - 260, GRID_OBEN))
+        logo_y = LOGO_Y
 
     kopf_rot = kopf.rotate(-TILT_DEG, expand=True, resample=Image.BICUBIC)
     balken_rot = balken.rotate(-TILT_DEG, expand=True, resample=Image.BICUBIC)
@@ -211,9 +238,9 @@ def main(motiv, ziel, headline, unterzeile, versatz="0"):
     logo_x = (W - logo.width) // 2
     schein = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     schein.paste(Image.new("RGBA", logo.size, (0, 0, 0, 190)),
-                 (logo_x, LOGO_Y + 4), logo.split()[3])
+                 (logo_x, logo_y + 4), logo.split()[3])
     bild = Image.alpha_composite(bild, schein.filter(ImageFilter.GaussianBlur(14)))
-    bild.alpha_composite(logo, (logo_x, LOGO_Y))
+    bild.alpha_composite(logo, (logo_x, logo_y))
 
     bild = filmkorn(bild)
     bild.convert("RGB").save(ziel, quality=94)
@@ -221,6 +248,6 @@ def main(motiv, ziel, headline, unterzeile, versatz="0"):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in (5, 6):
+    if len(sys.argv) not in (5, 6, 7):
         raise SystemExit(__doc__)
-    main(*sys.argv[1:6])
+    main(*sys.argv[1:7])
