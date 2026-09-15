@@ -21,7 +21,7 @@ innerhalb von GRID_OBEN..GRID_UNTEN.
 
 AUFRUF
 ------
-    python3 make_cover.py <motiv.jpg> <cover.jpg> "ZEILE EINS|AKZENTWORT" "UNTERZEILE" [versatz] [unten|oben]
+    python3 make_cover.py <motiv.jpg> <cover.jpg> "ZEILE EINS|AKZENTWORT" "UNTERZEILE" [versatz] [unten|oben] [zoom]
 
 Das Wort nach dem senkrechten Strich wird orange gesetzt. `versatz` (-1 bis 1)
 verschiebt den Bildausschnitt, falls das Motiv nicht mittig sitzt. Das letzte
@@ -64,27 +64,36 @@ LOGO_Y = 330                        # innerhalb des Grid-Ausschnitts
 ABDUNKLUNG = 0.78                   # Verlauf von unten - traegt die Headline
 KOPF_ABDUNKLUNG = 0.5               # Verlauf von oben - gibt dem Logo Halt
 KOPF_BIS = 700                      # bis wohin der obere Verlauf reicht
-LOGO_Y_UNTEN = 1420                 # Logo-Position, wenn der Text oben steht
+LOGO_Y_OBEN = GRID_OBEN + 10        # Logo-Position, wenn der Text oben steht
 
 
-def motiv_einpassen(pfad, versatz=0.0):
+def motiv_einpassen(pfad, versatz=0.0, zoom=1.0):
     """Motiv auf 1080x1920 bringen - beschnitten, nichts verzerrt.
 
-    `versatz` verschiebt den Ausschnitt (-1 ganz nach oben, +1 ganz nach
-    unten), falls das Wesentliche nicht in der Bildmitte liegt."""
+    `zoom` > 1 waehlt einen kleineren Ausschnitt (naeher dran) und schafft
+    damit ueberhaupt erst Spielraum zum Verschieben - bei einem Motiv, das
+    schon 9:16 ist, gaebe es sonst keinen. `versatz` (-1 bis 1) verschiebt
+    den Ausschnitt dann dort, wo Spielraum da ist: vorrangig senkrecht,
+    sonst waagrecht. Nach unten geschobener Ausschnitt heisst: das Motiv
+    rutscht im Bild nach oben und macht unten Platz fuer den Text."""
     bild = Image.open(pfad).convert("RGB")
     ziel = W / H
     b, h = bild.size
-    if b / h > ziel:
-        neu_b = int(h * ziel)
-        links = int((b - neu_b) / 2 * (1 + versatz))
-        links = max(0, min(links, b - neu_b))
-        bild = bild.crop((links, 0, links + neu_b, h))
+    zoom = max(1.0, float(zoom))
+
+    aus_b, aus_h = (h * ziel, float(h)) if b / h > ziel else (float(b), b / ziel)
+    aus_b, aus_h = aus_b / zoom, aus_h / zoom
+    aus_b, aus_h = int(min(aus_b, b)), int(min(aus_h, h))
+
+    frei_x, frei_y = b - aus_b, h - aus_h
+    if frei_y > 0:
+        y = int(frei_y / 2 * (1 + versatz))
+        x = frei_x // 2
     else:
-        neu_h = int(b / ziel)
-        oben = int((h - neu_h) / 2 * (1 + versatz))
-        oben = max(0, min(oben, h - neu_h))
-        bild = bild.crop((0, oben, b, oben + neu_h))
+        x = int(frei_x / 2 * (1 + versatz))
+        y = 0
+    x, y = max(0, min(x, frei_x)), max(0, min(y, frei_y))
+    bild = bild.crop((x, y, x + aus_b, y + aus_h))
     return bild.resize((W, H), Image.LANCZOS).convert("RGBA")
 
 
@@ -206,22 +215,22 @@ def filmkorn(bild, staerke=GRAIN_STRENGTH):
     return Image.fromarray(arr).convert("RGBA")
 
 
-def main(motiv, ziel, headline, unterzeile, versatz="0", pos="unten"):
+def main(motiv, ziel, headline, unterzeile, versatz="0", pos="unten", zoom="1"):
     akzent = None
     if "|" in headline:
         headline, akzent = [t.strip() for t in headline.split("|", 1)]
         headline = f"{headline} {akzent}".strip()
 
-    bild = motiv_einpassen(motiv, float(versatz))
+    bild = motiv_einpassen(motiv, float(versatz), float(zoom))
     kopf, size = headline_layer(headline.upper(), akzent.upper() if akzent else None)
     balken = balken_layer(unterzeile.upper())
 
     # Textblock so setzen, dass er im Grid-Ausschnitt sitzt
     block_h = kopf.height + balken.height
     if pos == "oben":
-        oben = GRID_OBEN + 120
+        oben = GRID_OBEN + 210
         bild = abdunkeln_oben(bild, oben + block_h + 200)
-        logo_y = LOGO_Y_UNTEN
+        logo_y = LOGO_Y_OBEN
     else:
         oben = GRID_UNTEN - 120 - block_h
         bild = abdunkeln(bild, max(oben - 260, GRID_OBEN))
@@ -248,6 +257,6 @@ def main(motiv, ziel, headline, unterzeile, versatz="0", pos="unten"):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in (5, 6, 7):
+    if len(sys.argv) not in (5, 6, 7, 8):
         raise SystemExit(__doc__)
-    main(*sys.argv[1:7])
+    main(*sys.argv[1:8])
