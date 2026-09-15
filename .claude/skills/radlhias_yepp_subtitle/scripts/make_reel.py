@@ -66,6 +66,7 @@ PULSE_AMOUNT = 0.25
 BASE_FONT_SIZE = 80
 MAX_LINES = 2
 MAX_WORDS_PER_BLOCK = 8   # dichte SRT-Bloecke automatisch aufteilen, damit Text nicht ueberladen wirkt
+SATZ_UEBERHANG = 1        # so viele Woerter darf ein Block ueberziehen, statt einen Satz zu zerreissen
 MIN_WORD_DUR = 0.22
 FADE_TO_BLACK = 1.0       # Sekunden am Ende
 
@@ -426,15 +427,70 @@ def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
     ends = starts[1:] + [starts[-1] + tail_dur]
     words_wbounds = [(clean_word(taps[i]["w"]), starts[i], ends[i]) for i in range(n)]
 
-    blocks, cur = [], []
-    for wb in words_wbounds:
-        if cur and (wb[1] - cur[-1][2] > gap_break or len(cur) >= MAX_WORDS_PER_BLOCK):
-            blocks.append(enforce_min_duration(cur))
-            cur = []
+    # Satzenden merken, solange die Satzzeichen noch da sind - clean_word
+    # entfernt sie, danach ist nicht mehr erkennbar, wo ein Satz aufhoert.
+    satzende = [bool(re.search(r"[.!?\u2026]+[\"')\]]*$", str(taps[i]["w"]).strip()))
+                for i in range(n)]
+
+    # Erst an echten Sprechpausen trennen, dann innerhalb jeder Gruppe
+    # satzbewusst in Anzeige-Bloecke schneiden.
+    blocks, gruppe, g_satz = [], [], []
+    for i, wb in enumerate(words_wbounds):
+        if gruppe and wb[1] - gruppe[-1][2] > gap_break:
+            blocks.extend(baue_bloecke(gruppe, g_satz))
+            gruppe, g_satz = [], []
+        gruppe.append(wb)
+        g_satz.append(satzende[i])
+    if gruppe:
+        blocks.extend(baue_bloecke(gruppe, g_satz))
+    return [enforce_min_duration(b) for b in blocks]
+
+
+def satz_stuecke(wbs, satzende):
+    """Wortfolge an Satzenden in einzelne Saetze zerlegen."""
+    stuecke, cur = [], []
+    for wb, ende in zip(wbs, satzende):
         cur.append(wb)
+        if ende:
+            stuecke.append(cur)
+            cur = []
     if cur:
-        blocks.append(enforce_min_duration(cur))
-    return blocks
+        stuecke.append(cur)
+    return stuecke
+
+
+def teile_gleichmaessig(satz):
+    """Einen zu langen Satz in moeglichst gleich grosse Teile schneiden.
+
+    Gleich gross, damit kein Ein-Wort-Rest uebrig bleibt - ein einzelnes
+    "kannst" auf der naechsten Seite liest sich wie ein Fehler."""
+    n = len(satz)
+    if n <= MAX_WORDS_PER_BLOCK + SATZ_UEBERHANG:
+        return [satz]
+    teile = math.ceil(n / MAX_WORDS_PER_BLOCK)
+    groesse = math.ceil(n / teile)
+    return [satz[i:i + groesse] for i in range(0, n, groesse)]
+
+
+def baue_bloecke(wbs, satzende):
+    """Anzeige-Bloecke bilden - bevorzugt entlang der Satzgrenzen.
+
+    Ein Satz soll nicht mitten im Gedanken umbrechen. Deshalb wird zuerst an
+    Satzenden geschnitten; kurze Saetze duerfen sich einen Block teilen, und
+    nur wirklich lange Saetze werden gleichmaessig aufgeteilt."""
+    bloecke, offen = [], []
+    for satz in satz_stuecke(wbs, satzende):
+        teile = teile_gleichmaessig(satz)
+        if len(teile) == 1 and offen and len(offen) + len(satz) <= MAX_WORDS_PER_BLOCK:
+            offen.extend(satz)          # kurzer Satz passt noch mit dazu
+            continue
+        if offen:
+            bloecke.append(offen)
+        bloecke.extend(teile[:-1])
+        offen = list(teile[-1])
+    if offen:
+        bloecke.append(offen)
+    return bloecke
 
 # ---------------------------------------------------------------------------
 # 3. DICHTE BLOECKE AUTOMATISCH AUFTEILEN (max. MAX_WORDS_PER_BLOCK Woerter)

@@ -130,9 +130,29 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 - Schrift: Barlow Condensed Bold (`assets/BarlowCondensed-Bold.ttf`)
 - Neigung -2,5°, Block-Deckkraft 93%, Filmkorn-Stärke 0,16
 - Karaoke-Puls: aktuelles Wort +25% Größe, sinusförmig ein-/ausblendend
-- max. 8 Wörter pro Textblock, Mindestanzeigedauer 0,22s pro Wort
+- max. 8 Wörter pro Textblock (+1 Wort Überhang, um Sätze nicht zu zerreißen),
+  Mindestanzeigedauer 0,22s pro Wort
 - 1080x1920, 24fps, Logo oben mittig, letzte Sekunde Fade-to-Black
 - Call-to-Action-Einblender ab Sekunde 15, 3,5 s Standzeit
+
+## Blockaufteilung folgt den Satzgrenzen
+
+Die Anzeige-Blöcke brechen **nicht** stur nach 8 Wörtern, sondern entlang der
+Satzzeichen - sonst rutscht das letzte Wort eines Satzes allein auf die nächste
+Seite ("... leisten" / "kannst.") und liest sich wie ein Fehler. Die Reihenfolge:
+
+1. Echte Sprechpausen (> 0,5 s) trennen immer.
+2. Innerhalb einer Sprechgruppe wird an Satzenden (`.!?…`) geschnitten.
+3. Kurze aufeinanderfolgende Sätze teilen sich einen Block, solange zusammen
+   höchstens `MAX_WORDS_PER_BLOCK` Wörter zusammenkommen.
+4. Ein Satz darf `SATZ_UEBERHANG` Wörter über das Limit gehen, statt zerrissen
+   zu werden (Schrift wird dann automatisch etwas kleiner - bei 9 Wörtern 70
+   statt 80 px, was im fertigen Reel nicht auffällt).
+5. Nur wirklich lange Sätze werden geteilt, und zwar in **gleich große** Teile -
+   damit nie ein Ein-Wort-Rest übrig bleibt.
+
+Wichtig: Die Satzzeichen müssen im Text stehen, damit das greift. `clean_word`
+entfernt sie erst beim Rendern; erkannt werden sie vorher.
 
 ## Call-to-Action-Einblender
 
