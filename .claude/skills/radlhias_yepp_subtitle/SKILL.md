@@ -160,12 +160,24 @@ entfernt sie erst beim Rendern; erkannt werden sie vorher.
 Videoframe, sondern ein gesetztes Bild:
 
 ```bash
-python3 scripts/make_cover.py <motiv.jpg> <cover.jpg> "GRIFFE|LOCKER?" "DER HAARSPRAY-TRICK" [versatz]
+python3 scripts/make_cover.py <motiv.jpg> <cover.jpg> "GRIFFE|LOCKER?" "DER HAARSPRAY-TRICK" [versatz] [unten|oben] [zoom]
 ```
 
-- Das Wort nach dem senkrechten Strich wird orange gesetzt, der Rest creme.
+- Alles hinter dem senkrechten Strich wird orange gesetzt (auch mehrere
+  Woerter), der Rest creme.
 - `versatz` (-1 bis 1) verschiebt den Bildausschnitt, falls das Motiv nicht
   mittig sitzt (0.55 holt bei Werkbank-Fotos die Teile nach vorne).
+- `unten|oben`: Textblock oben statt unten, wenn das Wesentliche des Motivs in
+  der Bildmitte oder unten liegt. Das Logo wandert dann ueber den Text.
+  Vorsicht bei Portraits - oben liegender Text verdeckt das Gesicht, und im
+  Grid zieht ein Gesicht mehr als ein Gegenstand.
+- `zoom` (> 1) waehlt einen engeren Ausschnitt. Noetig bei Motiven, die schon
+  9:16 sind: ohne Zoom gibt es keinen Spielraum, den `versatz` verschieben
+  koennte.
+
+**Liegt das Motiv mittig** (Stillleben auf der Werkbank), ist "Text oben" fast
+immer besser als hineinzuzoomen - Zoom schneidet schnell das halbe Motiv weg.
+Beide Varianten bauen, als Grid-Kacheln nebeneinanderlegen, dann entscheiden.
 - **Grid-sicherer Bereich:** Das Cover ist 1080x1920, im Profil-Grid zeigt
   Instagram aber nur den mittigen 4:5-Ausschnitt (y 285-1635). Logo und Text
   liegen deshalb innerhalb von `GRID_OBEN`/`GRID_UNTEN`. Vor der Uebergabe
