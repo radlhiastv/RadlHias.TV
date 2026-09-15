@@ -61,7 +61,9 @@ externen Dienst, ohne Konto, ohne Handarbeit. Das ist der Standardweg.
    `<output-ordner>/_reel_tmp/frames/` prüfen und den letzten Zusammensetz-Schritt
    notfalls manuell mit ffmpeg nachholen (siehe `references/manual_assembly.md`).
 6. **Stichprobe prüfen**: 2-3 Frames aus dem Ergebnis exportieren und ansehen
-   (Timing, Textüberladung, Logo-Position), bevor an Mathias übergeben wird.
+   (Timing, Textüberladung, Logo-Position, CTA-Einblender), bevor an Mathias
+   übergeben wird. Einen Frame aus dem CTA-Fenster (Sekunde 15-18,5) immer
+   dabei haben.
 7. **Ausgeben**: fertige Datei nach `/mnt/user-data/outputs/` kopieren und mit
    `present_files` zeigen. Bei über 30MB vor dem Versand komprimieren (siehe
    `references/manual_assembly.md`).
@@ -130,6 +132,27 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 - Karaoke-Puls: aktuelles Wort +25% Größe, sinusförmig ein-/ausblendend
 - max. 8 Wörter pro Textblock, Mindestanzeigedauer 0,22s pro Wort
 - 1080x1920, 24fps, Logo oben mittig, letzte Sekunde Fade-to-Black
+- Call-to-Action-Einblender ab Sekunde 15, 3,5 s Standzeit
+
+## Call-to-Action-Einblender
+
+Jedes Reel bekommt automatisch einen Follow-Hinweis eingeblendet. Werte stehen
+im `STYLE PRESET` von `make_reel.py` unter `CTA_*`:
+
+- **Wann:** ab Sekunde 15 (`CTA_AT`), 3,5 s lang (`CTA_DUR`). Bewusst frueh -
+  ein Hinweis im Abspann erreicht nur die Zuschauer, die ohnehin schon bis zum
+  Ende geblieben sind. Bei Clips unter ~20 s rutscht er automatisch auf 40 %
+  der Laufzeit.
+- **Wo:** oben unter dem Logo (`CTA_Y = 350`). Nicht unten - dort ueberdeckt
+  Instagram das Bild mit Caption, Profilname und Buttons.
+- **Was:** zwei kurze Zeilen (`CTA_LINES`), Navy-Frage + oranger Handle.
+  Laenger als ~4 Woerter pro Zeile liest in 3,5 s niemand mit.
+- **Aussehen:** Creme-Balken mit dunkler Kontur, Schatten, Filmkorn und
+  derselben -2,5-Grad-Neigung wie der Untertitelblock, sanft ein- und
+  ausgeblendet mit kleinem Aufwaertsversatz.
+
+Abschalten fuer ein einzelnes Reel: `CTA_ENABLED = False`. Anderer Text (z. B.
+Hinweis auf die Werkstatt statt auf den Kanal): nur `CTA_LINES` aendern.
 
 ## Bekannte Grenzen (nur relevant für den SRT-Fallback-Pfad)
 

@@ -69,6 +69,24 @@ MAX_WORDS_PER_BLOCK = 8   # dichte SRT-Bloecke automatisch aufteilen, damit Text
 MIN_WORD_DUR = 0.22
 FADE_TO_BLACK = 1.0       # Sekunden am Ende
 
+# Call-to-Action-Einblender. Sitzt bewusst frueh im Reel: die meisten Zuschauer
+# steigen vor dem Ende aus, ein Follow-Hinweis im Abspann erreicht sie nicht
+# mehr. Oben im Bild, weil Instagram den unteren Rand mit Caption, Profilname
+# und Buttons ueberdeckt.
+CTA_ENABLED = True
+CTA_AT = 15.0             # Sekunde, in der der Einblender kommt
+CTA_DUR = 3.5             # Standzeit - genug zum Lesen, kurz genug zum Nichtstoeren
+CTA_FADE = 0.3
+CTA_Y = 350               # unter dem Logo, weit ueber dem Untertitelblock
+CTA_FONT_SIZE = 58
+CTA_LINE_GAP = 12
+CTA_PAD_X, CTA_PAD_Y = 46, 28
+CTA_RADIUS = 26
+CTA_LINES = [
+    ("MEHR WERKSTATT-TIPPS?", NAVY),
+    ("@RADLHIAS.TV FOLGEN", ORANGE),
+]
+
 # ---------------------------------------------------------------------------
 # 1. SRT PARSEN
 # ---------------------------------------------------------------------------
@@ -509,6 +527,82 @@ def draw_word_shadow(draw, x, y_baseline_offset, word, font, scale, base_size):
     xx = x - dx
     draw.text((xx + SHADOW_OFFSET[0], yy + SHADOW_OFFSET[1]), word, font=f2, fill=(0, 0, 0, SHADOW_ALPHA))
 
+_cta_cache = {}
+
+def cta_zeitfenster(dur):
+    """Startzeit des Einblenders - bei kurzen Clips nach vorne geholt."""
+    start = CTA_AT
+    if start + CTA_DUR + 1.5 > dur:
+        start = max(dur * 0.4, 1.0)
+    return start, start + CTA_DUR
+
+def baue_cta_layer(rng):
+    """Den Banner einmal bauen - er aendert sich ueber die Standzeit nicht."""
+    if "layer" in _cta_cache:
+        return _cta_cache["layer"]
+    font = ImageFont.truetype(FONT_PATH, CTA_FONT_SIZE)
+    masse = [font.getbbox(text) for text, _ in CTA_LINES]
+    breite = max(b[2] - b[0] for b in masse)
+    zeilen_h = CTA_FONT_SIZE + CTA_LINE_GAP
+    box_w = int(breite + CTA_PAD_X * 2)
+    box_h = int(zeilen_h * len(CTA_LINES) + CTA_PAD_Y * 2 - CTA_LINE_GAP)
+
+    rand = 30                                   # Platz fuer Schatten und Neigung
+    layer = Image.new("RGBA", (box_w + rand * 2, box_h + rand * 2), (0, 0, 0, 0))
+    schatten = Image.new("RGBA", layer.size, (0, 0, 0, 0))
+    ImageDraw.Draw(schatten).rounded_rectangle(
+        [rand + SHADOW_OFFSET[0], rand + SHADOW_OFFSET[1],
+         rand + box_w + SHADOW_OFFSET[0], rand + box_h + SHADOW_OFFSET[1]],
+        radius=CTA_RADIUS, fill=(0, 0, 0, SHADOW_ALPHA))
+    schatten = schatten.filter(ImageFilter.GaussianBlur(SHADOW_BLUR))
+
+    d = ImageDraw.Draw(layer)
+    d.rounded_rectangle([rand, rand, rand + box_w, rand + box_h],
+                        radius=CTA_RADIUS, fill=CREAM,
+                        outline=DARK, width=DARK_EXTRA + 2)
+    for i, (text, farbe) in enumerate(CTA_LINES):
+        tb = font.getbbox(text)
+        x = rand + (box_w - (tb[2] - tb[0])) / 2 - tb[0]
+        y = rand + CTA_PAD_Y + i * zeilen_h - tb[1]
+        d.text((x, y), text, font=font, fill=farbe)
+
+    layer = Image.alpha_composite(schatten, layer)
+    # Filmkorn wie beim Untertitelblock, damit sich der Banner einfuegt
+    alpha = layer.split()[3]
+    korn = make_grain(layer.size, GRAIN_STRENGTH, rng)
+    layer = Image.alpha_composite(layer, Image.merge(
+        "RGBA", (korn, korn, korn,
+                 alpha.point(lambda p: int(p * GRAIN_STRENGTH)))))
+    layer = layer.rotate(-TILT_DEG, expand=True, resample=Image.BICUBIC)
+    _cta_cache["layer"] = layer
+    return layer
+
+def render_cta(t, dur, rng):
+    """Follow-Hinweis, sanft ein- und ausgeblendet."""
+    if not CTA_ENABLED:
+        return None
+    start, end = cta_zeitfenster(dur)
+    if not start <= t <= end:
+        return None
+    if t < start + CTA_FADE:
+        p = (t - start) / CTA_FADE
+    elif t > end - CTA_FADE:
+        p = (end - t) / CTA_FADE
+    else:
+        p = 1.0
+    p = min(max(p, 0.0), 1.0)
+    weich = p * p * (3 - 2 * p)
+
+    banner = baue_cta_layer(rng).copy()
+    a = banner.split()[3]
+    banner.putalpha(a.point(lambda v: int(v * BLOCK_OPACITY * weich)))
+
+    frame = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    # Beim Einblenden ein paar Pixel nach oben laufen lassen
+    versatz = int((1 - weich) * 18)
+    frame.alpha_composite(banner, ((W - banner.width) // 2, CTA_Y + versatz))
+    return frame
+
 def render_frame(t, blocks, layouts, rng):
     seg_idx = None
     for i, (start, end) in enumerate([(b[0][1], b[-1][2]) for b in blocks]):
@@ -617,6 +711,9 @@ def main(video_path, srt_path, out_path):
         frame = render_frame(t, word_blocks, layouts, rng)
         if frame is None:
             frame = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        cta = render_cta(t, dur, rng)
+        if cta is not None:
+            frame.alpha_composite(cta)
         frame.save(f"{frames_dir}/frame_{n:05d}.png")
         if n % 100 == 0:
             print(f"  frame {n}/{total_frames}")
