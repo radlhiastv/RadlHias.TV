@@ -154,6 +154,36 @@ Seite ("... leisten" / "kannst.") und liest sich wie ein Fehler. Die Reihenfolge
 Wichtig: Die Satzzeichen müssen im Text stehen, damit das greift. `clean_word`
 entfernt sie erst beim Rendern; erkannt werden sie vorher.
 
+## Vorschaubild (Cover) fuers Grid
+
+`scripts/make_cover.py` baut das Reel-Cover im selben Markenstil - kein
+Videoframe, sondern ein gesetztes Bild:
+
+```bash
+python3 scripts/make_cover.py <motiv.jpg> <cover.jpg> "GRIFFE|LOCKER?" "DER HAARSPRAY-TRICK" [versatz]
+```
+
+- Das Wort nach dem senkrechten Strich wird orange gesetzt, der Rest creme.
+- `versatz` (-1 bis 1) verschiebt den Bildausschnitt, falls das Motiv nicht
+  mittig sitzt (0.55 holt bei Werkbank-Fotos die Teile nach vorne).
+- **Grid-sicherer Bereich:** Das Cover ist 1080x1920, im Profil-Grid zeigt
+  Instagram aber nur den mittigen 4:5-Ausschnitt (y 285-1635). Logo und Text
+  liegen deshalb innerhalb von `GRID_OBEN`/`GRID_UNTEN`. Vor der Uebergabe
+  immer diesen Ausschnitt gegenpruefen, nicht nur das ganze Bild.
+- Verlauf von unten traegt die Headline, ein schwacher Verlauf von oben plus
+  Schlagschatten geben dem Logo Halt - auf unruhigem Werkstatthintergrund
+  verschwindet es sonst.
+
+**Motive:** Mathias' eigene Fotos liegen in `blogimages/` und `Fotos/` im
+Repo-Wurzelverzeichnis (Werkbank, Werkstatt, Portraits). Die sind echtes
+Marken-Material und meist die bessere Wahl.
+
+**Bildgenerierung per OpenArt ist nur halb nutzbar:** Generieren klappt, aber
+`cdn.openart.ai` ist vom Egress-Proxy gesperrt (403) - die fertige Datei laesst
+sich nicht in die Sandbox holen. Nicht ueber Umwege daran vorbeiarbeiten.
+Wenn ein KI-Motiv sein soll: Mathias laedt es aus seinem OpenArt-Konto und legt
+es in den Drive-Ordner, dann laeuft es den bekannten Weg (`video_transfer.md`).
+
 ## Call-to-Action-Einblender
 
 Jedes Reel bekommt automatisch einen Follow-Hinweis eingeblendet. Werte stehen
