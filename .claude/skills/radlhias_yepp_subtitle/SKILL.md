@@ -201,6 +201,36 @@ Bewaehrt:
 montieren und so zeigen - einzeln sieht jedes Cover gut aus, erst im
 Nebeneinander entscheidet sich, welches im Profil wirklich zieht.
 
+## Wohin die fertigen Dateien gehoeren
+
+**Immer in Mathias' Google-Drive-Ordner, nie ins Git-Repo.** Das Repo bleibt
+Code und Website; Cover, Motive und Reels gehoeren in den Drive-Ordner
+"Reel Videos" (`1NhioZQsS7MdC5o_0xdDjxi8tokMK6oA3`). Ausdrueckliche Ansage von
+Mathias.
+
+Der Upload geht nicht direkt aus dieser Sandbox: `GOOGLEDRIVE_UPLOAD_FILE`
+verlangt einen `s3key`, also eine bereits in Composios Speicher liegende Datei.
+Weder ein lokaler Pfad noch eine URL werden angenommen. Der Weg, der
+funktioniert, laeuft ueber den Composio-Workbench:
+
+1. Assets dort besorgen - Schrift, Logo und `make_cover.py` per `curl` von
+   `raw.githubusercontent.com` (das Repo ist oeffentlich), Motive vom
+   OpenArt-CDN (in der Composio-Sandbox nicht gesperrt).
+2. Cover dort mit demselben `make_cover.py` bauen - gleiches Skript, gleiche
+   Parameter, gleiches Ergebnis.
+3. `up, err = upload_local_file(pfad)` liefert den `s3key`.
+4. `run_composio_tool("GOOGLEDRIVE_UPLOAD_FILE", {"file_to_upload":
+   {"name": ..., "mimetype": "image/jpeg", "s3key": up["s3key"]},
+   "folder_to_upload_to": "<ordner-id>"})`
+
+Grenzen: 5 MB je Datei (groessere PNGs vorher als JPEG mit `quality=95,
+subsampling=0` speichern), sonst `GOOGLEDRIVE_RESUMABLE_UPLOAD`.
+
+**Gegenprobe, dass das Richtige hochgeladen wurde:** Von beiden Fassungen einen
+8x8-Graustufen-Fingerabdruck berechnen und vergleichen - Abstand 0 heisst
+identisch. Dasselbe Verfahren findet auch heraus, welches von mehreren
+KI-Motiven Mathias ausgewaehlt hat, wenn er eines davon zurueckschickt.
+
 **Bildgenerierung per OpenArt ist nur halb nutzbar:** Generieren klappt, aber
 `cdn.openart.ai` ist vom Egress-Proxy gesperrt (403) - die fertige Datei laesst
 sich nicht in die Sandbox holen. Nicht ueber Umwege daran vorbeiarbeiten.
