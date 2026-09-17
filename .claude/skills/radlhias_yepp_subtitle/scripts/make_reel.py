@@ -473,8 +473,11 @@ def layout_block(seg_words):
     for line in lines:
         x = 0
         for w in line:
+            ww = font.getlength(w)
+            extra = ww * PULSE_AMOUNT
+            x += extra / 2
             positions[idx] = (x, y, w)
-            x += font.getlength(w) + space_w
+            x += ww + extra / 2 + space_w
             idx += 1
         y += line_h + line_gap
     total_h = y - line_gap
