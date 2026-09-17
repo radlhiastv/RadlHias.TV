@@ -98,7 +98,7 @@ def parse_srt(path):
     return out
 
 def clean_word(w):
-    return "".join(c for c in w if c.isalnum() or c in "ÄÖÜäöüß").upper()
+    return "".join(c for c in w if c.isalnum() or c in "ÄÖÜäöüß.,!?…").upper()
 
 # ---------------------------------------------------------------------------
 # 2. AUDIO-ENERGIE-ANALYSE fuer Wort-Timing innerhalb eines SRT-Blocks
