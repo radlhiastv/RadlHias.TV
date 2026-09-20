@@ -63,8 +63,8 @@ TILT_DEG = -2.5
 BLOCK_OPACITY = 0.93
 GRAIN_STRENGTH = 0.16
 PULSE_AMOUNT = 0.25
-BASE_FONT_SIZE = 90
-WORD_SPACING_FACTOR = 1.7   # multipliziert die Leerzeichenbreite - kleiner = Woerter enger zusammen
+BASE_FONT_SIZE = 105
+WORD_SPACING_FACTOR = 1.3   # multipliziert die Leerzeichenbreite - kleiner = Woerter enger zusammen
 MAX_LINES = 2
 MAX_WORDS_PER_BLOCK = 8   # dichte SRT-Bloecke automatisch aufteilen, damit Text nicht ueberladen wirkt
 MIN_WORD_DUR = 0.22
