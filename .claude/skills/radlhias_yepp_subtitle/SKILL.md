@@ -125,9 +125,17 @@ immer nur dort vornehmen, damit die Vorlage konsistent bleibt:
 
 - Navy `#1B2E45` (Grundtext), Orange `#BC5412` (aktuelles/gesprochenes Wort),
   Creme-Kontur `#F5F0E6`, dunkle Außenkontur `#0A0A0A`
-- Schrift: Barlow Condensed Bold (`assets/BarlowCondensed-Bold.ttf`)
+- Schrift: Barlow Condensed Bold (`assets/BarlowCondensed-Bold.ttf`), Basisgröße 90px
+  (`BASE_FONT_SIZE`), schrumpft automatisch bis min. 28px wenn eine Zeile sonst nicht passt
+- Wortabstand eng: `WORD_SPACING_FACTOR = 1.7` (Leerzeichenbreite mal Faktor) - eine
+  einzige Stelle fuer beide Wortumbruch-/Platzierungs-Berechnungen, nicht getrennt anpassen
+- Satzzeichen bleiben erhalten (`.,!?;:-`), `clean_word()` entfernt nur den Rest und macht
+  alles GROSS
 - Neigung -2,5°, Block-Deckkraft 93%, Filmkorn-Stärke 0,16
-- Karaoke-Puls: aktuelles Wort +25% Größe, sinusförmig ein-/ausblendend
+- Karaoke-Puls: aktuelles Wort +25% Größe, sinusförmig ein-/ausblendend - beim Umbruch
+  (`fit_and_wrap`) UND beim Platzieren (`layout_block`) mit demselben `PULSE_AMOUNT`-Puffer
+  reserviert, sonst laeuft Text rechts aus dem Bild (siehe `references/manual_assembly.md`
+  falls das je wieder auftaucht)
 - max. 8 Wörter pro Textblock, Mindestanzeigedauer 0,22s pro Wort
 - 1080x1920, 24fps, Logo oben mittig, letzte Sekunde Fade-to-Black
 

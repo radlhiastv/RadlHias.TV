@@ -63,7 +63,8 @@ TILT_DEG = -2.5
 BLOCK_OPACITY = 0.93
 GRAIN_STRENGTH = 0.16
 PULSE_AMOUNT = 0.25
-BASE_FONT_SIZE = 80
+BASE_FONT_SIZE = 90
+WORD_SPACING_FACTOR = 1.7   # multipliziert die Leerzeichenbreite - kleiner = Woerter enger zusammen
 MAX_LINES = 2
 MAX_WORDS_PER_BLOCK = 8   # dichte SRT-Bloecke automatisch aufteilen, damit Text nicht ueberladen wirkt
 MIN_WORD_DUR = 0.22
@@ -97,7 +98,7 @@ def parse_srt(path):
     return out
 
 def clean_word(w):
-    return "".join(c for c in w if c.isalnum() or c in "ÄÖÜäöüß").upper()
+    return "".join(c for c in w if c.isalnum() or c in "ÄÖÜäöüß.,!?;:-").upper()
 
 # ---------------------------------------------------------------------------
 # 2. AUDIO-ENERGIE-ANALYSE fuer Wort-Timing innerhalb eines SRT-Blocks
@@ -442,10 +443,14 @@ def fit_and_wrap(words, base_size, max_w, max_lines=MAX_LINES):
     lines = [words]
     while size > 28:
         font = ImageFont.truetype(FONT_PATH, size)
-        space_w = font.getlength(" ") * 2.6
+        space_w = font.getlength(" ") * WORD_SPACING_FACTOR
         lines, cur, cur_w = [], [], 0
         for w in words:
-            ww = font.getlength(w)
+            # Reserve wie layout_block: jedes Wort kann als aktives Wort um
+            # PULSE_AMOUNT breiter pulsieren - das muss schon beim Umbruch
+            # eingeplant werden, sonst laeuft die Zeile beim Rendern ueber
+            # den rechten Rand hinaus (siehe render_frame draw_word scale).
+            ww = font.getlength(w) * (1 + PULSE_AMOUNT)
             add = ww if not cur else space_w + ww
             if cur_w + add <= max_w or not cur:
                 cur.append(w)
@@ -468,7 +473,7 @@ def layout_block(seg_words):
     asc, desc = font.getmetrics()
     line_h = asc + desc
     line_gap = int(line_h * 0.55)
-    space_w = font.getlength(" ") * 2.6
+    space_w = font.getlength(" ") * WORD_SPACING_FACTOR
     positions, idx, y = {}, 0, 0
     for line in lines:
         x = 0
