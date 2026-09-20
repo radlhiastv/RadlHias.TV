@@ -445,7 +445,11 @@ def fit_and_wrap(words, base_size, max_w, max_lines=MAX_LINES):
         space_w = font.getlength(" ") * 2.6
         lines, cur, cur_w = [], [], 0
         for w in words:
-            ww = font.getlength(w)
+            # Reserve wie layout_block: jedes Wort kann als aktives Wort um
+            # PULSE_AMOUNT breiter pulsieren - das muss schon beim Umbruch
+            # eingeplant werden, sonst laeuft die Zeile beim Rendern ueber
+            # den rechten Rand hinaus (siehe render_frame draw_word scale).
+            ww = font.getlength(w) * (1 + PULSE_AMOUNT)
             add = ww if not cur else space_w + ww
             if cur_w + add <= max_w or not cur:
                 cur.append(w)
