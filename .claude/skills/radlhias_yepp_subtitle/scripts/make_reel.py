@@ -2,10 +2,10 @@
 """
 RadlHias Reel-Vorlage
 ======================
-Nimmt ein Rohvideo + entweder (a) eine SRT-Datei (z.B. aus VN exportiert, Text
-vorher korrigiert) oder (b) eine timing.json aus dem Reel-Timing-Tool (siehe
-references/reel_timing.md) und erzeugt automatisch das fertige Reel im
-RadlHias-Stil:
+Nimmt ein Rohvideo + entweder (a) eine timing.json aus dem Forced Alignment
+(scripts/align_text.py, siehe references/forced_alignment.md) oder (b) eine
+SRT-Datei (z.B. aus VN exportiert, Text vorher korrigiert) und erzeugt
+automatisch das fertige Reel im RadlHias-Stil:
 - Wort-fuer-Wort-Untertitel, aktuelles Wort wird groesser/orange (Karaoke-Puls)
 - Navy/Orange/Creme-Farbschema, Doppelkontur-Look, Schatten, Filmkorn, -2.5 Grad Neigung
 - Logo-Wasserzeichen oben, Fade-to-Black am Ende
@@ -18,10 +18,9 @@ Voraussetzungen im selben Ordner:
     logo_watermark.png   (500x500 o.ae. RadlHias-Logo, transparent, wird automatisch skaliert)
 
 Workflow für Mathias (empfohlen - exaktes Timing, kein Schaetzen aus der Tonspur):
-    1. Reel-Timing-Artefakt oeffnen, Rohvideo + reinen Text (ohne Zeitstempel)
-       laden, im Sprechtempo durchtippen, "Fuer Claude speichern" druecken.
-    2. Claude liest die getappten Zeitstempel (timing.json) zurueck und ruft
-       python3 make_reel.py mein_video.mp4 timing.json reel_fertig.mp4 auf.
+    1. Mathias schickt Rohvideo + den gesprochenen Text.
+    2. python3 align_text.py mein_video.mp4 text.txt timing.json  (Forced Alignment)
+    3. python3 make_reel.py mein_video.mp4 timing.json reel_fertig.mp4
 
 Alternativ-Workflow (Text-Timing aus Audio-Energie-Analyse geschaetzt):
     1. In VN: Auto-Untertitel erzeugen (lokaler Modus, kostenlos), Text korrigieren, als SRT exportieren.
@@ -306,16 +305,16 @@ def enforce_min_duration(seg_words, min_dur=MIN_WORD_DUR, gap_eps=0.02):
     return out
 
 # ---------------------------------------------------------------------------
-# 2b. WORT-TIMING AUS DEM WORT-TAKTGEBER-TOOL (manuell getappte Zeitstempel)
+# 2b. WORT-TIMING AUS ANKERZEITEN (timing.json aus dem Forced Alignment)
 # ---------------------------------------------------------------------------
 def interpolate_from_anchors(words, anchors, duration=None):
     """Rechnet aus Stuetzstellen (Ankern) die Zeit JEDES Wortes aus.
 
-    Der Yepp-Timer laesst Mathias nicht mehr jedes einzelne Wort setzen,
-    sondern nur noch rund ein Viertel davon - die Woerter dazwischen fallen
-    hier an. Gemessen an seinem Material spricht er gleichmaessig genug,
-    dass eine Verteilung nach Zeichenlaenge innerhalb eines Ankerabstands
-    von ~2 Sekunden traegt (laengere Woerter dauern laenger als kurze).
+    Liegt nicht fuer jedes Wort eine Zeit vor, sondern nur fuer einen Teil
+    (Stuetzstellen), fallen die Woerter dazwischen hier an. Gemessen an
+    Mathias' Material spricht er gleichmaessig genug, dass eine Verteilung
+    nach Zeichenlaenge innerhalb eines Ankerabstands von ~2 Sekunden traegt
+    (laengere Woerter dauern laenger als kurze).
 
     `anchors`: [{"i": <Wortindex>, "t": <Sekunde>}, ...]
     Rueckgabe: Liste der Startzeiten, eine je Wort."""
@@ -375,14 +374,14 @@ def interpolate_from_anchors(words, anchors, duration=None):
 
 
 def parse_word_timings_json(path, gap_break=0.5, tail_dur=0.45):
-    """Liest die vom Yepp-Timer exportierten Zeitstempel ein.
+    """Liest eine timing.json mit Wort-Zeitstempeln ein.
 
     Zwei Formate, am Inhalt von "words" unterschieden:
 
-    * **Anker** (aktuell): {"words": ["Wort", ...],
-      "anchors": [{"i": 0, "t": 0.83}, ...]} - Mathias setzt nur
-      Stuetzstellen, die Woerter dazwischen rechnet
-      `interpolate_from_anchors` aus.
+    * **Anker** (aktuell, so schreibt es `align_text.py`):
+      {"words": ["Wort", ...], "anchors": [{"i": 0, "t": 0.83}, ...]} -
+      liegt nicht fuer jedes Wort eine Zeit vor, rechnet
+      `interpolate_from_anchors` die Luecken aus.
     * **Ein Stempel je Wort** (aelter): {"words": [{"w": "...", "t": 1.23}]}
 
     Jedes Wort dauert bis zum naechsten; das letzte bekommt `tail_dur`
@@ -595,7 +594,7 @@ def main(video_path, srt_path, out_path):
         capture_output=True, text=True).stdout.strip())
 
     if srt_path.lower().endswith(".json"):
-        print("Getappte Wort-Zeitstempel einlesen (Reel-Timing)...")
+        print("Wort-Zeitstempel aus timing.json einlesen...")
         word_blocks = parse_word_timings_json(srt_path)
     else:
         print("SRT einlesen...")
