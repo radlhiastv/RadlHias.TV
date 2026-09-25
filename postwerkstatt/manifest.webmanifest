@@ -1,0 +1,17 @@
+{
+  "name": "Postwerkstatt – Instagram-Editor",
+  "short_name": "Postwerkstatt",
+  "description": "Captions schreiben, zählen, Hooks finden, Hashtags verwalten – offline auf dem Handy.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f1eb",
+  "theme_color": "#1c3448",
+  "lang": "de",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" },
+    { "src": "../RadlHias_Logo_freigestellt_cream.png", "sizes": "500x500", "type": "image/png", "purpose": "any" }
+  ]
+}

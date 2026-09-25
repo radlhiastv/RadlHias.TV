@@ -9,6 +9,7 @@ Persönliche Homepage für den YouTube-Kanal RadlHias.TV.
 ├── index.html        ← Startseite
 ├── admin-blog.html   ← Blog-Admin (Artikel schreiben/bearbeiten/löschen)
 ├── blogimages/        ← Bilder der ursprünglich migrierten Artikel
+├── postwerkstatt/     ← Instagram-Post-Editor (PWA, läuft offline am Handy)
 ├── worker/            ← Cloudflare Worker: Termine, Werkstatt & Blog-Backend
 └── README.md
 ```
@@ -100,3 +101,49 @@ Datumsbereich) sowie das Nachtragen von erledigter Arbeit, Endpreis und Statuswe
 direkt in einem Google Sheet – dieselbe Datenquelle, die Mathias bisher schon manuell gepflegt
 hat. Backend-Endpunkte liegen im selben Worker wie die Terminverwaltung, Einrichtung siehe
 [`worker/SETUP.md`](worker/SETUP.md), Abschnitt „Google Sheets Anbindung".
+
+## Postwerkstatt (Instagram-Editor)
+
+`postwerkstatt/` ist ein eigenständiges Werkzeug zum Schreiben von Instagram-Captions –
+erreichbar unter `https://radlhias.tv/postwerkstatt/`. Es läuft komplett im Browser,
+ohne Server, ohne Konto und ohne Netz.
+
+**Was drin ist**
+
+- Live-Zähler: Zeichen (Limit 2200), verbleibende Zeichen, Wörter, Hashtags (Limit 30),
+  Absätze und wie viele Zeichen noch bis zum „… mehr“-Abschnitt bei 125 Zeichen frei sind.
+- Hook-Generator: liest die Caption, erkennt Thema, Nebenthema und Zahlen und baut daraus
+  Vorschläge für die erste Zeile – wählbar nach Tonalität. Ein Klick setzt den Hook ein,
+  der nächste ersetzt ihn wieder.
+- Bausteine: Caption-Gerüste (Story, How-to, Liste, Vorher/Nachher, Meinung, Produkt)
+  und fertige Call-to-Action-Sätze.
+- Hashtag-Vorschläge: 20 Stück aus der Caption plus Themenprofil (Marke, Branche,
+  Region), gruppiert nach Herkunft und mit grober Größenangabe (• Nische, •• mittel,
+  ••• breit). Fünf davon lassen sich auswählen – mehr nimmt Instagram nicht –, eine
+  sinnvolle Mischung ist vorgewählt.
+- Hashtag-Verwaltung mit eigenen Sets, Entdoppeln, Sortieren und der Wahl
+  „in der Caption“ oder „im ersten Kommentar“.
+- Feed-Vorschau im Instagram-Look plus ein Qualitäts-Check über neun Punkte
+  (Hook-Länge, Absätze, Satzlänge, CTA, Hashtag-Menge, Emojis, Links …).
+- Posts-Verwaltung mit Status (Idee, Entwurf, Fertig, Gepostet), Suche und Checkliste
+  vorm Posten.
+
+**Themenprofil**
+
+Im Reiter *Tags* unter „Themenprofil“ stehen Marke, Tätigkeit, Region und die fix
+gewünschten Hashtags. Das wird einmal eingetragen und fließt danach in jeden
+Vorschlag ein. Das Thema eines Posts bestimmt allein die Caption – die Branche wirkt
+nur schwach mit, sonst schlägt bei jedem Post das komplette Leistungsangebot durch.
+
+**Aufs Handy holen**
+
+Seite in Safari bzw. Chrome öffnen → „Zum Home-Bildschirm“. Danach startet sie wie eine
+App, auch offline. Eine neue Version wird beim nächsten Start mit Netz automatisch geladen
+(nach Änderungen an `index.html` bitte die `CACHE`-Version in `postwerkstatt/sw.js` hochzählen).
+
+**Daten & Handywechsel**
+
+Alle Posts liegen ausschließlich im `localStorage` des jeweiligen Geräts – nichts geht an
+einen Server. Im Reiter *Posts* gibt es **Export** (eine JSON-Datei mit allen Posts, Sets und
+Einstellungen) und **Import**. Beim Import werden nur unbekannte Posts ergänzt, vorhandene
+bleiben unangetastet. Vor einem Gerätewechsel also exportieren und die Datei sichern.
