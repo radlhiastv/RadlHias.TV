@@ -135,6 +135,7 @@ label.field:first-child{margin-top:0}
 }
 .hook .cat.f{background:var(--orange)}
 .hook .cat.p{background:var(--green)}
+.hook .cat.ki{background:var(--navy)}
 .hook p{font-size:16px;font-weight:600;color:var(--navy);line-height:1.35}
 .hook .meta{font-size:11px;color:var(--text-dim);margin-top:4px}
 .hook .acts{display:flex;gap:6px;margin-top:8px}
@@ -282,6 +283,24 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
       </div>
       <p class="muted" id="hookCtx" style="margin-top:8px"></p>
       <p class="muted" style="margin-top:4px">Ein eingesetzter Hook wird beim nächsten Einsetzen ersetzt – solange du die erste Zeile nicht von Hand änderst.</p>
+    </div>
+
+    <div class="card">
+      <h2>KI-Hooks <span class="hint" id="kiHint"></span></h2>
+      <p class="muted">Schickt die Caption an deinen Worker, der sie an Claude weitergibt. Braucht Netz und eine Anmeldung – und kostet rund 2 bis 3 Cent pro Abruf.</p>
+      <div id="kiLogin" style="display:none">
+        <label class="field">Benutzername</label>
+        <input type="text" id="kiUser" autocomplete="username">
+        <label class="field">Passwort</label>
+        <input type="password" id="kiPass" autocomplete="current-password">
+        <div class="row" style="margin-top:10px">
+          <button class="btn wide" id="btnKiLogin">Anmelden</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn o wide" id="btnKi">KI-Hooks holen</button>
+        <button class="btn ghost sm" id="btnKiLogout" style="display:none">Abmelden</button>
+      </div>
     </div>
     <div id="hookList"></div>
   </section>
@@ -438,7 +457,7 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
 
 <script>
 "use strict";
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 const MAX_CHARS = 2200;      // Instagram-Limit für Captions
 const MAX_TAGS  = 5;         // mehr als 5 Hashtags nimmt Instagram nicht mehr an
 const TAG_HART  = 30;        // technische Obergrenze, nur als Notbremse
@@ -759,7 +778,7 @@ function generateHooks(n){
     .slice(0, n || 8);
 }
 
-function renderHooks(){
+function renderHooks(fertigeListe){
   const a = analyse($("#caption").value);
   if (!$("#caption").value.trim()) {
     $("#hookCtx").textContent = "Noch kein Text – schreib zuerst ein paar Sätze, dann werden die Hooks konkret.";
@@ -769,11 +788,11 @@ function renderHooks(){
       (a.thema2 ? ", Nebenthema „" + a.thema2 + "“" : "") +
       (a.zahl ? ", Zahl „" + a.zahl + "“" : "");
   }
-  const list = generateHooks(8);
+  const list = fertigeListe || generateHooks(8);
   const catClass = c => ({Fehler:"f",Stopp:"f",Meinung:"f",Story:"p",Nutzen:"p"})[c] || "";
   $("#hookList").innerHTML = list.map((h,i) => `
     <div class="hook${cur().hook && cur().hook === h.text ? " used" : ""}">
-      <span class="cat ${catClass(h.cat)}">${h.cat}</span>
+      <span class="cat ${h.ki ? "ki" : catClass(h.cat)}">${h.ki ? "KI · " : ""}${esc(h.cat)}</span>
       <p>${esc(h.text)}</p>
       <div class="meta">${chars(h.text)} Zeichen${chars(h.text) > CUT ? " · zu lang für die Vorschau" : ""}</div>
       <div class="acts">
@@ -798,6 +817,81 @@ function insertHook(text){
   p.hook = text;
   save(); renderAll();
   toast("Hook eingesetzt");
+}
+
+/* ============================================================
+   KI-Hooks über den eigenen Worker
+   Der Anthropic-Key liegt dort als Secret. Ohne Netz oder Anmeldung
+   bleibt der regelbasierte Generator oben die Rückfallebene.
+   ============================================================ */
+const API = "/api/admin";
+let kiAngemeldet = null;   // null = noch nicht geprüft
+
+async function kiStatus(){
+  if (!navigator.onLine) { kiUI(false, "Offline – die KI braucht Netz."); return false; }
+  try {
+    const r = await fetch(API + "/me", { credentials: "include" });
+    const d = await r.json();
+    kiAngemeldet = !!d.authenticated;
+  } catch(e){
+    kiAngemeldet = false;
+    kiUI(false, "Worker nicht erreichbar.");
+    return false;
+  }
+  kiUI(kiAngemeldet, kiAngemeldet ? "angemeldet" : "nicht angemeldet");
+  return kiAngemeldet;
+}
+
+function kiUI(an, hinweis){
+  $("#kiLogin").style.display = an ? "none" : "block";
+  $("#btnKiLogout").style.display = an ? "inline-flex" : "none";
+  $("#kiHint").textContent = hinweis || "";
+}
+
+async function kiLogin(){
+  const username = $("#kiUser").value.trim(), password = $("#kiPass").value;
+  if (!username || !password) { toast("Benutzername und Passwort fehlen"); return; }
+  try {
+    const r = await fetch(API + "/login", {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    if (!r.ok) { const d = await r.json().catch(() => ({})); toast(d.error || "Anmeldung fehlgeschlagen"); return; }
+    $("#kiPass").value = "";
+    kiAngemeldet = true; kiUI(true, "angemeldet");
+    toast("Angemeldet");
+  } catch(e){ toast("Worker nicht erreichbar"); }
+}
+
+async function kiHooks(){
+  const caption = $("#caption").value.trim();
+  if (caption.length < 30) { toast("Schreib zuerst ein paar Sätze"); return; }
+  if (!navigator.onLine) { toast("Offline – nimm die Vorschläge oben"); return; }
+  if (kiAngemeldet === null) await kiStatus();
+
+  const btn = $("#btnKi");
+  btn.disabled = true; btn.textContent = "Claude denkt nach …";
+  try {
+    const r = await fetch(API + "/hooks", {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ caption, ton: db.settings.tone })
+    });
+    if (r.status === 401) {
+      kiAngemeldet = false; kiUI(false, "bitte anmelden");
+      toast("Bitte zuerst anmelden"); return;
+    }
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.hooks || !d.hooks.length) { toast(d.error || "Hat nicht geklappt"); return; }
+    kiAngemeldet = true; kiUI(true, d.hooks.length + " Vorschläge");
+    renderHooks(d.hooks.map(h => ({ cat: h.cat, text: h.text, ki: true })));
+    toast("KI-Hooks da");
+  } catch(e){
+    toast("Worker nicht erreichbar");
+  } finally {
+    btn.disabled = false; btn.textContent = "KI-Hooks holen";
+  }
 }
 
 /* ============================================================
@@ -1159,7 +1253,7 @@ function pushUndo(){
 function tab(name){
   $$(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + name));
   $$("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
-  if (name === "hooks") renderHooks();
+  if (name === "hooks") { renderHooks(); if (kiAngemeldet === null) kiStatus(); }
   if (name === "tags" && !tagPool.length) genTags(false);
   if (name === "posts") renderPosts();
   window.scrollTo(0,0);
@@ -1275,6 +1369,12 @@ $("#tone").onchange = () => { db.settings.tone = $("#tone").value; save(); rende
 $$("nav.tabs button").forEach(b => b.onclick = () => tab(b.dataset.tab));
 $("#btnHooks").onclick = () => { hookSeed = Date.now() & 0x7fffffff; renderHooks(); };
 $("#btnHooksMore").onclick = () => { hookSeed = (hookSeed + 7919) & 0x7fffffff; renderHooks(); };
+$("#btnKi").onclick = kiHooks;
+$("#btnKiLogin").onclick = kiLogin;
+$("#btnKiLogout").onclick = async () => {
+  try { await fetch(API + "/logout", { method: "POST", credentials: "include" }); } catch(e){}
+  kiAngemeldet = false; kiUI(false, "abgemeldet"); toast("Abgemeldet");
+};
 $("#btnBreaks").onclick = fixBreaks;
 $("#btnTrim").onclick = trimText;
 $("#btnUndo").onclick = () => {

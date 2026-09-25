@@ -81,6 +81,15 @@ Da Bild-/CSS-/JS-Dateinamen sich bei Änderungen aktuell nicht automatisch ände
 Cache-Busting per Hash), sollte man nach dem Ersetzen einer Datei mit gleichem Namen in Cloudflare
 einmal **Purge Cache** auslösen, damit Besucher nicht bis zu ein Jahr lang eine alte Version sehen.
 
+## Worker deployen
+
+Der Cloudflare Worker (`worker/`) deployt sich selbst: Sobald eine Änderung unter
+`worker/` auf `main` landet, baut und veröffentlicht ihn die GitHub Action
+`.github/workflows/deploy-worker.yml`. Manuell auslösen geht im Reiter *Actions*
+→ *Worker deployen* → *Run workflow* – auch vom Handy. Die einmalige Einrichtung
+der beiden Repository-Secrets steht in [`worker/SETUP.md`](worker/SETUP.md),
+Abschnitt 11.
+
 ## Werkstatt-Terminbuchung
 
 `termin.html` (Kunden-Buchungsseite, verlinkt von `bikeservice.html`) und `admin-termine.html`
@@ -127,6 +136,15 @@ ohne Server, ohne Konto und ohne Netz.
   (Hook-Länge, Absätze, Satzlänge, CTA, Hashtag-Menge, Emojis, Links …).
 - Posts-Verwaltung mit Status (Idee, Entwurf, Fertig, Gepostet), Suche und Checkliste
   vorm Posten.
+
+**KI-Hooks (optional)**
+
+Neben dem regelbasierten Generator kann der Editor Vorschläge von Claude holen.
+Das läuft über `POST /api/admin/hooks` im Cloudflare Worker (`worker/src/lib/hooks.js`),
+hinter dem Admin-Login – der Anthropic-Schlüssel liegt als Worker-Secret und nie
+im Browser. Einrichtung: [`worker/SETUP.md`](worker/SETUP.md), Abschnitt 12.
+Ohne Netz, ohne Anmeldung oder ohne hinterlegten Schlüssel bleibt der lokale
+Generator die Rückfallebene.
 
 **Themenprofil**
 

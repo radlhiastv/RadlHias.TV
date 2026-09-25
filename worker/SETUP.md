@@ -291,6 +291,82 @@ Kein App-Review bei Meta nötig, solange nur du selbst (als Admin von App und
 Seite) postest – Review wird erst Pflicht, sobald fremde Nutzer über die App
 posten sollen.
 
+## 11. Deployment per GitHub Action (ohne Rechner deployen)
+
+Bis hierher wurde der Worker mit `npx wrangler deploy` von einem Rechner
+hochgeladen. Mit der Action `.github/workflows/deploy-worker.yml` passiert das
+automatisch: Sobald eine Änderung unter `worker/` auf `main` landet, baut GitHub
+den Worker und deployt ihn. Damit reicht ein Push vom Handy.
+
+Einmalig einzurichten sind zwei Repository-Secrets.
+
+**a) Cloudflare-API-Token erstellen**
+
+1. Cloudflare-Dashboard → oben rechts aufs Profil → **My Profile** → **API Tokens**.
+2. **Create Token** → die Vorlage **Edit Cloudflare Workers** verwenden.
+3. Unter *Account Resources* deinen Account wählen, unter *Zone Resources* die
+   Zone `radlhias.tv` (der Worker hängt an Routes dieser Zone).
+4. Token erzeugen und **sofort kopieren** – er wird nur ein einziges Mal angezeigt.
+
+**b) Account-ID heraussuchen**
+
+Im Dashboard unter **Workers & Pages** rechts in der Seitenleiste, oder aus der
+Adresszeile: `dash.cloudflare.com/<account-id>/...`.
+
+**c) Beides bei GitHub hinterlegen**
+
+Im Repo → **Settings** → **Secrets and variables** → **Actions** → **New
+repository secret**. Zwei Stück anlegen:
+
+| Name | Wert |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | der Token aus Schritt a |
+| `CLOUDFLARE_ACCOUNT_ID` | die ID aus Schritt b |
+
+**d) Ausprobieren**
+
+Im Reiter **Actions** → *Worker deployen* → **Run workflow**. Läuft der Durchgang
+grün durch, ist alles eingerichtet. Schlägt er mit einem Berechtigungsfehler
+fehl, nennt die Fehlermeldung die fehlende Berechtigung – diese im Token
+nachtragen (Dashboard → API Tokens → Edit).
+
+Die Action baut den Worker erst mit `--dry-run`. Schlägt der Build fehl, wird
+nichts hochgeladen und die laufende Version bleibt unangetastet.
+
+---
+
+## 12. KI-Hooks für die Postwerkstatt
+
+`/postwerkstatt/` (der Instagram-Editor) kann Hook-Vorschläge von Claude holen.
+Der Endpunkt ist `POST /api/admin/hooks` und liegt hinter dem Admin-Login aus
+Abschnitt 5 – ohne Anmeldung gibt es nichts, damit niemand Fremdes den Key
+verbraucht. Der Schlüssel liegt als Worker-Secret und verlässt den Worker nie.
+
+**Schlüssel besorgen**
+
+1. Auf `console.anthropic.com` anmelden, unter *API Keys* einen Key erzeugen.
+2. Dort auch gleich unter *Limits* ein Ausgabenlimit setzen. Ein Abruf kostet
+   etwa 2 bis 3 Cent, aber ein Limit erspart böse Überraschungen.
+
+**Schlüssel hinterlegen** – wahlweise:
+
+- Am Rechner: `wrangler secret put ANTHROPIC_API_KEY` (im Ordner `worker/`).
+- Am Handy: Cloudflare-Dashboard → **Workers & Pages** → `radlhias-termin-api`
+  → **Settings** → **Variables and Secrets** → Variable vom Typ *Secret* mit dem
+  Namen `ANTHROPIC_API_KEY` anlegen und speichern.
+
+Fehlt der Schlüssel, antwortet der Endpunkt mit `503` und dem Hinweis, dass
+kein `ANTHROPIC_API_KEY` hinterlegt ist – der regelbasierte Hook-Generator im
+Editor funktioniert davon unabhängig weiter, auch offline.
+
+**Verwendetes Modell**
+
+`claude-opus-5`, mit `effort: "low"` (siehe `src/lib/hooks.js`). Wer es günstiger
+will, trägt dort `claude-haiku-4-5` ein – spürbar billiger, dafür weniger
+treffsicher bei Wortwitz und Tonfall.
+
+---
+
 ## 11. Noch offen (aus dem Briefing, Punkt 11)
 
 - [ ] Google Cloud Projekt + OAuth-Setup durchführen (Schritt 3)

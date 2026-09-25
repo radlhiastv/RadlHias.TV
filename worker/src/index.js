@@ -19,6 +19,7 @@ import { renderListingPage, renderArticlePage, render404Page, BLOG_PER_PAGE_OPTI
 import { renderStatusPage, renderStatusNotFoundPage } from "./lib/statusTemplate.js";
 import { qrCodeSvg } from "./lib/qrcode.js";
 import { renderSitemap } from "./lib/sitemap.js";
+import { generateHooks } from "./lib/hooks.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -245,6 +246,26 @@ export default {
       if (path.startsWith("/api/admin/")) {
         const ok = await requireAuth(request, env);
         if (!ok) return json({ error: "Nicht angemeldet." }, { status: 401 }, cors);
+      }
+
+      // Postwerkstatt (/postwerkstatt/): KI-Hooks fuer eine Caption. Der
+      // Anthropic-Key liegt als Secret auf dem Worker, nicht im Browser.
+      if (path === "/api/admin/hooks" && request.method === "POST") {
+        const body = await request.json().catch(() => null);
+        if (!body || typeof body.caption !== "string") {
+          return badRequest("Caption fehlt.");
+        }
+        try {
+          const result = await generateHooks(env, { caption: body.caption, ton: body.ton });
+          return json(result, { status: 200 }, cors);
+        } catch (err) {
+          const status = Number(err?.status) || 502;
+          // Nur selbst formulierte Meldungen durchreichen -- die des SDK
+          // koennen Interna enthalten.
+          const msg = err?.safe && err.message ? err.message : "Die Hook-Erzeugung hat nicht geklappt.";
+          console.error("hooks:", err?.message || err);
+          return json({ error: msg }, { status }, cors);
+        }
       }
 
       if (path === "/api/admin/summary" && request.method === "GET") {
