@@ -2,7 +2,7 @@
    Ziel: Die App startet auch ohne Netz. Beim nächsten Online-Start holt sie
    sich automatisch die neue Version von radlhias.tv.
    Bei Änderungen an index.html: CACHE hochzählen. */
-const CACHE = "postwerkstatt-v4";
+const CACHE = "postwerkstatt-v5";
 const CORE = [
   "./",
   "./index.html",
@@ -37,6 +37,10 @@ self.addEventListener("fetch", e => {
   // /api/* -- geht unberührt ans Netz: Anmeldestatus und KI-Antworten haben im
   // Cache nichts verloren. Fremde Herkunft (Schriften) wird weiter gecacht.
   if (url.origin === location.origin && !url.pathname.startsWith("/postwerkstatt/")) return;
+
+  // version.json meldet, welche Fassung online steht -- die darf nie aus dem
+  // Cache kommen, sonst sieht die App ewig ihren eigenen alten Stand.
+  if (url.pathname.endsWith("/version.json")) return;
 
   const isDoc = req.mode === "navigate" || url.pathname.endsWith("/") || url.pathname.endsWith("index.html");
 

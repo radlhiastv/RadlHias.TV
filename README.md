@@ -158,6 +158,20 @@ gewünschten Hashtags. Das wird einmal eingetragen und fließt danach in jeden
 Vorschlag ein. Das Thema eines Posts bestimmt allein die Caption – die Branche wirkt
 nur schwach mit, sonst schlägt bei jedem Post das komplette Leistungsangebot durch.
 
+**Version und Updates**
+
+Die laufende Version steht im Kopf der App neben dem Titel und im Reiter *Posts*
+unter „Sicherung". Beim Start sieht die App still in `postwerkstatt/version.json`
+nach, ob online eine neuere Fassung liegt; ist das so, erscheint oben ein oranger
+Balken, der auf Tippen neu lädt. Ein Tipp auf die Versionsnummer im Kopf oder auf
+„Nach Updates sehen" prüft von Hand.
+
+Bei jeder Änderung an der App sind deshalb drei Stellen anzupassen:
+`VERSION` in `postwerkstatt/index.html`, `version` (plus `datum` und `was`) in
+`postwerkstatt/version.json` und `CACHE` in `postwerkstatt/sw.js`. Laufen die
+ersten beiden auseinander, meldet die App dauerhaft ein Update oder verschweigt
+eines.
+
 **Aufs Handy holen**
 
 Seite in Safari bzw. Chrome öffnen → „Zum Home-Bildschirm“. Danach startet sie wie eine
