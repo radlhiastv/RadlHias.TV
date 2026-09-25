@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Postwerkstatt – Instagram-Editor</title>
+<meta name="description" content="Captions schreiben, zählen, Hooks finden, Hashtags verwalten – offline auf dem Handy.">
+<meta name="theme-color" content="#1c3448">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../RadlHias_Logo_500x500.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Postwerkstatt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;900&display=swap">
+<style>
+:root{
+  --cream:#f5f1eb;--cream2:#ede7dc;--cream3:#ddd6c8;
+  --navy:#1c3448;--navy2:#254560;--navy-dark:#0a1219;
+  --blue:#2d6e9e;--blue-lt:#a8c8dc;
+  --orange:#bc5412;--orange2:#e06820;
+  --text:#2a3a48;--text-dim:#616e79;--border:#ccc8c0;
+  --white:#fff;--green:#2a6a3a;--red:#a52a1a;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--cream);color:var(--text);
+  font-family:Barlow,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55;
+  display:flex;flex-direction:column;overscroll-behavior-y:none;
+}
+h1,h2,h3,.cond{font-family:'Barlow Condensed',Barlow,sans-serif;text-transform:uppercase;letter-spacing:.5px}
+button,input,textarea,select{font-family:inherit;font-size:16px;color:inherit}
+button{cursor:pointer;border:none;background:none}
+
+/* ---------- Kopf ---------- */
+header{
+  background:var(--navy);color:var(--cream);
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 8px;
+  display:flex;align-items:center;gap:10px;flex:0 0 auto;
+}
+header h1{font-size:22px;font-weight:900;line-height:1;color:var(--cream)}
+header .sub{font-size:11px;letter-spacing:3px;color:var(--blue-lt);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
+header .spacer{flex:1}
+.icon-btn{
+  width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);
+  color:var(--cream);font-size:18px;display:flex;align-items:center;justify-content:center;
+}
+.icon-btn:active{background:rgba(255,255,255,.22)}
+
+/* ---------- Zähler-Leiste ---------- */
+.stats{
+  background:var(--navy2);color:var(--cream);flex:0 0 auto;
+  display:flex;gap:2px;padding:0 6px 8px;overflow-x:auto;scrollbar-width:none;
+}
+.stats::-webkit-scrollbar{display:none}
+.stat{
+  flex:1 0 auto;min-width:60px;text-align:center;padding:4px 5px;border-radius:9px;
+  background:rgba(0,0,0,.18);
+}
+.stat b{display:block;font-size:16px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:9px;letter-spacing:.4px;text-transform:uppercase;color:var(--blue-lt)}
+.stat.warn b{color:#ffc46b}
+.stat.bad b{color:#ff8a70}
+.bar{height:4px;background:rgba(0,0,0,.25);flex:0 0 auto}
+.bar i{display:block;height:100%;width:0;background:var(--blue-lt);transition:width .15s}
+.bar i.warn{background:#ffc46b}
+.bar i.bad{background:#ff8a70}
+
+/* ---------- Inhalt ---------- */
+main{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 16px}
+.pane{display:none}
+.pane.on{display:block}
+.card{
+  background:var(--white);border:1px solid var(--border);border-radius:14px;
+  padding:12px;margin-bottom:12px;box-shadow:0 2px 10px rgba(28,52,72,.06);
+}
+.card>h2{font-size:15px;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card>h2 .hint{font-family:Barlow,sans-serif;text-transform:none;letter-spacing:0;font-size:12px;color:var(--text-dim);font-weight:400;margin-left:auto}
+
+textarea,input[type=text],select{
+  width:100%;background:var(--cream);border:1px solid var(--border);border-radius:10px;
+  padding:10px;line-height:1.6;
+}
+textarea{resize:vertical;min-height:120px;font-size:16px}
+#caption{min-height:210px}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px;background:var(--white)}
+
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  border-radius:10px;padding:9px 13px;font-weight:600;font-size:14px;
+  background:var(--navy);color:var(--cream);display:inline-flex;align-items:center;gap:6px;
+}
+.btn:active{background:var(--navy2)}
+.btn.o{background:var(--orange)}
+.btn.o:active{background:var(--orange2)}
+.btn.ghost{background:var(--cream2);color:var(--navy);border:1px solid var(--border)}
+.btn.ghost:active{background:var(--cream3)}
+.btn.wide{flex:1;justify-content:center}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn[disabled]{opacity:.45}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  background:var(--cream2);border:1px solid var(--border);border-radius:999px;
+  padding:6px 11px;font-size:13px;color:var(--navy);font-weight:500;
+}
+.chip:active{background:var(--cream3)}
+.chip.on{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.emoji-bar{display:flex;gap:4px;overflow-x:auto;margin-bottom:8px;padding-bottom:2px;scrollbar-width:none}
+.emoji-bar::-webkit-scrollbar{display:none}
+.emoji-bar button{font-size:19px;padding:2px 5px;border-radius:8px;background:var(--cream2);flex:0 0 auto}
+
+label.field{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin:10px 0 4px;font-weight:600}
+label.field:first-child{margin-top:0}
+.split{display:flex;gap:8px}
+.split>*{flex:1;min-width:0}
+
+/* ---------- Hooks ---------- */
+.hook{
+  border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;
+  background:var(--cream);position:relative;
+}
+.hook .cat{
+  font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--white);
+  background:var(--blue);border-radius:999px;padding:2px 8px;display:inline-block;margin-bottom:5px;font-weight:600;
+}
+.hook .cat.f{background:var(--orange)}
+.hook .cat.p{background:var(--green)}
+.hook p{font-size:16px;font-weight:600;color:var(--navy);line-height:1.35}
+.hook .meta{font-size:11px;color:var(--text-dim);margin-top:4px}
+.hook .acts{display:flex;gap:6px;margin-top:8px}
+.hook.used{border-color:var(--orange);background:#fdf3ec}
+
+/* ---------- Vorschau ---------- */
+.ig{
+  background:var(--white);border:1px solid var(--cream3);border-radius:12px;overflow:hidden;
+  font-size:14px;max-width:420px;margin:0 auto;
+}
+.ig .top{display:flex;align-items:center;gap:8px;padding:9px 10px;border-bottom:1px solid var(--cream2)}
+.ig .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--orange2),var(--navy))}
+.ig .top b{font-size:13px}
+.ig .media{height:130px;background:repeating-linear-gradient(45deg,var(--cream2),var(--cream2) 12px,var(--cream) 12px,var(--cream) 24px);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:12px}
+.ig .body{padding:10px}
+.ig .body .txt{white-space:pre-wrap;word-break:break-word}
+.ig .more{color:var(--text-dim)}
+.ig .cut{color:var(--text-dim)}
+.ig .tags{color:var(--blue);word-break:break-word;margin-top:6px}
+
+/* ---------- Check ---------- */
+.check{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--cream2);font-size:14px}
+.check:last-child{border-bottom:none}
+.check .dot{flex:0 0 auto;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;margin-top:2px}
+.dot.ok{background:var(--green)}.dot.no{background:var(--red)}.dot.mid{background:#c98a1e}
+.check .t b{display:block;font-weight:600}
+.check .t span{color:var(--text-dim);font-size:13px}
+.score{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.score b{font-size:34px;font-family:'Barlow Condensed',sans-serif;color:var(--navy);line-height:1}
+.todo{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--cream2);font-size:14px}
+.todo:last-child{border-bottom:none}
+.todo input{width:21px;height:21px;accent-color:var(--orange);flex:0 0 auto}
+.todo.done span{text-decoration:line-through;color:var(--text-dim)}
+
+/* ---------- Posts ---------- */
+.post-item{
+  display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--border);
+  border-radius:12px;margin-bottom:8px;background:var(--cream);
+}
+.post-item.cur{border-color:var(--orange);background:#fdf3ec}
+.post-item .pi{flex:1;min-width:0}
+.post-item .pi b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-item .pi span{font-size:12px;color:var(--text-dim)}
+.badge{font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--cream3);color:var(--navy);font-weight:600}
+.badge.idee{background:var(--cream3)}
+.badge.entwurf{background:var(--blue-lt)}
+.badge.fertig{background:#cfe3cf;color:var(--green)}
+.badge.gepostet{background:var(--navy);color:var(--cream)}
+
+/* ---------- Tab-Leiste ---------- */
+nav.tabs{
+  flex:0 0 auto;display:flex;background:var(--navy-dark);
+  padding-bottom:var(--safe-b);border-top:1px solid rgba(255,255,255,.08);
+}
+nav.tabs button{
+  flex:1;padding:8px 2px 7px;color:#7e94a6;font-size:10px;letter-spacing:.6px;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600;
+}
+nav.tabs button i{font-style:normal;font-size:19px;line-height:1}
+nav.tabs button.on{color:var(--cream)}
+nav.tabs button.on i{filter:drop-shadow(0 0 6px rgba(224,104,32,.8))}
+
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:calc(74px + var(--safe-b));
+  background:var(--navy);color:var(--cream);padding:9px 16px;border-radius:999px;font-size:14px;
+  opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.toast.on{opacity:1}
+.muted{color:var(--text-dim);font-size:13px}
+.sep{height:1px;background:var(--cream2);margin:10px 0}
+dialog{
+  border:none;border-radius:16px;padding:16px;max-width:92vw;width:380px;
+  background:var(--cream);color:var(--text);box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+dialog::backdrop{background:rgba(10,18,25,.55)}
+dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Postwerkstatt</h1>
+    <div class="sub">Instagram-Editor</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="icon-btn" id="btnNew" title="Neuer Post">＋</button>
+  <button class="icon-btn" id="btnCopyAll" title="Alles kopieren">⧉</button>
+</header>
+
+<div class="stats" id="stats">
+  <div class="stat" id="sChars"><b>0</b><span>Zeichen</span></div>
+  <div class="stat" id="sLeft"><b>2200</b><span>frei</span></div>
+  <div class="stat" id="sWords"><b>0</b><span>Wörter</span></div>
+  <div class="stat" id="sTags"><b>0</b><span>Hashtags</span></div>
+  <div class="stat" id="sCut"><b>0</b><span>vor „mehr“</span></div>
+  <div class="stat" id="sLines"><b>0</b><span>Absätze</span></div>
+</div>
+<div class="bar"><i id="barFill"></i></div>
+
+<main>
+
+  <!-- ===================== TEXT ===================== -->
+  <section class="pane on" id="pane-text">
+    <div class="card">
+      <h2>Caption <span class="hint" id="titleHint"></span></h2>
+      <input type="text" id="postTitle" placeholder="Arbeitstitel (nur für dich)" style="margin-bottom:8px">
+      <div class="emoji-bar" id="emojiBar"></div>
+      <textarea id="caption" placeholder="Schreib los. Erste Zeile = Hook – die entscheidet, ob jemand auf „mehr“ tippt."></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost sm" id="btnBreaks">Absatz-Fix</button>
+        <button class="btn ghost sm" id="btnTrim">Aufräumen</button>
+        <button class="btn ghost sm" id="btnUndo">Rückgängig</button>
+        <button class="btn o sm" id="btnCopyCap">Caption kopieren</button>
+      </div>
+      <p class="muted" style="margin-top:6px">Absatz-Fix setzt unsichtbare Zeichen in Leerzeilen, damit Instagram die Absätze nicht zusammenschiebt.</p>
+    </div>
+
+    <div class="card">
+      <h2>Bausteine</h2>
+      <label class="field">Gerüst laden (ersetzt nichts, hängt an)</label>
+      <div class="chips" id="templateChips"></div>
+      <div class="sep"></div>
+      <label class="field">Call-to-Action ans Ende</label>
+      <div class="chips" id="ctaChips"></div>
+    </div>
+  </section>
+
+  <!-- ===================== HOOKS ===================== -->
+  <section class="pane" id="pane-hooks">
+    <div class="card">
+      <h2>Hook-Generator</h2>
+      <p class="muted">Liest deine Caption, zieht Thema, Zahlen und Schlüsselwörter raus und baut daraus Vorschläge für die erste Zeile.</p>
+      <label class="field">Tonalität</label>
+      <select id="tone">
+        <option value="alle">Alle Stile mischen</option>
+        <option value="werkstatt">Werkstatt-Hias (persönlich, direkt)</option>
+        <option value="sachlich">Sachlich &amp; nützlich</option>
+        <option value="frech">Frech &amp; zugespitzt</option>
+        <option value="story">Story &amp; Emotion</option>
+      </select>
+      <div class="row" style="margin-top:10px">
+        <button class="btn o wide" id="btnHooks">Hooks generieren</button>
+        <button class="btn ghost" id="btnHooksMore">Neu würfeln</button>
+      </div>
+      <p class="muted" id="hookCtx" style="margin-top:8px"></p>
+      <p class="muted" style="margin-top:4px">Ein eingesetzter Hook wird beim nächsten Einsetzen ersetzt – solange du die erste Zeile nicht von Hand änderst.</p>
+    </div>
+    <div id="hookList"></div>
+  </section>
+
+  <!-- ===================== HASHTAGS ===================== -->
+  <section class="pane" id="pane-tags">
+    <div class="card">
+      <h2>Hashtags <span class="hint" id="tagHint">0 / 30</span></h2>
+      <textarea id="hashtags" placeholder="#radlhias #fahrradwerkstatt …" style="min-height:110px"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost sm" id="btnTagClean">Sortieren &amp; säubern</button>
+        <button class="btn o sm" id="btnCopyTags">Hashtags kopieren</button>
+      </div>
+      <label class="field">Platzierung</label>
+      <div class="chips">
+        <button class="chip" data-place="caption">In der Caption</button>
+        <button class="chip" data-place="comment">Im ersten Kommentar</button>
+      </div>
+      <p class="muted" style="margin-top:6px" id="placeHint"></p>
+    </div>
+    <div class="card">
+      <h2>Sets</h2>
+      <div class="chips" id="tagSets"></div>
+      <div class="sep"></div>
+      <div class="row">
+        <input type="text" id="newSetName" placeholder="Neues Set aus aktuellen Tags – Name">
+        <button class="btn ghost sm" id="btnSaveSet">Sichern</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHECK ===================== -->
+  <section class="pane" id="pane-check">
+    <div class="card">
+      <h2>Vorschau</h2>
+      <div class="ig">
+        <div class="top"><div class="av"></div><div><b>radlhias.tv</b><div style="font-size:11px;color:#616e79">Oberndorf bei Salzburg</div></div></div>
+        <div class="media">Bild / Reel</div>
+        <div class="body">
+          <div class="txt"><b>radlhias.tv</b> <span id="prevCut"></span><span class="more" id="prevMore"></span></div>
+          <div class="tags" id="prevTags"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn ghost sm wide" id="btnPrevFull">Ganze Caption zeigen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Qualitäts-Check</h2>
+      <div class="score"><b id="scoreNum">0/9</b><span class="muted" id="scoreTxt"></span></div>
+      <div id="checkList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Vorm Posten</h2>
+      <div id="todoList"></div>
+    </div>
+  </section>
+
+  <!-- ===================== POSTS ===================== -->
+  <section class="pane" id="pane-posts">
+    <div class="card">
+      <h2>Meine Posts <span class="hint" id="postCount"></span></h2>
+      <input type="text" id="postSearch" placeholder="Suchen …" style="margin-bottom:8px">
+      <div class="chips" style="margin-bottom:10px" id="statusFilter">
+        <button class="chip on" data-f="alle">Alle</button>
+        <button class="chip" data-f="idee">Idee</button>
+        <button class="chip" data-f="entwurf">Entwurf</button>
+        <button class="chip" data-f="fertig">Fertig</button>
+        <button class="chip" data-f="gepostet">Gepostet</button>
+      </div>
+      <div id="postList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Status des aktuellen Posts</h2>
+      <div class="chips" id="statusSet">
+        <button class="chip" data-s="idee">Idee</button>
+        <button class="chip" data-s="entwurf">Entwurf</button>
+        <button class="chip" data-s="fertig">Fertig</button>
+        <button class="chip" data-s="gepostet">Gepostet</button>
+      </div>
+      <div class="sep"></div>
+      <div class="row">
+        <button class="btn ghost sm" id="btnDupe">Duplizieren</button>
+        <button class="btn ghost sm" id="btnDelete">Löschen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Sicherung <span class="hint">Handywechsel</span></h2>
+      <p class="muted">Alles liegt nur in diesem Browser. Die Export-Datei enthält alle Posts, Sets und Einstellungen – damit holst du auf einem neuen Gerät alles zurück.</p>
+      <div class="row" style="margin-top:8px">
+        <button class="btn wide" id="btnExport">Export</button>
+        <button class="btn ghost wide" id="btnImport">Import</button>
+      </div>
+      <input type="file" id="fileImport" accept="application/json,.json" hidden>
+      <div class="sep"></div>
+      <p class="muted">Quelle &amp; Vollversion: <b>github.com/radlhiastv/RadlHias.TV</b> → <code>/postwerkstatt/</code> · erreichbar unter <b>radlhias.tv/postwerkstatt/</b></p>
+      <p class="muted" style="margin-top:6px" id="verLine"></p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="tabs">
+  <button class="on" data-tab="text"><i>✍️</i>Text</button>
+  <button data-tab="hooks"><i>⚡</i>Hooks</button>
+  <button data-tab="tags"><i>#️⃣</i>Tags</button>
+  <button data-tab="check"><i>✅</i>Check</button>
+  <button data-tab="posts"><i>📂</i>Posts</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<dialog id="dlg">
+  <h2 id="dlgTitle"></h2>
+  <div id="dlgBody" style="max-height:60vh;overflow:auto;white-space:pre-wrap"></div>
+  <div class="row" style="margin-top:12px"><button class="btn wide" id="dlgOk">Passt</button></div>
+</dialog>
+
+<script>
+"use strict";
+const VERSION = "1.0.0";
+const MAX_CHARS = 2200;      // Instagram-Limit für Captions
+const MAX_TAGS  = 30;        // Instagram-Limit für Hashtags pro Post
+const CUT       = 125;       // ab hier klappt Instagram im Feed auf "… mehr"
+const LS = "postwerkstatt.v1";
+
+/* ============================================================
+   Zustand
+   ============================================================ */
+const defaultTagSets = {
+  "Werkstatt": "#fahrradwerkstatt #radservice #bikeservice #schrauben #werkstattalltag",
+  "Rad & Technik": "#fahrrad #rennrad #mtb #gravelbike #fahrradtechnik #bikefitting",
+  "Region": "#salzburg #oberndorf #flachgau #salzburgerland #radfahrensalzburg",
+  "Kanal": "#radlhias #radlhiastv #yepp"
+};
+
+let db = {
+  posts: [],
+  current: null,
+  tagSets: Object.assign({}, defaultTagSets),
+  settings: { place: "caption", tone: "alle" },
+  v: 1
+};
+let undoStack = [];
+let hookSeed = 1;
+let filter = "alle";
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const chars = s => Array.from(s || "").length;   // zählt Emoji als ein Zeichen
+
+const TODOS = [
+  "Cover / erstes Bild final",
+  "Alt-Text hinterlegt",
+  "Ort markiert",
+  "Personen & Marken verlinkt",
+  "Musik / Ton geprüft",
+  "Untertitel lesbar (Handy-Test)",
+  "Hashtags gesetzt",
+  "Story-Teaser geplant"
+];
+
+function emptyPost(){
+  return {
+    id: uid(), title: "", caption: "", hashtags: "",
+    status: "idee", hook: "", todos: {},
+    created: Date.now(), updated: Date.now()
+  };
+}
+function cur(){
+  let p = db.posts.find(x => x.id === db.current);
+  if (!p) { p = emptyPost(); db.posts.unshift(p); db.current = p.id; }
+  return p;
+}
+
+/* ============================================================
+   Speichern / Laden
+   ============================================================ */
+function save(){
+  const p = cur();
+  p.title    = $("#postTitle").value;
+  p.caption  = $("#caption").value;
+  p.hashtags = $("#hashtags").value;
+  p.updated  = Date.now();
+  try { localStorage.setItem(LS, JSON.stringify(db)); }
+  catch(e){ toast("Speicher voll – bitte alte Posts löschen"); }
+}
+function load(){
+  try {
+    const raw = localStorage.getItem(LS);
+    if (raw) {
+      const d = JSON.parse(raw);
+      db = Object.assign(db, d);
+      db.tagSets = Object.assign({}, defaultTagSets, d.tagSets || {});
+      db.settings = Object.assign({ place:"caption", tone:"alle" }, d.settings || {});
+    }
+  } catch(e){ /* kaputter Speicher: mit leerem Stand weiterarbeiten */ }
+  if (!db.posts.length) { const p = emptyPost(); db.posts.push(p); db.current = p.id; }
+  if (!db.posts.find(x => x.id === db.current)) db.current = db.posts[0].id;
+}
+function loadIntoEditor(){
+  const p = cur();
+  $("#postTitle").value = p.title;
+  $("#caption").value   = p.caption;
+  $("#hashtags").value  = p.hashtags;
+  $("#tone").value      = db.settings.tone;
+  renderAll();
+}
+
+/* ============================================================
+   Zählen
+   ============================================================ */
+function tagList(str){
+  return (str.match(/#[\wÄÖÜäöüßÀ-ɏ][\wÄÖÜäöüßÀ-ɏ.]*/g) || [])
+         .map(t => t.replace(/\.+$/, ""));
+}
+function countWords(s){
+  return (s.trim().match(/[\p{L}\p{N}][\p{L}\p{N}'’\-]*/gu) || []).length;
+}
+function fullText(){
+  const cap = $("#caption").value;
+  const tags = $("#hashtags").value.trim();
+  if (db.settings.place === "caption" && tags) return cap.replace(/\s+$/,"") + "\n\n" + tags;
+  return cap;
+}
+function renderStats(){
+  const cap = $("#caption").value;
+  const total = chars(fullText());
+  const left  = MAX_CHARS - total;
+  const tags  = tagList($("#hashtags").value + " " + cap);
+  const firstLine = cap.split("\n")[0] || "";
+  const paras = cap.trim() ? cap.trim().split(/\n\s*\n/).length : 0;
+
+  set("#sChars", total, total > MAX_CHARS ? "bad" : total > MAX_CHARS*0.9 ? "warn" : "");
+  set("#sLeft",  left,  left < 0 ? "bad" : left < 200 ? "warn" : "");
+  set("#sWords", countWords(cap), "");
+  set("#sTags",  tags.length, tags.length > MAX_TAGS ? "bad" : tags.length > 15 ? "warn" : "");
+  set("#sCut",   Math.max(0, CUT - chars(firstLine)), chars(firstLine) > CUT ? "bad" : "");
+  set("#sLines", paras, "");
+
+  const pct = Math.min(100, total / MAX_CHARS * 100);
+  const f = $("#barFill");
+  f.style.width = pct + "%";
+  f.className = total > MAX_CHARS ? "bad" : total > MAX_CHARS*0.9 ? "warn" : "";
+  $("#tagHint").textContent = tagList($("#hashtags").value).length + " / " + MAX_TAGS;
+  $("#titleHint").textContent = cur().status.toUpperCase();
+}
+function set(sel, val, cls){
+  const el = $(sel);
+  el.querySelector("b").textContent = val;
+  el.className = "stat " + cls;
+}
+
+/* ============================================================
+   Hook-Generator
+   ============================================================ */
+const STOP = new Set(("der die das den dem des ein eine einen einem einer eines und oder aber doch denn "+
+"ich du er sie es wir ihr mir mich dir dich ihm ihn uns euch sich man "+
+"ist sind war waren bin bist sein hat habe haben hatte hatten wird werden wurde wurden kann können "+
+"muss müssen soll sollen will wollen darf dürfen mag mögen "+
+"nicht auch noch schon nur mehr sehr wie was wer wo wann warum wenn weil dass also dann als "+
+"auf aus bei mit nach seit von vor zu zur zum im in an am für über unter durch gegen ohne um "+
+"dieser diese dieses jeder jede jedes alle alles etwas nichts immer nie oft mal so da hier dort "+
+"gut gute guter gutes besser beste ganz gar eben halt schon mal echt total voll ja nein "+
+"heute gestern morgen dann jetzt gerade wieder zuerst danach "+
+// Einheiten & Mengenwörter taugen nie als Thema
+"euro euros cent prozent kilometer meter zentimeter millimeter gramm kilo kilogramm stunde "+
+"stunden minute minuten sekunde sekunden tag tage woche wochen monat monate jahr jahre "+
+"stück mal grad watt zoll bar liter "+
+"the and you your for with this that have").split(/\s+/));
+
+const FALLBACK_THEMA = ["dein Rad","dieses Thema","die Sache","den Job"];
+
+function analyse(text){
+  const t = (text || "").trim();
+  const tokens = Array.from(t.matchAll(/[\p{L}][\p{L}\p{N}\-]{2,}/gu));
+  const total = Math.max(1, tokens.length);
+
+  // Punktzahl statt reiner Häufigkeit: Komposita und früh genannte Wörter
+  // sind fast immer das eigentliche Thema ("Kettenverschleiß" schlägt "Euro").
+  const nounScore = new Map(), keyScore = new Map();
+  tokens.forEach((m, i) => {
+    const w = m[0], k = w.toLowerCase();
+    if (STOP.has(k) || k.length < 4) return;
+    const before = t.slice(0, m.index).replace(/["„»\s]+$/, "");
+    const satzAnfang = before === "" || /[.!?:]$/.test(before);
+    let s = 1 + Math.min(1.2, (w.length - 4) / 7);      // je länger, desto spezifischer
+    if (i / total < 0.35) s += 0.35;                    // früh genannt = Thema
+    keyScore.set(w, (keyScore.get(w) || 0) + s);
+    // deutsche Substantive: großgeschrieben, aber nicht bloß am Satzanfang
+    if (/^[A-ZÄÖÜ]/.test(w) && !satzAnfang) nounScore.set(w, (nounScore.get(w) || 0) + s + 0.4);
+  });
+  const rank = m => Array.from(m.entries())
+    .sort((a,b) => b[1] - a[1] || b[0].length - a[0].length)
+    .map(e => e[0]);
+
+  const nouns = rank(nounScore);
+  const keys  = rank(keyScore);
+  // Nur Zahlen MIT Bezug taugen für einen Hook: "4000 km" ja, "20" allein nein.
+  const DATIV = {kilometern:"Kilometer",metern:"Meter",jahren:"Jahre",tagen:"Tage",
+                 euros:"Euro",höhenmetern:"Höhenmeter",gängen:"Gänge",graden:"Grad"};
+  const EINHEIT = /^(€|%|km\/h|km|kg|bar|mm|cm|ml|Zoll|Watt|W|Euro|Prozent|Grad|Liter|Stück|Gramm|Kilo|Minuten|Sekunden|Stunden|Tage|Tagen|Wochen|Monate|Jahre|Jahren|Kilometer|Kilometern|Meter|Metern|Höhenmeter|Höhenmetern|Gänge|Gängen)$/i;
+  const zahlen = [];
+  Array.from(t.matchAll(/\b(\d{1,5}(?:[.,]\d+)?)\s?(%|€|[\p{L}]{1,16})?/gu)).forEach(m => {
+    const num = m[1];
+    let unit = (m[2] || "").trim();
+    if (num === "0" || !unit) return;
+    const ok = EINHEIT.test(unit) || /^[A-ZÄÖÜ]/.test(unit);   // Einheit oder Substantiv
+    if (!ok) return;
+    unit = DATIV[unit.toLowerCase()] || unit;
+    zahlen.push(num + " " + unit);
+  });
+  const thema = nouns[0] || keys[0] || null;
+  const thema2 = nouns[1] || keys[1] || null;
+
+  return {
+    thema, thema2,
+    themaSafe: thema || FALLBACK_THEMA[Math.floor(rnd()*FALLBACK_THEMA.length)],
+    zahl: zahlen[0] || null,
+    zahlen, nouns, keys,
+    frage: /\?/.test(t),
+    ich: /\b(ich|mir|mich|mein)\b/i.test(t),
+    du: /\b(du|dir|dich|dein)\b/i.test(t),
+    laenge: chars(t)
+  };
+}
+
+// deterministischer Zufall, damit "Neu würfeln" reproduzierbar variiert
+function rnd(){
+  hookSeed = (hookSeed * 1103515245 + 12345) & 0x7fffffff;
+  return hookSeed / 0x7fffffff;
+}
+
+// t = Text-Funktion, need = benötigte Slots, tone = Stil
+const HOOKS = [
+  // --- Neugier -------------------------------------------------
+  {c:"Neugier", s:"sachlich", n:["thema"], t:a=>`Über ${a.thema} habe ich jahrelang das Falsche geglaubt.`},
+  {c:"Neugier", s:"sachlich", n:["thema"], t:a=>`${a.thema}: Genau hier scheitern die meisten.`},
+  {c:"Neugier", s:"frech",    n:["thema"], t:a=>`Über ${a.thema} redet keiner. Ich schon.`},
+  {c:"Neugier", s:"werkstatt",n:["thema"], t:a=>`Wenn du ${a.thema} bisher ignoriert hast – lies weiter.`},
+  {c:"Neugier", s:"sachlich", n:[],        t:a=>`Der kleine Handgriff, der alles ändert.`},
+  {c:"Neugier", s:"story",    n:["thema"], t:a=>`Ich hätte nicht gedacht, dass ${a.thema} so einen Unterschied macht.`},
+
+  // --- Fehler / Warnung ---------------------------------------
+  {c:"Fehler", s:"sachlich", n:["thema"], t:a=>`Die drei häufigsten Fehler bei ${a.thema}.`},
+  {c:"Fehler", s:"werkstatt",n:["thema"], t:a=>`Bitte mach das nicht mit ${a.thema}. Ich sag dir warum.`},
+  {c:"Fehler", s:"frech",    n:["thema"], t:a=>`Falsch gemacht bei ${a.thema} – und du zahlst zweimal.`},
+  {c:"Fehler", s:"werkstatt",n:["thema"], t:a=>`Das sehe ich jede Woche in der Werkstatt: ${a.thema}.`},
+  {c:"Fehler", s:"sachlich", n:["thema"], t:a=>`Wenn ${a.thema} nicht passt, hilft auch das teuerste Teil nichts.`},
+
+  // --- Zahl / Liste -------------------------------------------
+  {c:"Zahl", s:"sachlich", n:["zahl","thema"], t:a=>`${a.zahl} – die Zahl, die bei ${a.thema} alles erklärt.`},
+  {c:"Zahl", s:"sachlich", n:["zahl"],         t:a=>`${a.zahl}. Mehr braucht es nicht.`},
+  {c:"Zahl", s:"frech",    n:["zahl","thema"], t:a=>`${a.zahl} bei ${a.thema} – und alle schauen weg.`},
+  {c:"Zahl", s:"sachlich", n:["thema"],        t:a=>`3 Dinge, die bei ${a.thema} wirklich zählen.`},
+  {c:"Zahl", s:"sachlich", n:["thema"],        t:a=>`${a.thema} in 30 Sekunden erklärt.`},
+
+  // --- Meinung / Kontra ---------------------------------------
+  {c:"Meinung", s:"frech",   n:["thema"], t:a=>`Unpopuläre Meinung: ${a.thema} wird völlig überschätzt.`},
+  {c:"Meinung", s:"frech",   n:["thema"], t:a=>`Alle machen es bei ${a.thema} gleich. Ich nicht.`},
+  {c:"Meinung", s:"werkstatt",n:["thema"],t:a=>`27 Jahre Schrauben sagen mir etwas anderes über ${a.thema}.`},
+  {c:"Meinung", s:"frech",   n:["thema"], t:a=>`Vergiss, was du über ${a.thema} gelesen hast.`},
+  {c:"Meinung", s:"sachlich",n:["thema"], t:a=>`${a.thema} ist kein Hexenwerk – aber auch kein Zufall.`},
+
+  // --- Persönlich / Story -------------------------------------
+  {c:"Story", s:"werkstatt", n:["thema"], t:a=>`Heute in der Werkstatt: ${a.thema}.`},
+  {c:"Story", s:"story",     n:["thema"], t:a=>`Kurze Geschichte, wie mich ${a.thema} fast den Tag gekostet hat.`},
+  {c:"Story", s:"story",     n:["thema"], t:a=>`Ein Kunde, ein Problem, ${a.thema}. So ist es ausgegangen.`},
+  {c:"Story", s:"werkstatt", n:[],        t:a=>`Das war heute der Moment, an dem ich kurz stehen geblieben bin.`},
+  {c:"Story", s:"story",     n:["thema"], t:a=>`Ich dachte, ich kenne ${a.thema}. Dann kam das hier.`},
+
+  // --- Frage --------------------------------------------------
+  {c:"Frage", s:"sachlich", n:["thema"],         t:a=>`Wann hast du ${a.thema} zuletzt wirklich geprüft?`},
+  {c:"Frage", s:"frech",    n:["thema"],         t:a=>`Ehrliche Frage: Wie hältst du es mit ${a.thema}?`},
+  {c:"Frage", s:"sachlich", n:["thema","thema2"],t:a=>`${a.thema} oder ${a.thema2} – was ist dir wichtiger?`},
+  {c:"Frage", s:"werkstatt",n:["thema"],         t:a=>`Hand aufs Herz: Machst du das bei ${a.thema} auch so?`},
+
+  // --- Nutzen / How-to ----------------------------------------
+  {c:"Nutzen", s:"sachlich", n:["thema"], t:a=>`So geht ${a.thema} richtig – ohne Fachchinesisch.`},
+  {c:"Nutzen", s:"sachlich", n:["thema"], t:a=>`${a.thema} selber machen: Das brauchst du wirklich dafür.`},
+  {c:"Nutzen", s:"werkstatt",n:["thema"], t:a=>`Spar dir den Werkstattbesuch – ${a.thema} kriegst du selbst hin.`},
+  {c:"Nutzen", s:"sachlich", n:["thema"], t:a=>`Merk dir das für das nächste Mal, wenn ${a.thema} ansteht.`},
+  {c:"Nutzen", s:"sachlich", n:["thema"], t:a=>`Speicher dir das: ${a.thema}, kurz und verständlich.`},
+
+  // --- Vorher / Nachher ---------------------------------------
+  {c:"Wandel", s:"sachlich", n:["thema"], t:a=>`Vorher: Ärger mit ${a.thema}. Nachher: läuft.`},
+  {c:"Wandel", s:"story",    n:["thema"], t:a=>`Aus „geht schon noch“ wurde bei ${a.thema} ganz schnell „geht gar nicht mehr“.`},
+  {c:"Wandel", s:"werkstatt",n:["thema"], t:a=>`So sah ${a.thema} vorher aus. Und so danach.`},
+
+  // --- Direkt / Stopp -----------------------------------------
+  {c:"Stopp", s:"frech",    n:["thema"], t:a=>`Stopp. Bevor du bei ${a.thema} weitermachst.`},
+  {c:"Stopp", s:"frech",    n:[],        t:a=>`Kurz stehen bleiben. Das dauert 20 Sekunden.`},
+  {c:"Stopp", s:"werkstatt",n:["thema"], t:a=>`Wenn dein Rad das bei ${a.thema} macht: sofort aufhören.`},
+  {c:"Stopp", s:"sachlich", n:["thema"], t:a=>`Reality-Check zu ${a.thema}.`}
+];
+
+function generateHooks(n){
+  const a = analyse($("#caption").value);
+  const tone = db.settings.tone;
+  const pool = HOOKS.filter(h => tone === "alle" || h.s === tone);
+
+  const scored = [];
+  pool.forEach((h, i) => {
+    let score = 1;
+    let ok = true;
+    h.n.forEach(slot => { if (!a[slot]) ok = false; });
+    if (!ok && h.n.includes("thema") && !h.n.includes("thema2") && !h.n.includes("zahl")) {
+      // Thema fehlt: mit Platzhalter füllen, aber abwerten
+      score -= 0.5; ok = true;
+    }
+    if (!ok) return;
+    if (h.n.includes("zahl") && a.zahl) score += 0.6;
+    if (h.n.includes("thema") && a.thema) score += 0.5;
+    if (h.c === "Frage" && a.frage) score += 0.2;
+    if (h.c === "Story" && a.ich) score += 0.3;
+    if (h.c === "Nutzen" && a.du) score += 0.3;
+    score += rnd() * 0.9;
+
+    const ctx = Object.assign({}, a, { thema: a.thema || a.themaSafe, thema2: a.thema2 || "der Rest" });
+    let text;
+    try { text = h.t(ctx); } catch(e){ return; }
+    // Thema doppelt im Satz ("1400 Höhenmeter bei Höhenmeter") liest sich holprig
+    if (ctx.thema && text.toLowerCase().split(ctx.thema.toLowerCase()).length > 2) return;
+    scored.push({ cat: h.c, style: h.s, text, score });
+  });
+
+  const seen = new Set();
+  return scored
+    .sort((x,y) => y.score - x.score)
+    .filter(h => { const k = h.text.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+    .slice(0, n || 8);
+}
+
+function renderHooks(){
+  const a = analyse($("#caption").value);
+  if (!$("#caption").value.trim()) {
+    $("#hookCtx").textContent = "Noch kein Text – schreib zuerst ein paar Sätze, dann werden die Hooks konkret.";
+  } else {
+    $("#hookCtx").textContent =
+      "Erkannt: Thema „" + (a.thema || "–") + "“" +
+      (a.thema2 ? ", Nebenthema „" + a.thema2 + "“" : "") +
+      (a.zahl ? ", Zahl „" + a.zahl + "“" : "");
+  }
+  const list = generateHooks(8);
+  const catClass = c => ({Fehler:"f",Stopp:"f",Meinung:"f",Story:"p",Nutzen:"p"})[c] || "";
+  $("#hookList").innerHTML = list.map((h,i) => `
+    <div class="hook${cur().hook && cur().hook === h.text ? " used" : ""}">
+      <span class="cat ${catClass(h.cat)}">${h.cat}</span>
+      <p>${esc(h.text)}</p>
+      <div class="meta">${chars(h.text)} Zeichen${chars(h.text) > CUT ? " · zu lang für die Vorschau" : ""}</div>
+      <div class="acts">
+        <button class="btn o sm" data-hook="${i}">Einsetzen</button>
+        <button class="btn ghost sm" data-hookcopy="${i}">Kopieren</button>
+      </div>
+    </div>`).join("") || `<div class="card muted">Keine Hooks für diesen Stil – anderen Stil wählen.</div>`;
+
+  $$("[data-hook]").forEach(b => b.onclick = () => insertHook(list[+b.dataset.hook].text));
+  $$("[data-hookcopy]").forEach(b => b.onclick = () => copy(list[+b.dataset.hookcopy].text, "Hook kopiert"));
+}
+
+function insertHook(text){
+  const ta = $("#caption");
+  pushUndo();
+  let c = ta.value;
+  const p = cur();
+  if (p.hook && c.startsWith(p.hook)) {
+    c = c.slice(p.hook.length).replace(/^\n+/, "");      // alten Hook ersetzen
+  }
+  ta.value = text + "\n\n" + c.replace(/^\s+/, "");
+  p.hook = text;
+  save(); renderAll();
+  toast("Hook eingesetzt");
+}
+
+/* ============================================================
+   Bausteine
+   ============================================================ */
+const TEMPLATES = {
+  "Story": "Kurz zum Mitnehmen:\n\n[Was ist passiert]\n\n[Was war das Problem]\n\n[Wie ist es ausgegangen]\n\n[Was du daraus mitnimmst]",
+  "How-to": "Schritt für Schritt:\n\n1. [Schritt]\n2. [Schritt]\n3. [Schritt]\n\nWorauf du achten musst: [Hinweis]",
+  "Liste": "3 Dinge, die wirklich zählen:\n\n1️⃣ [Punkt]\n2️⃣ [Punkt]\n3️⃣ [Punkt]\n\nMein Favorit: [Punkt]",
+  "Vorher/Nachher": "Vorher: [Zustand]\n\nGemacht: [Arbeit]\n\nNachher: [Ergebnis]\n\nAufwand: [Zeit/Kosten]",
+  "Meinung": "Unpopuläre Meinung: [These]\n\nWarum ich das sage: [Begründung]\n\nWas ich stattdessen mache: [Alternative]",
+  "Produkt": "[Was ist es]\n\nFür wen: [Zielgruppe]\n\nStärken: [Punkte]\n\nSchwächen: [ehrlich]\n\nMein Fazit: [Urteil]"
+};
+const CTAS = [
+  "Was sagst du dazu? Schreib's in die Kommentare.",
+  "Speicher dir das für den Tag, an dem du es brauchst.",
+  "Kennst du jemanden, der das lesen sollte? Schick's weiter.",
+  "Frag mich alles in den Kommentaren – ich antworte.",
+  "Mehr davon? Dann folg mir hier.",
+  "Termin in der Werkstatt? Link in der Bio.",
+  "Ganzes Video auf YouTube – Link in der Bio.",
+  "Dein Tipp dazu? Immer her damit."
+];
+
+/* ============================================================
+   Hashtags
+   ============================================================ */
+function cleanTags(){
+  const raw = $("#hashtags").value;
+  const tags = tagList(raw).map(t => t.toLowerCase());
+  const uniq = Array.from(new Set(tags)).sort();
+  pushUndo();
+  $("#hashtags").value = uniq.join(" ");
+  save(); renderAll();
+  toast(uniq.length + " Hashtags, Doppelte raus");
+}
+function renderTagSets(){
+  $("#tagSets").innerHTML = Object.keys(db.tagSets).map(k =>
+    `<button class="chip" data-set="${esc(k)}">${esc(k)}</button>`).join("") +
+    `<button class="chip" data-setdel="1" style="border-style:dashed">Set löschen …</button>`;
+  $$("[data-set]").forEach(b => b.onclick = () => {
+    pushUndo();
+    const add = db.tagSets[b.dataset.set];
+    const t = $("#hashtags");
+    t.value = (t.value.trim() + " " + add).trim();
+    save(); renderAll(); toast("Set „" + b.dataset.set + "“ ergänzt");
+  });
+  $("[data-setdel]").onclick = () => {
+    const names = Object.keys(db.tagSets);
+    const n = prompt("Welches Set löschen?\n\n" + names.join("\n"));
+    if (n && db.tagSets[n]) { delete db.tagSets[n]; save(); renderTagSets(); toast("Set gelöscht"); }
+  };
+}
+
+/* ============================================================
+   Check & Vorschau
+   ============================================================ */
+function renderPreview(){
+  const cap = $("#caption").value;
+  const arr = Array.from(cap);
+  const head = arr.slice(0, CUT).join("");
+  $("#prevCut").textContent = head;
+  $("#prevMore").textContent = arr.length > CUT ? " … mehr" : "";
+  const tags = $("#hashtags").value.trim();
+  $("#prevTags").textContent = db.settings.place === "caption" ? tags : (tags ? "(Hashtags im ersten Kommentar)" : "");
+}
+function renderChecks(){
+  const cap = $("#caption").value;
+  const first = (cap.split("\n")[0] || "").trim();
+  const total = chars(fullText());
+  const tags = tagList($("#hashtags").value);
+  const emojis = (cap.match(/\p{Extended_Pictographic}/gu) || []).length;
+  const sentences = cap.split(/[.!?]+\s/).filter(s => s.trim().length > 1);
+  const avgLen = sentences.length ? countWords(cap) / sentences.length : 0;
+  const hasCTA = /(kommentar|schreib|folg|speicher|teil|link in|abonnier|schick|frag mich|merk dir)/i.test(cap.slice(-320));
+  const paras = cap.trim() ? cap.trim().split(/\n\s*\n/).length : 0;
+  const hasURL = /(https?:\/\/|www\.)/i.test(cap);
+
+  const checks = [
+    ["Hook in der ersten Zeile", first.length > 0 && chars(first) <= CUT,
+      chars(first) > CUT ? "Erste Zeile ist " + chars(first) + " Zeichen – Instagram schneidet bei " + CUT + " ab." : "Erste Zeile: " + chars(first) + " Zeichen."],
+    ["Hook ist knackig", chars(first) >= 15 && chars(first) <= 90,
+      chars(first) < 15 ? "Sehr kurz – sag mehr." : chars(first) > 90 ? "Etwas lang, ginge kürzer." : "Gute Länge."],
+    ["Innerhalb des Limits", total <= MAX_CHARS, total + " von " + MAX_CHARS + " Zeichen."],
+    ["Absätze statt Textwand", paras >= 2, paras + " Absätze – Leerzeilen machen es lesbar."],
+    ["Sätze kurz genug", avgLen > 0 && avgLen <= 20, avgLen ? avgLen.toFixed(1) + " Wörter pro Satz im Schnitt." : "Noch kein Text."],
+    ["Call-to-Action am Schluss", hasCTA, hasCTA ? "Gefunden." : "Sag den Leuten, was sie tun sollen."],
+    ["Hashtag-Menge", tags.length >= 5 && tags.length <= 20,
+      tags.length === 0 ? "Noch keine." : tags.length > MAX_TAGS ? "Über dem Limit von " + MAX_TAGS + "." : tags.length + " Stück – 5 bis 20 sind ein guter Korridor."],
+    ["Emojis dosiert", emojis >= 1 && emojis <= 12, emojis + " Emojis im Text."],
+    ["Keine Links in der Caption", !hasURL, hasURL ? "Links sind in Captions nicht klickbar – lieber in die Bio." : "Passt."]
+  ];
+
+  const okCount = checks.filter(c => c[1]).length;
+  $("#scoreNum").textContent = okCount + "/" + checks.length;
+  $("#scoreTxt").textContent = okCount >= 8 ? "Bereit zum Posten." : okCount >= 5 ? "Fast – ein paar Punkte offen." : "Da geht noch was.";
+  $("#checkList").innerHTML = checks.map(c => `
+    <div class="check">
+      <div class="dot ${c[1] ? "ok" : "no"}">${c[1] ? "✓" : "!"}</div>
+      <div class="t"><b>${esc(c[0])}</b><span>${esc(c[2])}</span></div>
+    </div>`).join("");
+}
+function renderTodos(){
+  const p = cur();
+  $("#todoList").innerHTML = TODOS.map((t,i) => `
+    <label class="todo${p.todos[i] ? " done" : ""}">
+      <input type="checkbox" data-todo="${i}"${p.todos[i] ? " checked" : ""}>
+      <span>${esc(t)}</span>
+    </label>`).join("");
+  $$("[data-todo]").forEach(cb => cb.onchange = () => {
+    p.todos[cb.dataset.todo] = cb.checked; save(); renderTodos();
+  });
+}
+
+/* ============================================================
+   Posts-Liste
+   ============================================================ */
+function renderPosts(){
+  const q = $("#postSearch").value.toLowerCase();
+  const list = db.posts
+    .filter(p => filter === "alle" || p.status === filter)
+    .filter(p => !q || (p.title + " " + p.caption + " " + p.hashtags).toLowerCase().includes(q))
+    .sort((a,b) => b.updated - a.updated);
+  $("#postCount").textContent = db.posts.length + " gespeichert";
+  $("#postList").innerHTML = list.map(p => {
+    const t = p.title || (p.caption.split("\n")[0] || "").slice(0, 44) || "Ohne Titel";
+    const d = new Date(p.updated).toLocaleDateString("de-AT", {day:"2-digit",month:"2-digit",year:"2-digit"});
+    return `<div class="post-item${p.id === db.current ? " cur" : ""}" data-open="${p.id}">
+      <div class="pi"><b>${esc(t)}</b><span>${d} · ${chars(p.caption)} Zeichen</span></div>
+      <span class="badge ${p.status}">${p.status}</span>
+    </div>`;
+  }).join("") || `<p class="muted">Nichts gefunden.</p>`;
+  $$("[data-open]").forEach(el => el.onclick = () => {
+    save(); db.current = el.dataset.open; save(); loadIntoEditor(); tab("text"); toast("Post geladen");
+  });
+  $$("#statusSet .chip").forEach(c => c.classList.toggle("on", c.dataset.s === cur().status));
+}
+
+/* ============================================================
+   Helfer
+   ============================================================ */
+function esc(s){ return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("on");
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("on"), 1800);
+}
+async function copy(text, msg){
+  if (!text.trim()) { toast("Nichts zu kopieren"); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(msg || "Kopiert");
+  } catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast(msg || "Kopiert"); }
+    catch(e2){ showDlg("Zum Kopieren markieren", text); }
+    ta.remove();
+  }
+}
+function showDlg(title, body){ $("#dlgTitle").textContent = title; $("#dlgBody").textContent = body; $("#dlg").showModal(); }
+function pushUndo(){
+  undoStack.push({ caption: $("#caption").value, hashtags: $("#hashtags").value });
+  if (undoStack.length > 30) undoStack.shift();
+}
+function tab(name){
+  $$(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + name));
+  $$("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
+  if (name === "hooks") renderHooks();
+  if (name === "posts") renderPosts();
+  window.scrollTo(0,0);
+  document.querySelector("main").scrollTop = 0;
+}
+function renderAll(){
+  renderStats(); renderPreview(); renderChecks(); renderTodos(); renderTagSets(); renderPosts();
+  $$("[data-place]").forEach(b => b.classList.toggle("on", b.dataset.place === db.settings.place));
+  $("#placeHint").textContent = db.settings.place === "caption"
+    ? "Hashtags zählen in die 2200 Zeichen der Caption."
+    : "Hashtags werden separat kopiert – als erster Kommentar unter dem Post.";
+}
+
+/* ============================================================
+   Aktionen
+   ============================================================ */
+function fixBreaks(){
+  pushUndo();
+  const t = $("#caption");
+  // unsichtbares Zeichen in leere Zeilen, damit Instagram Absätze behält
+  t.value = t.value.split("\n").map(l => l.trim() === "" ? "⁣" : l).join("\n");
+  save(); renderAll(); toast("Absätze gesichert");
+}
+function trimText(){
+  pushUndo();
+  const t = $("#caption");
+  t.value = t.value
+    .replace(/[ \t]+$/gm, "")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/⁣/g, "")
+    .trim();
+  save(); renderAll(); toast("Aufgeräumt");
+}
+function exportAll(){
+  save();
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "postwerkstatt-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast("Export erstellt");
+}
+function importAll(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (!d || !Array.isArray(d.posts)) throw new Error("Format");
+      const have = new Set(db.posts.map(p => p.id));
+      const neu = d.posts.filter(p => !have.has(p.id));
+      db.posts = db.posts.concat(neu);
+      db.tagSets = Object.assign({}, db.tagSets, d.tagSets || {});
+      save(); loadIntoEditor(); renderPosts();
+      toast(neu.length + " Posts dazugeholt");
+    } catch(e){ toast("Datei passt nicht"); }
+  };
+  r.readAsText(file);
+}
+
+/* ============================================================
+   Start
+   ============================================================ */
+load();
+loadIntoEditor();
+$("#verLine").textContent = "Postwerkstatt v" + VERSION;
+
+// Emoji-Leiste
+["🚲","🔧","⚙️","💡","🔥","✅","❗️","👉","🙌","😅","📍","🎥","⏱️","💪","🛠️","❤️"]
+  .forEach(e => {
+    const b = document.createElement("button");
+    b.textContent = e;
+    b.onclick = () => insertAtCursor($("#caption"), e);
+    $("#emojiBar").appendChild(b);
+  });
+function insertAtCursor(ta, text){
+  pushUndo();
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0, s) + text + ta.value.slice(e);
+  ta.selectionStart = ta.selectionEnd = s + text.length;
+  ta.focus(); save(); renderAll();
+}
+
+// Bausteine
+$("#templateChips").innerHTML = Object.keys(TEMPLATES).map(k => `<button class="chip" data-tpl="${esc(k)}">${esc(k)}</button>`).join("");
+$$("[data-tpl]").forEach(b => b.onclick = () => {
+  pushUndo();
+  const t = $("#caption");
+  t.value = (t.value.trim() ? t.value.trim() + "\n\n" : "") + TEMPLATES[b.dataset.tpl];
+  save(); renderAll(); toast("Gerüst angehängt");
+});
+$("#ctaChips").innerHTML = CTAS.map((c,i) => `<button class="chip" data-cta="${i}">${esc(c.slice(0,26))}…</button>`).join("");
+$$("[data-cta]").forEach(b => b.onclick = () => {
+  pushUndo();
+  const t = $("#caption");
+  t.value = t.value.replace(/\s+$/,"") + "\n\n" + CTAS[+b.dataset.cta];
+  save(); renderAll(); toast("CTA angehängt");
+});
+
+// Eingaben
+let saveTimer;
+["#caption","#hashtags","#postTitle"].forEach(sel => {
+  $(sel).addEventListener("input", () => {
+    renderStats(); renderPreview();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => { save(); renderChecks(); }, 350);
+  });
+});
+$("#tone").onchange = () => { db.settings.tone = $("#tone").value; save(); renderHooks(); };
+
+// Knöpfe
+$$("nav.tabs button").forEach(b => b.onclick = () => tab(b.dataset.tab));
+$("#btnHooks").onclick = () => { hookSeed = Date.now() & 0x7fffffff; renderHooks(); };
+$("#btnHooksMore").onclick = () => { hookSeed = (hookSeed + 7919) & 0x7fffffff; renderHooks(); };
+$("#btnBreaks").onclick = fixBreaks;
+$("#btnTrim").onclick = trimText;
+$("#btnUndo").onclick = () => {
+  const u = undoStack.pop();
+  if (!u) { toast("Nichts mehr rückgängig"); return; }
+  $("#caption").value = u.caption; $("#hashtags").value = u.hashtags;
+  save(); renderAll(); toast("Zurück");
+};
+$("#btnCopyCap").onclick = () => copy($("#caption").value, "Caption kopiert");
+$("#btnCopyTags").onclick = () => copy($("#hashtags").value, "Hashtags kopiert");
+$("#btnCopyAll").onclick = () => copy(fullText(), db.settings.place === "caption" ? "Caption + Tags kopiert" : "Caption kopiert");
+$("#btnTagClean").onclick = cleanTags;
+$("#btnSaveSet").onclick = () => {
+  const n = $("#newSetName").value.trim();
+  if (!n) { toast("Name fehlt"); return; }
+  db.tagSets[n] = tagList($("#hashtags").value).join(" ");
+  $("#newSetName").value = ""; save(); renderTagSets(); toast("Set „" + n + "“ gesichert");
+};
+$$("[data-place]").forEach(b => b.onclick = () => { db.settings.place = b.dataset.place; save(); renderAll(); });
+$("#btnPrevFull").onclick = () => showDlg("Ganze Caption", fullText());
+$("#btnNew").onclick = () => {
+  save();
+  const p = emptyPost(); db.posts.unshift(p); db.current = p.id;
+  save(); loadIntoEditor(); tab("text"); toast("Neuer Post");
+};
+$("#btnDupe").onclick = () => {
+  save();
+  const p = Object.assign({}, cur(), { id: uid(), created: Date.now(), updated: Date.now(), status: "entwurf" });
+  p.title = (p.title || "Kopie") + " (Kopie)";
+  db.posts.unshift(p); db.current = p.id;
+  save(); loadIntoEditor(); toast("Dupliziert");
+};
+$("#btnDelete").onclick = () => {
+  if (!confirm("Diesen Post wirklich löschen?")) return;
+  db.posts = db.posts.filter(p => p.id !== db.current);
+  if (!db.posts.length) db.posts.push(emptyPost());
+  db.current = db.posts[0].id;
+  save(); loadIntoEditor(); toast("Gelöscht");
+};
+$$("#statusSet .chip").forEach(c => c.onclick = () => { cur().status = c.dataset.s; save(); renderAll(); });
+$$("#statusFilter .chip").forEach(c => c.onclick = () => {
+  filter = c.dataset.f;
+  $$("#statusFilter .chip").forEach(x => x.classList.toggle("on", x === c));
+  renderPosts();
+});
+$("#postSearch").addEventListener("input", renderPosts);
+$("#btnExport").onclick = exportAll;
+$("#btnImport").onclick = () => $("#fileImport").click();
+$("#fileImport").onchange = e => { if (e.target.files[0]) importAll(e.target.files[0]); e.target.value = ""; };
+$("#dlgOk").onclick = () => $("#dlg").close();
+
+window.addEventListener("beforeunload", save);
+document.addEventListener("visibilitychange", () => { if (document.hidden) save(); });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
