@@ -883,6 +883,11 @@ async function kiHooks(){
       kiAngemeldet = false; kiUI(false, "bitte anmelden");
       toast("Bitte zuerst anmelden"); return;
     }
+    if (r.status === 404) {
+      // Der laufende Worker kennt /hooks noch nicht -- Einrichtung steht aus.
+      kiUI(kiAngemeldet, "Worker noch nicht aktualisiert");
+      toast("Der Worker kennt die Hooks noch nicht"); return;
+    }
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.hooks || !d.hooks.length) { toast(d.error || "Hat nicht geklappt"); return; }
     kiAngemeldet = true; kiUI(true, d.hooks.length + " Vorschläge");
