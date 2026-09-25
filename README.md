@@ -81,6 +81,16 @@ Da Bild-/CSS-/JS-Dateinamen sich bei Änderungen aktuell nicht automatisch ände
 Cache-Busting per Hash), sollte man nach dem Ersetzen einer Datei mit gleichem Namen in Cloudflare
 einmal **Purge Cache** auslösen, damit Besucher nicht bis zu ein Jahr lang eine alte Version sehen.
 
+## Worker deployen
+
+Der Cloudflare Worker (`worker/`) deployt sich selbst: Sobald eine Änderung unter
+`worker/` auf `main` landet, baut und veröffentlicht ihn die GitHub Action
+`.github/workflows/deploy-worker.yml`. Manuell auslösen geht im Reiter *Actions*
+→ *Worker deployen* → *Run workflow* – auch vom Handy. Die einmalige Einrichtung
+der beiden Repository-Secrets steht in [`worker/SETUP.md`](worker/SETUP.md),
+Abschnitt 11. Fehlen die Secrets noch, baut die Action den Worker trotzdem und
+überspringt nur das Hochladen – sie wird deswegen nicht rot.
+
 ## Werkstatt-Terminbuchung
 
 `termin.html` (Kunden-Buchungsseite, verlinkt von `bikeservice.html`) und `admin-termine.html`
@@ -127,6 +137,19 @@ ohne Server, ohne Konto und ohne Netz.
   (Hook-Länge, Absätze, Satzlänge, CTA, Hashtag-Menge, Emojis, Links …).
 - Posts-Verwaltung mit Status (Idee, Entwurf, Fertig, Gepostet), Suche und Checkliste
   vorm Posten.
+- „Post kopieren“ legt den fertigen Beitrag in die Zwischenablage: Hook, Text und
+  Hashtags in einem Stück. Stehen die Hashtags auf „erster Kommentar“, heißt der
+  Knopf „Caption kopieren“ und lässt sie weg – der Hinweis darunter sagt jeweils,
+  was drin ist.
+
+**KI-Hooks (optional)**
+
+Neben dem regelbasierten Generator kann der Editor Vorschläge von Claude holen.
+Das läuft über `POST /api/admin/hooks` im Cloudflare Worker (`worker/src/lib/hooks.js`),
+hinter dem Admin-Login – der Anthropic-Schlüssel liegt als Worker-Secret und nie
+im Browser. Einrichtung: [`worker/SETUP.md`](worker/SETUP.md), Abschnitt 12.
+Ohne Netz, ohne Anmeldung oder ohne hinterlegten Schlüssel bleibt der lokale
+Generator die Rückfallebene.
 
 **Themenprofil**
 
@@ -134,6 +157,20 @@ Im Reiter *Tags* unter „Themenprofil“ stehen Marke, Tätigkeit, Region und d
 gewünschten Hashtags. Das wird einmal eingetragen und fließt danach in jeden
 Vorschlag ein. Das Thema eines Posts bestimmt allein die Caption – die Branche wirkt
 nur schwach mit, sonst schlägt bei jedem Post das komplette Leistungsangebot durch.
+
+**Version und Updates**
+
+Die laufende Version steht im Kopf der App neben dem Titel und im Reiter *Posts*
+unter „Sicherung". Beim Start sieht die App still in `postwerkstatt/version.json`
+nach, ob online eine neuere Fassung liegt; ist das so, erscheint oben ein oranger
+Balken, der auf Tippen neu lädt. Ein Tipp auf die Versionsnummer im Kopf oder auf
+„Nach Updates sehen" prüft von Hand.
+
+Bei jeder Änderung an der App sind deshalb drei Stellen anzupassen:
+`VERSION` in `postwerkstatt/index.html`, `version` (plus `datum` und `was`) in
+`postwerkstatt/version.json` und `CACHE` in `postwerkstatt/sw.js`. Laufen die
+ersten beiden auseinander, meldet die App dauerhaft ein Update oder verschweigt
+eines.
 
 **Aufs Handy holen**
 

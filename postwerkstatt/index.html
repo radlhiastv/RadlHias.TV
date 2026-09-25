@@ -43,7 +43,8 @@ header{
   display:flex;align-items:center;gap:10px;flex:0 0 auto;
 }
 header h1{font-size:22px;font-weight:900;line-height:1;color:var(--cream)}
-header .sub{font-size:11px;letter-spacing:3px;color:var(--blue-lt);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
+header .sub{font-size:11px;letter-spacing:2px;color:var(--blue-lt);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;padding:0;text-align:left;display:block}
+header button.sub:active{color:var(--cream)}
 header .spacer{flex:1}
 .icon-btn{
   width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);
@@ -135,6 +136,7 @@ label.field:first-child{margin-top:0}
 }
 .hook .cat.f{background:var(--orange)}
 .hook .cat.p{background:var(--green)}
+.hook .cat.ki{background:var(--navy)}
 .hook p{font-size:16px;font-weight:600;color:var(--navy);line-height:1.35}
 .hook .meta{font-size:11px;color:var(--text-dim);margin-top:4px}
 .hook .acts{display:flex;gap:6px;margin-top:8px}
@@ -197,6 +199,12 @@ nav.tabs button i{font-style:normal;font-size:19px;line-height:1}
 nav.tabs button.on{color:var(--cream)}
 nav.tabs button.on i{filter:drop-shadow(0 0 6px rgba(224,104,32,.8))}
 
+#updBanner{
+  display:block;width:100%;background:var(--orange);color:#fff;padding:9px 14px;
+  font-size:14px;font-weight:600;text-align:left;line-height:1.35;flex:0 0 auto;
+}
+#updBanner:active{background:var(--orange2)}
+#updBanner span{display:block;font-weight:400;font-size:12px;opacity:.9;margin-top:2px}
 .toast{
   position:fixed;left:50%;transform:translateX(-50%);bottom:calc(74px + var(--safe-b));
   background:var(--navy);color:var(--cream);padding:9px 16px;border-radius:999px;font-size:14px;
@@ -218,11 +226,11 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
 <header>
   <div>
     <h1>Postwerkstatt</h1>
-    <div class="sub">Instagram-Editor</div>
+    <button class="sub" id="verTag" title="Nach einer neuen Version sehen">Instagram-Editor</button>
   </div>
   <div class="spacer"></div>
   <button class="icon-btn" id="btnNew" title="Neuer Post">＋</button>
-  <button class="icon-btn" id="btnCopyAll" title="Alles kopieren">⧉</button>
+  <button class="icon-btn" id="btnCopyAll" title="Ganzen Post kopieren">⧉</button>
 </header>
 
 <div class="stats" id="stats">
@@ -234,6 +242,7 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
   <div class="stat" id="sLines"><b>0</b><span>Absätze</span></div>
 </div>
 <div class="bar"><i id="barFill"></i></div>
+<button id="updBanner" style="display:none">Neue Version <b id="updVer"></b> ist da – zum Laden tippen<span id="updWas"></span></button>
 
 <main>
 
@@ -248,8 +257,9 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
         <button class="btn ghost sm" id="btnBreaks">Absatz-Fix</button>
         <button class="btn ghost sm" id="btnTrim">Aufräumen</button>
         <button class="btn ghost sm" id="btnUndo">Rückgängig</button>
-        <button class="btn o sm" id="btnCopyCap">Caption kopieren</button>
+        <button class="btn o sm" id="btnCopyCap">Post kopieren</button>
       </div>
+      <p class="muted" style="margin-top:6px" id="copyHint"></p>
       <p class="muted" style="margin-top:6px">Absatz-Fix setzt unsichtbare Zeichen in Leerzeilen, damit Instagram die Absätze nicht zusammenschiebt.</p>
     </div>
 
@@ -282,6 +292,24 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
       </div>
       <p class="muted" id="hookCtx" style="margin-top:8px"></p>
       <p class="muted" style="margin-top:4px">Ein eingesetzter Hook wird beim nächsten Einsetzen ersetzt – solange du die erste Zeile nicht von Hand änderst.</p>
+    </div>
+
+    <div class="card">
+      <h2>KI-Hooks <span class="hint" id="kiHint"></span></h2>
+      <p class="muted">Schickt die Caption an deinen Worker, der sie an Claude weitergibt. Braucht Netz und eine Anmeldung – und kostet rund 2 bis 3 Cent pro Abruf.</p>
+      <div id="kiLogin" style="display:none">
+        <label class="field">Benutzername</label>
+        <input type="text" id="kiUser" autocomplete="username">
+        <label class="field">Passwort</label>
+        <input type="password" id="kiPass" autocomplete="current-password">
+        <div class="row" style="margin-top:10px">
+          <button class="btn wide" id="btnKiLogin">Anmelden</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn o wide" id="btnKi">KI-Hooks holen</button>
+        <button class="btn ghost sm" id="btnKiLogout" style="display:none">Abmelden</button>
+      </div>
     </div>
     <div id="hookList"></div>
   </section>
@@ -415,6 +443,9 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
       <div class="sep"></div>
       <p class="muted">Quelle &amp; Vollversion: <b>github.com/radlhiastv/RadlHias.TV</b> → <code>/postwerkstatt/</code> · erreichbar unter <b>radlhias.tv/postwerkstatt/</b></p>
       <p class="muted" style="margin-top:6px" id="verLine"></p>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost sm" id="btnUpd">Nach Updates sehen</button>
+      </div>
     </div>
   </section>
 
@@ -438,7 +469,10 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
 
 <script>
 "use strict";
-const VERSION = "1.1.0";
+// ACHTUNG: Diese Nummer und die in version.json muessen zusammenpassen.
+// Beide bei jeder Aenderung hochzaehlen -- sonst meldet die App dauerhaft ein
+// Update oder verschweigt eines. Ebenso CACHE in sw.js.
+const VERSION = "1.4.0";
 const MAX_CHARS = 2200;      // Instagram-Limit für Captions
 const MAX_TAGS  = 5;         // mehr als 5 Hashtags nimmt Instagram nicht mehr an
 const TAG_HART  = 30;        // technische Obergrenze, nur als Notbremse
@@ -759,7 +793,7 @@ function generateHooks(n){
     .slice(0, n || 8);
 }
 
-function renderHooks(){
+function renderHooks(fertigeListe){
   const a = analyse($("#caption").value);
   if (!$("#caption").value.trim()) {
     $("#hookCtx").textContent = "Noch kein Text – schreib zuerst ein paar Sätze, dann werden die Hooks konkret.";
@@ -769,11 +803,11 @@ function renderHooks(){
       (a.thema2 ? ", Nebenthema „" + a.thema2 + "“" : "") +
       (a.zahl ? ", Zahl „" + a.zahl + "“" : "");
   }
-  const list = generateHooks(8);
+  const list = fertigeListe || generateHooks(8);
   const catClass = c => ({Fehler:"f",Stopp:"f",Meinung:"f",Story:"p",Nutzen:"p"})[c] || "";
   $("#hookList").innerHTML = list.map((h,i) => `
     <div class="hook${cur().hook && cur().hook === h.text ? " used" : ""}">
-      <span class="cat ${catClass(h.cat)}">${h.cat}</span>
+      <span class="cat ${h.ki ? "ki" : catClass(h.cat)}">${h.ki ? "KI · " : ""}${esc(h.cat)}</span>
       <p>${esc(h.text)}</p>
       <div class="meta">${chars(h.text)} Zeichen${chars(h.text) > CUT ? " · zu lang für die Vorschau" : ""}</div>
       <div class="acts">
@@ -798,6 +832,86 @@ function insertHook(text){
   p.hook = text;
   save(); renderAll();
   toast("Hook eingesetzt");
+}
+
+/* ============================================================
+   KI-Hooks über den eigenen Worker
+   Der Anthropic-Key liegt dort als Secret. Ohne Netz oder Anmeldung
+   bleibt der regelbasierte Generator oben die Rückfallebene.
+   ============================================================ */
+const API = "/api/admin";
+let kiAngemeldet = null;   // null = noch nicht geprüft
+
+async function kiStatus(){
+  if (!navigator.onLine) { kiUI(false, "Offline – die KI braucht Netz."); return false; }
+  try {
+    const r = await fetch(API + "/me", { credentials: "include" });
+    const d = await r.json();
+    kiAngemeldet = !!d.authenticated;
+  } catch(e){
+    kiAngemeldet = false;
+    kiUI(false, "Worker nicht erreichbar.");
+    return false;
+  }
+  kiUI(kiAngemeldet, kiAngemeldet ? "angemeldet" : "nicht angemeldet");
+  return kiAngemeldet;
+}
+
+function kiUI(an, hinweis){
+  $("#kiLogin").style.display = an ? "none" : "block";
+  $("#btnKiLogout").style.display = an ? "inline-flex" : "none";
+  $("#kiHint").textContent = hinweis || "";
+}
+
+async function kiLogin(){
+  const username = $("#kiUser").value.trim(), password = $("#kiPass").value;
+  if (!username || !password) { toast("Benutzername und Passwort fehlen"); return; }
+  try {
+    const r = await fetch(API + "/login", {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    if (!r.ok) { const d = await r.json().catch(() => ({})); toast(d.error || "Anmeldung fehlgeschlagen"); return; }
+    $("#kiPass").value = "";
+    kiAngemeldet = true; kiUI(true, "angemeldet");
+    toast("Angemeldet");
+  } catch(e){ toast("Worker nicht erreichbar"); }
+}
+
+async function kiHooks(){
+  const caption = $("#caption").value.trim();
+  if (caption.length < 30) { toast("Schreib zuerst ein paar Sätze"); return; }
+  if (!navigator.onLine) { toast("Offline – nimm die Vorschläge oben"); return; }
+  if (kiAngemeldet === null) await kiStatus();
+
+  const btn = $("#btnKi");
+  btn.disabled = true; btn.textContent = "Claude denkt nach …";
+  try {
+    const r = await fetch(API + "/hooks", {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ caption, ton: db.settings.tone })
+    });
+    if (r.status === 401) {
+      kiAngemeldet = false; kiUI(false, "bitte anmelden");
+      toast("Bitte zuerst anmelden"); return;
+    }
+    if (r.status === 404) {
+      // Der laufende Worker kennt /hooks noch nicht -- Einrichtung steht aus.
+      kiUI(kiAngemeldet, "Worker noch nicht aktualisiert");
+      toast("Der Worker kennt die Hooks noch nicht"); return;
+    }
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.hooks || !d.hooks.length) { toast(d.error || "Hat nicht geklappt"); return; }
+    kiAngemeldet = true; kiUI(true, d.hooks.length + " Vorschläge");
+    renderHooks(d.hooks.map(h => ({ cat: h.cat, text: h.text, ki: true })));
+    toast("KI-Hooks da");
+  } catch(e){
+    toast("Worker nicht erreichbar");
+  } finally {
+    btn.disabled = false; btn.textContent = "KI-Hooks holen";
+  }
 }
 
 /* ============================================================
@@ -1020,6 +1134,33 @@ function renderTagPicks(){
   });
 }
 
+// Was kopiert wird, haengt an der Platzierung der Hashtags. Damit beim
+// Einfuegen keine Ueberraschung entsteht, sagen Knopf und Hinweis es vorher.
+function copyPost(){
+  const tags = tagList($("#hashtags").value);
+  const imKommentar = db.settings.place === "comment";
+  copy(fullText(), imKommentar || !tags.length
+    ? "Caption kopiert"
+    : "Post kopiert – mit " + tags.length + " Hashtags");
+}
+
+function renderCopyHint(){
+  const tags = tagList($("#hashtags").value);
+  const imKommentar = db.settings.place === "comment";
+  const btn = $("#btnCopyCap");
+  if (imKommentar) {
+    btn.textContent = "Caption kopieren";
+    $("#copyHint").textContent = tags.length
+      ? "Hook und Text. Die " + tags.length + " Hashtags kopierst du im Reiter Tags separat für den ersten Kommentar."
+      : "Hook und Text. Hashtags sind auf „erster Kommentar“ gestellt.";
+  } else {
+    btn.textContent = "Post kopieren";
+    $("#copyHint").textContent = tags.length
+      ? "Hook, Text und " + tags.length + " Hashtags – fertig zum Einfügen bei Instagram."
+      : "Hook und Text. Noch keine Hashtags gewählt.";
+  }
+}
+
 function applyTags(){
   if (!tagPicks.length) { toast("Nichts gewählt"); return; }
   pushUndo();
@@ -1159,14 +1300,14 @@ function pushUndo(){
 function tab(name){
   $$(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + name));
   $$("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
-  if (name === "hooks") renderHooks();
+  if (name === "hooks") { renderHooks(); if (kiAngemeldet === null) kiStatus(); }
   if (name === "tags" && !tagPool.length) genTags(false);
   if (name === "posts") renderPosts();
   window.scrollTo(0,0);
   document.querySelector("main").scrollTop = 0;
 }
 function renderAll(){
-  renderStats(); renderPreview(); renderChecks(); renderTodos(); renderTagSets(); renderPosts();
+  renderStats(); renderPreview(); renderChecks(); renderTodos(); renderTagSets(); renderPosts(); renderCopyHint();
   $$("[data-place]").forEach(b => b.classList.toggle("on", b.dataset.place === db.settings.place));
   $("#placeHint").textContent = db.settings.place === "caption"
     ? "Hashtags zählen in die 2200 Zeichen der Caption."
@@ -1222,11 +1363,55 @@ function importAll(file){
 }
 
 /* ============================================================
+   Version und Updates
+   Die eingebaute VERSION steht gegen version.json auf dem Server.
+   Der Service Worker laesst diese Datei bewusst am Cache vorbei.
+   ============================================================ */
+async function pruefeVersion(manuell){
+  if (!navigator.onLine) {
+    if (manuell) toast("Offline – dafür brauchst du Netz");
+    return;
+  }
+  try {
+    const r = await fetch("version.json?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("status " + r.status);
+    const d = await r.json();
+    if (!d || !d.version) throw new Error("kein Inhalt");
+    if (d.version !== VERSION) {
+      $("#updVer").textContent = "v" + d.version;
+      $("#updWas").textContent = d.was ? d.was : "";
+      $("#updBanner").style.display = "block";
+      $("#verLine").textContent = "Postwerkstatt v" + VERSION + " – v" + d.version + " steht bereit";
+    } else {
+      $("#updBanner").style.display = "none";
+      $("#verLine").textContent = "Postwerkstatt v" + VERSION + " – aktuell" + (d.datum ? " (Stand " + d.datum + ")" : "");
+      if (manuell) toast("Du hast die neueste Version");
+    }
+  } catch(e){
+    if (manuell) toast("Konnte nicht nachsehen");
+  }
+}
+
+async function ladeNeueVersion(){
+  save();
+  try {
+    const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+    if (reg) await reg.update();
+  } catch(e){ /* dann eben ohne */ }
+  location.reload();
+}
+
+/* ============================================================
    Start
    ============================================================ */
 load();
 loadIntoEditor();
+$("#verTag").textContent = "Instagram-Editor · v" + VERSION;
 $("#verLine").textContent = "Postwerkstatt v" + VERSION;
+$("#verTag").onclick = () => pruefeVersion(true);
+$("#btnUpd").onclick = () => pruefeVersion(true);
+$("#updBanner").onclick = ladeNeueVersion;
+pruefeVersion(false);   // beim Start still nachsehen
 
 // Emoji-Leiste
 ["🚲","🔧","⚙️","💡","🔥","✅","❗️","👉","🙌","😅","📍","🎥","⏱️","💪","🛠️","❤️"]
@@ -1264,7 +1449,7 @@ $$("[data-cta]").forEach(b => b.onclick = () => {
 let saveTimer;
 ["#caption","#hashtags","#postTitle"].forEach(sel => {
   $(sel).addEventListener("input", () => {
-    renderStats(); renderPreview();
+    renderStats(); renderPreview(); renderCopyHint();
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => { save(); renderChecks(); }, 350);
   });
@@ -1275,6 +1460,12 @@ $("#tone").onchange = () => { db.settings.tone = $("#tone").value; save(); rende
 $$("nav.tabs button").forEach(b => b.onclick = () => tab(b.dataset.tab));
 $("#btnHooks").onclick = () => { hookSeed = Date.now() & 0x7fffffff; renderHooks(); };
 $("#btnHooksMore").onclick = () => { hookSeed = (hookSeed + 7919) & 0x7fffffff; renderHooks(); };
+$("#btnKi").onclick = kiHooks;
+$("#btnKiLogin").onclick = kiLogin;
+$("#btnKiLogout").onclick = async () => {
+  try { await fetch(API + "/logout", { method: "POST", credentials: "include" }); } catch(e){}
+  kiAngemeldet = false; kiUI(false, "abgemeldet"); toast("Abgemeldet");
+};
 $("#btnBreaks").onclick = fixBreaks;
 $("#btnTrim").onclick = trimText;
 $("#btnUndo").onclick = () => {
@@ -1283,9 +1474,9 @@ $("#btnUndo").onclick = () => {
   $("#caption").value = u.caption; $("#hashtags").value = u.hashtags;
   save(); renderAll(); toast("Zurück");
 };
-$("#btnCopyCap").onclick = () => copy($("#caption").value, "Caption kopiert");
+$("#btnCopyCap").onclick = copyPost;
 $("#btnCopyTags").onclick = () => copy($("#hashtags").value, "Hashtags kopiert");
-$("#btnCopyAll").onclick = () => copy(fullText(), db.settings.place === "caption" ? "Caption + Tags kopiert" : "Caption kopiert");
+$("#btnCopyAll").onclick = copyPost;
 $("#btnTagClean").onclick = cleanTags;
 $("#btnTagGen").onclick = () => { genTags(true); toast("20 Vorschläge, 5 vorgewählt"); };
 $("#btnTagGenMore").onclick = () => { const alt = tagPicks.slice(); genTags(true); tagPicks = alt.slice(0, MAX_TAGS); renderTagPicks(); };

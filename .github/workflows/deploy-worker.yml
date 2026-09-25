@@ -1,0 +1,72 @@
+
+# Deployt den Cloudflare Worker (Termine, Werkstatt, Blog, Postwerkstatt-Hooks)
+# automatisch, sobald sich unter worker/ etwas ändert und das auf main landet.
+# Damit braucht es keinen Rechner mit wrangler mehr -- ein Push vom Handy reicht.
+#
+# Einmalige Einrichtung (siehe worker/SETUP.md, Abschnitt "Deployment per
+# GitHub Action"): die beiden Repository-Secrets CLOUDFLARE_API_TOKEN und
+# CLOUDFLARE_ACCOUNT_ID hinterlegen.
+
+name: Worker deployen
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - ".github/workflows/deploy-worker.yml"
+  # Erlaubt das Deployen von Hand über den Actions-Reiter -- auch vom Handy aus.
+  workflow_dispatch:
+
+# Zwei gleichzeitige Deployments würden sich gegenseitig überholen.
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Bundle prüfen
+        # Baut den Worker, ohne ihn hochzuladen -- braucht keine Zugangsdaten.
+        # Schlägt der Schritt fehl, wird nichts deployed und die bestehende
+        # Version bleibt online.
+        run: npx wrangler deploy --dry-run
+
+      - name: Ist das Deployment eingerichtet?
+        id: check
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Der Worker wurde gebaut, aber nicht hochgeladen: CLOUDFLARE_API_TOKEN und/oder CLOUDFLARE_ACCOUNT_ID fehlen. Einrichtung siehe worker/SETUP.md, Abschnitt 11."
+          fi
+
+      - name: Deployen
+        # Solange die Secrets fehlen, wird übersprungen statt rot zu werden.
+        if: steps.check.outputs.ready == 'true'
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
