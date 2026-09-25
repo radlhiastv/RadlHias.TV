@@ -110,6 +110,11 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--blue);outline-of
 }
 .chip:active{background:var(--cream3)}
 .chip.on{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.tag-group{margin-bottom:11px}
+.tag-group .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:600;margin-bottom:5px;display:flex;gap:6px;align-items:center}
+.chip .sz{font-size:10px;opacity:.6;margin-right:5px;letter-spacing:-1px;vertical-align:1px}
+.chip.full{opacity:.55}
+.legende{font-size:11px;color:var(--text-dim);margin-top:2px}
 .emoji-bar{display:flex;gap:4px;overflow-x:auto;margin-bottom:8px;padding-bottom:2px;scrollbar-width:none}
 .emoji-bar::-webkit-scrollbar{display:none}
 .emoji-bar button{font-size:19px;padding:2px 5px;border-radius:8px;background:var(--cream2);flex:0 0 auto}
@@ -284,7 +289,39 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
   <!-- ===================== HASHTAGS ===================== -->
   <section class="pane" id="pane-tags">
     <div class="card">
-      <h2>Hashtags <span class="hint" id="tagHint">0 / 30</span></h2>
+      <h2>Vorschläge <span class="hint" id="pickHint">0 von 5 gewählt</span></h2>
+      <p class="muted">Aus deiner Caption und deinem Themenprofil. Tipp fünf Stück an – die Empfehlung ist schon vorgewählt.</p>
+      <div class="row" style="margin-top:10px">
+        <button class="btn o wide" id="btnTagGen">20 Hashtags vorschlagen</button>
+        <button class="btn ghost" id="btnTagGenMore">Neu mischen</button>
+      </div>
+      <div id="tagPicks" style="margin-top:12px"></div>
+      <div id="tagPickBar" style="display:none;margin-top:12px">
+        <div class="sep"></div>
+        <label class="field">Deine Auswahl</label>
+        <div class="chips" id="tagChosen"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn wide" id="btnTagApply">Übernehmen</button>
+          <button class="btn ghost" id="btnTagReset">Leeren</button>
+        </div>
+      </div>
+      <div class="sep"></div>
+      <button class="btn ghost sm" id="btnProfil">Themenprofil ▾</button>
+      <div id="profilBox" style="display:none">
+        <label class="field">Marke / Kanal</label>
+        <input type="text" id="pMarke" placeholder="RadlHias.TV">
+        <label class="field">Was du machst</label>
+        <input type="text" id="pBranche" placeholder="Fahrradwerkstatt, Bikefitting">
+        <label class="field">Region / Orte</label>
+        <input type="text" id="pRegion" placeholder="Innviertel, Oberösterreich">
+        <label class="field">Immer dabei</label>
+        <input type="text" id="pFix" placeholder="#radlhias">
+        <p class="muted" style="margin-top:6px">Wird gespeichert und bei jedem Post mitgedacht. „Immer dabei“ ist vorgewählt und belegt Plätze von deinen fünf – je weniger, desto mehr Platz fürs Thema.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Hashtags <span class="hint" id="tagHint">0 / 5</span></h2>
       <textarea id="hashtags" placeholder="#radlhias #fahrradwerkstatt …" style="min-height:110px"></textarea>
       <div class="row" style="margin-top:8px">
         <button class="btn ghost sm" id="btnTagClean">Sortieren &amp; säubern</button>
@@ -401,9 +438,10 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
 
 <script>
 "use strict";
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 const MAX_CHARS = 2200;      // Instagram-Limit für Captions
-const MAX_TAGS  = 30;        // Instagram-Limit für Hashtags pro Post
+const MAX_TAGS  = 5;         // mehr als 5 Hashtags nimmt Instagram nicht mehr an
+const TAG_HART  = 30;        // technische Obergrenze, nur als Notbremse
 const CUT       = 125;       // ab hier klappt Instagram im Feed auf "… mehr"
 const LS = "postwerkstatt.v1";
 
@@ -421,7 +459,9 @@ let db = {
   posts: [],
   current: null,
   tagSets: Object.assign({}, defaultTagSets),
-  settings: { place: "caption", tone: "alle" },
+  settings: { place: "caption", tone: "alle",
+    profil: { marke:"RadlHias.TV", branche:"Fahrradwerkstatt, Radservice, Bikefitting",
+              region:"Innviertel, Oberösterreich", fix:"#radlhias" } },
   v: 1
 };
 let undoStack = [];
@@ -477,6 +517,10 @@ function load(){
       db = Object.assign(db, d);
       db.tagSets = Object.assign({}, defaultTagSets, d.tagSets || {});
       db.settings = Object.assign({ place:"caption", tone:"alle" }, d.settings || {});
+      db.settings.profil = Object.assign(
+        { marke:"RadlHias.TV", branche:"Fahrradwerkstatt, Radservice, Bikefitting",
+          region:"Innviertel, Oberösterreich", fix:"#radlhias" },
+        db.settings.profil || {});
     }
   } catch(e){ /* kaputter Speicher: mit leerem Stand weiterarbeiten */ }
   if (!db.posts.length) { const p = emptyPost(); db.posts.push(p); db.current = p.id; }
@@ -518,7 +562,7 @@ function renderStats(){
   set("#sChars", total, total > MAX_CHARS ? "bad" : total > MAX_CHARS*0.9 ? "warn" : "");
   set("#sLeft",  left,  left < 0 ? "bad" : left < 200 ? "warn" : "");
   set("#sWords", countWords(cap), "");
-  set("#sTags",  tags.length, tags.length > MAX_TAGS ? "bad" : tags.length > 15 ? "warn" : "");
+  set("#sTags",  tags.length, tags.length > MAX_TAGS ? "bad" : tags.length === MAX_TAGS ? "" : "warn");
   set("#sCut",   Math.max(0, CUT - chars(firstLine)), chars(firstLine) > CUT ? "bad" : "");
   set("#sLines", paras, "");
 
@@ -790,6 +834,200 @@ function cleanTags(){
   save(); renderAll();
   toast(uniq.length + " Hashtags, Doppelte raus");
 }
+/* ============================================================
+   Hashtag-Vorschläge
+   Regelwerk statt Ratespiel: Themenfelder aus der Caption, Marke,
+   Region und ein paar breite Tags. Größe: ○ Nische, ◐ mittel, ● breit.
+   ============================================================ */
+const TAG_BASIS = [["#fahrrad",3],["#radfahren",3],["#cycling",3],["#bikelife",3],["#radlliebe",2]];
+
+const TAG_LEX = [
+  {re:/kette|antrieb|ritzel|kassette|schaltwerk|schaltung|kettenblatt|verschlei/i,
+   t:[["#fahrradkette",1],["#antrieb",1],["#schaltung",1],["#kettenpflege",1],["#fahrradtechnik",2]]},
+  {re:/brems|belag|beläge|bremsflüssigkeit|entlüft|quietsch/i,
+   t:[["#bremsen",1],["#scheibenbremse",1],["#bremsbeläge",1],["#sicherheitamrad",1],["#fahrradtechnik",2]]},
+  {re:/reifen|schlauch|tubeless|luftdruck|panne|felge|laufrad|speiche|zentrier|mantel/i,
+   t:[["#reifen",2],["#tubeless",1],["#laufradbau",1],["#pannenschutz",1],["#luftdruck",1]]},
+  {re:/service|wartung|reparatur|werkstatt|inspektion|schraub|montage|einstell|kunde/i,
+   t:[["#fahrradwerkstatt",2],["#radservice",1],["#fahrradservice",2],["#werkstattalltag",1],["#schrauberliebe",1]]},
+  {re:/e-?bike|akku|motor|bosch|pedelec|unterstütz|reichweite/i,
+   t:[["#ebike",3],["#pedelec",2],["#ebikelife",2],["#ebikeservice",1],["#akku",1]]},
+  {re:/mtb|mountainbike|trail|fully|hardtail|enduro|gelände|downhill/i,
+   t:[["#mountainbike",3],["#mtb",3],["#trailride",2],["#mtblife",2],["#hardtail",1]]},
+  {re:/rennrad|gravel|roadbike|asphalt|watt|tempo|schotter/i,
+   t:[["#rennrad",3],["#gravelbike",2],["#roadcycling",3],["#rennradliebe",2],["#gravelride",1]]},
+  {re:/bikefitting|sitzposition|sattel|lenker|knie|rücken|ergonom|vorbau|nacken/i,
+   t:[["#bikefitting",2],["#sitzposition",1],["#ergonomie",2],["#sattel",1],["#schmerzfreiradfahren",1]]},
+  {re:/gebraucht|kaufen|kauf|preis|wert|budget|kosten|teuer|sparen/i,
+   t:[["#gebrauchtrad",1],["#fahrradkauf",1],["#radkauf",1],["#preistipp",1],["#gebrauchtcheck",1]]},
+  {re:/werkzeug|selber|selbst|diy|drehmoment|zange|schlüssel|montageständer/i,
+   t:[["#selbermachen",2],["#fahrradwerkzeug",1],["#diybike",1],["#schraubertipp",1]]},
+  {re:/tour|ausfahrt|höhenmeter|berg|pass|runde|gefahren|unterwegs|strecke|kilometer/i,
+   t:[["#radtour",2],["#bikepacking",2],["#ausfahrt",1],["#radlausflug",1],["#unterwegsmitdemrad",1]]},
+  {re:/putzen|reinig|pflege|winter|salz|rost|einwintern|schmier|fetten|waschen/i,
+   t:[["#fahrradpflege",1],["#radpflege",1],["#winterfit",1],["#kettenpflege",1]]},
+  {re:/kind|kinderrad|nachwuchs|schulweg|familie/i,
+   t:[["#kinderrad",1],["#kinderfahrrad",1],["#radfahrenmitkindern",1]]},
+  {re:/video|reel|youtube|kanal|folge|abonn|clip|dreh/i,
+   t:[["#youtube",3],["#reels",3],["#fahrradvideo",1],["#youtubekanal",2]]},
+  {re:/tipp|trick|anleitung|erklär|schritt|zeig|wissen|merk/i,
+   t:[["#fahrradtipps",1],["#radtipp",1],["#anleitung",2],["#wissenswert",2]]}
+];
+
+const REGIO_LEX = {
+  "innviertel":       ["#innviertel","#braunau","#ried","#schärding","#oberösterreich"],
+  "oberösterreich":   ["#oberösterreich","#ooe","#upperaustria"],
+  "salzburg":         ["#salzburg","#salzburgerland","#flachgau"],
+  "flachgau":         ["#flachgau","#salzburgerland","#oberndorf"],
+  "österreich":       ["#österreich","#austria","#radfahreninösterreich"],
+  "bayern":           ["#bayern","#oberbayern"]
+};
+const SRC_LBL = { text:"Aus deinem Text", thema:"Zum Thema", lokal:"Lokal – wenig Konkurrenz",
+                  marke:"Marke", breit:"Breit – viel Konkurrenz" };
+const SRC_ORDER = ["text","thema","lokal","marke","breit"];
+const SZ = { 1:"•", 2:"••", 3:"•••" };
+// Wörter, die als Hashtag nichts bringen, und Dativformen, die zurückmüssen
+const TAG_STOP = new Set(("kunde kunden leute mensch menschen sache sachen ding dinge moment "+
+"woche wochen monat monate jahr jahre tag tage stunde stunden minute minuten grad prozent "+
+"euro stück mal problem frage antwort beispiel unterschied ende anfang teil teile arbeit "+
+"zimmertemperatur temperatur nummer stelle art weise punkt fall").split(/\s+/));
+const TAG_DATIV = { kilometern:"kilometer", metern:"meter", jahren:"jahre", tagen:"tage",
+                    höhenmetern:"höhenmeter", gängen:"gänge", beläge:"bremsbeläge", belägen:"bremsbeläge" };
+
+let tagPool = [], tagPicks = [];
+
+function tagSlug(w){
+  const clean = String(w).toLowerCase().replace(/^#+/,"").replace(/[^\p{L}\p{N}]+/gu,"");
+  return clean.length > 2 ? "#" + clean : "";
+}
+
+function buildTagPool(){
+  const cap = $("#caption").value;
+  const a = analyse(cap);
+  const pf = db.settings.profil;
+  // Nur der Text des Posts bestimmt das Thema. Die Branche kommt separat und
+  // schwächer dazu, sonst schlägt bei jedem Post das ganze Leistungsangebot durch.
+  const hay = (cap + " " + $("#postTitle").value).toLowerCase();
+  const fach = (pf.branche || "").toLowerCase();
+  const pool = new Map();
+  const add = (tag, size, src, score) => {
+    if (!tag || tag.length < 4) return;
+    const k = tag.toLowerCase();
+    const old = pool.get(k);
+    if (old) { if (score > old.score) { old.score = score; old.src = src; } return; }
+    pool.set(k, { tag:k, size, src, score });
+  };
+
+  tagList(pf.fix || "").forEach(t => add(t.toLowerCase(), 1, "marke", 10));
+  if (pf.marke) add(tagSlug(pf.marke), 1, "marke", 9);
+
+  TAG_LEX.forEach(g => { if (g.re.test(hay)) g.t.forEach(([t,sz],i) => add(t, sz, "thema", 7 - i*0.25)); });
+  TAG_LEX.forEach(g => { if (fach && g.re.test(fach)) g.t.forEach(([t,sz],i) => add(t, sz, "thema", 3.4 - i*0.2)); });
+
+  a.nouns.slice(0,6).forEach((w,i) => {
+    const wort = (TAG_DATIV[w.toLowerCase()] || w).toLowerCase();
+    if (TAG_STOP.has(wort)) return;
+    add(tagSlug(wort), 1, "text", 5.8 - i*0.3);
+  });
+
+  (pf.region || "").split(/[,;/]+/).map(x => x.trim()).filter(Boolean).forEach((o,i) => {
+    const liste = REGIO_LEX[o.toLowerCase()] || [tagSlug(o)];
+    liste.forEach((t,j) => add(t, j === 0 ? 2 : 1, "lokal", 6.2 - i*0.6 - j*0.25));
+    const fach = (pf.branche || "").split(/[,;]/)[0];
+    if (i === 0 && fach) add(tagSlug(fach + o), 1, "lokal", 5.4);
+  });
+
+  TAG_BASIS.forEach(([t,sz],i) => add(t, sz, "breit", 2.5 - i*0.1));
+
+  // Marke und Ort sollen stabil bleiben, beim Rest darf gewürfelt werden
+  const alle = Array.from(pool.values())
+    .map(x => Object.assign(x, { r: x.score + rnd() * (x.src === "lokal" || x.src === "marke" ? 0.15 : 0.8) }))
+    .sort((p,q) => q.r - p.r);
+
+  const out = []; let breit = 0, lokal = 0;
+  for (const t of alle) {
+    if (out.length >= 20) break;
+    if (t.size === 3) { if (breit >= 4) continue; breit++; }
+    if (t.src === "lokal") { if (lokal >= 4) continue; lokal++; }
+    out.push(t);
+  }
+  return out;
+}
+
+// Empfehlung: ein breiter, zwei mittlere, zwei lokale/eigene
+function empfehlung(list){
+  const pick = [];
+  const take = fn => {
+    if (pick.length >= MAX_TAGS) return;
+    const x = list.find(t => pick.indexOf(t) < 0 && fn(t));
+    if (x) pick.push(x);
+  };
+  // "Immer dabei" hat Vorrang - der Rest füllt die verbleibenden Plätze auf
+  const fix = tagList(db.settings.profil.fix || "").map(t => t.toLowerCase());
+  fix.forEach(f => take(t => t.tag === f));
+  take(t => t.src === "thema" && t.size <= 2);        // spezifisch zum Inhalt
+  take(t => t.src === "thema" && t.size <= 2);
+  take(t => t.src === "lokal");                        // regional gefunden werden
+  take(t => t.size === 3);                             // ein breiter Tag
+  take(t => t.src === "text");
+  while (pick.length < MAX_TAGS && pick.length < list.length) take(() => true);
+  return pick.slice(0, MAX_TAGS).map(t => t.tag);
+}
+
+function genTags(neu){
+  if (neu) hookSeed = (hookSeed + 4211) & 0x7fffffff;
+  tagPool = buildTagPool();
+  const schon = tagList($("#hashtags").value).map(t => t.toLowerCase());
+  tagPicks = schon.length ? schon.slice(0, MAX_TAGS) : empfehlung(tagPool);
+  tagPicks.forEach(t => {
+    if (!tagPool.find(x => x.tag === t)) tagPool.unshift({ tag:t, size:1, src:"text", score:9 });
+  });
+  renderTagPicks();
+}
+
+function renderTagPicks(){
+  const voll = tagPicks.length >= MAX_TAGS;
+  const gruppen = SRC_ORDER
+    .map(src => [src, tagPool.filter(t => t.src === src)])
+    .filter(g => g[1].length);
+
+  $("#tagPicks").innerHTML = gruppen.map(([src, list]) => `
+    <div class="tag-group">
+      <div class="lbl">${SRC_LBL[src]}</div>
+      <div class="chips">${list.map(t => {
+        const on = tagPicks.indexOf(t.tag) >= 0;
+        return `<button class="chip${on ? " on" : (voll ? " full" : "")}" data-tag="${esc(t.tag)}">` +
+               `<span class="sz">${SZ[t.size]}</span>${esc(t.tag)}</button>`;
+      }).join("")}</div>
+    </div>`).join("") +
+    (tagPool.length ? `<div class="legende">• Nische · •• mittel · ••• breit — grob geschätzt, keine Live-Zahlen von Instagram.</div>` : `<p class="muted">Schreib zuerst deine Caption, dann werden die Vorschläge konkret.</p>`);
+
+  $$("[data-tag]").forEach(b => b.onclick = () => {
+    const t = b.dataset.tag, i = tagPicks.indexOf(t);
+    if (i >= 0) tagPicks.splice(i,1);
+    else if (tagPicks.length >= MAX_TAGS) { toast("Fünf ist Schluss – erst einen abwählen"); return; }
+    else tagPicks.push(t);
+    renderTagPicks();
+  });
+
+  $("#pickHint").textContent = tagPicks.length + " von " + MAX_TAGS + " gewählt";
+  $("#tagPickBar").style.display = tagPool.length ? "block" : "none";
+  $("#tagChosen").innerHTML = tagPicks.length
+    ? tagPicks.map(t => `<button class="chip on" data-unpick="${esc(t)}">${esc(t)} ✕</button>`).join("")
+    : `<span class="muted">Noch nichts gewählt.</span>`;
+  $$("[data-unpick]").forEach(b => b.onclick = () => {
+    tagPicks = tagPicks.filter(x => x !== b.dataset.unpick); renderTagPicks();
+  });
+}
+
+function applyTags(){
+  if (!tagPicks.length) { toast("Nichts gewählt"); return; }
+  pushUndo();
+  $("#hashtags").value = tagPicks.join(" ");
+  save(); renderAll(); renderTagPicks();
+  toast(tagPicks.length + " Hashtags übernommen");
+}
+
 function renderTagSets(){
   $("#tagSets").innerHTML = Object.keys(db.tagSets).map(k =>
     `<button class="chip" data-set="${esc(k)}">${esc(k)}</button>`).join("") +
@@ -841,8 +1079,8 @@ function renderChecks(){
     ["Absätze statt Textwand", paras >= 2, paras + " Absätze – Leerzeilen machen es lesbar."],
     ["Sätze kurz genug", avgLen > 0 && avgLen <= 20, avgLen ? avgLen.toFixed(1) + " Wörter pro Satz im Schnitt." : "Noch kein Text."],
     ["Call-to-Action am Schluss", hasCTA, hasCTA ? "Gefunden." : "Sag den Leuten, was sie tun sollen."],
-    ["Hashtag-Menge", tags.length >= 5 && tags.length <= 20,
-      tags.length === 0 ? "Noch keine." : tags.length > MAX_TAGS ? "Über dem Limit von " + MAX_TAGS + "." : tags.length + " Stück – 5 bis 20 sind ein guter Korridor."],
+    ["Hashtag-Menge", tags.length >= 3 && tags.length <= MAX_TAGS,
+      tags.length === 0 ? "Noch keine." : tags.length > MAX_TAGS ? tags.length + " Stück – Instagram nimmt nur " + MAX_TAGS + "." : tags.length + " von " + MAX_TAGS + "."],
     ["Emojis dosiert", emojis >= 1 && emojis <= 12, emojis + " Emojis im Text."],
     ["Keine Links in der Caption", !hasURL, hasURL ? "Links sind in Captions nicht klickbar – lieber in die Bio." : "Passt."]
   ];
@@ -922,6 +1160,7 @@ function tab(name){
   $$(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + name));
   $$("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
   if (name === "hooks") renderHooks();
+  if (name === "tags" && !tagPool.length) genTags(false);
   if (name === "posts") renderPosts();
   window.scrollTo(0,0);
   document.querySelector("main").scrollTop = 0;
@@ -1048,6 +1287,23 @@ $("#btnCopyCap").onclick = () => copy($("#caption").value, "Caption kopiert");
 $("#btnCopyTags").onclick = () => copy($("#hashtags").value, "Hashtags kopiert");
 $("#btnCopyAll").onclick = () => copy(fullText(), db.settings.place === "caption" ? "Caption + Tags kopiert" : "Caption kopiert");
 $("#btnTagClean").onclick = cleanTags;
+$("#btnTagGen").onclick = () => { genTags(true); toast("20 Vorschläge, 5 vorgewählt"); };
+$("#btnTagGenMore").onclick = () => { const alt = tagPicks.slice(); genTags(true); tagPicks = alt.slice(0, MAX_TAGS); renderTagPicks(); };
+$("#btnTagApply").onclick = applyTags;
+$("#btnTagReset").onclick = () => { tagPicks = []; renderTagPicks(); };
+$("#btnProfil").onclick = () => {
+  const box = $("#profilBox"), zu = box.style.display === "none";
+  box.style.display = zu ? "block" : "none";
+  $("#btnProfil").textContent = zu ? "Themenprofil ▴" : "Themenprofil ▾";
+};
+[["#pMarke","marke"],["#pBranche","branche"],["#pRegion","region"],["#pFix","fix"]].forEach(([sel,key]) => {
+  $(sel).value = db.settings.profil[key] || "";
+  $(sel).addEventListener("input", () => {
+    db.settings.profil[key] = $(sel).value;
+    clearTimeout($(sel)._t);
+    $(sel)._t = setTimeout(() => { save(); genTags(false); }, 500);
+  });
+});
 $("#btnSaveSet").onclick = () => {
   const n = $("#newSetName").value.trim();
   if (!n) { toast("Name fehlt"); return; }

@@ -2,7 +2,7 @@
    Ziel: Die App startet auch ohne Netz. Beim nächsten Online-Start holt sie
    sich automatisch die neue Version von radlhias.tv.
    Bei Änderungen an index.html: CACHE hochzählen. */
-const CACHE = "postwerkstatt-v1";
+const CACHE = "postwerkstatt-v2";
 const CORE = [
   "./",
   "./index.html",

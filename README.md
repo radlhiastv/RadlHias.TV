@@ -117,12 +117,23 @@ ohne Server, ohne Konto und ohne Netz.
   der nächste ersetzt ihn wieder.
 - Bausteine: Caption-Gerüste (Story, How-to, Liste, Vorher/Nachher, Meinung, Produkt)
   und fertige Call-to-Action-Sätze.
+- Hashtag-Vorschläge: 20 Stück aus der Caption plus Themenprofil (Marke, Branche,
+  Region), gruppiert nach Herkunft und mit grober Größenangabe (• Nische, •• mittel,
+  ••• breit). Fünf davon lassen sich auswählen – mehr nimmt Instagram nicht –, eine
+  sinnvolle Mischung ist vorgewählt.
 - Hashtag-Verwaltung mit eigenen Sets, Entdoppeln, Sortieren und der Wahl
   „in der Caption“ oder „im ersten Kommentar“.
 - Feed-Vorschau im Instagram-Look plus ein Qualitäts-Check über neun Punkte
   (Hook-Länge, Absätze, Satzlänge, CTA, Hashtag-Menge, Emojis, Links …).
 - Posts-Verwaltung mit Status (Idee, Entwurf, Fertig, Gepostet), Suche und Checkliste
   vorm Posten.
+
+**Themenprofil**
+
+Im Reiter *Tags* unter „Themenprofil“ stehen Marke, Tätigkeit, Region und die fix
+gewünschten Hashtags. Das wird einmal eingetragen und fließt danach in jeden
+Vorschlag ein. Das Thema eines Posts bestimmt allein die Caption – die Branche wirkt
+nur schwach mit, sonst schlägt bei jedem Post das komplette Leistungsangebot durch.
 
 **Aufs Handy holen**
 
