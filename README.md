@@ -88,7 +88,8 @@ Der Cloudflare Worker (`worker/`) deployt sich selbst: Sobald eine Änderung unt
 `.github/workflows/deploy-worker.yml`. Manuell auslösen geht im Reiter *Actions*
 → *Worker deployen* → *Run workflow* – auch vom Handy. Die einmalige Einrichtung
 der beiden Repository-Secrets steht in [`worker/SETUP.md`](worker/SETUP.md),
-Abschnitt 11.
+Abschnitt 11. Fehlen die Secrets noch, baut die Action den Worker trotzdem und
+überspringt nur das Hochladen – sie wird deswegen nicht rot.
 
 ## Werkstatt-Terminbuchung
 
@@ -136,6 +137,10 @@ ohne Server, ohne Konto und ohne Netz.
   (Hook-Länge, Absätze, Satzlänge, CTA, Hashtag-Menge, Emojis, Links …).
 - Posts-Verwaltung mit Status (Idee, Entwurf, Fertig, Gepostet), Suche und Checkliste
   vorm Posten.
+- „Post kopieren“ legt den fertigen Beitrag in die Zwischenablage: Hook, Text und
+  Hashtags in einem Stück. Stehen die Hashtags auf „erster Kommentar“, heißt der
+  Knopf „Caption kopieren“ und lässt sie weg – der Hinweis darunter sagt jeweils,
+  was drin ist.
 
 **KI-Hooks (optional)**
 

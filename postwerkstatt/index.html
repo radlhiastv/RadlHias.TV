@@ -223,7 +223,7 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
   </div>
   <div class="spacer"></div>
   <button class="icon-btn" id="btnNew" title="Neuer Post">＋</button>
-  <button class="icon-btn" id="btnCopyAll" title="Alles kopieren">⧉</button>
+  <button class="icon-btn" id="btnCopyAll" title="Ganzen Post kopieren">⧉</button>
 </header>
 
 <div class="stats" id="stats">
@@ -249,8 +249,9 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
         <button class="btn ghost sm" id="btnBreaks">Absatz-Fix</button>
         <button class="btn ghost sm" id="btnTrim">Aufräumen</button>
         <button class="btn ghost sm" id="btnUndo">Rückgängig</button>
-        <button class="btn o sm" id="btnCopyCap">Caption kopieren</button>
+        <button class="btn o sm" id="btnCopyCap">Post kopieren</button>
       </div>
+      <p class="muted" style="margin-top:6px" id="copyHint"></p>
       <p class="muted" style="margin-top:6px">Absatz-Fix setzt unsichtbare Zeichen in Leerzeilen, damit Instagram die Absätze nicht zusammenschiebt.</p>
     </div>
 
@@ -457,7 +458,7 @@ dialog h2{font-size:18px;color:var(--navy);margin-bottom:10px}
 
 <script>
 "use strict";
-const VERSION = "1.2.0";
+const VERSION = "1.3.0";
 const MAX_CHARS = 2200;      // Instagram-Limit für Captions
 const MAX_TAGS  = 5;         // mehr als 5 Hashtags nimmt Instagram nicht mehr an
 const TAG_HART  = 30;        // technische Obergrenze, nur als Notbremse
@@ -1114,6 +1115,33 @@ function renderTagPicks(){
   });
 }
 
+// Was kopiert wird, haengt an der Platzierung der Hashtags. Damit beim
+// Einfuegen keine Ueberraschung entsteht, sagen Knopf und Hinweis es vorher.
+function copyPost(){
+  const tags = tagList($("#hashtags").value);
+  const imKommentar = db.settings.place === "comment";
+  copy(fullText(), imKommentar || !tags.length
+    ? "Caption kopiert"
+    : "Post kopiert – mit " + tags.length + " Hashtags");
+}
+
+function renderCopyHint(){
+  const tags = tagList($("#hashtags").value);
+  const imKommentar = db.settings.place === "comment";
+  const btn = $("#btnCopyCap");
+  if (imKommentar) {
+    btn.textContent = "Caption kopieren";
+    $("#copyHint").textContent = tags.length
+      ? "Hook und Text. Die " + tags.length + " Hashtags kopierst du im Reiter Tags separat für den ersten Kommentar."
+      : "Hook und Text. Hashtags sind auf „erster Kommentar“ gestellt.";
+  } else {
+    btn.textContent = "Post kopieren";
+    $("#copyHint").textContent = tags.length
+      ? "Hook, Text und " + tags.length + " Hashtags – fertig zum Einfügen bei Instagram."
+      : "Hook und Text. Noch keine Hashtags gewählt.";
+  }
+}
+
 function applyTags(){
   if (!tagPicks.length) { toast("Nichts gewählt"); return; }
   pushUndo();
@@ -1260,7 +1288,7 @@ function tab(name){
   document.querySelector("main").scrollTop = 0;
 }
 function renderAll(){
-  renderStats(); renderPreview(); renderChecks(); renderTodos(); renderTagSets(); renderPosts();
+  renderStats(); renderPreview(); renderChecks(); renderTodos(); renderTagSets(); renderPosts(); renderCopyHint();
   $$("[data-place]").forEach(b => b.classList.toggle("on", b.dataset.place === db.settings.place));
   $("#placeHint").textContent = db.settings.place === "caption"
     ? "Hashtags zählen in die 2200 Zeichen der Caption."
@@ -1358,7 +1386,7 @@ $$("[data-cta]").forEach(b => b.onclick = () => {
 let saveTimer;
 ["#caption","#hashtags","#postTitle"].forEach(sel => {
   $(sel).addEventListener("input", () => {
-    renderStats(); renderPreview();
+    renderStats(); renderPreview(); renderCopyHint();
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => { save(); renderChecks(); }, 350);
   });
@@ -1383,9 +1411,9 @@ $("#btnUndo").onclick = () => {
   $("#caption").value = u.caption; $("#hashtags").value = u.hashtags;
   save(); renderAll(); toast("Zurück");
 };
-$("#btnCopyCap").onclick = () => copy($("#caption").value, "Caption kopiert");
+$("#btnCopyCap").onclick = copyPost;
 $("#btnCopyTags").onclick = () => copy($("#hashtags").value, "Hashtags kopiert");
-$("#btnCopyAll").onclick = () => copy(fullText(), db.settings.place === "caption" ? "Caption + Tags kopiert" : "Caption kopiert");
+$("#btnCopyAll").onclick = copyPost;
 $("#btnTagClean").onclick = cleanTags;
 $("#btnTagGen").onclick = () => { genTags(true); toast("20 Vorschläge, 5 vorgewählt"); };
 $("#btnTagGenMore").onclick = () => { const alt = tagPicks.slice(); genTags(true); tagPicks = alt.slice(0, MAX_TAGS); renderTagPicks(); };

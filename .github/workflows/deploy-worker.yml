@@ -45,14 +45,27 @@ jobs:
         run: npm ci
 
       - name: Bundle prüfen
-        # Baut den Worker, ohne ihn hochzuladen. Schlägt der Schritt fehl,
-        # wird nichts deployed und die bestehende Version bleibt online.
+        # Baut den Worker, ohne ihn hochzuladen -- braucht keine Zugangsdaten.
+        # Schlägt der Schritt fehl, wird nichts deployed und die bestehende
+        # Version bleibt online.
         run: npx wrangler deploy --dry-run
+
+      - name: Ist das Deployment eingerichtet?
+        id: check
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Der Worker wurde gebaut, aber nicht hochgeladen: CLOUDFLARE_API_TOKEN und/oder CLOUDFLARE_ACCOUNT_ID fehlen. Einrichtung siehe worker/SETUP.md, Abschnitt 11."
+          fi
 
       - name: Deployen
+        # Solange die Secrets fehlen, wird übersprungen statt rot zu werden.
+        if: steps.check.outputs.ready == 'true'
         run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
