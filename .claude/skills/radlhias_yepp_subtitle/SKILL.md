@@ -1,6 +1,6 @@
 ---
 name: radlhias_yepp_subtitle
-description: Baut aus einem RadlHias-Reel-Rohvideo + dem gesprochenen Text ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-fuer-Wort-Karaoke-Untertitel (aktuelles Wort wird groesser/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5 Grad Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. Das Wort-Timing entsteht per Forced Alignment aus Text + Tonspur (scripts/align_text.py) - lokal, ohne externen Dienst und ohne Handarbeit. IMMER verwenden, wenn Mathias ein Rohvideo + gesprochenen Text (oder SRT oder Yepp-Timer-Zeitstempel) fuer ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwaehnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen.
+description: Baut aus einem RadlHias-Reel-Rohvideo + dem gesprochenen Text ein fertiges Instagram-Reel im RadlHias-Markenstil - Wort-fuer-Wort-Karaoke-Untertitel (aktuelles Wort wird groesser/orange), Navy/Orange/Creme-Farbschema, Doppelkontur, Schatten, Filmkorn, -2,5 Grad Neigung, Logo-Wasserzeichen, Fade-to-Black am Ende. Das Wort-Timing entsteht per Forced Alignment aus Text + Tonspur (scripts/align_text.py) - lokal, ohne externen Dienst und ohne Handarbeit. IMMER verwenden, wenn Mathias ein Rohvideo + gesprochenen Text (oder eine SRT-Datei) fuer ein RadlHias-Reel schickt, "Yepp" oder "Reel" erwaehnt, nach seiner Untertitel-Vorlage fragt, oder Text bittet "wie gewohnt" oder "wie immer" einzubauen.
 ---
 
 # RadlHias Yepp-Untertitel
@@ -68,11 +68,10 @@ externen Dienst, ohne Konto, ohne Handarbeit. Das ist der Standardweg.
 
 ## Die anderen Wege (nur noch Ausnahmefälle)
 
-**Yepp-Timer** (https://radlhias.tv/yepp-timer/): Seit dem Forced Alignment
-**Korrekturwerkzeug, nicht mehr Haupteingabe.** Sinnvoll, wenn das Alignment an
-einzelnen Stellen danebenliegt - Mathias kann die Marken dort von Hand
-verschieben (siehe `references/yepp_timer.md`). Ihn nicht mehr unaufgefordert
-als ersten Weg vorschlagen; das ist unnötige Handarbeit.
+**Timing von Hand nachbessern**: Sitzt das Alignment an einzelnen Stellen
+nicht, die `timing.json` direkt anpassen - sie ist eine schlichte Liste aus
+Wörtern und Ankerzeiten (siehe `references/forced_alignment.md`). Kein eigenes
+Werkzeug nötig, und in aller Regel auch nicht nötig.
 
 **Externe Transkriptionsdienste** (Gladia, Deepgram über Composio): **Nicht
 vorschlagen.** Mathias will ausdrücklich keinen Dienst, bei dem er ein Abo

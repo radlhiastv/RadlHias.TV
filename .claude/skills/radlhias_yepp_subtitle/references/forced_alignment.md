@@ -91,6 +91,6 @@ anschließende Rendern in `make_reel.py` dauert deutlich länger (~5 Minuten fü
 ## Wenn das Ergebnis an einzelnen Stellen nicht sitzt
 
 Die `timing.json` ist eine schlichte Liste von Wortzeiten und lässt sich von
-Hand nachbessern. Für größere Korrekturen kann Mathias sie in den Yepp-Timer
-laden (https://radlhias.tv/yepp-timer/) und dort verschieben - der ist seit
-diesem Weg **Korrekturwerkzeug, nicht mehr Haupteingabe**.
+Hand nachbessern: Unter `anchors` steht je Wort der Index `i` und die Startzeit
+`t` in Sekunden. Einzelne `t`-Werte verschieben genügt - die Reihenfolge muss
+aufsteigend bleiben, sonst kippt das Rendering die Wörter zurecht.
