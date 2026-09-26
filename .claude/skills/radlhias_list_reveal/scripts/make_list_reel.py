@@ -10,6 +10,7 @@ erste Zeile = Label (z.B. "dein Zahnarzt:") in Orange, restliche Zeilen
 Doppelkontur (Dunkel + Creme), im RadlHias-Markenstil. Logo-Wasserzeichen
 oben, Text beginnt deutlich darunter. Kein Filmkorn, keine Neigung -
 bei mehreren gleichzeitig sichtbaren Bloecken bleibt es sonst zu unruhig.
+Rendert standardmaessig OHNE Ton (Original-Tonspur wird verworfen).
 
 Verwendung:
     python3 make_list_reel.py <video.mp4> <output.mp4> <blocks.json>
@@ -158,11 +159,11 @@ def main():
         if n % 100 == 0:
             print(f"  frame {n}/{total_frames}")
 
-    print("Basisclip skalieren...")
+    print("Basisclip skalieren (ohne Ton)...")
     base_clip = os.path.join(tmp, "base_clip.mp4")
     subprocess.run(["ffmpeg", "-i", args.video, "-vf", f"scale={W}:{H}:flags=lanczos,fps={FPS}",
-                     "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p",
-                     "-c:a", "aac", "-b:a", "192k", base_clip, "-y"], capture_output=True, check=True)
+                     "-an", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p",
+                     base_clip, "-y"], capture_output=True, check=True)
 
     print("Zusammensetzen (Text-Overlay + Logo)...")
     filter_complex = (
@@ -174,9 +175,9 @@ def main():
         "-framerate", str(FPS), "-i", f"{frames_dir}/frame_%05d.png",
         "-loop", "1", "-t", str(dur), "-i", LOGO_PATH,
         "-filter_complex", filter_complex,
-        "-map", "[vout]", "-map", "0:a",
+        "-map", "[vout]",
         "-r", str(FPS), "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "18",
-        "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
+        "-movflags", "+faststart",
         args.output, "-y",
     ]
     subprocess.run(cmd, capture_output=True, check=True)

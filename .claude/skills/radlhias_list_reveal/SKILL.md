@@ -29,6 +29,8 @@ Frame und bleiben bis zum Ende stehen - typisch fuer Aufzaehlungs-/Pointe-Reels
   Bloecken macht das den Text sonst zu unruhig/schwerer lesbar
 - Bloecke wachsen von `TOP_Y` nach unten; jeder neue Block blendet kurz ein
   (~0,18s) und bleibt danach stehen
+- Rendert standardmaessig OHNE Ton (Original-Tonspur wird verworfen) - Mathias
+  vertont/musikalisiert diese Reels separat
 
 ## Workflow
 
