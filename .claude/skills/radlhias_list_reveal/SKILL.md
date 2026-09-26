@@ -29,6 +29,8 @@ Frame und bleiben bis zum Ende stehen - typisch fuer Aufzaehlungs-/Pointe-Reels
   Bloecken macht das den Text sonst zu unruhig/schwerer lesbar
 - Bloecke wachsen von `TOP_Y` nach unten; jeder neue Block blendet kurz ein
   (~0,18s) und bleibt danach stehen
+- Rendert standardmaessig OHNE Ton (Original-Tonspur wird verworfen) - Mathias
+  vertont/musikalisiert diese Reels separat
 
 ## Workflow
 
@@ -42,7 +44,10 @@ Frame und bleiben bis zum Ende stehen - typisch fuer Aufzaehlungs-/Pointe-Reels
    Bloecke schon in den ersten ~3 Sekunden, der letzte (Pointe-)Block deutlich
    spaeter.
 3. **`blocks.json` schreiben**: Liste von `{"start": <Sekunde>, "lines": [...]}`,
-   siehe Docstring in `scripts/make_list_reel.py`.
+   siehe Docstring in `scripts/make_list_reel.py`. Der Abschluss-Block (z.B. eine
+   Frage an die Community als Call-to-Action) bekommt `"cta": true` - dadurch
+   setzt er sich per `CTA_EXTRA_GAP` sichtbar vom Hauptteil ab, statt direkt
+   dranzukleben.
 4. **Rendern**:
    ```bash
    python3 scripts/make_list_reel.py <video.mp4> <output.mp4> blocks.json
