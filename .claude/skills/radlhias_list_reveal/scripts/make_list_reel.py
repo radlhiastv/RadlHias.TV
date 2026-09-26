@@ -17,13 +17,17 @@ Verwendung:
 blocks.json:
     [
       {"start": 0.0, "lines": ["dein Zahnarzt:", "„Du putzt falsch“"]},
-      {"start": 2.6, "lines": ["dein Arzt:", "„Du isst falsch“"]}
+      {"start": 2.6, "lines": ["dein Arzt:", "„Du isst falsch“"]},
+      {"start": 8.2, "lines": ["Was sagst Du dazu?"], "cta": true}
     ]
     "start" = Sekunde, ab der der Block erscheint (bleibt bis Videoende stehen).
     "lines" = vorformatierte Zeilen (werden zusaetzlich automatisch umgebrochen,
               falls eine Zeile breiter als der sichere Textbereich ist). Die
               ERSTE Zeile eines Blocks gilt als Label (Orange), alle weiteren
               als Aussage/Zitat (Navy). Bei nur einer Zeile: Navy.
+    "cta"   = optional, true fuer den Call-to-Action-Block am Ende (z.B. die
+              Abschlussfrage) - bekommt zusaetzlichen Abstand nach oben
+              (CTA_EXTRA_GAP), damit er sich sichtbar vom Hauptteil absetzt.
 
 Assets (im selben Skill-Ordner):
     BarlowCondensed-Bold.ttf
@@ -48,13 +52,14 @@ DARK = (0x0A, 0x0A, 0x0A, 255)
 
 LOGO_Y = 60
 MAX_TEXT_W = 940
-TOP_Y = 480          # Text beginnt deutlich unter dem Logo
-FONT_SIZE = 66        # Barlow Condensed ist schmaler als Barlow ExtraBold -
+TOP_Y = 400          # Text beginnt deutlich unter dem Logo
+FONT_SIZE = 72        # Barlow Condensed ist schmaler als Barlow ExtraBold -
                        # deshalb etwas groesser fuer vergleichbare Lesbarkeit
-STROKE_DARK = 9
-STROKE_CREAM = 5
+STROKE_DARK = 10
+STROKE_CREAM = 6
 LINE_GAP = 16
-BLOCK_GAP = 50
+BLOCK_GAP = 48
+CTA_EXTRA_GAP = 80     # zusaetzlicher Abstand vor einem "cta"-Block
 FADE_IN = 0.18
 
 
@@ -86,7 +91,7 @@ def build_layout(blocks, font):
             is_label = (i == 0 and len(b["lines"]) > 1)
             for wrapped in wrap_line(raw, font, MAX_TEXT_W):
                 lines.append((wrapped, is_label))
-        laid_out.append({"start": b["start"], "lines": lines})
+        laid_out.append({"start": b["start"], "lines": lines, "cta": bool(b.get("cta"))})
     return laid_out, line_h, asc
 
 
@@ -108,6 +113,8 @@ def render_frame(t, laid_out, line_h, font):
     for block in laid_out:
         if t < block["start"]:
             continue
+        if block["cta"]:
+            y += CTA_EXTRA_GAP
         age = t - block["start"]
         alpha = int(255 * min(max(age / FADE_IN, 0), 1))
         for text, is_label in block["lines"]:
