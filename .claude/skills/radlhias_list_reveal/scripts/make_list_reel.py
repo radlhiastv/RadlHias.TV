@@ -66,11 +66,11 @@ LOGO_Y = 60
 MAX_TEXT_W = 940
 TOP_Y = 400          # Text beginnt deutlich unter dem Logo
 
-BADGE_FONT_SIZE = 46
-BADGE_PAD_X = 34
-BADGE_PAD_Y = 20
+BADGE_FONT_SIZE = 64
+BADGE_PAD_X = 44
+BADGE_PAD_Y = 26
 BADGE_TILT_DEG = 8       # verspielte Neigung
-BADGE_MARGIN = (40, 40)  # Abstand vom rechten/oberen Rand
+BADGE_MARGIN = (30, 30)  # Abstand vom rechten/oberen Rand
 FONT_SIZE = 72        # Barlow Condensed ist schmaler als Barlow ExtraBold -
                        # deshalb etwas groesser fuer vergleichbare Lesbarkeit
 STROKE_DARK = 10
