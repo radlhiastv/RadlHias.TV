@@ -161,7 +161,11 @@ def main():
 
     print("Basisclip skalieren (ohne Ton)...")
     base_clip = os.path.join(tmp, "base_clip.mp4")
-    subprocess.run(["ffmpeg", "-i", args.video, "-vf", f"scale={W}:{H}:flags=lanczos,fps={FPS}",
+    # Erst auf Zielhoehe skalieren (Seitenverhaeltnis erhalten), dann mittig auf
+    # Zielbreite zuschneiden - verzerrt Quer-/Breitbildmaterial nicht wie ein
+    # reines scale=W:H es taete (das wuerde stur strecken/stauchen).
+    crop_filter = f"scale=-2:{H}:flags=lanczos,crop={W}:{H},fps={FPS}"
+    subprocess.run(["ffmpeg", "-i", args.video, "-vf", crop_filter,
                      "-an", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p",
                      base_clip, "-y"], capture_output=True, check=True)
 
