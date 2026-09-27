@@ -29,6 +29,16 @@ blocks.json:
     "cta"   = optional, true fuer den Call-to-Action-Block am Ende (z.B. die
               Abschlussfrage) - bekommt zusaetzlichen Abstand nach oben
               (CTA_EXTRA_GAP), damit er sich sichtbar vom Hauptteil absetzt.
+    "color" = optional, "orange" oder "navy" - erzwingt die Farbe fuer ALLE
+              Zeilen dieses Blocks (z.B. um den Hook-Satz orange hervorzu-
+              heben, auch wenn er nur eine Zeile hat und sonst als Aussage
+              in Navy gelten wuerde). Ohne "color" gilt die normale Label/
+              Aussage-Logik oben.
+
+Optionaler Serien-Sticker (--badge "TEIL 1"):
+    Zeigt ein verspieltes, leicht gedrehtes Orange-Sticker oben rechts in
+    der Ecke (z.B. fuer eine mehrteilige Reel-Serie), statt eine eigene
+    Textzeile im Hauptblock zu belegen.
 
 Assets (im selben Skill-Ordner):
     BarlowCondensed-Bold.ttf
@@ -38,7 +48,7 @@ import os
 import json
 import argparse
 import subprocess
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H = 1080, 1920
 FPS = 24
@@ -53,7 +63,13 @@ DARK = (0x0A, 0x0A, 0x0A, 255)
 
 LOGO_Y = 60
 MAX_TEXT_W = 940
-TOP_Y = 400          # Text beginnt deutlich unter dem Logo
+TOP_Y = 300          # Text beginnt deutlich unter dem Logo
+
+BADGE_FONT_SIZE = 46
+BADGE_PAD_X = 34
+BADGE_PAD_Y = 20
+BADGE_TILT_DEG = 8       # verspielte Neigung
+BADGE_MARGIN = (40, 40)  # Abstand vom rechten/oberen Rand
 FONT_SIZE = 72        # Barlow Condensed ist schmaler als Barlow ExtraBold -
                        # deshalb etwas groesser fuer vergleichbare Lesbarkeit
 STROKE_DARK = 10
@@ -88,8 +104,12 @@ def build_layout(blocks, font):
     laid_out = []
     for b in blocks:
         lines = []  # Liste von (text, ist_label)
+        forced_color = b.get("color")
         for i, raw in enumerate(b["lines"]):
-            is_label = (i == 0 and len(b["lines"]) > 1)
+            if forced_color:
+                is_label = (forced_color == "orange")
+            else:
+                is_label = (i == 0 and len(b["lines"]) > 1)
             for wrapped in wrap_line(raw, font, MAX_TEXT_W):
                 lines.append((wrapped, is_label))
         laid_out.append({"start": b["start"], "lines": lines, "cta": bool(b.get("cta"))})
@@ -126,11 +146,38 @@ def render_frame(t, laid_out, line_h, font):
     return frame
 
 
+def build_badge_image(text, out_path):
+    """Verspieltes, leicht gedrehtes Orange-Sticker (z.B. "TEIL 1") als
+    eigenstaendiges PNG - wird wie das Logo per ffmpeg-overlay eingeblendet,
+    statt eine Zeile im Hauptblock zu belegen."""
+    font = ImageFont.truetype(FONT_PATH, BADGE_FONT_SIZE)
+    bbox = font.getbbox(text)
+    text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    box_w = text_w + BADGE_PAD_X * 2
+    box_h = text_h + BADGE_PAD_Y * 2
+    pad = 40  # Puffer, damit die Drehung nichts abschneidet
+    canvas = Image.new("RGBA", (box_w + pad * 2, box_h + pad * 2), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(canvas)
+    rect = [pad, pad, pad + box_w, pad + box_h]
+    shadow = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rounded_rectangle(
+        [rect[0] + 6, rect[1] + 8, rect[2] + 6, rect[3] + 8], radius=box_h // 2, fill=(0, 0, 0, 140))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(5))
+    canvas = Image.alpha_composite(canvas, shadow)
+    draw = ImageDraw.Draw(canvas)
+    draw.rounded_rectangle(rect, radius=box_h // 2, fill=ORANGE, outline=CREAM, width=5)
+    draw.text((pad + BADGE_PAD_X - bbox[0], pad + BADGE_PAD_Y - bbox[1]), text, font=font, fill=CREAM)
+    rotated = canvas.rotate(BADGE_TILT_DEG, expand=True, resample=Image.BICUBIC)
+    rotated.save(out_path)
+    return rotated.size
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("video")
     ap.add_argument("output")
     ap.add_argument("blocks_json")
+    ap.add_argument("--badge", default=None, help='Serien-Sticker oben rechts, z.B. "TEIL 1"')
     args = ap.parse_args()
 
     with open(args.blocks_json, encoding="utf-8") as f:
@@ -161,19 +208,33 @@ def main():
 
     print("Basisclip skalieren (ohne Ton)...")
     base_clip = os.path.join(tmp, "base_clip.mp4")
-    subprocess.run(["ffmpeg", "-i", args.video, "-vf", f"scale={W}:{H}:flags=lanczos,fps={FPS}",
+    # Erst auf Zielhoehe skalieren (Seitenverhaeltnis erhalten), dann mittig auf
+    # Zielbreite zuschneiden - verzerrt Quer-/Breitbildmaterial nicht wie ein
+    # reines scale=W:H es taete (das wuerde stur strecken/stauchen).
+    crop_filter = f"scale=-2:{H}:flags=lanczos,crop={W}:{H},fps={FPS}"
+    subprocess.run(["ffmpeg", "-i", args.video, "-vf", crop_filter,
                      "-an", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p",
                      base_clip, "-y"], capture_output=True, check=True)
 
     print("Zusammensetzen (Text-Overlay + Logo)...")
     filter_complex = (
         "[1:v]format=rgba[ov];[0:v][ov]overlay=0:0[bg];"
-        f"[bg][2:v]overlay=(W-w)/2:{LOGO_Y}[vout]"
+        f"[bg][2:v]overlay=(W-w)/2:{LOGO_Y}[bg2]"
     )
     cmd = [
         "ffmpeg", "-i", base_clip,
         "-framerate", str(FPS), "-i", f"{frames_dir}/frame_%05d.png",
         "-loop", "1", "-t", str(dur), "-i", LOGO_PATH,
+    ]
+    if args.badge:
+        badge_path = os.path.join(tmp, "badge.png")
+        build_badge_image(args.badge, badge_path)
+        mx, my = BADGE_MARGIN
+        filter_complex += f";[bg2][3:v]overlay=W-w-{mx}:{my}[vout]"
+        cmd += ["-loop", "1", "-t", str(dur), "-i", badge_path]
+    else:
+        filter_complex += ";[bg2]copy[vout]"
+    cmd += [
         "-filter_complex", filter_complex,
         "-map", "[vout]",
         "-r", str(FPS), "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "18",

@@ -1,6 +1,6 @@
 ---
 name: radlhias_list_reveal
-description: Baut aus einem RadlHias-Reel-Rohvideo ein Reel im "aufbauende Liste"-Stil - mehrere Text-Bloecke (z.B. "dein Zahnarzt: 'Du putzt falsch'") erscheinen nacheinander getimt und bleiben stehen, statt wie beim Yepp-Stil wortweise zu pulsieren. Schrift: Barlow Condensed Bold im RadlHias-Markenstil (Label-Zeile Orange, Aussage/Zitat Navy, Doppelkontur Dunkel+Creme), zentriert, Logo-Wasserzeichen oben, Text beginnt deutlich darunter, kein Filmkorn, keine Neigung. Nachgebaut nach einem Vorbild-Reel (Pointe-Format: "dein X sagt Y" mehrfach hintereinander), dann auf RadlHias-Optik umgestellt. IMMER verwenden, wenn Mathias ein Rohvideo fuer ein Reel mit mehreren nacheinander erscheinenden, stehenbleibenden Text-Bloecken will (Listen-Format, Zitat-Format, "X sagt / Y sagt"-Aufbau) statt Wort-fuer-Wort-Karaoke, oder explizit auf dieses "aufbauende Liste"-Beispiel verweist.
+description: Baut aus einem RadlHias-Reel-Rohvideo ein Reel im "aufbauende Liste"-Stil - mehrere Text-Bloecke (z.B. "dein Zahnarzt: 'Du putzt falsch'") erscheinen nacheinander getimt und bleiben stehen, statt wie beim Yepp-Stil wortweise zu pulsieren. Schrift: Barlow Condensed Bold im RadlHias-Markenstil (Label-Zeile Orange, Aussage/Zitat Navy, Doppelkontur Dunkel+Creme; Farbe pro Block auch per "color" erzwingbar), zentriert, Logo-Wasserzeichen oben, Text beginnt deutlich darunter, kein Filmkorn, keine Neigung. Optionaler verspielter Serien-Sticker oben rechts (z.B. "TEIL 1") ueber --badge, fuer mehrteilige Reel-Serien. Nachgebaut nach einem Vorbild-Reel (Pointe-Format: "dein X sagt Y" mehrfach hintereinander), dann auf RadlHias-Optik umgestellt. IMMER verwenden, wenn Mathias ein Rohvideo fuer ein Reel mit mehreren nacheinander erscheinenden, stehenbleibenden Text-Bloecken will (Listen-Format, Zitat-Format, "X sagt / Y sagt"-Aufbau, Ranking-/Top-N-Liste) statt Wort-fuer-Wort-Karaoke, oder explizit auf dieses "aufbauende Liste"-Beispiel verweist.
 ---
 
 # RadlHias Reel - Aufbauende Liste
@@ -31,6 +31,14 @@ Frame und bleiben bis zum Ende stehen - typisch fuer Aufzaehlungs-/Pointe-Reels
   (~0,18s) und bleibt danach stehen
 - Rendert standardmaessig OHNE Ton (Original-Tonspur wird verworfen) - Mathias
   vertont/musikalisiert diese Reels separat
+- Ein Block kann `"color": "orange"` oder `"color": "navy"` setzen, um die
+  automatische Label/Aussage-Farblogik zu ueberschreiben (z.B. einen
+  einzeiligen Hook-Satz trotzdem orange hervorheben)
+- Serien-Sticker (`--badge "TEIL 1"`): verspielter, leicht gedrehter
+  Orange-Sticker oben rechts in der Ecke, statt eine Zeile im Hauptblock zu
+  belegen - fuer mehrteilige Reihen (Teil 1, Teil 2, ...)
+- Quer-/Breitbildmaterial wird sauber mittig zugeschnitten statt verzerrt
+  gestreckt (erst auf Zielhoehe skaliert, dann auf Zielbreite gecroppt)
 
 ## Workflow
 
