@@ -39,6 +39,10 @@ blocks.json:
               Bildmotiv in der Mitte freizuhalten. Folgebloecke ohne "y"
               laufen von dort normal weiter nach unten.
 
+Optionale Logo-Hoehe (--logo-y 175):
+    Verschiebt das Logo-Wasserzeichen, wenn es oben mit dem Bildmotiv
+    kollidiert (Standard: LOGO_Y).
+
 Optionaler Serien-Sticker (--badge "TEIL 1"):
     Zeigt ein verspieltes, leicht gedrehtes Orange-Sticker oben rechts in
     der Ecke (z.B. fuer eine mehrteilige Reel-Serie), statt eine eigene
@@ -186,6 +190,7 @@ def main():
     ap.add_argument("output")
     ap.add_argument("blocks_json")
     ap.add_argument("--badge", default=None, help='Serien-Sticker oben rechts, z.B. "TEIL 1"')
+    ap.add_argument("--logo-y", type=int, default=LOGO_Y, help="Hoehe des Logo-Wasserzeichens in Pixeln")
     args = ap.parse_args()
 
     with open(args.blocks_json, encoding="utf-8") as f:
@@ -234,7 +239,7 @@ def main():
     print("Zusammensetzen (Text-Overlay + Logo)...")
     filter_complex = (
         "[1:v]format=rgba[ov];[0:v][ov]overlay=0:0[bg];"
-        f"[bg][2:v]overlay=(W-w)/2:{LOGO_Y}[bg2]"
+        f"[bg][2:v]overlay=(W-w)/2:{args.logo_y}[bg2]"
     )
     cmd = [
         "ffmpeg", "-i", base_clip,
