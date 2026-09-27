@@ -34,6 +34,10 @@ blocks.json:
               heben, auch wenn er nur eine Zeile hat und sonst als Aussage
               in Navy gelten wuerde). Ohne "color" gilt die normale Label/
               Aussage-Logik oben.
+    "y"     = optional, feste Pixel-Hoehe (0-1920), an der der Block beginnt,
+              statt direkt unter dem vorherigen - z.B. um ein wichtiges
+              Bildmotiv in der Mitte freizuhalten. Folgebloecke ohne "y"
+              laufen von dort normal weiter nach unten.
 
 Optionaler Serien-Sticker (--badge "TEIL 1"):
     Zeigt ein verspieltes, leicht gedrehtes Orange-Sticker oben rechts in
@@ -113,7 +117,8 @@ def build_layout(blocks, font):
                 is_label = (i == 0 and len(b["lines"]) > 1)
             for wrapped in wrap_line(raw, font, MAX_TEXT_W):
                 lines.append((wrapped, is_label))
-        laid_out.append({"start": b["start"], "lines": lines, "cta": bool(b.get("cta"))})
+        laid_out.append({"start": b["start"], "lines": lines, "cta": bool(b.get("cta")),
+                         "y": b.get("y")})
     return laid_out, line_h, asc
 
 
@@ -135,7 +140,9 @@ def render_frame(t, laid_out, line_h, font):
     for block in laid_out:
         if t < block["start"]:
             continue
-        if block["cta"]:
+        if block["y"] is not None:
+            y = block["y"]
+        elif block["cta"]:
             y += CTA_EXTRA_GAP
         age = t - block["start"]
         alpha = int(255 * min(max(age / FADE_IN, 0), 1))

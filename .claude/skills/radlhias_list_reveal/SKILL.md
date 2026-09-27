@@ -34,6 +34,11 @@ Frame und bleiben bis zum Ende stehen - typisch fuer Aufzaehlungs-/Pointe-Reels
 - Ein Block kann `"color": "orange"` oder `"color": "navy"` setzen, um die
   automatische Label/Aussage-Farblogik zu ueberschreiben (z.B. einen
   einzeiligen Hook-Satz trotzdem orange hervorheben)
+- Ein Block kann `"y": <Pixel>` setzen, um an einer festen Hoehe zu beginnen
+  statt direkt unter dem vorherigen - z.B. um das Hauptmotiv in der Bildmitte
+  freizuhalten (Text oben drueber, Rest unten drunter)
+- Standbild statt Video: vorher per ffmpeg `zoompan` ein 1080x1920-Video mit
+  langsamem Zoom (Ken-Burns) auf das Motiv bauen, dann dieses als Rohvideo nutzen
 - Serien-Sticker (`--badge "TEIL 1"`): verspielter, leicht gedrehter
   Orange-Sticker oben rechts in der Ecke, statt eine Zeile im Hauptblock zu
   belegen - fuer mehrteilige Reihen (Teil 1, Teil 2, ...)
