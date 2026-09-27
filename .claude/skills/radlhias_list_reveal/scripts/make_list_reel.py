@@ -64,7 +64,7 @@ DARK = (0x0A, 0x0A, 0x0A, 255)
 
 LOGO_Y = 60
 MAX_TEXT_W = 940
-TOP_Y = 300          # Text beginnt deutlich unter dem Logo
+TOP_Y = 400          # Text beginnt deutlich unter dem Logo
 
 BADGE_FONT_SIZE = 46
 BADGE_PAD_X = 34
@@ -77,7 +77,7 @@ STROKE_DARK = 10
 STROKE_CREAM = 6
 LINE_GAP = 16
 BLOCK_GAP = 48
-CTA_EXTRA_GAP = 80     # zusaetzlicher Abstand vor einem "cta"-Block
+CTA_EXTRA_GAP = 170    # zusaetzlicher Abstand vor einem "cta"-Block
 FADE_IN = 0.18
 
 
