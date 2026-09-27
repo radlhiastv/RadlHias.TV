@@ -46,6 +46,7 @@ Assets (im selben Skill-Ordner):
 """
 import os
 import json
+import shutil
 import argparse
 import subprocess
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -187,6 +188,13 @@ def main():
     workdir = os.path.dirname(os.path.abspath(args.output)) or "."
     tmp = os.path.join(workdir, "_list_reel_tmp")
     frames_dir = os.path.join(tmp, "frames")
+    # Frames-Ordner IMMER frisch anlegen: ffmpeg liest frame_%05d.png als
+    # lueckenlose Sequenz, unabhaengig davon, wie viele Frames dieser Lauf
+    # tatsaechlich schreibt. Bleiben von einem frueheren, laengeren Render
+    # noch hoehere Frame-Nummern liegen, haengt ffmpeg sie klaglos ans Ende
+    # des neuen (kuerzeren) Videos an - genau das fuehrte zu einem Frame aus
+    # einem vorherigen Reel am Ende eines neuen, kuerzeren Reels.
+    shutil.rmtree(frames_dir, ignore_errors=True)
     os.makedirs(frames_dir, exist_ok=True)
 
     dur = float(subprocess.run(

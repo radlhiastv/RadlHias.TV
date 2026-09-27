@@ -31,6 +31,7 @@ import sys
 import os
 import re
 import math
+import shutil
 import subprocess
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -582,6 +583,11 @@ def main(video_path, srt_path, out_path):
     tmp = os.path.join(workdir, "_reel_tmp")
     os.makedirs(tmp, exist_ok=True)
     frames_dir = os.path.join(tmp, "frames")
+    # Frames-Ordner IMMER frisch anlegen: ffmpeg liest frame_%05d.png als
+    # lueckenlose Sequenz. Bleiben von einem frueheren, laengeren Render noch
+    # hoehere Frame-Nummern liegen, haengt ffmpeg sie ans Ende des neuen
+    # (kuerzeren) Videos an, statt den Lauf sauber zu beenden.
+    shutil.rmtree(frames_dir, ignore_errors=True)
     os.makedirs(frames_dir, exist_ok=True)
 
     audio_path = os.path.join(tmp, "audio.wav")
