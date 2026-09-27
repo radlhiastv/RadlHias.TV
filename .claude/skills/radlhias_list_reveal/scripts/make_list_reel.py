@@ -75,8 +75,8 @@ FONT_SIZE = 72        # Barlow Condensed ist schmaler als Barlow ExtraBold -
                        # deshalb etwas groesser fuer vergleichbare Lesbarkeit
 STROKE_DARK = 10
 STROKE_CREAM = 6
-LINE_GAP = 16
-BLOCK_GAP = 48
+LINE_GAP = 18
+BLOCK_GAP = 58
 CTA_EXTRA_GAP = 170    # zusaetzlicher Abstand vor einem "cta"-Block
 FADE_IN = 0.18
 
