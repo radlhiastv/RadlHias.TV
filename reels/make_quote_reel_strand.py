@@ -42,7 +42,7 @@ def main(foto, audio_src, out):
     l4 = q.line_layer([("JOHN F. KENNEDY", CREAM)], 72, track=3, dashes=True)
     items = [(big, 655, 0.5), (l2, 830, 1.2), (l3, 990, 1.9), (l4, 1160, 3.0)]
     cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-"]
-    if audio_src != "-": cmd += ["-i", audio_src, "-map", "0:v", "-map", "1:a", "-c:a", "copy"]
+    if audio_src != "-": cmd += ["-i", audio_src, "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-af", f"afade=t=out:st={DUR-0.6}:d=0.6"]
     cmd += ["-t", str(DUR), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "17", "-movflags", "+faststart", "-shortest", out]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for i in range(int(DUR * FPS)):
