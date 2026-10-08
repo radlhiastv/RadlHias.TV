@@ -24,12 +24,12 @@ def main(foto, audio_src, out):
         reg = (x0 - 6, y0 - 6, x1 + 6, y1 + 6)
         src.paste(src.crop(reg).filter(ImageFilter.GaussianBlur(3)), reg[:2])
     ph = src.crop((CROP_X, 0, CROP_X + 1620, 2000)).resize((W, 1333), Image.LANCZOS)
-    DY = 230  # Foto nach unten verschoben (unten wird Sand abgeschnitten)
+    DY = 340  # Foto nach unten verschoben (unten wird Sand abgeschnitten)
     top = H - 1333 + DY
     ov = Image.new("L", (1, 1333))
     for y in range(1333):
         g = y + top
-        a = 1.0 if g < 870 else (1 - 0.15 * (g - 870) / 390 if g < 1260 else max(0.0, 0.85 * (1 - (g - 1260) / 90)))
+        a = 1.0 if g < 980 else (1 - 0.15 * (g - 980) / 390 if g < 1370 else max(0.0, 0.85 * (1 - (g - 1370) / 90)))
         ov.putpixel((0, y), int(255 * a))
     ph = Image.composite(Image.new("RGB", (W, 1333), BG), ph, ov.resize((W, 1333)))
     base_full = Image.new("RGB", (W, H), BG); base_full.paste(ph, (0, top)); base_full = base_full.convert("RGBA")
@@ -40,7 +40,7 @@ def main(foto, audio_src, out):
     l2 = q.line_layer([("FREUDE,", ORANGE)], 175, track=2)
     l3 = q.line_layer([("RAD ", CREAM), ("ZU ", ORANGE), ("FAHREN", CREAM)], 175, track=2)
     l4 = q.line_layer([("JOHN F. KENNEDY", CREAM)], 72, track=3, dashes=True)
-    items = [(big, 655, 0.5), (l2, 830, 1.2), (l3, 990, 1.9), (l4, 1160, 3.0)]
+    items = [(big, 705, 0.5), (l2, 880, 1.2), (l3, 1040, 1.9), (l4, 1210, 3.0)]
     cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-"]
     if audio_src != "-": cmd += ["-i", audio_src, "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-af", f"afade=t=out:st={DUR-0.6}:d=0.6"]
     cmd += ["-t", str(DUR), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "17", "-movflags", "+faststart", "-shortest", out]
@@ -51,8 +51,8 @@ def main(foto, audio_src, out):
         zw, zh = int(W * z), int(H * z)
         bg = base_full.resize((zw, zh), Image.BICUBIC).crop(((zw - W) // 2, zh - H, (zw - W) // 2 + W, zh))
         fr = Image.blend(Image.new("RGBA", (W, H), BG + (255,)), bg, min(1, t / 0.4))
-        paste(fr, logo, (W - logo.width) / 2, 135, alpha=min(1, t / 0.3) * 0.95)
-        paste(fr, head, 0, 415, alpha=max(0, min(1, (t - 0.2) / 0.25)))
+        paste(fr, logo, (W - logo.width) / 2, 160, alpha=min(1, t / 0.3) * 0.95)
+        paste(fr, head, 0, 465, alpha=max(0, min(1, (t - 0.2) / 0.25)))
         for lay, y, t0 in items:
             if t >= t0:
                 k = (t - t0) / 0.2
