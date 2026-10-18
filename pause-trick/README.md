@@ -12,7 +12,7 @@ Mitgeliefert sind zwei Konfigurationen:
 | Datei | Was drin ist |
 |---|---|
 | `config.yaml` | neutrales Beispiel ("TREFFER" / "DANEBEN"), Modus `follow` |
-| `config-radlhias.yaml` | RadlHias-Variante im Stil des Vorlagen-Videos: "RAD FAHREN" gegen "IM HAUSHALT HELFEN" und "EINKAUFEN", Modus `jump` |
+| `config-radlhias.yaml` | RadlHias-Variante im Stil des Vorlagen-Videos: "RAD FAHREN" gegen "ARBEITEN GEHEN", rotierender Radfahrer als Zeiger, Modus `jump` |
 
 ---
 
@@ -264,7 +264,35 @@ Schalter von `check_frames.py`:
 
 ---
 
-## 6. Aufbau des Codes
+## 6. Die Radfahrer-Grafik
+
+Als Zeiger dient `assets/radfahrer.png` - ein Radfahrer **in der Aufsicht**.
+Das ist kein Zufall: die Grafik dreht sich im Video um ihren Mittelpunkt, und
+von oben sieht ein Radfahrer in jeder Drehlage richtig aus. Eine Seitenansicht
+stuende nach einer halben Umdrehung auf dem Kopf und wirkt wie ein Sturz.
+Die Speedlines hinter dem Fahrer machen die Fahrtrichtung auf den ersten Blick
+klar.
+
+Das fertige PNG liegt im Repository, du musst also nichts bauen. Wer die
+Grafik aendern will, bearbeitet `assets/radfahrer.svg` (reiner Text, jede
+Linie ist kommentiert) und baut das PNG neu:
+
+```bash
+pip install cairosvg          # nur dafuer noetig, nicht fuer das Video
+python assets/make_pointer.py
+```
+
+Das Skript rendert in doppelter Aufloesung (1400x1800) - deshalb steht in der
+Config `png_scale: 0.40`. Es gibt am Ende auch den passenden `pivot`-Wert aus.
+
+Eine eigene Grafik geht genauso: PNG mit transparentem Hintergrund, Fahrt-
+bzw. Zeigerrichtung nach oben, dann in der Config `pointer.png` und
+`pointer.pivot` (Drehpunkt in Pixeln der PNG) setzen. Zeigt deine Grafik nicht
+nach oben, korrigierst du das mit `pointer.base_angle`.
+
+---
+
+## 7. Aufbau des Codes
 
 ```
 pause-trick/
@@ -273,7 +301,10 @@ pause-trick/
 ├── config.yaml            # neutrales Beispiel
 ├── config-radlhias.yaml   # RadlHias-Variante im Vorlagen-Stil
 ├── requirements.txt
-├── assets/                # Logo und Mittel-Badge
+├── assets/
+│   ├── radfahrer.svg      # Quelle der Zeiger-Grafik
+│   ├── radfahrer.png      # daraus gebaut, wird vom Video benutzt
+│   └── make_pointer.py    # baut das PNG neu (braucht cairosvg)
 ├── fonts/                 # mitgelieferte Schrift (OFL)
 └── pausetrick/
     ├── config.py          # Config laden, auffuellen, pruefen

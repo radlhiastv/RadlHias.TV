@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900">
+  <!-- Radfahrer in der Aufsicht, Fahrtrichtung nach oben.
+       Aufsicht statt Seitenansicht, weil sich die Grafik im Video um ihren
+       Mittelpunkt dreht: von oben sieht sie in jeder Drehlage richtig aus,
+       eine Seitenansicht stuende nach einer halben Umdrehung auf dem Kopf. -->
+
+  <!-- Speedlines hinten: machen die Fahrtrichtung sofort klar -->
+  <g stroke="#bc5412" stroke-width="18" stroke-linecap="round" opacity="0.85">
+    <path d="M262 802 V866"/>
+    <path d="M350 828 V892"/>
+    <path d="M438 802 V866"/>
+  </g>
+
+  <!-- Raeder, Rahmen, Lenker (von oben nur schmale Streifen) -->
+  <g stroke="#1c3448" stroke-linecap="round" fill="none">
+    <path d="M350 108 V286" stroke-width="30"/>   <!-- Vorderrad -->
+    <path d="M350 286 V700" stroke-width="18"/>   <!-- Rahmen -->
+    <path d="M350 596 V784" stroke-width="30"/>   <!-- Hinterrad -->
+    <path d="M214 306 H486" stroke-width="30"/>   <!-- Lenker -->
+  </g>
+
+  <!-- Pedale -->
+  <g stroke="#1c3448" stroke-width="22" stroke-linecap="round">
+    <path d="M272 648 H316"/>
+    <path d="M384 648 H428"/>
+  </g>
+
+  <!-- Beine -->
+  <g stroke="#1c3448" stroke-width="42" stroke-linecap="round" fill="none">
+    <path d="M304 566 L292 646"/>
+    <path d="M396 566 L408 646"/>
+  </g>
+
+  <!-- Arme zum Lenker -->
+  <g stroke="#1c3448" stroke-width="30" stroke-linecap="round" fill="none">
+    <path d="M268 486 L232 318"/>
+    <path d="M432 486 L468 318"/>
+  </g>
+
+  <!-- Oberkoerper / Trikot von oben -->
+  <path d="M244 566 Q240 440 350 428 Q460 440 456 566 Q350 598 244 566 Z"
+        fill="#bc5412" stroke="#1c3448" stroke-width="14" stroke-linejoin="round"/>
+
+  <!-- Helm von oben, vorne spitz zulaufend -->
+  <path d="M350 322 Q414 358 410 428 Q402 494 350 504 Q298 494 290 428 Q286 358 350 322 Z"
+        fill="#1c3448"/>
+  <path d="M350 348 Q394 376 390 428 Q384 472 350 480 Q316 472 310 428 Q306 376 350 348 Z"
+        fill="none" stroke="#f5f1eb" stroke-width="11"/>
+  <path d="M334 392 H366" stroke="#f5f1eb" stroke-width="11" stroke-linecap="round"/>
+</svg>

@@ -8,17 +8,15 @@
 # ---------------------------------------------------------------------------
 
 headline:
-  text: "PAUSIER, UM ZU SEHEN,\nWAS DU HEUTE MACHST"
+  text: "PAUSIER, UM ZU SEHEN,\nWAS DU HEUTE TUN SOLLTEST"
   font_path: "fonts/BigShoulders-Bold.ttf"
-  size: 104
+  size: 96
   color: "#1c3448"          # RadlHias Navy
-  y: 330
+  y: 300
   line_spacing: 6
 
 target_label: "RAD FAHREN"
-decoy_label:                # Liste: wird reihum auf die Koeder-Plaetze verteilt
-  - "IM HAUSHALT\nHELFEN"
-  - "EINKAUFEN"
+decoy_label: "ARBEITEN GEHEN"
 target_count: 4             # 4 Ziele auf 12/3/6/9 Uhr
 decoy_count: 4              # 4 Koeder dazwischen
 
@@ -34,24 +32,21 @@ speed_curve:                # schneller Start, langsameres Ausdrehen
   - { t: 1.00, dps: 950 }
 
 layout:
-  radius: 390
-  center_y_offset: 230      # Ring sitzt unter der Ueberschrift
+  radius: 410
+  center_y_offset: 250      # Ring sitzt unter der Ueberschrift
   min_separation: 30.0
   base_offset: 0.0
 
 pointer:
-  type: arrow
-  length: 300
-  tail: 0
-  width: 30
-  head_width: 92
-  head_length: 100
-  color: "#bc5412"          # RadlHias Orange
-  hub_radius: 0             # Mitte deckt das Logo ab
+  type: png
+  png: "assets/radfahrer.png"   # aus assets/radfahrer.svg gebaut
+  pivot: [700, 1000]            # Drehpunkt in Pixeln der PNG
+  png_scale: 0.40            # PNG liegt in doppelter Aufloesung vor
+  base_angle: 0                 # die Grafik zeigt bereits nach oben
+  hub_radius: 0
 
 center_image:
-  path: "assets/radlhias_badge.png"
-  width: 300
+  path: null
 
 font:
   path: "fonts/BigShoulders-Bold.ttf"
