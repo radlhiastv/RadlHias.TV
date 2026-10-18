@@ -1,0 +1,6 @@
+# Render-Ergebnisse gehoeren nicht ins Repository
+output/
+output-*/
+__pycache__/
+*.pyc
+.venv/

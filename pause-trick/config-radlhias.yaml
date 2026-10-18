@@ -1,0 +1,83 @@
+# ---------------------------------------------------------------------------
+# RadlHias-Variante im Stil des Vorlagen-Videos
+# Aufruf: python make_video.py --config config-radlhias.yaml
+#
+# Aufbau wie in der Vorlage: 8 feste Labels im Kreis, abwechselnd Ziel und
+# Koeder. Der Zeiger springt nur zwischen den 4 Ziel-Positionen - egal wo
+# man pausiert, es steht immer "RAD FAHREN" unter dem Zeiger.
+# ---------------------------------------------------------------------------
+
+headline:
+  text: "PAUSIER, UM ZU SEHEN,\nWAS DU HEUTE MACHST"
+  font_path: "fonts/BigShoulders-Bold.ttf"
+  size: 104
+  color: "#1c3448"          # RadlHias Navy
+  y: 330
+  line_spacing: 6
+
+target_label: "RAD FAHREN"
+decoy_label:                # Liste: wird reihum auf die Koeder-Plaetze verteilt
+  - "IM HAUSHALT\nHELFEN"
+  - "EINKAUFEN"
+target_count: 4             # 4 Ziele auf 12/3/6/9 Uhr
+decoy_count: 4              # 4 Koeder dazwischen
+
+mode: jump
+jump_min_step: 0            # wie in der Vorlage: der Zeiger darf kurz stehen
+direction: cw
+start_angle: 0.0
+
+speed_curve:                # schneller Start, langsameres Ausdrehen
+  - { t: 0.00, dps: 2600 }
+  - { t: 0.55, dps: 1700 }
+  - { t: 0.85, dps: 1150 }
+  - { t: 1.00, dps: 950 }
+
+layout:
+  radius: 390
+  center_y_offset: 230      # Ring sitzt unter der Ueberschrift
+  min_separation: 30.0
+  base_offset: 0.0
+
+pointer:
+  type: arrow
+  length: 300
+  tail: 0
+  width: 30
+  head_width: 92
+  head_length: 100
+  color: "#bc5412"          # RadlHias Orange
+  hub_radius: 0             # Mitte deckt das Logo ab
+
+center_image:
+  path: "assets/radlhias_badge.png"
+  width: 300
+
+font:
+  path: "fonts/BigShoulders-Bold.ttf"
+  size: 54
+  color: "#1c3448"          # Ziel und Koeder gleich - sonst faellt der Trick auf
+  decoy_color: null
+  orientation: tangential
+  orientation_strength: 0.6 # gedaempft wie in der Vorlage
+  jitter: true
+  jitter_max: 5.0
+
+background: "#f5f1eb"       # RadlHias Creme
+seed: 7
+
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  duration: 10.0
+  crf: 18
+  preset: medium
+  audio: null
+
+output_dir: output-radlhias
+
+check:
+  tolerance: 3.0
+  sample_count: 10
+  overlay: true
