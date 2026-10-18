@@ -1,0 +1,90 @@
+# ---------------------------------------------------------------------------
+# Pause-Trick-Video - Konfiguration
+# Aufruf: python make_video.py --config config.yaml
+# Alle Werte sind optional; was hier fehlt, kommt aus den Standardwerten
+# in pausetrick/config.py. Erklaerung aller Felder: siehe README.md
+# ---------------------------------------------------------------------------
+
+# --- Texte und Anzahl der Labels ------------------------------------------
+target_label: "TREFFER"      # Text der Ziel-Labels (hier wird immer getroffen)
+decoy_label: "DANEBEN"       # Text der Koeder-Labels (wird nie getroffen)
+target_count: 1              # Anzahl Ziel-Labels
+decoy_count: 7               # Anzahl Koeder-Labels
+
+# --- Bewegung --------------------------------------------------------------
+mode: follow                 # "follow" (Standard) oder "jump"
+direction: cw                # "cw" = im Uhrzeigersinn, "ccw" = dagegen
+start_angle: 0.0             # Startwinkel des Zeigers, 0 Grad = 12 Uhr
+
+# Geschwindigkeitskurve: Stuetzpunkte ueber die normierte Zeit t (0..1),
+# dps = Grad pro Sekunde. Dazwischen wird linear interpoliert.
+# Schneller Start -> Mittelteil -> langsames Ausdrehen am Ende.
+speed_curve:
+  - { t: 0.00, dps: 1500 }
+  - { t: 0.55, dps: 1100 }
+  - { t: 0.85, dps: 520 }
+  - { t: 1.00, dps: 200 }
+
+# --- Layout des Label-Rings ------------------------------------------------
+layout:
+  radius: 360                # Abstand Labelmitte <-> Bildmitte in Pixel
+  center_y_offset: 0         # Ring nach unten (positiv) / oben (negativ) schieben
+  min_separation: 16.0       # Mindestabstand Koeder <-> Ziel in Grad
+  decoy_mode: ring           # "ring": Koeder wandern mit (immer ueberlappungsfrei)
+                             # "fixed": Koeder stehen fest, weichen nur aus
+  base_offset: 0.0           # Grunddrehung des Rings in Grad
+  show_ring: false           # dezenten Kreis mitzeichnen
+  ring_color: "#DDDDDD"
+  ring_width: 4
+
+# --- Zeiger ----------------------------------------------------------------
+pointer:
+  type: arrow                # "arrow" = gezeichneter Pfeil, "png" = eigene Grafik
+  # Fuer type: png zusaetzlich:
+  # png: "zeiger.png"        # PNG mit transparentem Hintergrund
+  # pivot: [128, 400]        # Drehpunkt in Pixelkoordinaten der PNG
+  # png_scale: 1.0           # Grafik skalieren
+  # base_angle: 0.0          # falls die Grafik nicht nach oben zeigt
+  length: 205                # Pfeillaenge ab Bildmitte (Pixel)
+  tail: 60                   # Laenge hinter der Bildmitte
+  width: 28                  # Schaftbreite
+  head_width: 84             # Breite der Pfeilspitze
+  head_length: 92            # Laenge der Pfeilspitze
+  color: "#EC5323"           # Ziegler Orange
+  hub_radius: 26             # Nabe in der Mitte (0 = aus)
+  hub_color: "#0D62A8"       # Ziegler Blau
+
+# --- Typografie ------------------------------------------------------------
+font:
+  path: null                 # TTF-Pfad, z.B. "fonts/Verdana-Bold.ttf"; null = Automatik
+  size: 56
+  color: "#1a1a1a"
+  decoy_color: null          # null = gleiche Farbe wie das Ziel
+  stroke_width: 0            # Kontur um den Text (Pixel)
+  stroke_color: "#FFFFFF"
+  orientation: radial        # "radial", "tangential" oder "upright"
+  jitter: true               # leichte zufaellige Schraegstellung (Handmade-Look)
+  jitter_max: 6.0            # maximale Schraegstellung in Grad
+
+background: "#F5F3F1"
+seed: 42                     # Zufallsbasis - gleicher Seed = gleiches Bild
+
+# --- Video und Export ------------------------------------------------------
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  duration: 8.0              # Sekunden
+  crf: 18                    # H.264 Qualitaet (niedriger = besser, 18-23 sinnvoll)
+  preset: medium
+  audio: null                # z.B. "sound.mp3" - wird auf Videolaenge gekuerzt
+  audio_bitrate: "192k"
+
+output_dir: output
+
+# --- Pruefung --------------------------------------------------------------
+check:
+  tolerance: 3.0             # erlaubte Abweichung Zeiger <-> Ziel in Grad
+  decoy_clearance: null      # Mindestabstand Zeiger <-> Koeder; null = auto
+  sample_count: 10           # Anzahl der Stichproben-PNGs in output/check/
+  overlay: true              # Messlinie und Zahlen in die Stichproben zeichnen
