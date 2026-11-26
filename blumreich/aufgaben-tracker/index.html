@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BLUMREICH Aufgaben-Tracker</title>
+<meta name="description" content="Miss mit einem Tipp, wie viel Zeit deine Aufgaben im Betrieb wirklich brauchen. Kostenlos, ohne Anmeldung, die Daten bleiben auf deinem Handy.">
+<!-- ENTWURF: vor der Veröffentlichung entfernen -->
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#141922">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Aufgaben">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="kopf">
+  <div class="kopf-innen">
+    <div class="marke">
+      <img src="icons/icon.svg" alt="" width="34" height="34">
+      <div><span class="marke-name">BLUMREICH</span><span class="marke-tool">Aufgaben-Tracker</span></div>
+    </div>
+    <button class="icon-btn" id="btn-info" type="button" aria-label="Anleitung und Hinweise">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- Ansicht: Tracken -->
+  <section id="ansicht-tracken" class="ansicht">
+    <div class="status" id="status" aria-live="polite">
+      <p class="status-label" id="status-label">Gerade läuft nichts</p>
+      <p class="status-name" id="status-name">Tippe bei einer Aufgabe auf Start.</p>
+      <p class="status-uhr" id="status-uhr" hidden>0:00:00</p>
+      <p class="status-zeitraum" id="status-zeitraum"></p>
+    </div>
+
+    <h1 class="abschnitt">Deine Aufgaben</h1>
+    <ul class="aufgaben" id="aufgaben"></ul>
+
+    <button class="btn btn-leise breit" id="btn-neu" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Aufgabe hinzufügen
+    </button>
+
+    <div class="aktionen">
+      <button class="btn btn-haupt breit" id="btn-abschliessen" type="button">Zeitraum abschließen und Protokoll ansehen</button>
+      <div class="aktionen-klein">
+        <button class="link-btn" id="btn-zwischenstand" type="button">Zwischenstand</button>
+        <button class="link-btn" id="btn-eintraege" type="button">Einträge korrigieren</button>
+        <button class="link-btn" id="btn-frueher" type="button" hidden>Frühere Protokolle</button>
+      </div>
+    </div>
+
+    <div class="install" id="install" hidden>
+      <p><b>Als App aufs Handy holen:</b> <span id="install-text"></span></p>
+      <button class="btn btn-leise" id="btn-install" type="button" hidden>App installieren</button>
+    </div>
+  </section>
+
+  <!-- Ansicht: Protokoll -->
+  <section id="ansicht-protokoll" class="ansicht" hidden>
+    <button class="zurueck" type="button" data-zurueck>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Zurück
+    </button>
+    <div id="protokoll"></div>
+  </section>
+
+  <!-- Ansicht: Einträge -->
+  <section id="ansicht-eintraege" class="ansicht" hidden>
+    <button class="zurueck" type="button" data-zurueck>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Zurück
+    </button>
+    <h1 class="abschnitt">Einträge korrigieren</h1>
+    <p class="hinweis-text">Vergessen zu stoppen? Tippe auf einen Eintrag und stell die Zeit richtig. Fehlt etwas, trag es nach.</p>
+    <button class="btn btn-leise breit" id="btn-nachtragen" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Eintrag nachtragen
+    </button>
+    <div id="eintraege"></div>
+  </section>
+
+  <!-- Ansicht: Frühere Protokolle -->
+  <section id="ansicht-frueher" class="ansicht" hidden>
+    <button class="zurueck" type="button" data-zurueck>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Zurück
+    </button>
+    <h1 class="abschnitt">Frühere Protokolle</h1>
+    <ul class="liste" id="frueher"></ul>
+  </section>
+</main>
+
+<footer class="fuss">
+  <p><a href="datenschutz.html">Datenschutz</a> · <a href="impressum.html">Impressum</a></p>
+  <p>Deine Einträge bleiben auf diesem Gerät. <button class="link-btn klein" id="btn-loeschen" type="button">Alle Daten löschen</button></p>
+  <p class="klein">Ein Tool von Mathias Blumreich</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- Willkommen / Info -->
+<dialog id="dlg-info" class="dlg">
+  <form method="dialog">
+    <h2>So funktioniert's</h2>
+    <ol class="schritte">
+      <li>Gib deinen Aufgaben einen Namen, zum Beispiel „Angebote schreiben“.</li>
+      <li>Wenn du damit anfängst, tippst du auf <b>Start</b>. Wenn du fertig bist, auf <b>Stopp</b>.</li>
+      <li>Es läuft immer nur eine Aufgabe. Die Uhr zählt auch weiter, wenn das Handy gesperrt ist.</li>
+      <li>Nach ein paar Tagen tippst du auf <b>Zeitraum abschließen</b> und siehst, wo deine Zeit hingeht.</li>
+    </ol>
+    <div class="dsgvo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      <p><b>Deine Daten bleiben bei dir.</b> Alles, was du einträgst, wird nur auf diesem Handy gespeichert. Es wird nicht an Blumreich oder Dritte übertragen. Es gibt kein Konto, kein Tracking und keine Werbung. <a href="datenschutz.html">Mehr dazu</a></p>
+    </div>
+    <p class="install-dlg" id="install-dlg"></p>
+    <button class="btn btn-haupt breit" value="ok">Verstanden</button>
+  </form>
+</dialog>
+
+<!-- Eintrag bearbeiten / nachtragen -->
+<dialog id="dlg-eintrag" class="dlg">
+  <form method="dialog" id="form-eintrag">
+    <h2 id="eintrag-titel">Eintrag ändern</h2>
+    <label class="feld">Aufgabe
+      <select id="e-aufgabe"></select>
+    </label>
+    <label class="feld">Tag
+      <input type="date" id="e-tag" required>
+    </label>
+    <div class="feld-reihe">
+      <label class="feld">Von
+        <input type="time" id="e-von" required>
+      </label>
+      <label class="feld">Bis
+        <input type="time" id="e-bis" required>
+      </label>
+    </div>
+    <p class="fehler" id="e-fehler" hidden></p>
+    <div class="dlg-knoepfe">
+      <button class="btn btn-haupt" value="speichern" id="e-speichern">Speichern</button>
+      <button class="btn btn-leise" value="abbrechen" formnovalidate>Abbrechen</button>
+    </div>
+    <button class="link-btn gefahr" value="loeschen" id="e-loeschen" formnovalidate>Eintrag löschen</button>
+  </form>
+</dialog>
+
+<!-- Rückfrage -->
+<dialog id="dlg-frage" class="dlg">
+  <form method="dialog">
+    <h2 id="frage-titel"></h2>
+    <p id="frage-text"></p>
+    <div class="dlg-knoepfe">
+      <button class="btn btn-haupt" value="ja" id="frage-ja">Ja</button>
+      <button class="btn btn-leise" value="nein">Abbrechen</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
